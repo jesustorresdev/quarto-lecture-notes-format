@@ -1,0 +1,139 @@
+= Desarrollo de Videojuegos 3D: Composición de niveles
+Jesús Torres <jmtorres@ull.es>
+include::../config/attributes.adoc[]
+:imagesdir: {imagesdir}/composición_de_niveles
+2019-2020
+
+Cuando el nivel o el mundo —en los juegos de mundo abierto— que queremos desarrollar es demasiado extenso como cargarlo de una sola vez, estamos obligados a dividirlo en diferentes mapas o escenas, cargándolas y descargándolas bajo demanda según se desarrolla el juego.
+Esto, indudablemente, condiciona el diseño del nivel.
+
+Un caso extremo es lo que ocurría en los primeros juegos de la saga Resident Evil, donde abrir cualquier puerta, escalera o ascensor reproducía una cinemática durante la que se cargaba la siguiente escena.
+Obviamente tenía que ser así por las limitaciones del hardware del época.
+
+.Pantalla de carga en la apertura de puertas en Resident Evil HD
+video::lJK6QeDFncI[]
+
+Hoy en día estas transiciones no destacan tanto.
+Se colocan ascensores o pasadizos estrechos en los que apenas se puede ver lo que hay delante,
+para disimular la carga de la siguiente parte del escenario
+
+.Pasadizo en el _gamaplay_ de "Star Wars Jedi: Fallen Order" mostrado en el EA Play 2019.
+video::8939aURV9Dc[start=322]
+
+En mundos abiertos en exteriores se puede dividir el escenario en varias escenas e ir cargándolas dinámicamente cuando el jugador se aproxima, al tiempo que se descargan las escenas más alejadas que el jugador ya no puede ver.
+Para limitar el alcance de la visión del jugador se pueden barreras visuales —como montañas o edificios— pero en todo caso hay que tener en cuenta que la cámara nunca mostrará más allá de la distancia que tenga configurada como _far clipping plane_.
+
+// TODO: Dibujo de la idea básica
+
+== Level streaming (UE4)
+
+La solución de Unreal Engine 4 para este problema se llama https://docs.unrealengine.com/en-US/Engine/LevelStreaming/Overview/index.html[Level Streaming] que, como suele ocurrir con este motor, prácticamente viene lista para ser usada.
+
+En Level Streaming existen 3 elementos:
+
+* *Persistent Level*: o nivel persistente, es el nivel del escenario completo.
+Su función es gestionar los niveles que se van a ir cargando y descargando según sea necesario. Puede tener actores que van a ser permanentes, como el cielo o exteriores que se ven en la distancia.
+
+* *Streaming Levels*: son los niveles que se van a ir cargando y descargando en lugares concretos del _persistent level_.
+
+* *Level Streaming Volumes*: son volúmenes que cargan o descargan los _streaming levels_ que se le indiquen cuando el jugador entra en el volumen.
+
+Obviamente el motor provee de funciones para cargar y descargar _streaming levels_ desde código por si queremos un comportamiento más complejo.
+
+== Word Composition (UE4)
+
+Unreal Engine 4 también soporta esta versión de _level streaming_ en la que los _streaming levels_ están distribuidos en una rejilla 2D y se van cargando y descargando según se acerca el jugador.
+
+En https://docs.unrealengine.com/en-US/Engine/LevelStreaming/WorldBrowser/index.html[Word composition] el nivel persistente no contiene información sobre los _streaming levels_, sino que estos se descubren buscando en la carpeta que los contiene y cada _streaming level_ contiene la información necesaria para cargar el nivel en el lugar adecuado.
+De esta forma los tanto el nivel persistente como los _streaming levels_ son realmente independientes, permitiendo que varios desarrolladores trabajen al mismo tiempo en distintas ubicaciones del escenario.
+Lo que es especialmente importante en juegos de mundo abierto realmente grandes.
+
+.Ventana de _Word Composition_ donde se observa la disposición de los distintos niveles en el escenario.
+image::world_layout.jpg[]
+
+== Composición de niveles en Unity
+
+En Unity las soluciones son las mismas que las comentadas anteriormente para Unreal Engine, solo que no vienen implementadas.
+
+Como es habitual, tendríamos que hacerlo nosotros mismos usando los métodos https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.LoadSceneAsync.html[`SceneManager.LoadSceneAsync()`] —en modo aditivo— y https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.UnloadSceneAsync.html[`SceneManager.UnloadSceneAsync()`].
+Aunque, por lo comentado, se puede ver no es nada complejo y nos da mucha flexibilidad para además darle otros usos a las escenas.
+
+NOTE: En este caso es importante utilizar las versiones "Async" para no detener el juego mientras se cargan las escenas.
+
+== Limitaciones del punto flotante
+
+Tanto Unreal Engine como Unity utilizan números punto flotante de 32 bits —o de precisión simple—.
+
+Algunos motivos para esta decisión podrían ser:
+
+* Si hubieran optado por números de punto flotantes de 64 bits necesitarían más memoria, porque cada uno ocuparía el doble de lo que ocupan ahora.
+
+* Aunque ya no es tan común, han existido arquitecturas sin soporte para números de punto flotante de 64 bits.
+Esto es algo a tener en cuenta si se quiere desarrollar un motor que sea portable a diferentes arquitecturas.
+
+El problema es que la precisión de los números de punto flotante no es fija, como se puede ver en la <<img-ieee754-precision>>.
+A mayor sea el valor que almacenan, peor es la precisión.
+
+[#img-ieee754-precision]
+.Precisión de los números de punto flotante.
+image::ieee754_precision.png[]
+
+Así que a 50Km. del origen la precisión es de 1cm., sin importar que la unidad por defecto en Unreal Engine sea el centímetro mientras que la de Unity es el metro.
+
+Aunque no lo parezca esto puede generar efectos indeseables.
+Un jugador a más de 5Km. del origen podría comenzar a notar comportamientos raros en las física, en las animaciones o el movimiento de los objetos de objetos cercanos, porque aunque los cálculos señalen que algo debe ir en cierto sitio, la precisión a esa distancia hará que la ubicación se redondee al flotante posible más cercano.
+
+== Traslación del origen
+
+Para resolver el problema de la limitación de la precisión de flotantes lo que se puede hacer es reubicar el origen del sistema de referencia del escenario cerca del jugador según este se aleja.
+O, para ser mas exactos, mover todos los actores del escenario para que el jugador y lo que le jugador tiene más cerca estén próximo al origen.
+
+// TODO: Añadir algún dibujo sobre traslación de origen
+
+=== En Unreal Engine
+
+Nuevamente, en Unreal Engine ya viene implementado.
+Tan solo hay que activar la opción _Enable World Origin Rebasing_.
+
+=== En Unity
+
+En Unity, como es más común, tendremos que hacerlo nosotros mismos:
+
+1. Iterar sobre todos los _GameObject_ para desplazarlos de tal forma que el jugador vuelva a estar cerca del origen del sistema de referencia.
+Una forma cómoda de hacerlo es que asegurarnos de que todos los _GameObject_ de una escena son hijos de un único GameObject que hace de raíz de la escena.
+Moviendo este GameObject raíz, se trasladarían todos los objetos de escena, ya que su posición es relativa a su padre.
+
+2. Hay que tener cuidado con tener muchos _collider_ estáticos —aquellos en _GameObjects_ sin un component _Rigidbody_ por que moverlos tiene un gran impacto en el motor de físicas, haciendo que se pierda _frames_ o provocando problemas con el sonido.
+El cualquier caso, para evitar problemas con el motor de físicas, el mejor sitio para mover los objetos es `FixedUpdate()`.
+
+3. Otros componentes que necesiten coordenadas globales estáticas también pueden dar problemas.
+Por ejemplo, si se usa _NavMesh_, hay que recalcularlos tras el desplazamiento. Mientras que no se puede utilizar _Global Illumination_ porque la información de iluminación se ha precalculado para objetos estáticos en posiciones concretas.
+
+==== El problema es en los foros de Unity
+
+Crear mundos abiertos no es el principal uso de Unity pero no por eso algunos han dejado de intentarlo.
+Un buen lugar para extraer ideas son los foros de Unity.
+Estos algunos hilos al respecto:
+
+* https://forum.unity.com/threads/how-to-handle-truly-open-world-maps-with-unity-due-to-floating-point-limitations.530575/[How to handle truly open world maps with Unity, due to floating point limitations?]
+* https://forum.unity.com/threads/feature-request-a-native-origin-shifter-integrated-with-physics-like-on-ue.648736/[Feature request: a native origin shifter integrated with physics like on UE]
+* https://forum.unity.com/threads/floating-point-errors-and-large-scale-worlds.526807/[Floating Point Errors and Large Scale Worlds]
+
+En algunos mensajes se hace referencia a este script:
+
+* http://wiki.unity3d.com/index.php?title=Floating_Origin&_ga=2.158366650.1017864420.1581032515-2049087233.1564526278[Floating Origin]
+
+aunque hay que tener en cuenta que se puede optimizar muchísimo.
+Por ejemplo, usando `FixedUpdate()` en lugar de `LateUpdate()` o evitando el uso de `FindObjectOfType()` mediante el empleo de _GameObject_ raíz por escena, como hemos comentado anteriormente.
+
+Entre los mensajes del foro hay bastante sugerencias de optimización y hasta alguna implementación mucho mejor que la anterior.
+
+==== Otro motor de físicas
+
+Como el principal coste viene por mover objetos con _colliders_ estáticos, otra idea interesante es utilizar otra implementación del motor de físicas donde no exista este problema.
+
+Por ejemplo, esta implementación está basada https://developer.nvidia.com/gameworks-physx-overview[NVIDIA PhysX], como el motor de físicas integrado en Unity.
+
+* https://forum.unity.com/threads/nvidia-physx-plugin-preview.645004/[NVIDIA PhysX plugin]
+
+pero se discute que pudiera ofrecer algún tipo de acceso a la función https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/OriginShift.html[`PxScene::shiftOrigin()`] de NVIDIA PhysX, para reubicar estos _colliders_ con un poco menos de coste.
