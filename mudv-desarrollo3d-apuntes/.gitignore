@@ -1,6 +1,6 @@
  .idea/
 *.iml
-out/
+output/
 gen/
 idea-gitignore.jar
 resources/templates.list
