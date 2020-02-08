@@ -11,14 +11,14 @@ Un caso extremo es lo que ocurría en los primeros juegos de la saga Resident Ev
 Obviamente tenía que ser así por las limitaciones del hardware del época.
 
 .Pantalla de carga en la apertura de puertas en Resident Evil HD
-video::lJK6QeDFncI[]
+video::lJK6QeDFncI[youtube]
 
 Hoy en día estas transiciones no destacan tanto.
-Se colocan ascensores o pasadizos estrechos en los que apenas se puede ver lo que hay delante,
-para disimular la carga de la siguiente parte del escenario
+Se colocan ascensores, túneles bajo el agua o pasadizos estrechos en los que apenas se puede ver lo que hay delante,
+para disimular la carga de la siguiente parte del escenario.
 
 .Pasadizo en el _gamaplay_ de "Star Wars Jedi: Fallen Order" mostrado en el EA Play 2019.
-video::8939aURV9Dc[start=322]
+video::8939aURV9Dc[youtube,start=322]
 
 En mundos abiertos en exteriores se puede dividir el escenario en varias escenas e ir cargándolas dinámicamente cuando el jugador se aproxima, al tiempo que se descargan las escenas más alejadas que el jugador ya no puede ver.
 Para limitar el alcance de la visión del jugador se pueden barreras visuales —como montañas o edificios— pero en todo caso hay que tener en cuenta que la cámara nunca mostrará más allá de la distancia que tenga configurada como _far clipping plane_.
@@ -80,8 +80,9 @@ image::ieee754_precision.png[]
 
 Así que a 50Km. del origen la precisión es de 1cm., sin importar que la unidad por defecto en Unreal Engine sea el centímetro mientras que la de Unity es el metro.
 
-Aunque no lo parezca esto puede generar efectos indeseables.
-Un jugador a más de 5Km. del origen podría comenzar a notar comportamientos raros en las física, en las animaciones o el movimiento de los objetos de objetos cercanos, porque aunque los cálculos señalen que algo debe ir en cierto sitio, la precisión a esa distancia hará que la ubicación se redondee al flotante posible más cercano.
+Aunque no lo parezca esto puede generar efectos indeseables, en función del tipo de juego.
+Un jugador a poco más de 5Km. del origen podría comenzar a notar comportamientos raros en las física, en las animaciones o el movimiento de los objetos si está lo bastante cerca.
+Porque aunque los cálculos señalen que algo debe ir en cierto sitio, la precisión a esa distancia hará que la ubicación se redondee al flotante posible más cercano.
 
 == Traslación del origen
 
@@ -116,7 +117,9 @@ Un buen lugar para extraer ideas son los foros de Unity.
 Estos algunos hilos al respecto:
 
 * https://forum.unity.com/threads/how-to-handle-truly-open-world-maps-with-unity-due-to-floating-point-limitations.530575/[How to handle truly open world maps with Unity, due to floating point limitations?]
+
 * https://forum.unity.com/threads/feature-request-a-native-origin-shifter-integrated-with-physics-like-on-ue.648736/[Feature request: a native origin shifter integrated with physics like on UE]
+
 * https://forum.unity.com/threads/floating-point-errors-and-large-scale-worlds.526807/[Floating Point Errors and Large Scale Worlds]
 
 En algunos mensajes se hace referencia a este script:

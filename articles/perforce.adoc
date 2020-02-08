@@ -1,6 +1,7 @@
-= Desarrollo de Videojuegos 3D: Colaboración usando Perforce
+= Desarrollo de Videojuegos 3D: Colaborar usando Perforce
 Jesús Torres <jmtorres@ull.es>
 include::../config/attributes.adoc[]
+:imagesdir: {imagesdir}/perforce
 2019-2020
 
 http://www.perforce.com[Perforce] es la compañía que desarrolla http://www.perforce.com/products/helix-core[Helix Core], un sistema de control de versiones (en inglés, _Version Control System_ o _VCS_) diseñado para manejar proyectos realmente grandes.
@@ -116,6 +117,7 @@ Mientras que en Perforce se configura en el servidor ejecutando el comanod `http
 La configuración de tipos de archivo en Perforce es mucho más potente que en Git.
 Para mostrarlo vamos a ver un ejemplo de posible configuración para alojar proyectos de Unreal Engine:
 
+.Ejemplo de especificación de tipos de archivos en Perforce para Unreal Engine.
 ----
 # Perforce File Type Mapping Specifications.
 #
@@ -240,7 +242,7 @@ Una características interesantes es que en los _streams_ se pueden filtrar los 
 Por ejemplo, se puede crear un _stream_ para el departamento de arte que les permita modificar los recursos del proyecto pero no tocar los archivos de código fuente.
 O crear una rama donde solo se puede trabajar en el código del motor para actualizarlo de versión, sin tocar el resto del proyecto.
 
-[NOTE]
+[TIP]
 Para entender mejor como se pueden aprovechar las características de los _streams_, merece la pena ver el webinar https://www.perforce.com/webinars/vcs/best-practices-game-development-using-streams[Best Practices for Game Development Using Streams] dónde el estudio Sumo Digital explica como los usan ellos en sus proyectos con Unreal Engine.
 
 == Perforce en un estudio _indie_
