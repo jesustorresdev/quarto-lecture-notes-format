@@ -5,16 +5,12 @@ INPUTFILES = $(notdir $(wildcard $(INPUTDIR)/*.adoc))
 
 HTMLOUTPUTFILES = $(addprefix $(OUTPUTDIR)/,$(INPUTFILES:.adoc=.html))
 PDFOUTPUTFILES = $(addprefix $(OUTPUTDIR)/,$(INPUTFILES:.adoc=.pdf))
-XMLOUTPUTFILES = $(addprefix $(OUTPUTDIR)/,$(INPUTFILES:.adoc=.xml))
 EPUBOUTPUTFILES = $(addprefix $(OUTPUTDIR)/,$(INPUTFILES:.adoc=.epub))
 
 html: prepare $(HTMLOUTPUTFILES)
 	@echo 'Hecho'
 
 pdf: prepare $(PDFOUTPUTFILES)
-	@echo 'Hecho'
-
-docbook: prepare $(XMLOUTPUTFILES)
 	@echo 'Hecho'
 
 epub: prepare $(EPUBOUTPUTFILES)
@@ -26,13 +22,10 @@ $(OUTPUTDIR)/%.html: $(INPUTDIR)/%.adoc
 $(OUTPUTDIR)/%.pdf: $(INPUTDIR)/%.adoc
 	asciidoctor -r asciidoctor-pdf -b pdf $< -o $@
 
-$(OUTPUTDIR)/%.xml: $(INPUTDIR)/%.adoc
-	asciidoctor -b docbook5 $< -o $@
+$(OUTPUTDIR)/%.epub: $(INPUTDIR)/%.adoc
+	asciidoctor -r asciidoctor-epub3 -b epub3 $< -o $@
 
-$(OUTPUTDIR)/%.epub: $(OUTPUTDIR)/%.xml
-	pandoc -f docbook -t epub3 $< -o $@
-
-all: html pdf docbook epub
+all: html pdf epub
 
 prepare:
 	mkdir -p output
