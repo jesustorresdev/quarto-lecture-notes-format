@@ -78,10 +78,10 @@ A mayor sea el valor que almacenan, peor es la precisión.
 .Precisión de los números de punto flotante.
 image::ieee754_precision.png[]
 
-Así que a 50Km. del origen la precisión es de 1cm., sin importar que la unidad por defecto en Unreal Engine sea el centímetro mientras que la de Unity es el metro.
+Así que a 50 Km. del origen la precisión es de 1 cm., sin importar que la unidad por defecto en Unreal Engine sea el centímetro mientras que la de Unity es el metro.
 
 Aunque no lo parezca esto puede generar efectos indeseables, en función del tipo de juego.
-Un jugador a poco más de 5Km. del origen podría comenzar a notar comportamientos raros en las física, en las animaciones o el movimiento de los objetos si está lo bastante cerca.
+Un jugador a poco más de 2 Km. del origen podría comenzar a notar comportamientos raros en las física, en las animaciones o el movimiento de los objetos si está lo bastante cerca.
 Porque aunque los cálculos señalen que algo debe ir en cierto sitio, la precisión a esa distancia hará que la ubicación se redondee al flotante posible más cercano.
 
 == Traslación del origen
@@ -96,21 +96,39 @@ O, para ser mas exactos, mover todos los actores del escenario para que el jugad
 Nuevamente, en Unreal Engine ya viene implementado.
 Tan solo hay que activar la opción _Enable World Origin Rebasing_.
 
+:fn-origin-shift-multiplayer: footnote:[Los detalles de como lo hace se pueden leer en el https://forums.unrealengine.com/community/work-in-progress/81424-pull-request-world-origin-shifting-in-mp[foro de Unreal Engine] y en el correspondiente https://github.com/EpicGames/UnrealEngine/pull/2359[Pull Request] en GitHub.]
+Esto funciona incluso en juegos en red, permitiendo mundos de hasta 20 Km. x 20 Km sin problemas de precisión{fn-origin-shift-multiplayer}.
+
 === En Unity
 
 En Unity, como es más común, tendremos que hacerlo nosotros mismos:
 
-1. Iterar sobre todos los _GameObject_ para desplazarlos de tal forma que el jugador vuelva a estar cerca del origen del sistema de referencia.
-Una forma cómoda de hacerlo es que asegurarnos de que todos los _GameObject_ de una escena son hijos de un único GameObject que hace de raíz de la escena.
-Moviendo este GameObject raíz, se trasladarían todos los objetos de escena, ya que su posición es relativa a su padre.
+1. Iterar sobre todos los _GameObject_ de cada escena para desplazarlos de tal forma que el jugador vuelva a estar cerca del origen del sistema de referencia.
 
 2. Hay que tener cuidado con tener muchos _collider_ estáticos —aquellos en _GameObjects_ sin un component _Rigidbody_ por que moverlos tiene un gran impacto en el motor de físicas, haciendo que se pierda _frames_ o provocando problemas con el sonido.
 El cualquier caso, para evitar problemas con el motor de físicas, el mejor sitio para mover los objetos es `FixedUpdate()`.
 
 3. Otros componentes que necesiten coordenadas globales estáticas también pueden dar problemas.
-Por ejemplo, si se usa _NavMesh_, hay que recalcularlos tras el desplazamiento. Mientras que no se puede utilizar _Global Illumination_ porque la información de iluminación se ha precalculado para objetos estáticos en posiciones concretas.
+Por ejemplo, si se usa _NavMesh_, hay que recalcularlos tras el desplazamiento.
+Mientras que no se puede utilizar _Global Illumination_, porque la información de iluminación se ha precalculado para objetos estáticos en posiciones concretas, lo que obliga a usar técnicas alternativas que puedan proporcionar resultados similares —como, por ejemplo, _Ambient Occlusion_—.
 
-==== El problema es en los foros de Unity
+==== Renderizado relativo a la cámara
+
+En nuevo _render_ HDRP tiene una opción llamada _Camera-relative rendering_.
+Al activarla, durante el _render_ las posiciones de los _GameObjects_ se modifican para que sean relativas a la cámara y no al origen de la escena.
+Esto puede ayudar a reducir defectos en la imagen renderizada debido a los problemas de precisión con los números de punto flotante.
+
+==== Con otro motor de físicas
+
+Como el principal coste se debe a mover objetos con _colliders_ estáticos, otra idea interesante es utilizar otra implementación del motor de físicas donde no exista este problema.
+
+Por ejemplo, esta implementación está basada https://developer.nvidia.com/gameworks-physx-overview[NVIDIA PhysX], como el motor de físicas integrado en Unity.
+
+* https://forum.unity.com/threads/nvidia-physx-plugin-preview.645004/[NVIDIA PhysX plugin]
+
+pero se discute que pudiera ofrecer algún tipo de acceso a la función https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/OriginShift.html[`PxScene::shiftOrigin()`] de NVIDIA PhysX, para reubicar estos _colliders_ con un poco menos de coste.
+
+==== El problema en los foros de Unity
 
 Crear mundos abiertos no es el principal uso de Unity pero no por eso algunos han dejado de intentarlo.
 Un buen lugar para extraer ideas son los foros de Unity.
@@ -127,16 +145,27 @@ En algunos mensajes se hace referencia a este script:
 * http://wiki.unity3d.com/index.php?title=Floating_Origin&_ga=2.158366650.1017864420.1581032515-2049087233.1564526278[Floating Origin]
 
 aunque hay que tener en cuenta que se puede optimizar muchísimo.
-Por ejemplo, usando `FixedUpdate()` en lugar de `LateUpdate()` o evitando el uso de `FindObjectOfType()` mediante el empleo de _GameObject_ raíz por escena, como hemos comentado anteriormente.
+Por ejemplo, usando `FixedUpdate()` en lugar de `LateUpdate()` o evitando el uso de `FindObjectOfType()` registrando previamente los objetos existentes en algún _array_ o lista.
 
 Entre los mensajes del foro hay bastante sugerencias de optimización y hasta alguna implementación mucho mejor que la anterior.
 
-==== Otro motor de físicas
+== ¿Y si cambiamos la escala?
 
-Como el principal coste viene por mover objetos con _colliders_ estáticos, otra idea interesante es utilizar otra implementación del motor de físicas donde no exista este problema.
+Ya hemos comentado que Unreal Engine usa como unidad el centímetro mientras que Unity usa el metro, sin que eso tenga ningún efecto en obtener más precisión.
 
-Por ejemplo, esta implementación está basada https://developer.nvidia.com/gameworks-physx-overview[NVIDIA PhysX], como el motor de físicas integrado en Unity.
+Pero eso es porque así ninguno de los dos motores aprovecha de la mejor manera posible el intervalo más preciso de los números de punto flotante, que está entre -1 u 1.
+Sin embargo no hay nada que lo impida, porque realmente la unidad de medida en el motor es más que nada un convención.
+Un 1 unidad será lo que nosotros creamos que sea, según el tipo de proyecto en el que estemos trabajado.
 
-* https://forum.unity.com/threads/nvidia-physx-plugin-preview.645004/[NVIDIA PhysX plugin]
+Así que si sabemos que el intervalo más preciso es el [-1, 1] y tenemos pensando desarrollar un juego de mundo abierto 100 Km. x 100 Km. de extensión total, nada nos impide decir que nuestra unidad son 50 Km.
+Es decir, que cada cuadrado de 1 x 1 en el editor, representan 50 Km. x 50 Km en el juego y que en 4 cuadrados está contenido todo el espacio disponible.
 
-pero se discute que pudiera ofrecer algún tipo de acceso a la función https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/OriginShift.html[`PxScene::shiftOrigin()`] de NVIDIA PhysX, para reubicar estos _colliders_ con un poco menos de coste.
+Si observamos <<img-ieee754-precision>> y consideramos que 1 son 50 Km., es fácil determinar que la precisión en el extremo del mundo será de 0.25 cm.; que es 4 veces mejor que lo que obtendríamos trabajando con la convención estándar de ambos motores.
+
+Sin embargo debemos considerar varios inconvenientes:
+
+1. Los modelos importados deberán haber sido escalados para se coherentes con la convención que hemos elegido para nuestro proyecto. En Maya, por ejemplo, 1 unidad es un centrímetro. Así que si no tenemos esto en cuenta, los modelos importados será enormes.
+
+2. Las unidades si son relevantes para el motor de físicas. Por ejemplo, en Unity si la gravedad vale 9.8 quiere decir 9.8 m./s.^2^. Si en un proyecto la unidad es 50 Km. y no el metro, la gravedad debería ser —si queremos que sea realista— 0,000196.
+
+// TODO: Añadir referencia al TFG: "Generación procedural para mundos en videojuegos".
