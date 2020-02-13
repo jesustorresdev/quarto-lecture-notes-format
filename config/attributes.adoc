@@ -5,8 +5,8 @@ include::locale/attributes.adoc[]
 // Activar las referencias de texto completo con: etiqueta, número y título.
 :sectnums:
 :xrefstyle: short
-// Ubicación de las imágenes.
-:imagesdir: ../images
+// Ubicación de imágenes y vídeos.
+:imagesdir: ../media
 // Usar Font Awesome para los iconos.
 :icons: font
 // Activar las fórmulas matemáticas.

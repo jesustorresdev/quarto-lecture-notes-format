@@ -1,37 +1,51 @@
 BASEDIR = $(PWD)
 INPUTDIR = $(BASEDIR)/articles
 OUTPUTDIR = $(BASEDIR)/output
+
+HTMLOUTPUTDIR = $(OUTPUTDIR)/html
+PDFOUTPUTDIR = $(OUTPUTDIR)/pdf
+EPUBOUTPUTDIR = $(OUTPUTDIR)/epub
+
+MEDIAINPUTDIR = $(BASEDIR)/media
+MEDIAOUTPUTDIR = $(OUTPUTDIR)/media
+
 INPUTFILES = $(notdir $(wildcard $(INPUTDIR)/*.adoc))
+HTMLOUTPUTFILES = $(addprefix $(HTMLOUTPUTDIR)/,$(INPUTFILES:.adoc=.html))
+PDFOUTPUTFILES = $(addprefix $(PDFOUTPUTDIR)/,$(INPUTFILES:.adoc=.pdf))
+EPUBOUTPUTFILES = $(addprefix $(EPUBOUTPUTDIR)/,$(INPUTFILES:.adoc=.epub))
 
-HTMLOUTPUTFILES = $(addprefix $(OUTPUTDIR)/,$(INPUTFILES:.adoc=.html))
-PDFOUTPUTFILES = $(addprefix $(OUTPUTDIR)/,$(INPUTFILES:.adoc=.pdf))
-EPUBOUTPUTFILES = $(addprefix $(OUTPUTDIR)/,$(INPUTFILES:.adoc=.epub))
+ASCIIDOCTOR_CMD = asciidoctor
+ASCIIDOCTOR_OPTS := --require asciidoctor-diagram
+ASCIIDOCTOR_OPTS += --require ./lib/macros.rb
 
-ASCIIDOCTOR_CMD = "asciidoctor -r asciidoctor-diagram
-
-# TODO: Copiar las imágenes y asegurar los enlaces correctos en output.
-
-html: prepare $(HTMLOUTPUTFILES)
+html: prepare-html $(HTMLOUTPUTFILES)
 	@echo 'Hecho'
 
-pdf: prepare $(PDFOUTPUTFILES)
+pdf: prepare-pdf $(PDFOUTPUTFILES)
 	@echo 'Hecho'
 
-epub: prepare $(EPUBOUTPUTFILES)
+epub: prepare-epub $(EPUBOUTPUTFILES)
 	@echo 'Hecho'
 
-$(OUTPUTDIR)/%.html: $(INPUTDIR)/%.adoc
-	$(ASCIIDOCTOR_CMD) -b html5 $< -o $@
+$(HTMLOUTPUTDIR)/%.html: $(INPUTDIR)/%.adoc
+	$(ASCIIDOCTOR_CMD) $(ASCIIDOCTOR_OPTS) --backend html5 $< -o $@
 
-$(OUTPUTDIR)/%.pdf: $(INPUTDIR)/%.adoc
-	$(ASCIIDOCTOR_CMD) -r asciidoctor-pdf -b pdf $< -o $@
+$(PDFOUTPUTDIR)/%.pdf: $(INPUTDIR)/%.adoc
+	$(ASCIIDOCTOR_CMD) $(ASCIIDOCTOR_OPTS) --require asciidoctor-pdf --backend pdf $< -o $@
 
-$(OUTPUTDIR)/%.epub: $(INPUTDIR)/%.adoc
-	$(ASCIIDOCTOR_CMD) -r asciidoctor-epub3 -b epub3 $< -o $@
+$(EPUBOUTPUTDIR)/%.epub: $(INPUTDIR)/%.adoc
+	$(ASCIIDOCTOR_CMD) $(ASCIIDOCTOR_OPTS) --require asciidoctor-epub3 --backend epub3 $< -o $@
 
 all: html pdf epub
 
-prepare:
-	mkdir -p output
+prepare-html:
+	@mkdir --parents $(HTMLOUTPUTDIR)
+	@cp --remove-destination --link --recursive $(MEDIAINPUTDIR) $(MEDIAOUTPUTDIR)
+
+prepare-pdf:
+	@mkdir -p $(PDFOUTPUTDIR)
+
+prepare-epub:
+	@mkdir -p $(EPUBOUTPUTDIR)
 
 .PHONY: prepare
