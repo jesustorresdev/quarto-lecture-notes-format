@@ -7,7 +7,6 @@ PDFOUTPUTDIR = $(OUTPUTDIR)/pdf
 EPUBOUTPUTDIR = $(OUTPUTDIR)/epub
 
 MEDIAINPUTDIR = $(BASEDIR)/media
-MEDIAOUTPUTDIR = $(OUTPUTDIR)/media
 
 INPUTFILES = $(notdir $(wildcard $(INPUTDIR)/*.adoc))
 HTMLOUTPUTFILES = $(addprefix $(HTMLOUTPUTDIR)/,$(INPUTFILES:.adoc=.html))
@@ -40,7 +39,7 @@ all: html pdf epub
 
 prepare-html:
 	@mkdir --parents $(HTMLOUTPUTDIR)
-	@cp --remove-destination --link --recursive $(MEDIAINPUTDIR) $(MEDIAOUTPUTDIR)
+	@cp --remove-destination --link --recursive $(MEDIAINPUTDIR) $(OUTPUTDIR)
 
 prepare-pdf:
 	@mkdir -p $(PDFOUTPUTDIR)
