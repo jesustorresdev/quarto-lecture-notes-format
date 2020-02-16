@@ -23,7 +23,7 @@ Sin embargo vamos a profundizar en el tema porque involucra opciones que es inte
 Supongamos que los animadores del proyecto nos entrega el modelo y las animaciones de un personaje{fn-mixamo} que importamos en el motor.
 
 .El personaje de ejemplo caminando en la web de Mixamo.
-video::mixamo_walking.mp4[opts="autoplay,loop",width=640,height=480]
+video::mixamo_walking.mp4[opts="autoplay,loop",width=640,height=378]
 
 Si lo hacemos correctamente, tendremos la malla del personaje con su esqueleto, que en Unity se llama _Skinned Mesh, mientras que en Unreal Engine es Skeletal Mesh.
 Y además tendremos una serie de animaciones, que no son sino secuencias de transformaciones, aplicadas en las uniones de los huesos a lo largo del tiempo.
@@ -32,14 +32,15 @@ El esqueleto es un árbol de huesos, como se puede observar en la <<img-characte
 En la base está el hueso raíz, que en el modelo que estamos usando lo han llamado _Hips_ —caderas, en inglés—.
 
 [#img-character-skeleton]
-.Esqueleto del personaje a la izquierda de la ventana.
+.Esqueleto del personaje a la izquierda de la ventana del editor de Unreal Engine.
 image::character_skeleton.jpg[]
 
-En el siguiente este hueso está señalado en rojo y se ve como mantiene el origen al tiempo que rota y estira, haciendo que el personaje se desplace hacia adelante.
+El hueso raíz está destacado en rojo en el siguiente vídeo.
+Donde además se ve como mantiene el origen al tiempo que rota y estira, haciendo que el personaje se desplace hacia adelante.
 
 [#video-walking-character-skeleton]
 .Esqueleto del personaje mientras camina.
-video::walking_character_skeleton.mp4[opts="autoplay,loop",width=640,height=480]
+video::walking_character_skeleton.mp4[opts="autoplay,loop",width=640,height=421]
 
 Para usar _root motion_ lo que hace el motor de juego es obtener las diferencias entre estas transformaciones del hueso raíz cada instante y una postura de referencia.
 Esta postura de referencia puede ser la postura de referencia del modelo —es decir, la postura sin animaciones, que por lo general es una https://en.wikipedia.org/wiki/T-pose[pose T]— la postura en el primer fotograma de la animación, la postura resultado de promediar todas las posturas de la animación o cualquier otra obtenida por otras técnicas que implemente el motor de videojuegos.
@@ -53,10 +54,11 @@ Si no vamos a usar _root motion_, somos nosotros los responsables del mover el a
 Por lo tanto, no nos interesa que la animación contenga traslaciones o rotaciones globales de toda la malla.
 Es decir, todas las animaciones debería ser "en el sitio"
 
-.Ejemplo de cómo la animación saca al modelo de la cápsula.
-video::walking_out_of_capsule.mp4[opts="autoplay,loop",width=640,height=480]
+En el siguiente vídeo se puede observar como, debido a que en estos modelos no es así, la malla se sale de la cápsula al caminar.
 
-En el vídeo anterior se puede observar como, debido a que en estos modelos no es así, la malla se sale de la cápsula al caminar.
+.Ejemplo de cómo la animación saca al modelo de la cápsula.
+video::walking_out_of_capsule.mp4[opts="autoplay,loop",width=640,height=421]
+
 Esto nos obliga o bien a editar todas las animaciones en un programa adecuado, para suprimir este parte del movimiento del uso raíz, o bien pedirle al motor que sustraiga como pueda este movimiento del hueso raíz, como si quisiéramos hacer _root motion_, pero sin llegar a aplicarlo al movimiento del objeto del personaje —porque hemos dicho que realmente no queremos _root motion_.
 
 Sí por el contrario queremos usar _root motion_, lo idea es que hubiera un verdadero hueso _Root_, padre de _Hips_, de tamaño 0 a nivel del suelo que estuviera animado solo con el movimiento global del personaje.
@@ -76,7 +78,7 @@ El movimiento ha sido extraído de la animación para aplicárselo después al a
 Así que el modelo ya no se saldría de la cápsula, como pasaba antes.
 
 .Ejemplo con _Enable Root Motion_ usando como referencia la posición de referencia del modelo.
-video::root_motion_ref_pose.mp4[opts="autoplay,loop",width=640,height=480]
+video::root_motion_ref_pose.mp4[opts="autoplay,loop",width=640,height=421]
 
 Sin embargo, como este modelo no estaba preparado para usarlo con _root motion_ —tal y como comentamos en el apartado anterior— los resultados no son del todo satisfactorios.
 
@@ -86,7 +88,7 @@ Mientras que al caminar están ligeramente dobladas, por lo que si el hueso raí
 Parece que la postura de referencia escogida no es la adecuada.
 
 .Ejemplo con _Enable Root Motion_ usando como referencia el primer fotograma de la animación.
-video::root_motion_first-frame.mp4[opts="autoplay,loop",width=640,height=480]
+video::root_motion_first-frame.mp4[opts="autoplay,loop",width=640,height=421]
 
 En el vídeo anterior se aprecia lo que ocurre al usar como postura de referencia la del primer fotograma de la animación.
 Como en ese fotograma es más parecido a los del resto de la animación, con un hueso _Hips_ ligeramente más corto para ajustarse a la altura del personaje con las rodillas ligeramente dobladas, el resultado es mucho mejor.
@@ -148,7 +150,7 @@ Pero para eso se puede utilizar curvas ajustadas para coincidir con el movimient
 Otro caso es el salto con ataque del siguiente vídeo:
 
 .Ejemplo de ataque con salto.
-video::jump_attack.mp4[opts="autoplay,loop",width=640,height=480]
+video::jump_attack.mp4[opts="autoplay,loop",width=640,height=378]
 
 donde sería muy cómodo que el objeto del personaje sincronizara su movimiento con la animación.
 Pero por los mismos motivos que hemos comentado antes, lo mejor es controlar el movimiento desde la lógica del juego.

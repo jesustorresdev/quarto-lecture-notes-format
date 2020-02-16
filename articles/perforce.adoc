@@ -65,6 +65,8 @@ Y, como hemos comentado, también es lo que permite Git LFS.
 Lo normal es que en algún sitio haya un servidor remoto que haga de punto de sincronización de los repositorios de cada uno de los usuarios.
 Es el caso de Git y de Mercurial.
 
+=== Ventajas de los VCS distribuidos
+
 Los VCS distribuidos como Git se han impuesto a los centralizados porque entre otras cosas:
 
 * No hace falta estar conectado a la red para trabajar con el VCS.
@@ -79,7 +81,7 @@ Ni tampoco ocurre nada si el servidor remoto cae.
 Sin embargo, por lo que hemos comentado al hablar de los problemas de Git, no son los mas adecuados en proyectos grandes donde sea necesario controlar también archivos en formato binario.
 Por eso hasta hace bastante poco era común encontrar estudios que seguían usando un VCS centralizado como Subversion.
 
-=== Entonces Perforce...
+=== Ventajas de Perforce
 
 Perforce es un VCS puramente centralizado, por lo que escala mucho mejor que Git en este tipo de proyectos.
 En el servidor central se almacenan los distintos repositorios —llamados _depots_— mientras que los clientes tienen espacios de trabajo de trabajo —o _workspaces_— dónde se descargan únicamente los archivos del repositorio en la revisión que nos interese de histórico para trabajar.
@@ -110,9 +112,7 @@ Los VCS que deben trabajar con archivos binarios —que se guardan completos y n
 Para esto cada VCS usas sus propias heurísticas pero como pueden equivocarse, es buena idea disponer de algún mecanismo para indicar como debe ser trata cada archivo según su extensión o la ruta dónde esta ubicado.
 
 Esto en Git se hace con un archivo `https://git-scm.com/docs/gitattributes[.gitattributes]` que debe incorporarse al repositorio.
-Mientras que en Perforce se configura en el servidor ejecutando el comanod `https://www.perforce.com/manuals/v16.1/cmdref/file.types.html[p4 typemap]`.
-
-=== Typemaps
+Mientras que en Perforce se configura en el servidor ejecutando el comando `https://www.perforce.com/manuals/v16.1/cmdref/file.types.html[p4 typemap]`.
 
 La configuración de tipos de archivo en Perforce es mucho más potente que en Git.
 Para mostrarlo vamos a ver un ejemplo de posible configuración para alojar proyectos de Unreal Engine:
@@ -188,7 +188,23 @@ En el caso de Unity los archivos de recursos en su formato original si se deben 
 
 // TODO: Añadir algún vídeo explicando como se usa.
 
-=== Colaborar en Unity
+== Directorios en el control de versiones
+
+Del directorio de un proyecto en Unity, solo los siguientes subdirectorios deben ser incluidos en el control de versiones:
+
+ * `Assets`, porque tiene los recursos del proyecto.
+ * `Packages`, porque contiene los paquetes que hemos instalado en el proyecto desde el editor.
+ * `ProjectSettings`, porque contiene la configuración del proyecto.
+
+Mientras que en un proyecto de Unreal Engine se deben incluir:
+
+ * `Content`, porque contiene los recursos del proyecto.
+ * `Config`, porque tiene la configuración del proyecto.
+ * El Archivo `.uproject`, que es el archivo del proyecto.
+
+En ambos casos se puede incluir el directorio a dónde se compila el proyecto si queremos que los binarios estén disponibles para todo el equipo en el control de versiones —por ejemplo, para que el equipo de garantía de calidad pueda tener acceder a ellos rápidamente—.
+
+== Colaborar en Unity
 
 Es evidente que, a menos que un proyecto sea muy pequeño, nos interesará que varios desarrolladores y diseñadores puedan trabajar en un mismo nivel al mismo tiempo.
 ¿Pero como podríamos hacer para lograrlo?.
@@ -203,19 +219,56 @@ Pero claro, con esa configuración no parece posible colaborar en el desarrollo 
 
 La solución para colaborar desarrollando en Unity, tanto con Git como con Perforce, o cualquier otro VCS, está en seguir las siguientes indicaciones:
 
-1. Borrar de nuestra cabeza la relación _un nivel es una escena_.
+. Borrar de nuestra cabeza la idea de que cada nivel es una y solo una escena.
 En general un nivel del juego debería estar compuesto por varias escenas cargadas de forma aditiva.
 
-2. Crear escenas para agrupar objetos relacionados de un mismo nivel.
+. Crear escenas para agrupar objetos relacionados de un mismo nivel.
 Por ejemplo, un escena para la interfaz de usuario, otra para el mundo del nivel, una escena para cada misión que el jugador tenga que superar en el nivel, etc.
 Como hemos dicho anteriormente, estas escenas se deben ir cargando de forma aditiva según sea necesario durante el desarrollo del juego.
 
-3. Cada escena debería ser básicamente una colección de _prefabs_.
+. Cada escena debería ser básicamente una colección de _prefabs_.
 Las escenas se construiría añadiendo y posicionando _prefabs_ en ellas.
 
 De esta forma varios desarrolladores podrían estar modificando diferentes aspectos de un mismo nivel siempre que están trabajando en _prefabs_ o escenas diferentes.
 
-== Streams
+== Colaborar en Unreal Engine
+
+En Unreal Engine la estrategia para colaborar más fácilmente puede ser similar.
+
+=== Subniveles
+
+En un nivel solo puede haber una persona trabajando al mismo tiempo, pero Unreal permite descomponer un nivel en varios subniveles y que estos se carguen a demanda —por ejemplo, cuando el jugador está cerca— usando lo que llaman https://docs.unrealengine.com/en-US/Engine/LevelStreaming/index.html[Level Streaming].
+Si los subniveles se marcan como https://docs.unrealengine.com/en-US/Engine/Levels/CollaborateWithSublevels/index.html[Always Streaming], ya no se cargan a demanda, sino que se cargan todos juntos al cargar el nivel principal —llamado _Persistent Level_—.
+
+Esto permite que multiples desarrolladores trabajen en el mismo escenario al mismo tiempo, solo que en diferentes subniveles.
+Como ocurre en Unity, no estamos obligados a usar distintos niveles para distintas regiones del mundo.
+Sino que la descomposición puede ser de otro tipo, en función de como se haya planificado repartir el trabajo.
+Así, por ejemplo, un subnivel puede tener las mallas estáticas que dan forma al mundo, otro los NPC y otro todos los sonidos; permitiendo a diferentes desarrolladores trabajar en cada uno de estos subniveles
+
+=== _Prefabs_
+
+:fn-unreal-prefabs: footnote[Unreal Engine no soporta _prefabs_ de serie, pero en el Marketplace si existen diferentes soluciones que los implementan.]
+En Unreal Engine no existe el concepto de _prefabs_{fn-unreal-prefabs} pero los actores _Blueprint_ se pueden utilizar para hacer algo, hasta cierto punto, similar.
+
+Basta con crear un actor _Blueprint_ y, sin necesidad de añadirle código, incorporar como componentes mallas, luces, sistemas de partículas y el resto de elementos que nos interesen.
+Después el actor se pone en el lugar, o lugares del nivel que queramos, ya que puede ser instanciado varias veces.
+
+Se puede editar el _Blueprint_ en el explorador de contenidos, si se quiere hacer un cambio global en todas las instancias.
+O modificar cada instancia ubicada en el nivel, si se quieren hacer cambios individuales.
+
+=== Child Actors Component
+
+En Unreal Engine a veces hay características que solo están disponibles como un actor y no como un componente que puedas poner dentro de un actor.
+Eso significa que esas características no se podría agrupar dentro del actor _Blueprint_ usado a modo de _prefab_ que hemos comentado en el apartado anterior.
+
+En ese caso se puede añadir al actor _Blueprint_ un componente llamado _Child Actor Component_.
+Este recibe como argumento un actor que queremos instanciar o destruir cuando el actor principal sea instanciado o destruido, respectivamente.
+Así que ese actor que no podemos incluir como componente en el _prefab_ sería el actor hijo que el _Child Actor Component_ del _prefab_ gestionará.
+
+En general no se recomienda usar actores hijos.
+En lo posible es siempre mejor utilizar componentes.
+
+== Perforce Streams
 
 Obviamente Perforce soporta ramas, como muchos otros VCS.
 Pero merece la pena mencionar una característica avanzada llamada _streams_.

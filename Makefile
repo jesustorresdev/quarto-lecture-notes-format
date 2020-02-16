@@ -39,7 +39,7 @@ all: html pdf epub
 
 prepare-html:
 	@mkdir --parents $(HTMLOUTPUTDIR)
-	@cp --remove-destination --link --recursive $(MEDIAINPUTDIR) $(OUTPUTDIR)
+	cp --remove-destination --link --recursive $(MEDIAINPUTDIR) $(OUTPUTDIR)
 
 prepare-pdf:
 	@mkdir -p $(PDFOUTPUTDIR)

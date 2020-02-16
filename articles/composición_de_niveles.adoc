@@ -10,18 +10,60 @@ Esto, indudablemente, condiciona el diseño del nivel.
 Un caso extremo es lo que ocurría en los primeros juegos de la saga Resident Evil, donde abrir cualquier puerta, escalera o ascensor reproducía una cinemática durante la que se cargaba la siguiente escena.
 Obviamente tenía que ser así por las limitaciones del hardware del época.
 
-.Pantalla de carga en la apertura de puertas en Resident Evil HD
-video::lJK6QeDFncI[youtube]
+.Pantalla de carga al salir de la habitación en Resident Evil HD.
+video::lJK6QeDFncI[youtube,opts="modest",start=6,end=16,width=640,height=360]
 
 Hoy en día estas transiciones no destacan tanto.
-Se colocan ascensores, túneles bajo el agua o pasadizos estrechos en los que apenas se puede ver lo que hay delante,
-para disimular la carga de la siguiente parte del escenario.
+Se colocan ascensores, túneles bajo el agua o pasadizos estrechos en los que apenas se puede ver lo que hay delante, para disimular la carga de la siguiente parte del escenario.
 
 .Pasadizo en el _gamaplay_ de "Star Wars Jedi: Fallen Order" mostrado en el EA Play 2019.
-video::8939aURV9Dc[youtube,start=322]
+video::8939aURV9Dc[youtube,opts="modest",start=322,end=353,width=640,height=360]
 
 En mundos abiertos en exteriores se puede dividir el escenario en varias escenas e ir cargándolas dinámicamente cuando el jugador se aproxima, al tiempo que se descargan las escenas más alejadas que el jugador ya no puede ver.
 Para limitar el alcance de la visión del jugador se pueden barreras visuales —como montañas o edificios— pero en todo caso hay que tener en cuenta que la cámara nunca mostrará más allá de la distancia que tenga configurada como _far clipping plane_.
+
+[#img-world-chunk-loading]
+.Esquema de la división del mundo en subniveles cargándolas y descargándolas a demanda.
+[ditaa, format="png", shadows=false]
+....
++-=--------------+-=--------------+-=--------------+
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
++-=--------------+----------------+----------------+
+|                |c1AB            | cCFF           |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |      Jugador   |  Cargando...   |
+|                |    +---------> |                |
+|                |    |           |                |
+|                |    |           |                |
+|                |    :           |                |
+|                |    |           |                |
++-=--------------+----------------+----------------+
+|                |cCCC            |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                | Descargando... |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
++-=--------------+----------------+-=--------------+
+....
 
 // TODO: Dibujo de la idea básica
 
@@ -32,9 +74,9 @@ La solución de Unreal Engine 4 para este problema se llama https://docs.unreale
 En Level Streaming existen 3 elementos:
 
 * *Persistent Level*: o nivel persistente, es el nivel del escenario completo.
-Su función es gestionar los niveles que se van a ir cargando y descargando según sea necesario. Puede tener actores que van a ser permanentes, como el cielo o exteriores que se ven en la distancia.
+Su función es gestionar los subniveles que se van a ir cargando y descargando según sea necesario. Puede tener actores que van a ser permanentes, como el cielo o exteriores que se ven en la distancia.
 
-* *Streaming Levels*: son los niveles que se van a ir cargando y descargando en lugares concretos del _persistent level_.
+* *Streaming Levels*: son los subniveles que se van a ir cargando y descargando en lugares concretos del _persistent level_.
 
 * *Level Streaming Volumes*: son volúmenes que cargan o descargan los _streaming levels_ que se le indiquen cuando el jugador entra en el volumen.
 
@@ -45,7 +87,7 @@ Obviamente el motor provee de funciones para cargar y descargar _streaming level
 Unreal Engine 4 también soporta esta versión de _level streaming_ en la que los _streaming levels_ están distribuidos en una rejilla 2D y se van cargando y descargando según se acerca el jugador.
 
 En https://docs.unrealengine.com/en-US/Engine/LevelStreaming/WorldBrowser/index.html[Word composition] el nivel persistente no contiene información sobre los _streaming levels_, sino que estos se descubren buscando en la carpeta que los contiene y cada _streaming level_ contiene la información necesaria para cargar el nivel en el lugar adecuado.
-De esta forma los tanto el nivel persistente como los _streaming levels_ son realmente independientes, permitiendo que varios desarrolladores trabajen al mismo tiempo en distintas ubicaciones del escenario.
+De esta forma los tanto el nivel persistente como los _streaming levels_ son realmente independientes, permitiendo que varios desarrolladores trabajen al mismo tiempo en distintas ubicaciones del mundo.
 Lo que es especialmente importante en juegos de mundo abierto realmente grandes.
 
 .Ventana de _Word Composition_ donde se observa la disposición de los distintos niveles en el escenario.
@@ -86,8 +128,11 @@ Porque aunque los cálculos señalen que algo debe ir en cierto sitio, la precis
 
 == Traslación del origen
 
-Para resolver el problema de la limitación de la precisión de flotantes lo que se puede hacer es reubicar el origen del sistema de referencia del escenario cerca del jugador según este se aleja.
-O, para ser mas exactos, mover todos los actores del escenario para que el jugador y lo que le jugador tiene más cerca estén próximo al origen.
+Para resolver el problema de la limitación de la precisión de flotantes lo que se puede hacer es reubicar el origen del sistema de referencia del mundo cerca del jugador, según este se aleja.
+O, para ser mas exactos, mover todos los actores para que el jugador y lo que el jugador tiene más cerca estén próximos al origen.
+
+.Esquema ilustrativo de la traslación del origen.
+image::traslación_del_origen.svg[]
 
 // TODO: Añadir algún dibujo sobre traslación de origen
 
@@ -103,18 +148,18 @@ Esto funciona incluso en juegos en red, permitiendo mundos de hasta 20 Km. x 20 
 
 En Unity, como es más común, tendremos que hacerlo nosotros mismos:
 
-1. Iterar sobre todos los _GameObject_ de cada escena para desplazarlos de tal forma que el jugador vuelva a estar cerca del origen del sistema de referencia.
+. Iterar sobre todos los _GameObject_ de cada escena para desplazarlos de tal forma que el jugador vuelva a estar cerca del origen del sistema de referencia.
 
-2. Hay que tener cuidado con tener muchos _collider_ estáticos —aquellos en _GameObjects_ sin un component _Rigidbody_ por que moverlos tiene un gran impacto en el motor de físicas, haciendo que se pierda _frames_ o provocando problemas con el sonido.
+. Hay que tener cuidado con tener muchos _collider_ estáticos —aquellos en _GameObjects_ sin un component _Rigidbody_ por que moverlos tiene un gran impacto en el motor de físicas, haciendo que se pierda _frames_ o provocando problemas con el sonido.
 El cualquier caso, para evitar problemas con el motor de físicas, el mejor sitio para mover los objetos es `FixedUpdate()`.
 
-3. Otros componentes que necesiten coordenadas globales estáticas también pueden dar problemas.
+. Otros componentes que necesiten coordenadas globales estáticas también pueden dar problemas.
 Por ejemplo, si se usa _NavMesh_, hay que recalcularlos tras el desplazamiento.
 Mientras que no se puede utilizar _Global Illumination_, porque la información de iluminación se ha precalculado para objetos estáticos en posiciones concretas, lo que obliga a usar técnicas alternativas que puedan proporcionar resultados similares —como, por ejemplo, _Ambient Occlusion_—.
 
 ==== Renderizado relativo a la cámara
 
-En nuevo _render_ HDRP tiene una opción llamada _Camera-relative rendering_.
+En el nuevo _render_ HDRP tiene una opción llamada _Camera-relative rendering_.
 Al activarla, durante el _render_ las posiciones de los _GameObjects_ se modifican para que sean relativas a la cámara y no al origen de la escena.
 Esto puede ayudar a reducir defectos en la imagen renderizada debido a los problemas de precisión con los números de punto flotante.
 
@@ -164,8 +209,8 @@ Si observamos <<img-ieee754-precision>> y consideramos que 1 son 50 Km., es fác
 
 Sin embargo debemos considerar varios inconvenientes:
 
-1. Los modelos importados deberán haber sido escalados para se coherentes con la convención que hemos elegido para nuestro proyecto. En Maya, por ejemplo, 1 unidad es un centrímetro. Así que si no tenemos esto en cuenta, los modelos importados será enormes.
+. Los modelos importados deberán haber sido escalados para se coherentes con la convención que hemos elegido para nuestro proyecto. En Maya, por ejemplo, 1 unidad es un centímetro. Así que si no tenemos esto en cuenta, los modelos importados será enormes.
 
-2. Las unidades si son relevantes para el motor de físicas. Por ejemplo, en Unity si la gravedad vale 9.8 quiere decir 9.8 m./s.^2^. Si en un proyecto la unidad es 50 Km. y no el metro, la gravedad debería ser —si queremos que sea realista— 0,000196.
+. Las unidades si son relevantes para el motor de físicas. Por ejemplo, en Unity si la gravedad vale 9.8 quiere decir 9.8 m./s.^2^. Si en un proyecto la unidad es 50 Km. y no el metro, la gravedad debería ser —si queremos que sea realista— 0,000196.
 
-// TODO: Añadir referencia al TFG: "Generación procedural para mundos en videojuegos".
+// TODO: Añadir referencia al TFG "Generación procedural para mundos en videojuegos" cuando esté publicado.
