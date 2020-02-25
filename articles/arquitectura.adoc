@@ -296,7 +296,7 @@ En Unreal Engine se recomienda ignorar los _singleton_ y, en su lugar, extender 
 La forma adecuada de usar `GameInstance` es crear un _Blueprints_ heredando de la clase `GameInstance`.
 Mientras que en C++ se debe heredar de `UGameInstance`.
 
-Obviamente hay que tener mucho cuidado estructurando el código porqe `GameInstance` solo hay una en el juego, para toda la lógica y los datos que queremos meter ahí.
+Obviamente hay que tener mucho cuidado estructurando el código porque `GameInstance` solo hay una en el juego, para toda la lógica y los datos que queremos meter ahí.
 
 ==== Uso en Unity
 
@@ -348,6 +348,16 @@ public class Singleton : MonoBehaviour
 <4> Como `_instance` es privado, otras partes del código accederán a la instancia del _singleton_ usando esta propiedad de la siguiente manera: `Singleton.Instance`.
 <5> Al acceder se comprueba si ya existe existe una instancia. Sino es así, se busca el primer `GameObject` con el componente `Singleton` y se guarda su referencia en `_instance`.
 <6> Si no se encontrase ningún objeto con el componente `Singleton`, se crea uno, se añade el componente `Singleton` y esta es la instancia que se guarda en `_instance` y que se devuelve desde la propiedad.
+
+[NOTE]
+====
+Al ejecutar el juego en el editor, Unity resetea el estado de los _scripts_.
+En proyectos grandes eso puede llegar a consumir bastante tiempo, haciendo que cada vez sea mas díficil iterar rápidamente entre programar y probar, durante el desarrollo del proyecto.
+
+El https://docs.unity3d.com/2019.3/Documentation/Manual/DomainReloading.html[Domain Reloading], que es cómo se llama este mecanismo, se puede desactivar.
+Pero entonces es necesario modificar el proyecto para que los campos y eventos estáticos se reseten adecuadamente al ejecutar el juego.
+Cómo hacerlo está perfectamente explicado en la https://docs.unity3d.com/2019.3/Documentation/Manual/DomainReloading.html[documentación].
+====
 
 Lo cierto es que el ejemplo anterior es complejo porque considera muchos casos y hace muchas cosas por nosotros.
 Una de las que menos convencen es lo de crear el objeto si no existe y añadir un componente `Singleton`.
@@ -754,3 +764,97 @@ video::6vmRwLYWNRo[youtube,opts="modest",width=640,height=360]
 
 .Vídeo de la conferencia "Game Architecture with Scriptable Objects" en nite Austin 2017.
 video::raQ3iHhE_Kk[youtube,opts="modest",width=640,height=360]
+
+== Unreal Engine Game Framework
+
+Unreal Engine trae un https://docs.unrealengine.com/en-US/Gameplay/Framework/index.html[game framework] muy orientado al tipo de juegos que hace Epic —videojuegos de acción competitivos en primera o tercera persona— que incluye algunos de los componentes que hemos comentado hasta el momento.
+
+A continuación veremos qué componentes son, cómo se relacionan con lo que conocemos y qué ideas se pueden exportar a otros motores.
+
+=== GameMode y GameState
+
+En el _game framework_ de Unreal Engine el trabajo del _game manager_ se divide entre estas dos clases:
+
+* *GameMode*, que contiene las reglas del juego: transiciones entre niveles, número de jugadores, condiciones para ganar, reglas para hacer aparecer o reaparecer a los jugadores, cuándo se puede pausar el juego y que ocurre cuando se pide, etc.
+
+* *GameState*, que almacena los datos que describen el estado del juego: puntuaciones, lista de jugadores, objetivos cumplidos, etc.
+
+En general no se recomienda guardar en _Game State_ datos específicos de cada jugador —como el nombre, el nivel de salud o la puntuación específica de cada jugador— sino solo datos generales del estado del juego.
+Los datos específicos de jugadores se deben almacenar en una instancia de *PlayerState* para cada jugador.
+
+==== Ventajas
+
+Esta separación del _game manager_ entre una parte responsable de la lógica del juego y otra de los datos del juego es bastante conveniente:
+
+* Si estamos haciendo un juego en red, la lógica del juego debe ejecutarse únicamente en le servidor para evitar que se haga trampas.
+Mientras que los datos del juego confiables deben almacenarse en el servidor pero mantenerse una copia sincroniza en cada cliente.
+De hecho, así lo hace Unreal con `GameMode`, `GameState` y `PlayerState`.
+
+* Incluso si el juego no es en red, lo más normal es que tengan algún mecanismo de salvado de la partida.
+Separar la lógica del juego de los datos facilita poder almacenar estos últimos para salvar y recuperar el estado del juego.
+
+==== GameMode como configurador del juego
+
+Entre los datos de `GameMode` están las clases del _framework_ que se van instanciar para implementar aspectos concretos del juego: `GameState`, `PlayerController`, `PlayerState`, `HUD` o `DefaultPawn`.
+Así, por ejemplo, se puede cambiar en el `GameMode` el `DefaultPawn` para cambiar el actor del personaje del jugador en el juego.
+
+==== Datos privados de cada jugador
+
+En Unreal Engine —así como en Unity y en otros motores— el lugar recomendado para almacenar datos que el resto de jugadores no necesitan conocer —como el inventario o la cantidad de munición— es el actor / entidad / objeto del personaje del jugador.
+
+Como hemos comentado anteriormente, es interesante que estos datos estén separados en un objeto diferente, aunque accesible desde el personaje, para facilitar su almacenamiento y recuperación.
+
+.Ejemplo de persistencia de datos del jugador.
+[plantuml, format="svg"]
+....
+hide empty members
+class Player
+
+class PlayerPersistence {
+    +GetData() : PlayerData
+    +SaveData(data: PlayerData)
+}
+
+class PlayerData {
+    + health: float
+    + items: InventoryItems[]
+    + location: Vector3
+}
+
+Player -- PlayerData
+PlayerPersistence -- PlayerData
+....
+
+=== Controller
+
+En Unreal Engine se llama `Controller` al actor responsable de controlar un personaje.
+Es decir, el personaje y su controlador son actores diferentes, mientras que en Unity lo habitual es que el controlador sea un componente del `GameObject` del personaje.
+
+Hay dos clases que heredan de `Controller`:
+
+* *PlayerController*, que lee la entrada del jugador y controla el personaje en base a ella.
+Entre sus propiedades está la clase de la cámara y la del HUD que se va a usar para generar la vista del jugador
+`PlayerController` es el responsable de instanciar esa clases para crear el actor cámara y el actor HUD.
+
+* *AIController*, donde el control proviene de la IA.
+
+NOTE: La clase HUD del _game framework_ es código antiguo.
+Sigue existiendo porque hay quien lo usa para acceder a lienzo para dibujar su propia interfaz de usuario.
+Pero en la actualidad es mucho mejor crear _widgets_ con UMG y mostrarlos con _Add To Viewport_.
+
+Conectar cámara y HUD con el `PlayerController` es interesante en juegos multijugador donde se juega con la pantalla partida.
+
+El equivalente en Unity, por ejemplo, sería que el componente `PlayerController` coordinara a otros dos componentes del mismo `GameObject` del personaje del jugador: `CameraController` y `UIController`.
+Estos pueden ser configurados con el _prefab_ de la cámara y de la interfaz de usuario, respectivamente, y hacerse responsable de instanciarlos, configurarlos y gestionarlos durante el juego.
+
+=== Pawn y Character
+
+Los `Controller` pueden tomar el control de dos tipos de actores del _game framework_ de Unreal Engine:
+
+* *Pawn*, que son personajes muy básicos, no necesariamente humanoides.
+El `DefaultPawn` se pueden mover libre en 3D, sin ser afectados por la gravedad.
+
+* *Character*, que extiende `Pawn` añadirle todo lo que necesita un personaje tradicional: una cápsula de colisión, un `SkeletalMeshComponent` —una malla que puede ser animada mediante el sistema de animación de Unreal— y un `CharacterMovementComponent`, que implementa modos de movimiento típicos como caminar, correr, saltar, volar y nadar.
+
+El código del `CharacterMovementComponent` puede ser muy ilustrativo sobre cómo hacer nuestro propio `LocomotionController` o `MovementController` de un personaje en cualquier otro motor.
+En Unity el `CharacterController` es demasiado simple y acaba teniendo que ser sustituido por una implementación propia —o una comprada en el Asset Store— en la mayor parte de los casos.
