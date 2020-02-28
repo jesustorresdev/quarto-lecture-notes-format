@@ -1,0 +1,102 @@
+= Desarrollo de Videojuegos 3D: Sistemas de partículas
+Jesús Torres <jmtorres@ull.es>
+include::../config/attributes.adoc[]
+:imagesdir: {imagesdir}/sistemas_de_partículas
+2019-2020
+
+En cualquier aplicación gráfica, cuando queremos mostrar objetos sólidos 2D usamos _sprites_.
+Y si es en 3D usamos mallas.
+¿Pero qué podemos usar cuando queremos representar objetos no tan sólidos, como: líquidos, fuego, humo, gases en general o rayos cósmicos?.
+La respuesta es, un sistema de partículas.
+
+== Componentes de un sistema de partículas
+
+Cualquier sistema de partículas tiene como mínimo dos componentes fundamentales:
+
+:fn-cuadrangulo: pass:n[Un cuadrángulo es un polígono de cuatro lados.]
+
+* Las partículas, que por lo general son pequeños cuadrángulos{blank}footnote:[{fn-cuadrangulo}] 2D con una textura que siempre están de cara a la cámara —también conocidos como _billboards_— aunque en algunas implementaciones también soportan que cada partícula sea una malla 3D. Estas partículas tiene propiedades como: velocidad, textura, color, tiempo de vida, tamaño, etc.
+
+* El emisor, que es un objeto de la escena que desde su localización crea las partículas con las propiedades indicadas. Esto generalmente lo hace utilizando un _pool_ de partículas, para así poder volver a utilizar las partículas muertas de forma rápida y eficiente.
+
+Jugando con las propiedades de como se emiten y de las propias partículas, se puede conseguir todo tipo de efectos para mostrar objetos no sólidos en las escenas.
+
+image::simple_particle_system.png[]
+
+== Propiedades del sistema de partículas
+
+Algunas propiedades comunes de cualquier sistema de partículas son:
+
+* *Duración*, *retardo* y *repetición*, que indican durante cuánto tiempo se van a emitir partículas, cuánto tardarán en comenzar a emitirse al empezar y si al terminar el ciclo de emisión volverá a comenzar desde el principio, haciendo así que se emitan partículas constantemente.
+
+* *Tiempo de vida*, que indica cuanto tiempo pasará antes de que cada partícula muera.
+
+* *Velocidad*, *tamaño* y *rotación*, que es la velocidad, tamaño y rotación de cada partícula al ser emitida.
+
+* *Color*, *textura*, que indica el color y la textura de la partícula. En algunos casos se puede sustituir el _shader_ que dibuja la partícula para aplicar efectos particulares.
+
+* *Ratio de emisión*, que es el ritmo al que se emiten partículas.
+
+* *Forma del emisor*, que indica la forma del objeto emisor y sus dimensiones. El emisor, por ejemplo, puede ser un cono, una esfera o un cubo.
+
+image::conic_particle_system.png[]
+
+Gran parte de estos valores se pueden fijar o generar aleatoriamente.
+En este último caso, ya sea de forma uniforme en un rango de valores o aplicando alguna curva con la que ajustar la distribución.
+
+Algunas de estas propiedades también se pueden configurar para que cambien de cierta manera durante la vida de la partícula.
+Por ejemplo, que las partículas sean amarillas al empezar pero que según pasa el tiempo el color se vaya desplazando al rojo.
+O que el ratio de emisión sea pequeño al principio de la emisión y vaya aumentando con el tiempo.
+
+image::emision_rate_curve.png[]
+
+== Partículas con física
+
+En muchos motores las partículas, como cualquier otro objeto del juego, pueden tener física.
+Pueden "caer" después de haber sido emitidas, al verse efectadas por la gravedad.
+Y pueden colisionar o funcionar como un _trigger_, ejecutando cierta acción cuando entran o salen del _collider_ de otro objeto.
+
+image::particle_system_with_gravity.png[]
+
+Sin embargo es una funcionalidad que hay que utilizar con cuidado, evaluando antes otras alternativas.
+Porque tener de pronto miles de partículas con sus _colliders_ interactuando en la escena no puede ser muy barato.
+
+Por ejemplo, supongamos que queremos tener un fuego que haga daño al jugador cuando se acerca.
+Antes de utilizar _triggers_ en las partículas para que hagan daño al jugador al tocarlo, es mucho mas práctico y eficiente añadir un único _collider_ alrededor del juego que le haga daño al jugado cuando entre, creando la ilusión de que es por las llamas del juego.
+
+Sin embargo un uso bastante interesante puede ser simular lluvia.
+Gracias al uso de _triggers_, las partículas pueden saber cuándo han tocado una superficie y destruirse.
+Así evitamos que la lluvia atraviese los techos de las construcciones.
+
+== Implementaciones
+
+Cada motor de videojuegos tiene su implementación de sistema de partículas:
+
+* En Unity es un componente que se puede incorporar a cualquier _GameObject_.
+* En Unreal Engine es un recurso almacenado en `Content`. Para usarlo, en la escena se tiene que añadir un actor _Emitter_ configurado para usar un recurso de sistema de partículas concreto.
+
+En ambos casos, el sistema de partículas viene con una funcionalidad básica, que se puede extender añadiendo módulos especializados en efectos adicionales.
+
+Los sistemas de partículas utilizan la CPU para los cálculos pero es posible instanciar las partículas en la GPU para que parte de los cálculos se hagan en ella:
+
+* En Unreal eso activa cambiando el _TypeData_ a _GPU Sprites_, pero no es compatible con todos los módulos.
+
+* Unity requiere activar la opción _Enable GPU Instanciating_ del módulo _Render_ del sistema de partículas y el _shader_ de la partícula debe ser _Particles/Standard Surface_.
+Además solo está disponible en plataformas donde se soporta la instanciación en la GPU.
+
+:fn-cshapr-job-system: pass:n[El _C# Job System_ permite ejectar tareas distribuyendolas entre varios para mejorar el rendimiento.]
+En el caso de que los sistemas de partículas integrados no tengan los efectos que buscamos, es bastante común tener que desarrollar un sistema propio.
+En ese sentido Unity facilita las cosas al permitir utilizar su https://docs.unity3d.com/Manual/particle-system-job-system-integration.html[_C# Job System_]{blank}footnote:[{fn-cshapr-job-system}] para personalizar el comportamiento de las partículas haciendo los cálculos de forma más eficiente.
+Y, obviamente, es posible encontrar en el _Asset Store_ varios sistemas de partículas hechos por otros desarrolladores.
+
+== Consejos
+
+Los sistemas de partículas complejos pueden sufrir cierto retraso la primera vez que se usan, especialmente en plataformas con menos recursos, como los dispositivos móviles.
+Esto es debido a que generalmente están formados por varios tipos de partículas diferentes.
+Por ejemplo, en una explosión hay partículas de humo, chispas y fuego.
+Estas partículas se cargarán la primera vez que se van a usar y eso requiere algo de tiempo.
+
+Una posible solución es al menos tener una copia del sistema de partículas instanciada en una zona de la escena que no sea accesible por el jugador.
+Así la carga del sistema de partículas por primera vez ocurrirá durante la carga de la escena.
+
+TIP: La solución ideal es haber implementado un _pool_ de objetos que, entre otros, gestione instancias de los sistemas de partículas que vayamos a usar.
