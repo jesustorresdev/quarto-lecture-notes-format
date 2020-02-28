@@ -1,0 +1,605 @@
+= Desarrollo de Videojuegos 3D: Físicas en 3D
+Jesús Torres <jmtorres@ull.es>
+include::../config/attributes.adoc[]
+:imagesdir: {imagesdir}/físicas
+v2019-2020
+
+Aunque en los videojuegos se suele hacer mucho hincapié en la calidad del _render_, en un buen motor de videojuegos hay otro componente igual de importante para dotar de realismo a la simulación: el motor de físicas.
+
+== Introducción a los motores de físicas
+
+El motor de físicas es un componente desarrollado para realizar simulaciones de sistemas físicos con el objeto de modelar el mundo real.
+Pero hay que tener en cuenta que por las limitaciones impuestas por el tiempo real, los motores utilizados en videojuegos generalmente solo simulan sistemas relativamente simples y lo hacen de forma aproximada.
+Excepto en juegos con puzles donde el comportamiento físico es un factor determinante, en general solo hace falta que para el jugador la simulación sea lo suficientemente convincente.
+
+=== Tipos de simulaciones
+
+Los motores de físicas actuales suelen soportar diferentes tipos de simulaciones para diferentes tipos de objetos.
+
+==== Dinámica de sólido rígido 
+
+La simulación de la dinámica de solido rígido es la responsable de la simulación de la acción de fuerzas y colisiones en cuerpos no deformables.
+Es el tipo de simulación más sencilla y rápida de calcular y el primer tipo de simulación que se soportó en los motores de físicas para videojuegos.
+
+Para este tipo de simulación generalmente se le proporciona al motor un versión simplificada de la malla del objeto, que se usa para detectar colisiones.
+Mientras que para simular la dinámica de los cuerpos cuando hay colisiones o se aplican fuerzas mediante código, los motores suelen implementar alguna versión del https://es.wikipedia.org/wiki/M%C3%A9todo_de_Gauss-Seidel[método Gauss-Siedel].
+
+Una optimización común es que los objetos que permanecen detenidos durante cierto tiempo son sacados temporalmente de la simulación, aunque no de la detección de colisiones, hasta que son perturbados de nuevo.  
+
+==== Dinámica de cuerpos blandos
+
+Este tipo de simulación es usada con objetos blandos, tejidos y líquidos.
+
+Los objetos blandos se pueden modelar como varios cuerpos rígidos conectados mediante restricciones respecto a su movimiento.
+Usando estos cuerpos como el esqueleto de una malla, se puede obtener una superficie para el _rendering_ mediante animación esqueletal.
+
+Los tejidos se suelen modelar en el motor de física mediante partículas entre las que se establecer restricciones que confinan su movimiento mediante parámetros de estiramiento y flexión, entre otros.
+Esta técnica basada en partículas también se puede usar para simular objetos blandos y fluidos.
+
+Sin embargo la técnica que ofrece más precisión son los sistemas basados en https://es.wikipedia.org/wiki/M%C3%A9todo_de_los_elementos_finitos[elementos finitos].
+En ella la malla del objeto se descompone en elementos mas pequeños conectados mediante nodos.
+Los nodos representan los puntos donde se van a calcular desplazamientos.
+Mientras que los elementos está determinados por conjuntos de nodos y representan aspectos de las propiedades físicas del objeto, como la plasticidad y la rigidez.
+
+Sobre el modelo de elementos finitos se hacen los cálculos considerando el estrés al que las fuerzas involucradas someten a la estructura.
+El resultado permite simular con gran realismo deformaciones, destrucciones y otros efectos físicos en todo tipo de materiales.
+
+En el vídeo <<video-dmm>> se puede ver un ejemplo de este efecto de deformación obtenido mediante elementos finitos con el motor "Digital Molecular Matter".
+
+[#video-dmm]
+.Escena final de "Starkiller Vs. AT-ST" de "Star Wars The Force Unleashed".
+video::TRKHJmH9yNM[youtube,opts="modest",start=686,width=640,height=360]
+
+Lamentablemente las técnicas basadas en elementos finitos en tiempo real son tremendamente costosas, por lo que aun su uso no está muy extendido.
+
+==== Sistemas de partículas
+
+Los sistemas de partículas son utilizados para simular humo, fuego, explosiones, agua en movimiento o efectos visuales.
+
+Estos sistemas tienen un emisor que lanza partículas con una serie de propiedades preconfiguradas.
+A cada partícula se le pueden aplicar las reglas de la simulación de la dinámica de sólido rígido, por lo que el número de partículas viene limitado por la capacidad del hardware para simular una gran cantidad de estos objetos al mismo tiempo.
+
+==== Ragdoll
+
+Esta es un técnica utilizada para animar el movimiento de los personajes cuando mueren.
+Trata el cuerpo del personaje como una serie de cuerpos rígidos unidos y simula lo que ocurre cuando el cuerpo del personaje colapsa a caer inanimado.
+
+=== Motores de física
+
+El motor de físicas representa una parte importante del código de cualquier motor de videojuegos y programarlo no es sencillo.
+Por suerte en la actualizada hay un buen número de librerías y los motores de videojuegos existentes suelen integrar alguna de ellas. 
+
+==== ODE
+
+http://www.ode.org[ODE] es un motor libre —disponible en licencia dual LGPL/BSD— que soporta detección de colisiones y dinámica de solidos rígidos.
+
+==== Bullet
+
+https://pybullet.org/[Bullet] es un motor libre —disponible en licencia Zlib— utilizado tanto en producciones cinematográficas como en videojuegos.
+Es el motor incluido con Godot y el motor de videojuegos de Blender y se uso en Grand Theft Auto IV y V, Rocket League y Persona 5, entre otros.
+
+Aparte de las características de detección de colisiones y dinámica de sólidos rígidos, soporta también dinámica de cuerpos blandos y detección continua de colisión —o continuous collision detection (CCD), en inglés—.
+Esta técnica es muy útil cuando en la simulación hay objetos muy pequeños que se mueven muy rápido, como veremos más adelante.
+
+==== PhysX
+
+https://developer.nvidia.com/gameworks-PhysX-overview[PhysX] probablemente es el motor de físicas más popular.
+Es un motor libre con licencia BSD-3 que ha sido usado en The Witcher 3, Fallout 4, Batman: Arkham Knight y Borderlands 2, entre otros.
+Además es el moto integrado en Unreal Engine y Unity, entre otros motores, lo que justifica su gran popularidad.
+
+PhysX fue adquirido por NVIDIA con el propósito de ofrecer un motor que pudiera acelerarse usando la GPU de sus tarjetas gráficas Geforce.
+Sin embargo además puede ejecutare en cualquier CPU y está disponible para Windows, Linux, Mac, PS4, Xbox One, Nintendo Switch, IOS y Android.
+
+A parte de las características básicas de simulación de la dinámica de sólidos rígidos, PhysX adicionalmente soporta detección continua de colisión.
+Además NVIDIA ofrece una colección de librerías adicionales con las que ampliar los tipos de simulaciones soportadas: destrucciones, ropa, líquidos, fuego y humo.
+Y PhysX 5.0 se ha anunciado el soporte de modelos basados en elementos finitos. 
+
+==== Havok
+
+http://www.havok.com[Havok] es un producto comercial y el estándar de la industria en juegos AAA, proporcionando un solución muy robusta, optimizada —especialmente en mundos muy grandes— y con el mayor conjunto de características.
+
+En el vídeo <<vdeo-unity-physics-vs-havok>> se pueden ver las diferencias en cuanto a simulación entre Havok y el motor de físicas de Unity, basado en PhysX:
+
+[#video-unity-physics-vs-havok]
+."Overview of Havok Physics in Unity" en Unite Copenhagen 2019.
+video::Uv7DWq6KFbk[youtube,opts="modest",start=808,end=1662,width=640,height=360]
+
+Havok está disponible en Unity https://blogs.unity3d.com/es/2019/11/06/havok-physics-in-unity/[gratuitamente en versión _preview_] solo para proyectos que usan DOTS.
+En el futuro tendrá https://assetstore.unity.com/subscriptions/havok[un coste] para aquellos usuarios con licencia Unity Pro.
+
+En Unreal Engine es un poco más complejo.
+La integración solo está disponible para licenciaros de Unreal y hace falta adquirir el SDK de Havok aparte.
+
+En Wikipedia hay una lisa muy extensa, aunque incompleta, de https://en.wikipedia.org/wiki/List_of_games_using_Havok[videojuegos que han usado Havok].
+
+==== Digital Molecular Matter (DMM)
+
+Digital Molecular Matter (DMM) de http://www.pixeluxentertainment.com[Pixelux Entertainment S.A.] es un moto de físicas único en tanto en cuanto usa elementos finitos para simular la dinámica de cuerpos deformables y rompibles.
+
+Un ejemplo de lo que puede hacer se puede ver en el videojuego "Star Wars: The Force Unleashed".
+En el vídeo <<video-dmm>> se muestra una escena baste conocida de dicho juego en la que el protagonistas aplastan un AT-ST con la fuerza.
+
+=== GPU y procesadores de uso específicos
+
+Años atrás la industria jugó con la idea de que las simulaciones físicas se ejecutaran en un procesador especializado —como estaba pasando con los gráficos— descargando de ese trabajo a la CPU y proporcionando simulaciones realistas como no se habían visto hasta entonces.
+
+Con esa idea, por ejemplo, NovodeX creo su procesadores PhysX y el PhysX SDK.
+Posteriormente la empresa fue adquirida por AGEIA, que fabricó tarjetas de expansión con ese chip en formato PCIe.
+Finalmente AGEIA fue adquirida por NVIDIA que adaptó PhysX para que funcionara sobre sus GPU y durante mucho tiempo promoción el soporte mejorado de PhysX como una ventaja de sus tarjetas.
+
+En la actualidad el motor de físicas se ejecuta en la CPU, incluso en los motores de videojuegos que usan PhysX.
+A fin de cuentas es mucho más conveniente reservar la potencia de GPU para los gráficos.
+
+=== Motor de física determinista
+
+Debido a como los motores de físicas están diseñadas para ofrece soluciones aproximadas en tiempo real, por lo general no son deterministas.
+Esto quiere decir que en las mismas circunstancias no generan siempre la misma simulación.
+
+Esto no suele ser un problema, en excepto en algunos juegos en red donde se envían las acciones de los usuarios a los clientes y estos actualizan con esa información el estado del juego.
+Porque para que todos los jugadores vean lo mismo la simulación física en cada uno de los clientes debería ser exactamente igual.
+Apareciendo la necesidad de tener un motor con física determinista.
+
+Actualmente Havok ofrece física determinista entre clientes que se ejecutan en la misma arquitectura de CPU.
+Mientras que Unity se ha propuesto que su nuevo Unity Physics para DOTS sea determinista incluso entre plataformas diferentes
+
+// Véase: https://forum.unity.com/threads/unity-physics-discussion.646486/#post-4336525
+
+== Colisiones
+
+Para detectar colisiones los motores de físicas necesitan una versión simplificada de la malla del objeto.
+Por eso los motores proporcionan una serie de componentes con los que describir esa geometría.
+
+=== _Colliders_
+
+En un Unreal Engine están: `BoxComponent`, `SphereComponent` y `CapsuleComponent`, que tienen la forma que su propio nombre indica.
+Mientras que en Unity se llaman _colliders_ y tienen exactamente las mismas formas que los de Unreal: `BoxCollidder`, `SphereCollider` y `CapsuleCollider`.
+
+=== _Colliders_ complejos
+
+Cuando esas formas tan simples no son suficientes, se puede optar por crear la geometría para el motor de físicas a partir de la propia malla del objeto.
+
+En Unity se hace añadiendo el componente `MeshCollider`, que usa el component `Mesh` del mismo `GameObject` para obtener la malla y calcular una forma que encaje perfectamente con ella.
+Sin embargo esto tiene varios inconvenientes:
+
+* El motor es incapaz de detectar colisiones entre dos _mesh collider_.
+
+* No se pueden utilizar en `GameObject` con un componente `RigidBody`, ya que Physx necesita almacenar la velocidad y otros valores en cada vértice y esto es muy caro para este tipo de geometría.
+
+Ambos inconvenientes se pueden sortear activando la propiedad `MeshCollider.Convex` que genera un _collider_ convexo con un máximo de 255 triángulos.
+
+Como comentaremos más adelante, Unreal Engine genera automáticamente para cada malla una geometría de colisión compleja que se ajusta perfectamente a ella.
+Esta se puede utilizar para la detección de colisión pero en realidad se crea con otro fin.
+Para la detección de colisiones se puede añadir una geometría convexa, con diferentes grados de complejidad, que se ajuste algo mejor a las mallas que las formas primitivas que hemos comentado.
+
+=== Vehículos
+
+La física de los vehículos es lo bastante compleja como para que el motor de físicas traiga componentes específicos que contemplen aspectos tales cmo la física de las ruedas, la suspensión y la fricción de los neumáticos.
+
+A este respecto, Unity proporciona un componente https://docs.unity3d.com/2019.3/Documentation/Manual/class-WheelCollider.html[WheelCollider] y https://docs.unity3d.com/2019.3/Documentation/Manual/WheelColliderTutorial.html[un tutorial] sobre cómo usarlo.
+
+Unreal proporciona el componente denominado https://docs.unrealengine.com/en-US/Engine/Physics/Vehicles/SimpleWheeledVehicleMovementComponent/index.html[SimpleWheeledVehicleMovement] para incluir en el actor del vehículo y tienen una guía https://docs.unrealengine.com/en-US/Engine/Physics/Vehicles/index.html[muy detallada] al respecto.
+
+=== Capas
+
+Los motores permiten poner colocar los _colliders_ en distintas categorías o capas, para así controlar con qué otros _colliders_ pueden colisionar.
+
+== Colisiones, _Triggers_ y Cinemáticos
+
+El motor de físicas maneja dos conceptos de forma independiente:
+
+* *Colisión*, que es el mecanismo por el cual detecta colisiones entre las entidades conocidas, permitiendo que cuando eso ocurre una bloqueen a otras su movimiento.
+Para esto es para lo que se le coloca al objeto un cápsula u algún otro tipo de colisión.
+
+* *Simulación física*, que es el mecanismo por el cuál el motor de físicas simula el comportamiento físico de las entidades, teniendo en cuenta colisiones y fuerzas aplicadas.
+El motor de físicas toma el control del movimiento de las entidades para actualizarlo con los resultados de la simulación.
+Para esto es para lo que se coloca al objeto en Unity el componente `RigidBody`.
+
+Los objetos con física tienen ambas cosas.
+Es decir, tiene una geometría que sirve al motor de físicas para saber cuándo colisionan y su movimiento está controlado por el motor.
+
+=== Cinemáticos
+
+Pero también es posible tener objetos con detección de colisión pero sin simulación.
+Esos objetos se llaman cinemáticos y lo que nos permite es moverlos libremente por la escena, al tiempo que pueden colisionar con otros objetos físicos o cinemáticos.
+En una colisión, el movimiento del objeto cinemático no se ve alterado, ya que no responde a la simulación física.
+
+En Unreal Engine se crean objetos cinemáticos desactivando la propiedad menu:Physics[Simulate Physics] o con mediante el bloque de Blueprint `Set Simulate Physics`.
+En Unity son objetos cinemáticos aquellos con componente propiedad `Is Kinematic` del componente `RigidBody` a verdadero.
+
+=== _Triggers_
+
+A veces las geometrías físicas no nos interesan para detectar colisiones, sino como volúmenes en los que queremos detectar cuando entra o sale un objeto.
+En ese caso se puede inidicar que la geometría es un _trigger_ haciendo que el motor de físicas la ignore y no la tenga en cuenta en le detección de colisiones.
+
+Para eso los _colliders_ de Unity tiene una propiedad `Is Trigger`.
+En Unreal Engine el comportamiento en cada actor se puede fijar en base al tipo de objeto que es el otro actor.
+Simplemente hay que marca en la propiedad menu:Collision[Collision Response] con qué objeto se va a permitir el _overlap_.
+
+image::col_overlap_event_sphere.png[]
+
+=== Eventos
+
+Los motores pueden informar al código tanto de colisiones como de eventos de _trigger_, según el modo que se esté usando.
+
+En Unreal los eventos de colisión se emiten si está activa la propiedad menu:Collision[Simulation Generates Hit Events].
+Mientras que en para los eventos de _trigger_ tiene que estar activa la propiedad menu:Collision[Generate Overlap Events].
+Pero no se recomienda que en un mismo actor se intente interceptar ambos tipos de eventos ya que, por ejemplo, la colisión de un objeto muy rápido contra otro puede generar un evento de _overlap_, aunque esté configurados para bloquearse.
+
+En Unity reciben evento de colisión los objetos con componente `RigidBody`.
+Eso significa que los objetos estáticos que se verán en el siguiente apartado, no pueden recibir este tipo de eventos por no tener `RigidBody`.
+Mientras que reciben evento de _trigger_ los objetos con un _collider_ en modo _trigger_.
+
+En la https://docs.unity3d.com/2019.3/Documentation/Manual/CollidersOverview.html[documentación de Unity] hay una tabla donde se índica cuando se emiten eventos en función del tipo de objetos que colisionan.
+
+=== Multiples geometrías de colisión
+
+¿Qué ocurre si un `GameObject` o un actor tienen varios cápsulas u otro tipo de geometría de colisión?
+
+* En Unreal Engine solo se tiene en cuenta el componente raíz para detectar colisiones.
+
+* En Unity un `GameObject` varios _colliders_, ya asea en el mismo objeto o en objetos hijos, se comportan como uno solo desde el punto de vista de la detección de colisiones.
+Si el `GameObject` tiene un `RigidBody` emitirá a sus _scripts_ los eventos correspondiente, incluso aunque la colisión involucre a _colliders_ en objetos hijos.
+
+== Objetos estáticos frente a dinámicos
+
+Desde el punto del motor de física, los objetos de una escena pueden ser estáticos o dinámicos.
+
+* Los *objetos estáticos* nunca se mueven.
+Se usan para definir la geometría de la escena, que siempre es la misma.
+Se puede colisionar con ellos pero nunca se moverán del sitio.
+
+* Los *objetos dinámicos* si se mueven.
+Al contrario que los objetos estáticos, estos no solo pueden colisionar sino que el motor de físicas cambia su movimiento según las colisiones sufridas o según las fuerzas aplicadas mediante código.
+
+Lo importante es que el motor de físicas realiza ciertas optimizaciones sabiendo que los objetos estáticos no se mueven ni cambian de tamaño ni van a aparecer o desaparecer.
+Por lo tanto, si se altera de alguna forma un objeto estático, se obliga al motor de física a rehacer ciertos cálculos internos, afectando al rendimiento del juego.
+
+En Unity son objetos estáticos todos aquellos que tengan un _collider_ pero no un `RigidBody`, porque son los objetos con los que el motor de físicas puede detectar colisiones pero no los puede mover.
+
+En Unreal Engine son objetos estáticos aquellos cuya propiedad menu:Transform[Mobility] está puesta como menu:Movable[].
+Afortunadamente Unreal no ofrece ninguna forma de mover actores que no son menu:Movable[], de forma parecida al efecto a la propiedad `Static` de Unity.
+
+== Detección continua de colisiones
+
+Por defecto las colisiones se detectan de forma discreta, que es la forma más rápida y sencilla de hacerlo.
+En cada paso en el tiempo de simulación se calcula la posición de los objetos y que colisiones hay.
+
+Sin embargo esto abre la puerta a que objetos pequeños que se muevan muy rápido puedan pasar a través de otros sin ser detectados, en lo que dura un paso en el tiempo de simulación.
+
+Alguna posibles soluciones a este problema son:
+
+* Que el objeto en cada instante de tiempo lance un _raycast_ en la dirección del movimiento para detectar objetos que podría atravesar en el siguiente paso.
+
+* Que el objeto tenga una cola invisible que aumente su tamaño de forma no perceptible, para que el motor pueda detectar más fácilmente la colisión.
+
+* Activar la detección continua de colisión —o _continuous collision detection_ (CCD), en inglés— si el motor lo soporta.
+
+Tanto Unreal Engine como Unity soportan CCD.
+En el primero se activa mediante la propiedad menu:Collision[Use CCD].
+En el segundo es el componente https://docs.unity3d.com/2019.3/Documentation/Manual/class-Rigidbody.html[RigidBody] el que ofrece varios modos de funcionamiento a través de la propiedad `Collision Detection`:
+
+* *Discrete*, que es el modo ya comentado de detección discreta de la colisión (DCD).
+
+* *Continuous*, que usa detección discreta respecto a otros objetos dinámicos y detección continua respecto a objetos estáticos.
++
+El algoritmo que usa se llama _Time Of Impact_ (TOI) y en cada paso calcula, usando la velocidad lineal, el instante del posible antes del siguiente paso de simulación.
+Si tiene éxito, da un sub-paso de simulación hasta ese tiempo y repite el algoritmo
++
+Este algoritmo tiene un gran impacto en el rendimiento del motor de físicas.
+Y como no tiene en cuenta la velocidad angular, hay colisiones que no puede detectar.
+
+* *Continuous Dynamic*, que igual que el anterior utiliza CCD TOI contra objetos estáticos pero además contra objetos dinámicos configurados con _Continuous_ y _Continuous Dynamic_.
+
+* *Continuous Speculative*, que usa CCD especulativo contra otros objetos dinámicos y estáticos.
+Este el único modo CCD que se puede usar en objetos cinemáticos y es menos costoso que el algoritmo TOI.
+
+Algunos detalles más sobre estos algoritmos están disponibles en https://docs.unity3d.com/2019.3/Documentation/Manual/ContinuousCollisionDetection.html[la documentación Unity].
+
+== Materiales físicos
+
+Cuando los objetos colisionan, es necesario simular las propiedades físicas de los materiales de su superficie para conseguir efectos más realistas.
+Por ejemplo, una superficie helada por la que es fácil deslizarse o una de hierva en la que hay más fricción.
+
+Básicamente las propiedades que se pueden configurar son: *fricción* y el *grado de rebote*.
+
+Hay que tener en cuenta que se trata de una simulación de la dinámico de sólidos rígidos, por lo que los cuerpos no se van a deformar aunque se selecciones que la superficie tiene efecto rebote, como sería el caso de una pelota de goma.
+
+=== Referencias adicionales
+
+* https://docs.unity3d.com/2019.3/Documentation/Manual/class-PhysicMaterial.html[Unity - Physics Materials]
+* https://docs.unrealengine.com/en-US/Engine/Physics/PhysicalMaterials/index.html[Unreal Engine — Physical Materials]
+
+== Colisiones simples frente a complejas
+
+En Unreal Engine a los actores se les puede añadir componentes de colisión.
+Pero también hay _assets_ donde se puede definir esa información directamente.
+
+Los _Skeletal Mesh_ se pueden conectar a otro _asset_ llamado _Physics Asset_
+Este _asset_ se edita desde el https://docs.unrealengine.com/en-US/Engine/Physics/PhysicsAssetEditor/index.html[Physics Asset Editor] y contiene una definición de los diferentes cuerpos rígidos que cubren la malla y que se usarán durante la simulación física.
+
+Mientras que los _assets_ _Static Mesh_ son mucho más simples.
+Unreal Engine soporta añadir desde el editor _Static Mesh_ de la geometría para las colisiones.
+
+Esta geometría añadida es la geometría de colisión simple, formada por formas primitivas, como cajas, esferas, cápsulas o, en general, geometrías convexas que se ajusten de forma más precisa a la malla.
+Pero al mismo tiempo Unreal Engine genera automática una geometría de colisión compleja cuya forma se ajusta perfectamente a la malla del objeto.
+
+[NOTE]
+====
+Se le puede indicar a Unreal Engine que no genere ambas geometrías para el _Static Mesh_ si no estamos interesados en emplear ambas.
+En su lugar se puede configurar que use la simple como si fuera la compleja —ahorrando recursos— o que use la geometría compleja como si fuera la simple —mucho más costoso—.
+
+image:static_mesh_collision_complexity.jpg[]
+====
+
+Esta estrategia nos da la posibilidad de elegir entre consultar la geometría simple o la compleja a la hora de detectar colisiones o hacer _raycasts_.
+
+Por ejemplo, para que los personajes se mueven por el mundo colisionando según la geometría simple —que es menos pesada— pero al disparar se pueda hacer un _raycast_ o lanzar un proyectil contra la geometría compleja.
+Así se puede conocer el punto exacto del impacto sobre la maya del objeto para lanzar un sistema de partículas por el impacto y marcarlo con un _decal_.
+O para colocar un _decal_ en el lugar adecuado para simular el uso de una mira láser.
+
+[NOTE]
+====
+Detectar colisiones en la geometría compleja es más costoso, por lo que por defecto se usa la simple.
+Sin embargo se puede activar menu:Collision[Trace Complex On Move] en cualquier componente para que en su lugar consulte la geometría compleja de los objetos con los que interactúa, ignorando la simple.
+
+Un objeto con _Simulate Physics_ no pueden usar la geometría compleja porque Physx necesita almacenar la velocidad y otros valores en cada vértice y esto es muy caro para este tipo de geometría.
+====
+
+En Unity, se puede implementar un sistema similar usando _colliders_ y capas:
+
+. En el `GameObject` con el componente `MeshRenderer` se coloca el _mesh collider_, para que así se ajuste a la malla del objeto, mientras que en un `GameObject` hijo se colocaría la cápsula simple del objeto.
+
+. Ambos _colliders_ debe ponerse en capas diferente.
+Una para las consultas complejas, donde colocar los _mesh colliders_ y otra para los _colliders_ simples, para las colisiones normales.
+
+== _Joints_
+
+Un _joint_ conecta un objeto físico con otro o a un punto del mundo, aplicando fuerzas a los objetos o restringiendo su movimiento según ciertas reglas.
+
+=== Unreal Engine
+
+En Unreal Engine estas conexiones se denominan https://docs.unrealengine.com/en-US/Engine/Physics/Constraints/index.html[constraints] y puede crear de dos formas:
+
+* *Physics Constraint Actor*, que se utiliza para unir dos actores de la escena.
+
+* *Physics Constraint Component*, que se utiliza para unir componentes del mismo actor.
+
+También se pueden definir _constraints_ entre los cuerpos rígidos —ellos los llaman _Physics Bodies_— que definen la física de las _Skeletal Mesh_ de los personajes.
+Estas uniones se configuran en el https://docs.unrealengine.com/en-US/Engine/Physics/PhysicsAssetEditor/index.html[Physics Asset Editor]
+
+En realidad Unreal trae varios tipos de uniones que muy comunes preajustadas:
+
+* *Hinge*, que es una unión tipo bisagra.
+Útil para emular puertas.
+
+* *Prismatic*, que es una unión donde sólo puede haber deslizamiento en un eje.
+
+* *Ball and Socket*. que permite el movimiento al infinito número de ejes que tienen un centro común, como ocurre con la articulación del hombro, pero impide cualquier movimiento lineal.
+
+Pero en el fondo no son más que _constraints_ con ciertos valores concretos de configuración.
+
+=== Unity
+
+En Unity las uniones deben realizarse entre objetos con componente `RigidBody` o de otra forma el movimiento del motor no estaría bajo el control del motor de física:
+
+* https://docs.unity3d.com/2019.3/Documentation/Manual/class-CharacterJoint.html[*Character Joint*], que se comporta como el _Ball and Socket_, de forma similar a la articulación del hombro.
+
+* https://docs.unity3d.com/2019.3/Documentation/Manual/class-FixedJoint.html[*Fixed Joint*], limita el movimiento del objeto a seguir el movimiento de otro objeto al que está unido.
+Es una forma sencilla de conectar el movimiento de dos objetos sin emparentarlos o crear uniones que se pueden romper al forzarlas.
+
+* https://docs.unity3d.com/2019.3/Documentation/Manual/class-HingeJoint.html[*Hinge Joint*], que se comporta como una bisagra, permitiendo que un objeto rote alrededor de otro.
+
+* https://docs.unity3d.com/2019.3/Documentation/Manual/class-SpringJoint.html[*Spring Joint*], que permite que un objeto siga a otro a una distancia fija pero permitiendo que esa distancia se a large o se a corte si fuera necesario.
+Es muy útil para que la cámara siga al personaje, creando perspectivas en tercera persona.
+
+Existe otra unión, llamada https://docs.unity3d.com/2019.3/Documentation/Manual/class-ConfigurableJoint.html[Configurable Joint], que es muy similar a las _constrains_ de Unreal Engine, ya que incorpora toda la funcionalidad de cualquier tipo de unión y solo tenemos que darle los parámetros de configuración adecuados.
+Como en Unreal Engine, la lista de parámetros es muy extensa.
+
+.Propiedades del componente `ConfigurableJoint`.
+image::configurable_joint_props.png[]
+
+== _Raycasts_
+
+En muchas situaciones es necesario saber si un personaje está viendo algo como, por ejemplo, el personaje del jugador para atacarle.
+O al disparar, saber qué objeto u objetos van a ser alcanzados.
+Sea como fuere, esta situaciones se resuelven usando _raycasts_, que no son sino la emisión de un rayo invisible que detecta la geometría física por la que pasa.
+
+De hecho es importante hacer hincapié en eso último de detectar geometría física.
+Porque el sistema de _raycast_ usa el motor de físicas para encontrar objetos.
+Así que lo que le motor de físicas no conoce, una consulta de _raycast_ no lo puede devolver.
+Por lo tanto es necesario que aquello que queramos detectar tenga _physical body_, _collisions_, _collider_ o lo que se represente geometría física en el motor que estemo usando.
+
+=== _Raycast_ frente a _Overlap_
+
+Aparte de emitir un rayo para detectar los objetos alcanzados, se pueden consultar todos los objetos de un región.
+Por ejemplo en Unity los métodos: `OverlapBox()`, `OverlapCapsule()` y `OverlaSphere()` sirven para simular que hubiera en un posición concreta un _collider_ con la forma indica y devuelven todos los _collliders_ dentro de dicha región.
+
+Por el contrario los métodos: `Raycast()`, `BoxCast()`, `CapsuleCast() y `SphereCast()` lanzan un rayo entre dos puntos y devuelve el _collider_ golpeado.
+
+=== Filtrado
+
+Todas las funciones de _raycast_ permite filtrar de una manera o de otra los resultados.
+
+En el caso de Unreal se puede filtrar por dos categorías: canal —o _Trace Type_— o por tipo de objeto —u _Object Type_-.
+El primero sirve para hacer consultas del tipo "dame el primer objeto visible" o "dame el primer objeto que recibe un disparo".
+
+image::col_custom_presets.jpg[]
+
+Si un arma tiene una mira láser, la consulta sobre el canal _visibility_ nos diría dónde debe pintarse el punto rojo de la mira.
+Mientras que una consulta sobre un hipotético canal _weapon_ nos diría a donde llegaría el proyectil al disparar, que podría no ser el mismo objeto que el de _visibility_, si hay objetos visibles que el proyectil en cuestión pueda atravesar fácilmente, impactando en otro escondido detrás.
+
+Por otro lado la categoría de tipo de objeto nos permite filtrar por tipos físicos de objetos: vehículo, actor, NPC, geometría del nivel, etc.
+
+En Unity las cosas son bastante mas simples.
+Los objetos pueden estar en alguna de 32 capas posibles y en la consulta se pueden indicar que capas queremos consultar.
+
+==== Devolver uno o múltiples objetos
+
+Ya hemos comentado que en los _Overlap_ se pueden obtener todos los objetos de una región.
+Con los _raycast_ se traza un rayo entre dos puntos y se puede elegir recuperar el primero objeto encontrado o todos los atravesados durante el recorrido.
+Obviamente, en ambos casos se pueden aplicar los criterios de filtrado que comentamos en el apartado anterior.
+
+==== _Raycasts_ con forma
+
+Cuando queremos detectar si un personaje ve a un enemigo, no es suficiente lanzar un rayo puesto que solo examina una línea en el espacio, mientras que lo normal es que el personaje tenga un campo de visión más amplio.
+
+En ese caso se puede lanzar un _raycast_ con una forma que se desplaza a lo largo del recorrido del rayo detectado los objetos.
+Formas típicas son cubos, esferas y cápsulas.
+
+==== Usarlos de forma inteligente
+
+Los _raycast_ son una consulta al motor de física.
+No son caros y puede que en un fotograma tengamos que hacer muchos, pero tampoco son gratis.
+Por eso deberíamos valorar alternativas menos costosas.
+
+Por ejemplo, supongamos el caso de un personaje que tiene que detectar si hay el jugador está cerca.
+Lo más directo sería lanzar un es _raycast_ con forma de esfera y ver si detecta algo pero:
+
+. Es evidente que el personaje no podrá ver al jugador si está a varios kilómetros, aunque nada ocultara a uno de otro.
+Una primera comprobación podría ser comprobar si el jugador está al menos por debajo de cierta distancia.
+
+. Incluso si el jugador está cerca, el personaje difícilmente lo verá si está de espalda, ya que tiene un campo de visión limitado entorno al frente.
+Por lo tanto la segunda comprobación podría ser saber si el jugador están dentro del campo de visión.
+Esto es sencillo conociendo la posición del personaje y del jugador.
+
+. Finalmente, si todas las comprobaciones anteriores son positivas, se podría hacer el _raycast_ para asegurar que el personaje ve al jugador.
+Porque aunque esté dentro del campo de visión y una distancia razonable, el jugador podría estar escondido detrás de otro objeto.
+Así que necesitamos confirmar si es visible o no.
+
+[TIP]
+====
+Todas las funciones de _raycast_ y _overlap_ de Unity tienen una versión _NonAlloc_ donde el que invoca la función es el responsable de reservar el buffer donde almacenar los resultados, en lugar de dejar que lo haga la función llamada.
+
+El objetivo es evitar reservas de memoria que después pueden generar basura que acabe activado el recollector de basura.
+
+Es recomendable usar estas versiones antes que las no son _NonAlloc_.
+====
+
+=== Referencias adicionales
+
+* https://docs.unity3d.com/2019.3/Documentation/ScriptReference/Physics.html[Unity — ScriptReference — Physics]
+* https://docs.unrealengine.com/en-US/Engine/Physics/Tracing/index.html[Unreal Engine — Trace with Raycasts]
+
+== Tejidos
+
+El soporte para simular tejidos, tanto en Unreal Engine como en Unity, se basa en lo que pueden hacer NVIDIA Cloth.
+Eso significa el flujo de trabajo y las limitaciones son muy similares.
+
+La simulación de tejidos solo funciona con mallas esqueletales, como las que se usan con los personajes para poder animarlos.
+De hecho la herramienta está especialmente diseñada para personajes.
+
+=== Activar el soporte de este tipo de simulación.
+
+En Unity se añade el componente `Cloth` al objeto con el `SkinnedMeshRenderer` con la porción de malla que se quiere simular como tejido —por ejemplo una capa— y se configura según las características del tejido a simular.
+Diferentes tejidos deberán estar en diferentes `GameObjects` con su `Cloth` y su `SkinnedMeshRenderer`.
+
+En Unreal se selecciona la parte de la malla que interesa en el editor de _Skeletal Mesh_, se pide crear un _Clothing Asset_ a partir de la selección y se configuran en el _asset_ las características del tejido.
+Unreal permite seleccionar diferentes partes de la malla y crear un _asset_ de este tipo para cada una.
+
+=== Activar la detección de colisión.
+
+El tejido debe reaccionar ante las interacción con otros cuerpos físicos pero no lo puede con cualquier cuerpo de la escena, porque eso generaría problemas de rendimiento.
+Es necesario decirle de que otros cuerpos debe estar atento.
+
+En Unreal se le añade al _Clothing Asset_ el _Physical Asset_ del personaje que lleva la prenda.
+El https://docs.unrealengine.com/en-US/Engine/Physics/PhysicsAssetEditor/index.html[Physical Asset] tiene los cuerpos rígidos que describen la física del personaje.
+
+En Unity hay que configurar en el componente `Cloth` los _colliders_ del personaje con los que se quiere simular la colisión.
+Por ejemplo, los _colliders_ de las extremidades.
+
+Hay que tener en cuenta que es la ropa la que se va a desplazar por culpa de esos otros objetos, nunca al revés.
+
+=== Asignar nivel de influencia de la simulación
+
+Finalmente queda editar el nivel de influencia de la simulación en cada vértice de la malla.
+Se puede usar un pincel con el que se pintan esos "valores".
+
+=== Referencias adicionales
+
+* https://docs.unity3d.com/2019.3/Documentation/Manual/class-Cloth.html[Unity — Cloth]
+* https://docs.unrealengine.com/en-US/Engine/Physics/Cloth/Overview/index.html[Unreal Engine — Clothing Tool]
+
+== _Ragdolls_
+
+Los _ragdolls_ son una técnica utilizada para animar el movimiento de los personajes cuando mueren.
+Aunque en realidad lo que se hace desactivar la animación esqueletal y ceder el control del movimiento del cuerpo al motor de físicas.
+
+Para que el motor de físicas sepa que hacer con él previamente se deben haber configurado las distintas partes del cuerpo como cuerpos rígidos y las uniones entre ellos con las restricciones de movimiento adecuadas.
+
+=== Unreal Engine
+
+En Unreal Engine estos _physical bodies_ y las _constraints_ de las articulaciones se configuran en el https://docs.unrealengine.com/en-US/Engine/Physics/PhysicsAssetEditor/index.html[Physics Asset Editor].
+
+A la hora de activar el _ragdoll_ es necesario:
+
+. Activar la simulación de la física en todos los huesos llamando a `Set All Bodies Below Simulate Physics` y usando como hueso la cadera o el que sea el primero de la jerarquía.
+
+. Indicar que el peso de la simulación física en la animación es 1.0 llamando a `Set All Bodies Below Physics Blend Weight`.
+
+Obviamente este último parámetro nos permite crear un efecto mas cinematográfico, al poder cambiar el peso con una curva.
+Por ejemplo, se podría hacer que primero tuviera más peso la animación que se estaba reproduciendo, pero que tras unos instantes vaya dominando la simulación física.
+
+=== Unity
+
+Igualmente, en Unity hay que añadir `RigidBody` y `Joints` en las distintas partes del cuerpo.
+Esto se puede hacer a mano o utilizando el https://docs.unity3d.com/2019.3/Documentation/Manual/wizard-RagdollWizard.html[Ragdoll Wizard].
+
+Finalmente, lo más común, es marcar todos esos `RigidBody` como cinemáticos.
+Así el personaje será animado con normalidad.
+Cuando se quiera activar el _ragdoll_ solo hay que buscar los `RigidBody` y desactivar el modo cinemático para que el motor de físicas tome el control
+
+Obviamente está técnica no permite controlar la mezcla entre la animación esqueletal y la simulacion física, como si se puede hacer en Unreal Engine.
+Unity no trae nada de serie para hacerlo.
+
+Sería necesario utilizar algún recurso del _Asset Store_ —como el famoso https://assetstore.unity.com/packages/tools/physics/puppetmaster-48977[PuppetMaster]— o implementarlo por nuestra cuenta:
+
+. En el `GameObject` debería haber dos jerarquías unidas en el primero hueso: la del esqueleto animado y la de los `RigidBody` conectados mediante uniones.
+
+. El _script_ puede ocultar la primera e interpolar el movimiento de cada `RigidBody` de la segunda entre lo que dicta la simulación física y lo que indica la animación de la primera.
+
+// Véase: https://www.reddit.com/r/Unity3D/comments/ax6ytb/how_to_blend_ragdoll_physics_with_animation/ehvhnft/
+
+== Destruibles
+
+NVIDIA a lo largo del tiempo ha venido desarrollando diversas herramientas para simular destrucciones con PhysX.
+Hasta hace poco era una funcionalidad incluida dentro de NVIDIA APEX PhysX —al igual que el antiguo sistema de simulación de tejido— pero actualmente es un producto descontinuado y recomiendan migrar a https://developer.nvidia.com/blast[NVIDIA Blast].
+
+=== Unreal Engine
+Unreal Engine actualmente soporta APEX Destruction si se activa el _plugin_ del mismo nombre.
+En futuras versiones soportará NVIDIA Blast.
+
+Los _APEX Destructible assets_ se pueden generar desde una herramienta externa, llamada NVIDIA APEX PhysX Lab, o seleccionando menu:Botón derecho[Create Destructible Mesh]
+En este último caso la la división se hace de forma automática —usando la https://es.wikipedia.org/wiki/Pol%C3%ADgonos_de_Thiessen[Teselación de Voronoi]— y con un sólo nivel de destrucción.
+
+=== Unity
+
+En Unity actualmente no incluye de serie ninguna herramienta para crear destruibles.
+Solo https://forum.unity.com/threads/nvidia-blast.472623/[algún intento] en los foros de crear un _plugin_ para NVIDIA Blast.
+
+Pero creando previamente en un modelador un modelo fracturado, se puede sustituir el modelo no fracturado por el fracturado —con _colliders_ y `RigidBody` en cada pieza— en el momento del impacto.
+
+Incluso se puede jugar con tener los _colliders_ desactivados y el `RigidBody` en modo cinemático para evitar la sustitución:
+
+. En el `GameObject` raíz colocar un componente `RigidBody` y un _collider_ global para todo el objeto.
+
+. En cada pieza de la ruptura colocar un `RigidBody` en modo cinemático y un _collider_ desactivado.
+Por lo general será un _mesh collider_ convexo, para que se ajuste bien a la pieza sin consumir demasiado.
+
+. Añadir y configurar un sistema de partículas en el `GameObject` raíz para simular polvo o pequeños trozos.
+
+Los impactos por encima de un umbral configurable pueden provocar la destrucción completa del objeto:
+
+. Haciendo cinemático el `RigidBody` raíz.
+. Desactivado el _collider_ raíz.
+. Activando los _colliders_ de cada pieza.
+. Desactivando el modo cinemático de los `RigidBody` de cada pieza.
+
+Mientras que por debajo de dicho umbral sólo provocarían su destrucción parcial: activando los _colliders_ y desactivando el modo cinemático de los `RigidBody` solo de las piezas que van a ser impactadas según la dirección y velocidad del proyectil.
+
+También se pueden aplicar una fuerza a las piezas en dirección radial para simular una explosión.
+
+=== Referencias adicionales
+
+* https://developer.nvidia.com/blast[NVIDIA Blast]
+* https://docs.unrealengine.com/en-US/Engine/Physics/Apex/index.html[Unreal Engine — APEX]
+* https://wiki.unrealengine.com/Destructible_Troubleshooting_Guide[Unreal Engine — Destructible Troubleshooting Guide]
