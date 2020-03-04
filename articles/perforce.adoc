@@ -26,14 +26,14 @@ Cada vez que se clona un repositorio se crea una copia completa, con todo el his
 Por eso, por ejemplo, el proyecto de Unreal Engine 4 necesita 1.7GiB pero el repositorio completo clonado ocupa 4.4GiB.
 
 NOTE: Aunque Unreal Engine está disponible en GitHub, los desarrolladores no trabajan directamente en este repositorio.
-Epic Games utiliza internamente Perforce y pero usa GitHub para hacer públicas las versiones definitivas de su motor.
+Epic Games utiliza internamente Perforce pero usa GitHub para hacer públicas las versiones definitivas de su motor.
 
 Como se puede observar los tiempos de clonado son relativamente largos.
-A más historia tenga el proyecto, mas ocupará cada copia del repositorio y más tiempo tarda en clonarse.
-Si esto se volviera un problema, Git permite limitar la la antigüedad del historial que se clona.
+A más historial tenga el proyecto, más ocupará cada copia del repositorio y más tiempo tarda en clonarse.
+Si esto se volviera un problema, Git permite limitar la antigüedad del historial que se clona.
 Sin embargo, como Git solo almacena las diferencias entre una revisión y la siguiente, hacen falta muchos años de desarrollo y muchas revisiones para tener que llegar a eso.
 
-Todo eso cambia cuando una revisión no se puede guarda como una diferencia sino que hay que guardar el archivo completo.
+Todo eso cambia cuando una revisión no se puede guardar como una diferencia sino que hay que guardar el archivo completo.
 Cosa que ocurre cuando se quiere utilizar el VCS para controlar las versiones de archivos en formatos binarios.
 Entonces almacenar cada revisión necesita más espacio y la diferencia entre el tamaño del repositorio y el proyecto real crece muy rápidamente.
 
@@ -74,7 +74,7 @@ Ni tampoco ocurre nada si el servidor remoto cae.
 
 * Como cada repositorio es una copia del proyecto, existen múltiples réplicas, lo que reduce las posibilidades de perder datos.
 
-* Ofrece a los desarrolladores la libertad trabajar de forma independiente y experimental para luego solo subir los cambios relevantes para el resto del equipo.
+* Ofrece a los desarrolladores la libertad de trabajar de forma independiente y experimental para luego solo subir los cambios relevantes para el resto del equipo.
 
 * El servidor remoto necesita menos recursos ya que la mayor parte del trabajo se hace en los repositorios locales.
 
@@ -84,21 +84,21 @@ Por eso hasta hace bastante poco era común encontrar estudios que seguían usan
 === Ventajas de Perforce
 
 Perforce es un VCS puramente centralizado, por lo que escala mucho mejor que Git en este tipo de proyectos.
-En el servidor central se almacenan los distintos repositorios —llamados _depots_— mientras que los clientes tienen espacios de trabajo de trabajo —o _workspaces_— dónde se descargan únicamente los archivos del repositorio en la revisión que nos interese de histórico para trabajar.
+En el servidor central se almacenan los distintos repositorios —llamados _depots_— mientras que los clientes tienen espacios de trabajo de trabajo —o _workspaces_— donde se descargan únicamente los archivos del repositorio en la revisión que nos interese de histórico para trabajar.
 
 NOTE: Como Git es tan popular entre los desarrolladores, existe un producto llamado https://www.perforce.com/products/helix4git[Helix4Git] que se adquiere a parte.
 Permite a los desarrolladores utilizar Git sobre un servidor Perforce, que escala mucho mejor.
 
 Perforce permite configurar servidores en _cluster_, ya sea para escalar, repartir la carga de trabajo entre servidores, o para ofrecer alta disponibilidad con el modo maestro / réplica.
 
-== VCS basado _snapshots_ frente a _changesets_
+== VCS basado en _snapshots_ frente a _changesets_
 
 Otra forma de clasificar los VCS es según el modelo en el que se basan:
 
-* *Snapshots*: dónde el VCS maneja los archivos completos —probablemente con optimizaciones para reducir el espacio ocupado—.
-Este es el modelo de Git, que calcula las diferencias a demanda y las almacena como forma de optimizar, pero que trabajar con archivos completos.
+* *Snapshots*: donde el VCS maneja los archivos completos —probablemente con optimizaciones para reducir el espacio ocupado—.
+Este es el modelo de Git, que calcula las diferencias a demanda y las almacena como forma de optimizar, pero que trabaja con archivos completos.
 
-* *Changesets*: dónde el VCS solo maneja diferencias entre revisiones.
+* *Changesets*: donde el VCS solo maneja diferencias entre revisiones.
 Darcs, Perforce, Mercurial y muchos otros son de este tipo.
 
 Esta diferencia, si se aprovecha, es importante desde el punto de vista de lo bien que se integran las ramas en un _merge_ y cómo se resuelven los conflictos.
@@ -109,7 +109,7 @@ Los VCS basados en _changesets_ suelen hacerlo mejor que los basados en _snapsho
 Una de las características clave de Perforce es la gestión tan flexible que tiene de los tipos de archivo.
 
 Los VCS que deben trabajar con archivos binarios —que se guardan completos y no se pueden combinar cambios— y archivos de texto —de los que solo se guardan las diferencias— debe saber distinguir un tipo del otro.
-Para esto cada VCS usas sus propias heurísticas pero como pueden equivocarse, es buena idea disponer de algún mecanismo para indicar como debe ser trata cada archivo según su extensión o la ruta dónde esta ubicado.
+Para esto cada VCS usa sus propias heurísticas pero como pueden equivocarse, es buena idea disponer de algún mecanismo para indicar cómo debe ser trata cada archivo según su extensión o la ruta dónde esta ubicado.
 
 Esto en Git se hace con un archivo `https://git-scm.com/docs/gitattributes[.gitattributes]` que debe incorporarse al repositorio.
 Mientras que en Perforce se configura en el servidor ejecutando el comando `https://www.perforce.com/manuals/v16.1/cmdref/file.types.html[p4 typemap]`.
@@ -164,27 +164,27 @@ Perforce los añade para documentar el formato que espera para esta configuraci�
 
 <2> En cada línea se indica el tipo de archivo seguido por el patrón de la ruta para identificar a los archivos de este tipo.
 En este caso se indica que son binarios todos los archivos con extensión `.png` en cualquier subdirectorio del _depot_ de nombre 'depot'.
-Estos archivos se guardaran completos.
+Estos archivos se guardarán completos.
 Por la extensión se ve que estos archivos son texturas y modelos en el formato original, antes de importarlos en el proyecto.
 Se guardan en el proyecto para preservarlos, por si en el futuro hay que modificarlos y volver a importar.
 
 <3> Los archivos con extensión `.cpp` son archivos de texto.
 De estos archivos sólo se guardarán las diferencias entre cada revisión.
 
-<4> Los archivos con extensión `.uasset` —archivo de recursos en el editor— y `.umap` —archivo de escena— también son binarios pero en el momento que un cliente los abra para editar, automáticamente quedara bloqueada la edición para el resto de clientes.
+<4> Los archivos con extensión `.uasset` —archivo de recursos en el editor— y `.umap` —archivo de escena— también son binarios pero en el momento que un cliente los abra para editar, automáticamente quedará bloqueada la edición para el resto de clientes.
 A diferencia de los binarios mencionados anteriormente, estos corresponden a recursos ya importados en el proyecto.
 Sin el bloqueo, podrían ser editados al mismo tiempo desde varios editores de Unreal Engine al mismo tiempo, lo que crearía un conflicto que sería muy difícil de resolver.
 
 <5> Los archivos con extensión `.exe` también son binarios pero solo se almacenan en el VCS las dos últimas revisiones y el archivo siempre puede ser modificado por el cliente.
-Obviamente se trata a así a los archivos ejecutables del proyecto.
+Obviamente se trata así a los archivos ejecutables del proyecto.
 Por un lado, se quiere que los binarios estén disponibles en el repositorio para hacer rápidamente pruebas y demos.
 Pero teniendo las fuentes del proyecto en el VCS, no es necesario guardar todas las revisiones del ejecutable.
 Por el otro, se quiere que cualquier desarrollador pueda compilar el proyecto y sobrescribir su copia local del ejecutable sin restricciones.
 
-:fn-unity-behind-the-scenes: footnote:[Ver https://docs.unity3d.com/Manual/BehindtheScenes.html[Unity - Behind The Scenes] para conocer mas detalles sobre el proceso de importación de recursos.]
+:fn-unity-behind-the-scenes: pass:n[Ver https://docs.unity3d.com/Manual/BehindtheScenes.html[Unity - Behind The Scenes] para conocer más detalles sobre el proceso de importación de recursos.]
 
-En https://github.com/ull-master-videojuegos/perforce-typemaps se puede encontrar este mismo ejemplo archivo de configuración de tipos para Unreal Engine y otro para Unity.
-En el caso de Unity los archivos de recursos en su formato original si se deben bloquear, porque el editor de Unity los necesita para regenerar el contenido del directorio `Library` —que nunca debe incluirse en el repositorio— donde se guardan convertidos en un formato interno adecuado para el motor{fn-unity-behind-the-scenes}.
+En https://github.com/ull-master-videojuegos/perforce-typemaps[este repositorio] se puede encontrar este mismo ejemplo de archivo de configuración de tipos para Unreal Engine y otro para Unity.
+En el caso de Unity los archivos de recursos en su formato original si se deben bloquear, porque el editor de Unity los necesita para regenerar el contenido del directorio `Library` —que nunca debe incluirse en el repositorio— donde se guardan convertidos en un formato interno adecuado para el motor{blank}footnote:[{fn-unity-behind-the-scenes}].
 
 // TODO: Añadir algún vídeo explicando como se usa.
 
@@ -200,16 +200,16 @@ Mientras que en un proyecto de Unreal Engine se deben incluir:
 
  * `Content`, porque contiene los recursos del proyecto.
  * `Config`, porque tiene la configuración del proyecto.
- * El Archivo `.uproject`, que es el archivo del proyecto.
+ * El archivo `.uproject`, que es el archivo del proyecto.
 
-En ambos casos se puede incluir el directorio a dónde se compila el proyecto si queremos que los binarios estén disponibles para todo el equipo en el control de versiones —por ejemplo, para que el equipo de garantía de calidad pueda tener acceder a ellos rápidamente—.
+En ambos casos se puede incluir el directorio a donde se compila el proyecto si queremos que los binarios estén disponibles para todo el equipo en el control de versiones —por ejemplo, para que el equipo de garantía de calidad pueda tener acceder a ellos rápidamente—.
 
 == Colaborar en Unity
 
 Es evidente que, a menos que un proyecto sea muy pequeño, nos interesará que varios desarrolladores y diseñadores puedan trabajar en un mismo nivel al mismo tiempo.
-¿Pero como podríamos hacer para lograrlo?.
+¿Pero cómo podríamos hacer para lograrlo?.
 
-Lo primero que hay que mencionar que Unity trae una herramienta para integrar cambios en escenas y _prefabs_ que han sido modificados al mismo tiempo por varios desarrolladores.
+Lo primero que hay que mencionar es que Unity trae una herramienta para integrar cambios en escenas y _prefabs_ que han sido modificados al mismo tiempo por varios desarrolladores.
 Lo llaman https://docs.unity3d.com/Manual/SmartMerge.html[Smart Merge].
 Sin embargo no siempre podemos estar seguros de que vayamos a quedar satisfechos con el resultado.
 Por eso el archivo de ejemplo de _typemaps_ para Unity indica que los archivos `.unity` —las escenas— y `.perfab` —los _prefabs_— debe bloquearse para su edición.
@@ -227,9 +227,9 @@ Por ejemplo, un escena para la interfaz de usuario, otra para el mundo del nivel
 Como hemos dicho anteriormente, estas escenas se deben ir cargando de forma aditiva según sea necesario durante el desarrollo del juego.
 
 . Cada escena debería ser básicamente una colección de _prefabs_.
-Las escenas se construiría añadiendo y posicionando _prefabs_ en ellas.
+Las escenas se construirían añadiendo y posicionando _prefabs_ en ellas.
 
-De esta forma varios desarrolladores podrían estar modificando diferentes aspectos de un mismo nivel siempre que están trabajando en _prefabs_ o escenas diferentes.
+De esta forma varios desarrolladores podrían estar modificando diferentes aspectos de un mismo nivel siempre que estén trabajando en _prefabs_ o escenas diferentes.
 
 == Colaborar en Unreal Engine
 
@@ -247,8 +247,8 @@ Así, por ejemplo, un subnivel puede tener las mallas estáticas que dan forma a
 
 === _Prefabs_
 
-:fn-unreal-prefabs: footnote[Unreal Engine no soporta _prefabs_ de serie, pero en el Marketplace si existen diferentes soluciones que los implementan.]
-En Unreal Engine no existe el concepto de _prefabs_{fn-unreal-prefabs} pero los actores _Blueprint_ se pueden utilizar para hacer algo, hasta cierto punto, similar.
+:fn-unreal-prefabs: pass:n[Unreal Engine no soporta _prefabs_ de serie, pero en el Marketplace si existen diferentes soluciones que los implementan.]
+En Unreal Engine no existe el concepto de _prefabs{blank}footnote:[{fn-unreal-prefabs}]_ pero los actores _Blueprint_ se pueden utilizar para hacer algo, hasta cierto punto, similar.
 
 Basta con crear un actor _Blueprint_ y, sin necesidad de añadirle código, incorporar como componentes mallas, luces, sistemas de partículas y el resto de elementos que nos interesen.
 Después el actor se pone en el lugar, o lugares del nivel que queramos, ya que puede ser instanciado varias veces.
@@ -259,7 +259,7 @@ O modificar cada instancia ubicada en el nivel, si se quieren hacer cambios indi
 === Child Actors Component
 
 En Unreal Engine a veces hay características que solo están disponibles como un actor y no como un componente que puedas poner dentro de un actor.
-Eso significa que esas características no se podría agrupar dentro del actor _Blueprint_ usado a modo de _prefab_ que hemos comentado en el apartado anterior.
+Eso significa que esas características no se podrían agrupar dentro del actor _Blueprint_ usado a modo de _prefab_ que hemos comentado en el apartado anterior.
 
 En ese caso se puede añadir al actor _Blueprint_ un componente llamado _Child Actor Component_.
 Este recibe como argumento un actor que queremos instanciar o destruir cuando el actor principal sea instanciado o destruido, respectivamente.
@@ -291,16 +291,16 @@ Se espera que se combinene cambios desde el padre pero que a su vez se copien ca
 
 En https://www.perforce.com/video-tutorials/streams-overview[Streams Overview] hay un pequeño video-tutorial donde se explica claramente su funcionamiento.
 
-Una características interesantes es que en los _streams_ se pueden filtrar los archivos que ven los clientes y los que pueden modificar.
+Una característica interesante es que en los _streams_ se pueden filtrar los archivos que ven los clientes y los que pueden modificar.
 Por ejemplo, se puede crear un _stream_ para el departamento de arte que les permita modificar los recursos del proyecto pero no tocar los archivos de código fuente.
 O crear una rama donde solo se puede trabajar en el código del motor para actualizarlo de versión, sin tocar el resto del proyecto.
 
 [TIP]
-Para entender mejor como se pueden aprovechar las características de los _streams_, merece la pena ver el webinar https://www.perforce.com/webinars/vcs/best-practices-game-development-using-streams[Best Practices for Game Development Using Streams] dónde el estudio Sumo Digital explica como los usan ellos en sus proyectos con Unreal Engine.
+Para entender mejor cómo se pueden aprovechar las características de los _streams_, merece la pena ver el webinar https://www.perforce.com/webinars/vcs/best-practices-game-development-using-streams[Best Practices for Game Development Using Streams] donde el estudio Sumo Digital explica cómo los usan ellos en sus proyectos con Unreal Engine.
 
 == Perforce en un estudio _indie_
 
-Aunque Perforce es un herramienta ideal para proyectos grandes, hay que reconocer que algunas de sus características pueden ser interesantes para cualquier estudio _indie_.
+Aunque Perforce es una herramienta ideal para proyectos grandes, hay que reconocer que algunas de sus características pueden ser interesantes para cualquier estudio _indie_.
 
 Perforce es gratuito para hasta 5 usuarios.
 Los estudios _indie_ pueden pedir también acceso gratuito para hasta 5 usuarios el software de gestión de proyectos Handsoft y precio especial para más de 5 usuarios a través del https://www.perforce.com/indie-studio-pack[Perforce Indie Studio Pack].
@@ -312,3 +312,4 @@ La instalación del cliente de Perforce incluye un servidor personal que se pued
 * https://www.perforce.com/manuals/overview/Content/Overview/basic_concepts.basics.html[Conceptos básicos de Perforce]
 * https://www.perforce.com/manuals/p4v/[Guía de usuario del cliente de Perforce].
 * https://www.perforce.com/manuals/v15.1/dvcs/_git_perforce_command_mappings.html[Mapeo de la línea de comandos de Git a Perforce].
+* https://www.perforce.com/blog/vcs/perforce-vs-git-commands-you-should-know[Perforce vs. Git Commands You Should Know]

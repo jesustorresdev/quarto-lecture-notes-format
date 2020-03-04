@@ -4,7 +4,7 @@ include::../config/attributes.adoc[]
 :imagesdir: {imagesdir}/composición_de_niveles
 2019-2020
 
-Cuando el nivel o el mundo —en los juegos de mundo abierto— que queremos desarrollar es demasiado extenso como cargarlo de una sola vez, estamos obligados a dividirlo en diferentes mapas o escenas, cargándolas y descargándolas bajo demanda según se desarrolla el juego.
+Cuando el nivel o el mundo —en los juegos de mundo abierto— que queremos desarrollar es demasiado extenso como para cargarlo de una sola vez, estamos obligados a dividirlo en diferentes mapas o escenas, cargándolas y descargándolas bajo demanda según se desarrolla el juego.
 Esto, indudablemente, condiciona el diseño del nivel.
 
 Un caso extremo es lo que ocurría en los primeros juegos de la saga Resident Evil, donde abrir cualquier puerta, escalera o ascensor reproducía una cinemática durante la que se cargaba la siguiente escena.
@@ -20,7 +20,7 @@ Se colocan ascensores, túneles bajo el agua o pasadizos estrechos en los que ap
 video::8939aURV9Dc[youtube,opts="modest",start=322,end=353,width=640,height=360]
 
 En mundos abiertos en exteriores se puede dividir el escenario en varias escenas e ir cargándolas dinámicamente cuando el jugador se aproxima, al tiempo que se descargan las escenas más alejadas que el jugador ya no puede ver.
-Para limitar el alcance de la visión del jugador se pueden barreras visuales —como montañas o edificios— pero en todo caso hay que tener en cuenta que la cámara nunca mostrará más allá de la distancia que tenga configurada como _far clipping plane_.
+Para limitar el alcance de la visión del jugador se ponen barreras visuales —como montañas o edificios— pero en todo caso hay que tener en cuenta que la cámara nunca mostrará más allá de la distancia que tenga configurada como _far clipping plane_.
 
 [#img-world-chunk-loading]
 .Esquema de la división del mundo en subniveles cargándolas y descargándolas a demanda.
@@ -80,14 +80,14 @@ Su función es gestionar los subniveles que se van a ir cargando y descargando s
 
 * *Level Streaming Volumes*: son volúmenes que cargan o descargan los _streaming levels_ que se le indiquen cuando el jugador entra en el volumen.
 
-Obviamente el motor provee de funciones para cargar y descargar _streaming levels_ desde código por si queremos un comportamiento más complejo.
+Obviamente el motor provee funciones para cargar y descargar _streaming levels_ desde código por si queremos un comportamiento más complejo.
 
 == Word Composition (UE4)
 
 Unreal Engine 4 también soporta esta versión de _level streaming_ en la que los _streaming levels_ están distribuidos en una rejilla 2D y se van cargando y descargando según se acerca el jugador.
 
 En https://docs.unrealengine.com/en-US/Engine/LevelStreaming/WorldBrowser/index.html[Word composition] el nivel persistente no contiene información sobre los _streaming levels_, sino que estos se descubren buscando en la carpeta que los contiene y cada _streaming level_ contiene la información necesaria para cargar el nivel en el lugar adecuado.
-De esta forma los tanto el nivel persistente como los _streaming levels_ son realmente independientes, permitiendo que varios desarrolladores trabajen al mismo tiempo en distintas ubicaciones del mundo.
+De esta forma tanto el nivel persistente como los _streaming levels_ son realmente independientes, permitiendo que varios desarrolladores trabajen al mismo tiempo en distintas ubicaciones del mundo.
 Lo que es especialmente importante en juegos de mundo abierto realmente grandes.
 
 .Ventana de _Word Composition_ donde se observa la disposición de los distintos niveles en el escenario.
@@ -98,7 +98,7 @@ image::world_layout.jpg[]
 En Unity las soluciones son las mismas que las comentadas anteriormente para Unreal Engine, solo que no vienen implementadas.
 
 Como es habitual, tendríamos que hacerlo nosotros mismos usando los métodos https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.LoadSceneAsync.html[`SceneManager.LoadSceneAsync()`] —en modo aditivo— y https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.UnloadSceneAsync.html[`SceneManager.UnloadSceneAsync()`].
-Aunque, por lo comentado, se puede ver no es nada complejo y nos da mucha flexibilidad para además darle otros usos a las escenas.
+Aunque, por lo comentado, se puede ver que no es nada complejo y nos da mucha flexibilidad para además darle otros usos a las escenas.
 
 NOTE: En este caso es importante utilizar las versiones "Async" para no detener el juego mientras se cargan las escenas.
 
@@ -123,7 +123,7 @@ image::ieee754_precision.png[]
 Así que a 50 Km. del origen la precisión es de 1 cm., sin importar que la unidad por defecto en Unreal Engine sea el centímetro mientras que la de Unity es el metro.
 
 Aunque no lo parezca esto puede generar efectos indeseables, en función del tipo de juego.
-Un jugador a poco más de 2 Km. del origen podría comenzar a notar comportamientos raros en las física, en las animaciones o el movimiento de los objetos si está lo bastante cerca.
+Un jugador a poco más de 2 Km. del origen podría comenzar a notar comportamientos raros en las físicas, en las animaciones o el movimiento de los objetos si está lo bastante cerca.
 Porque aunque los cálculos señalen que algo debe ir en cierto sitio, la precisión a esa distancia hará que la ubicación se redondee al flotante posible más cercano.
 
 == Traslación del origen
@@ -192,24 +192,24 @@ En algunos mensajes se hace referencia a este script:
 aunque hay que tener en cuenta que se puede optimizar muchísimo.
 Por ejemplo, usando `FixedUpdate()` en lugar de `LateUpdate()` o evitando el uso de `FindObjectOfType()` registrando previamente los objetos existentes en algún _array_ o lista.
 
-Entre los mensajes del foro hay bastante sugerencias de optimización y hasta alguna implementación mucho mejor que la anterior.
+Entre los mensajes del foro hay bastantes sugerencias de optimización y hasta alguna implementación mucho mejor que la anterior.
 
 == ¿Y si cambiamos la escala?
 
 Ya hemos comentado que Unreal Engine usa como unidad el centímetro mientras que Unity usa el metro, sin que eso tenga ningún efecto en obtener más precisión.
 
-Pero eso es porque así ninguno de los dos motores aprovecha de la mejor manera posible el intervalo más preciso de los números de punto flotante, que está entre -1 u 1.
+Pero eso es porque así ninguno de los dos motores aprovecha de la mejor manera posible el intervalo más preciso de los números de punto flotante, que está entre -1 y 1.
 Sin embargo no hay nada que lo impida, porque realmente la unidad de medida en el motor es más que nada un convención.
-Un 1 unidad será lo que nosotros creamos que sea, según el tipo de proyecto en el que estemos trabajado.
+Una unidad espacial será lo que nosotros queramos que sea, según el tipo de proyecto en el que estemos trabajado.
 
-Así que si sabemos que el intervalo más preciso es el [-1, 1] y tenemos pensando desarrollar un juego de mundo abierto 100 Km. x 100 Km. de extensión total, nada nos impide decir que nuestra unidad son 50 Km.
+Así que si sabemos que el intervalo más preciso es el [-1, 1] y tenemos pensado desarrollar un juego de mundo abierto 100 Km. x 100 Km. de extensión total, nada nos impide decir que nuestra unidad son 50 Km.
 Es decir, que cada cuadrado de 1 x 1 en el editor, representan 50 Km. x 50 Km en el juego y que en 4 cuadrados está contenido todo el espacio disponible.
 
 Si observamos <<img-ieee754-precision>> y consideramos que 1 son 50 Km., es fácil determinar que la precisión en el extremo del mundo será de 0.25 cm.; que es 4 veces mejor que lo que obtendríamos trabajando con la convención estándar de ambos motores.
 
 Sin embargo debemos considerar varios inconvenientes:
 
-. Los modelos importados deberán haber sido escalados para se coherentes con la convención que hemos elegido para nuestro proyecto. En Maya, por ejemplo, 1 unidad es un centímetro. Así que si no tenemos esto en cuenta, los modelos importados será enormes.
+. Los modelos importados deberán haber sido escalados para ser coherentes con la convención que hemos elegido para nuestro proyecto. En Maya, por ejemplo, 1 unidad es un centímetro. Así que si no tenemos esto en cuenta, los modelos importados serán enormes.
 
 . Las unidades si son relevantes para el motor de físicas. Por ejemplo, en Unity si la gravedad vale 9.8 quiere decir 9.8 m./s.^2^. Si en un proyecto la unidad es 50 Km. y no el metro, la gravedad debería ser —si queremos que sea realista— 0,000196.
 

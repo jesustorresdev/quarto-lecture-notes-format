@@ -5,14 +5,14 @@ include::../config/attributes.adoc[]
 2019-2020
 
 Poner algo de orden en un proyecto es importante para asegurar su mantenibilidad.
-Facilita que cada miembro del equipo sepa donde buscar o añadir aquello que necesite para hacer su trabajo.
+Facilita que cada miembro del equipo sepa dónde buscar o añadir aquello que necesite para hacer su trabajo.
 Por eso a continuación vamos a ver algunas buenas prácticas comunes.
 
 == Organización de los recursos
 
 Todos los motores tienen una carpeta donde incluir los recursos del proyecto.
 Por ejemplo, en Unreal Engine es `Content` mientras que en Unity o CryEngine es `Assets`.
-¿Pero como deberíamos organizar el contenido de dicha carpeta?.
+¿Pero cómo deberíamos organizar el contenido de dicha carpeta?.
 
 Las opciones más comunes son:
 
@@ -21,7 +21,7 @@ Las opciones más comunes son:
 
 === Organización por tipo.
 
-En tutoriales, cursos y proyectos pequeños es muy común que el primer nivel de carpetas se organicen los recursos por tipo de recursos.
+En tutoriales, cursos y proyectos pequeños es muy común que en el primer nivel de carpetas se organicen los recursos por tipo de recursos.
 Por ejemplo: `Scripts`, `Art`, `Audio`, `Blueprints` o `BP`, `Animations`, `Prefabs`, `Scenes`, `Levels`, `Sprites`, `Data`, etc.
 
 [#img-assets-tree-by-type]
@@ -37,6 +37,7 @@ salt
  +++ Meshes
  +++ Textures
  ++ <b>Audio
+ ++ <b>Editor
  ++ <b>Prefabs
  ++ <b>Scenes
  ++ <b>Scripts
@@ -44,6 +45,8 @@ salt
 }
 }
 ....
+
+Aun así, es conveniente que el código de los _plugins_ del editor tengan su propia carpeta `Editor` en lugar de mezclarlos con el resto del código en `Scripts`.
 
 Muchas veces, algunas de estas carpetas de primer nivel suelen tener un segundo nivel también organizado por tipo.
 Por ejemplo, en la <<img-assets-tree-by-type>> la carpeta `Art` contiene: 'Meshes', 'Textures', 'Materials', etc.
@@ -74,6 +77,7 @@ salt
  ++ Audio
  +++ <b>NPC
  ++++ <b>Final Boss
+ ++ Editor
  ++ Prefabs
  ++ Scenes
  ++ Scripts
@@ -99,6 +103,7 @@ salt
 {
 {T
  + Assets
+ ++ <b>Editor
  ++ <b>Environment
  +++ Level01
  ++++ Materials
@@ -131,7 +136,7 @@ salt
 }
 ....
 
-En este caso es muy probable que alguien que esté trabando en una característica concreta tenga todo lo que necesita en un única rama de la jerarquía de recursos.
+En este caso es muy probable que alguien que esté trabajando en una característica concreta tenga todo lo que necesita en un única rama de la jerarquía de recursos.
 
 === Unity
 
@@ -144,7 +149,7 @@ Sin duda hace muy sencillo encontrar y utilizar recursos, tanto para prototipar 
 Sin embargo, también hace que sea muy sencillo cargar nuestro proyecto con recursos, ejemplos y documentación que no necesitamos.
 
 Por eso es importante seleccionar solo lo que realmente nos interesa durante el proceso de importación.
-Por si no estamos seguros, es buena idea tener un proyecto vació donde importar los paquetes desde la _Asset Store_ para luego exportar solo los _prefabs_ que nos interesen con sus dependencias.
+Por si no estamos seguros, es buena idea tener un proyecto vacio donde importar los paquetes desde la _Asset Store_ para luego exportar solo los _prefabs_ que nos interesen con sus dependencias.
 Incluso podemos modificarlos en este proyecto antes de exportarlos, si fuera necesario eliminar algún componente que no nos interese.
 
 El paquete exportado es el que importaríamos en nuestro proyecto, para así asegurarnos que sólo metemos lo que realmente vamos a utilizar.
@@ -166,7 +171,8 @@ salt
  ++++ Meshes
  ++++ Textures
  +++ Audio
- +++ <b>Scenes
+ +++ Scenes
+ +++ Editor
  +++ Prefabs
  +++ Tests
  ++ ProCore
@@ -176,7 +182,7 @@ salt
 ....
 
 Algunos desarrolladores prefieren colocar la jerarquía de recursos propios del proyecto dentro su propia carpeta.
-Por ejemplo, en la <<img-unit-gameassets>> se observa como la jerarquía de la <<img-assets-tree-by-type>> ahora está dentro de una carpeta llamada path[GameAssets] en el primer nivel de `Assets`.
+Por ejemplo, en la <<img-unit-gameassets>> se observa como la jerarquía de la <<img-assets-tree-by-type>> ahora está dentro de una carpeta llamada `GameAssets` en el primer nivel de `Assets`.
 
 El motivo es que en Unity los _plugins_ y _assets_ importados desde el _Asset Store_ se copian directamente en `Assets`, mezclándose con las carpetas con contenidos propios.
 Eso complica mantener una estructura organizada donde se separe qué es nuestro y qué un plugin o recurso importado.
@@ -200,18 +206,23 @@ TIP: Actualmente para utilizar contenidos dinámicos es mucho mejor utilizar htt
 ==== Usar Assembly Definitions
 
 Por defecto Unity compila todos el código C# en `Assembly-CSharp.dll`.
-Esto significa que cada vez que se modificar alguna parte del código se tiene que compilar todo, lo que puede consumir bastante tiempo en proyectos grandes.
+Esto significa que cada vez que se modifica alguna parte del código se tiene que compilar todo, lo que puede consumir bastante tiempo en proyectos grandes.
 
 Los https://docs.unity3d.com/Manual/ScriptCompilationAssemblyDefinitionFiles.html[Assembly Definitions] permiten que una carpeta y sus subcarpetas se compile en una DLL diferente.
 Esto reduce los tiempos de compilación porque si se modifica un archivo de código, sólo se compilan los archivos incluidos en la misma DLL.
 
-Además los _Assembly Definitions_ son necesarios para hacer tests del código del proyecto.
+El uso de _Assembly Definitions_ tiene además importantes ventajas:
+
+* Son necesarios para hacer tests del código del proyecto.
+
+* Fuerza una buena práctica de programación que es preferentemente tener dependencias en un solo sentido.
+Esto es debido a que un _assembly_ —una DLL— A no puede depender de un _assembly_ B que a su vez dependa de A.
 
 == Jerarquía de la escena
 
 También es conveniente fijar ciertas reglas sobre la organización de la jerarquía de objetos en la escena.
 
-En general es buena idea agrupa los elementos de la escena atendiendo a su papel en el juego o a su tipo.
+En general es buena idea agrupar los elementos de la escena atendiendo a su papel en el juego o a su tipo.
 
 [plantuml, format="svg"]
 ....
@@ -252,7 +263,7 @@ Así que la regla general es que es mejor tener muchos árboles en la raíz de l
 
 A efectos prácticos esto se traduce en que:
 
-* Como los objetos estáticos del escenario —mallas, luces, terreno, etc— no se mueven, por lo que se pueden poner todos juntos en un único árbol, lo que resulta muy cómodo para organizar esos objetos en la escena.
+* Como los objetos estáticos del escenario —mallas, luces, terreno, etc— no se mueven, se pueden poner todos juntos en un único árbol, lo que resulta muy cómodo para organizar esos objetos en la escena.
 
 * Por el mismo motivo, los _GameObject_ de _gameplay_ —el jugador, los enemigos, etc.— deberían estar en la raíz. Y los _GameObject_ creados dinámicamente nunca hacerlos hijos de quién los creó a menos que tengan que moverse con ese objeto.
 
@@ -261,7 +272,7 @@ A efectos prácticos esto se traduce en que:
 Si para facilitar el trabajo se prefiere agrupar estos objetos de _gameplay_ como hijos de algún _GameObject_, se puede crear un _plugin_ del editor que los mueva a la raíz antes de compilar o de entrar en el modo de ejecutar el juego.
 ====
 
-Una recomendación que simplifica la colaboración entre desarrolladores y que ayudar a mantener la jerarquía de objetos organizada, aunque haya que tener muchos en la raíz de la escena, es componer el nivel con la unión de varias escenas aditivas:
+Una recomendación que simplifica la colaboración entre desarrolladores y que ayuda a mantener la jerarquía de objetos organizada, aunque haya que tener muchos en la raíz de la escena, es componer el nivel con la unión de varias escenas aditivas:
 
 [plantuml, format="svg"]
 ....

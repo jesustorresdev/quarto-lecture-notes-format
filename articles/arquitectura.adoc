@@ -33,8 +33,8 @@ Pero veremos que la necesidad de este cambio de mentalidad no es un capricho de 
 
 === Componentes frente a herencia
 
-:fn-npc: footnote:{NPC son las siglas de _Non-player character_ o personaje no jugador.}
-Supongamos que estamos desarrollando una serie de NPC para nuestro juego.
+:fn-npc: pass:n[NPC son las siglas de _Non-player character_ o personaje no jugador.]
+Supongamos que estamos desarrollando una serie de NPC{blank}footnote:[{fn-npc}] para nuestro juego.
 Como es habitual tendrán una IA y una salud, ya que es posible hacerles.
 Así que esa características comunes las implementamos en la clase `Entity` para no repetir código.
 
@@ -177,8 +177,15 @@ Ambos tipos de componentes trabajar de forma coordinada para implementar un _sis
 
 Un sistema es una combinación de de componentes de software que trabajan juntos para implementar cierta funcionalidad.
 
-:fn-spawn-system: footnote:[El _spawn system_ determina donde aparecen el jugador y los NPC durante el juego.]
-En un videojuego suelen haber múltiples sistemas: inventario, locomoción, salvado, meteorología, conducción, _spawn_{fn-spawn-system}, interfaz de usuario, etc.
+:fn-spawn-system: pass:n[El _spawn system_ determina donde aparecen el jugador y los NPC durante el juego.]
+En un videojuego suelen haber múltiples sistemas: inventario, locomoción, salvado, meteorología, conducción, _spawn_{blank}footnote:[{fn-spawn-system}], interfaz de usuario, etc.
+
+[TIP]
+====
+Es muy recomendable el uso de espacios de nombres para agrupan los componentes de los distintos sistemas.
+Los espacios de nombre proporcionan límites bien definidos entre sistemas, evidenciando, gracias al uso de las cláusulas `using` cuando un sistema depende de otro.
+Eso ayuda a pensar si esas dependencias son necesarias o hace falta pensarla mejor el diseño.
+====
 
 === _Manager_
 
@@ -857,4 +864,4 @@ El `DefaultPawn` se pueden mover libre en 3D, sin ser afectados por la gravedad.
 * *Character*, que extiende `Pawn` añadirle todo lo que necesita un personaje tradicional: una cápsula de colisión, un `SkeletalMeshComponent` —una malla que puede ser animada mediante el sistema de animación de Unreal— y un `CharacterMovementComponent`, que implementa modos de movimiento típicos como caminar, correr, saltar, volar y nadar.
 
 El código del `CharacterMovementComponent` puede ser muy ilustrativo sobre cómo hacer nuestro propio `LocomotionController` o `MovementController` de un personaje en cualquier otro motor.
-En Unity el `CharacterController` es demasiado simple y acaba teniendo que ser sustituido por una implementación propia —o una comprada en el Asset Store— en la mayor parte de los casos.
+En Unity el `CharacterController` es demasiado simple y generalmente acaba teniendo que ser sustituido por una implementación propia —o una comprada en el Asset Store— en la mayor parte de los casos.
