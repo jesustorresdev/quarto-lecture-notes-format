@@ -133,8 +133,13 @@ Por eso merece la pena dedicarle un rato al siguiente vídeo, dónde en la prime
 .Vídeo de la conferencia "S.O.L.I.D. Unity" en Unite Austin 2017.
 video::eIf3-aDTOOA&__s[youtube,opts="modest",width=640,height=360]
 
-TIP: Para profundizar en estos principios, lo primero es aplicarlas en nuestros propios proyectos.
+[TIP]
+====
+Para profundizar en estos principios, lo primero es aplicarlas en nuestros propios proyectos.
 Para ser buenos desarrolladores también es recomendable dedicar algo de tiempo a asimilar y poner en prácticas las reglas y principios del https://puntoq.ull.es/permalink/f/6auhvr/ullabsysULL00512351c-X[Clean Code].
+
+Aparte del libro de Clean Code es bastante sencillo encontrar en Internet resúmenes —cómo https://juanmaperezblog.wordpress.com/2020/03/09/libro-resumido-clean-code/[este]— con las ideas principales y cursos —como https://openwebinars.net/cursos/clean-code/[este]—.
+====
 
 ====
 En resumen:
@@ -435,6 +440,49 @@ Pause -> Play : Play Clicked
 Pause -> Loading : Restart Clicked
 Pause -> Menu : "Go to Menu" Clicked
 ----
+
+=== _Factory_
+
+El patrón https://es.wikipedia.org/wiki/Factory_Method_(patr%C3%B3n_de_dise%C3%B1o)[factory] se utiliza para construir objetos.
+
+¿Por qué utilizar un patrón para construir objetos si todos las clases tienen un constructor?
+
+. Porque hay objetos que pueden ser complejos de construir.
+Una clase se supone que ya ha sido creada para que asuma cierta responsabilidad, por lo que por el principio de responsabilidad única puede ser interesante colocar en otro sitio la responsabilidad de construir adecuadamente sus instancias.
+
+. Para que la dependencia entre clases sea débil.
+Un objeto puede tener dependencias de otros objetos.
+Cuando estos otros objetos se instancian en el constructor de la clase del primero se crea un acoplamiento
+que dificulta poder reutilizar y extender el código.
+Por ejemplo, si la clase NPC instancia desde su constructor la clase que implementa la IA, más adelante puede ser complicado reutilizar la clase del NPC para crear entidades que utilizen otra IA.
+
+En la <<img-npc-factory>> se puede observar como el patrón _factory_ consiste en utilizar una clase o función _factory_ para construir los NPC y los componentes de los que depende.
+
+[#img-npc-factory]
+.Ejemplo del patrón _factory_ aplicado a crear NPC.
+[plantuml, format="svg"]
+....
+hide empty members
+
+class NPCFactory {
+  +getSimpleNPC(): NPC
+}
+
+NPCFactory <-- AnyClass : Obtener un NPC
+"NPC " <-- NPCFactory: Crear
+
+package "NPC " <<Rectangle>> {
+  class NPC
+  class StateMachine
+  class SimpleAIBrain
+}
+
+NPC -- StateMachine
+NPC -- SimpleAIBrain
+....
+
+En la <<img-npc-factory>> el `NPCFactory` tiene un método  `getSimpleNPC()` que crear NPC con una IA simple llamada `SimpleAIBrain`.
+Si se quisiera crear un NPC con otro tipo de IA, sólo haría falta añadir otro método a `NPCFactory` que creara un NPC con componentes diferentes.
 
 === _Strategy_
 
