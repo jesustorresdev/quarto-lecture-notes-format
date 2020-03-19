@@ -47,4 +47,4 @@ prepare-pdf:
 prepare-epub:
 	@mkdir -p $(EPUBOUTPUTDIR)
 
-.PHONY: prepare
+.PHONY: html pdf epub all prepare-html prepare-pdf prepare-epub
