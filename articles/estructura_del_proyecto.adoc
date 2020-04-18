@@ -2,7 +2,7 @@
 Jesús Torres <jmtorres@ull.es>
 include::../config/attributes.adoc[]
 :imagesdir: {imagesdir}/estructura_del_proyecto
-2019-2020
+Curso 2019-2020
 
 Poner algo de orden en un proyecto es importante para asegurar su mantenibilidad.
 Facilita que cada miembro del equipo sepa dónde buscar o añadir aquello que necesite para hacer su trabajo.

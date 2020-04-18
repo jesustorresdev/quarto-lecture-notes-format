@@ -1,0 +1,7 @@
+extends: default
+title-page:
+  authors:
+    content:
+      name_only: "{author}"
+      with_email: "{author} <{email}>"
+      with_url: "{url}[{author}]"

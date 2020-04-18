@@ -2,7 +2,7 @@
 Jesús Torres <jmtorres@ull.es>
 include::../config/attributes.adoc[]
 :imagesdir: {imagesdir}/perforce
-2019-2020
+Curso 2019-2020
 
 http://www.perforce.com[Perforce] es la compañía que desarrolla http://www.perforce.com/products/helix-core[Helix Core], un sistema de control de versiones (en inglés, _Version Control System_ o _VCS_) diseñado para manejar proyectos realmente grandes.
 

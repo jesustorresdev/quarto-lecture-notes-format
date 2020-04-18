@@ -2,7 +2,7 @@
 Jesús Torres <jmtorres@ull.es>
 include::../config/attributes.adoc[]
 :imagesdir: {imagesdir}/composición_de_niveles
-2019-2020
+Curso 2019-2020
 
 Cuando el nivel o el mundo —en los juegos de mundo abierto— que queremos desarrollar es demasiado extenso como para cargarlo de una sola vez, estamos obligados a dividirlo en diferentes mapas o escenas, cargándolas y descargándolas bajo demanda según se desarrolla el juego.
 Esto, indudablemente, condiciona el diseño del nivel.

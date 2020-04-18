@@ -2,7 +2,7 @@
 Jesús Torres <jmtorres@ull.es>
 include::../config/attributes.adoc[]
 :imagesdir: {imagesdir}/físicas
-v2019-2020
+Curso 2019-2020
 
 Aunque en los videojuegos se suele hacer mucho hincapié en la calidad del _render_, en un buen motor de videojuegos hay otro componente igual de importante para dotar de realismo a la simulación: el motor de físicas.
 

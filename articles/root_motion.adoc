@@ -2,7 +2,7 @@
 Jesús Torres <jmtorres@ull.es>
 include::../config/attributes.adoc[]
 :imagesdir: {imagesdir}/root_motion
-2019-2020
+Curso 2019-2020
 
 Una de las técnicas de animación de personajes por las que más se suele preguntar es el _Root motion_, que básicamente consiste en que el movimiento del actor o _GameObject_ del personaje esté controlada por la traslación y la rotación global de la malla según la animación.
 

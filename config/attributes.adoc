@@ -17,3 +17,5 @@ include::locale/attributes.adoc[]
 :experimental:
 // Incluir la tabla de contenidos.
 :toc:
+// Configuración del backend PDF
+ifdef::backend-pdf[include::pdf/attributes.adoc[]]

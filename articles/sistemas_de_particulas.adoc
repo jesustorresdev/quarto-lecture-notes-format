@@ -2,7 +2,7 @@
 Jesús Torres <jmtorres@ull.es>
 include::../config/attributes.adoc[]
 :imagesdir: {imagesdir}/sistemas_de_partículas
-2019-2020
+Curso 2019-2020
 
 En cualquier aplicación gráfica, cuando queremos mostrar objetos sólidos 2D usamos _sprites_.
 Y si es en 3D usamos mallas.

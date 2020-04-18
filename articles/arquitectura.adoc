@@ -2,7 +2,7 @@
 Jesús Torres <jmtorres@ull.es>
 include::../config/attributes.adoc[]
 :imagesdir: {imagesdir}/arquitectura
-2019-2020
+Curso 2019-2020
 
 El desarrollo de un videojuego, como el de cualquier otro programa, puede convertirse en infierno si:
 
