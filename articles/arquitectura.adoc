@@ -10,7 +10,7 @@ El desarrollo de un videojuego, como el de cualquier otro programa, puede conver
 
 * A la hora de resolver los problemas que surjan no optamos por soluciones preestablecidas y conocidas en la comunidad de desarrolladores.
 
-* No dedicamos tiempo a hacer estes.
+* No dedicamos tiempo a hacer tests.
 
 * No seguimos buenas prácticas de diseño y de programación, como por ejemplo SOLID o https://puntoq.ull.es/permalink/f/6auhvr/ullabsysULL00512351c-X[Clean Code].
 
@@ -19,14 +19,14 @@ A continuación haremos un resumen de algunas buenas prácticas y consejos que d
 == Arquitectura basada en componentes
 
 Lo primero que debemos tener en cuenta es que muchos motores de videojuegos, entre los que se incluyen Unity y Unreal Engine, han adoptado una arquitectura basada en componentes —también llamada Entidad-Componente (EC)—.
-Eso significa que cuanto más adoptemos esa arquitectura en el desarrollo de nuestros juegos, más ergonómico no parecerá el motor que utilicemos.
+Eso significa que cuanto más adoptemos esa arquitectura en el desarrollo de nuestros juegos, más ergonómico nos parecerá el motor que utilicemos.
 
 En Unity los objetos o entidades de una escena se llaman _GameObjects_ y les podemos agregar componentes.
-Es esa agregación de componentes que se comunican entre sí es lo que determinan las funcionalidades de cada objeto.
+Esa agregación de componentes que se comunican entre sí es lo que determina las funcionalidades de cada objeto.
 De hecho, un objeto sin componentes —si tal cosa fuera posible, porque en Unity el componente `Transform` no se puede eliminar— no tiene ninguna funcionalidad en absoluto.
 
 Y lo mismo ocurre en Unreal Engine, solo que las entidades de la escena se llaman actores que, al igual que en Unity, reciben su funcionalidad por medio de los componentes que se le añadan.
-Quizás las principal diferencia entre uno motor y el otro es que en Unreal los componentes se pueden agregar en una jerarquía de componentes —es decir, unos componentes puede ser hijos de otros— mientras que en Unity eso no es posibles.
+Quizás la principal diferencia entre un motor y el otro es que en Unreal los componentes se pueden agregar en una jerarquía de componentes —es decir, unos componentes puede ser hijos de otros— mientras que en Unity eso no es posible.
 
 Pensar en términos de programación orientada a componentes no es sencillo para quienes  aterrizamos desde la programación orientada a objetos tradicional, dónde lo común  es construir jerarquías inmensas de clases en un esfuerzo por asegurar la reutilización del código y evitar repetirnos.
 Pero veremos que la necesidad de este cambio de mentalidad no es un capricho de los diseñadores de motores de videojuegos.
@@ -35,11 +35,11 @@ Pero veremos que la necesidad de este cambio de mentalidad no es un capricho de 
 
 :fn-npc: pass:n[NPC son las siglas de _Non-player character_ o personaje no jugador.]
 Supongamos que estamos desarrollando una serie de NPC{blank}footnote:[{fn-npc}] para nuestro juego.
-Como es habitual tendrán una IA y una salud, ya que es posible hacerles.
-Así que esa características comunes las implementamos en la clase `Entity` para no repetir código.
+Como es habitual tendrán un controlador de IA y un nivel de salud.
+Así que esas características comunes las implementamos en la clase `Entity` para no repetir código.
 
-De `Entity` se heredad para crear cada uno de los tipos de personaje: luchadores con espada, hechiceros y hechiceros con espada.
-Y, además, hay versiones con la IA normal y otras con IA más agresiva en el convento.
+De `Entity` se heredan para crear cada uno de los tipos de personaje: luchadores con espada, hechiceros y hechiceros con espada.
+Y, además, hay versiones con la IA normal y otras con una IA más agresiva.
 Un posible esquema UML de relación entre las clases se puede ver en la <<img-herencia-uml>>, dónde, por ejemplo, la fecha de SwordFightingEntity a Entity indica que la primera extiende —es decir, hereda— de la segunda.
 
 [#img-herencia-uml]
@@ -55,15 +55,15 @@ MagicFightingEntity <|-- AggressiveMagicFightingEntity
 MagicAndSwordFightingEntity <|-- AggressiveMagicAndSwordFightingEntity
 ....
 
-Al ver la <<img-herencia-uml>> parece evidente que más características queramos combinar más complejo es el esquema de relación.
+Al ver la <<img-herencia-uml>> parece evidente que mientras más características queramos combinar más complejo es el esquema de relación.
 Si, por ejemplo, hubieran distintas formas de ser afectados por el daño, todas las clases tendrían una clase derivada con una versión con esa nueva forma de sufrir daño.
 Si hubiera otro tipo de IA, todas las clases tendrían una nueva versión con el nuevo tipo de IA.
 
 Lo peor de todo es que en la <<img-herencia-uml>> se ve que no se puede evitar la repetición de código.
-Por ejemplo, `MagicAndSwordFightingEntity` hereda de `SwordFightingEntity`, así que la primera puede aprovechar el código de la segunda para el combate con espada, pero no hereda de `MagicFightingEntity`, así que el código para el combate con magia no se reutilizada.
-Hay que volver a escribirlo para esta clase donde se combina ambos tipos de combate.
+Por ejemplo, `MagicAndSwordFightingEntity` hereda de `SwordFightingEntity`, así que la primera puede aprovechar el código de la segunda para el combate con espada, pero no hereda de `MagicFightingEntity`, así que el código para el combate con magia no se reutiliza.
+Hay que volver a escribirlo para esta clase donde se combinan ambos tipos de combate.
 
-La solución a este problema es utilizar componentes, cada uno de los cuales aportar alguna característica a la entidad.
+La solución a este problema es utilizar componentes, cada uno de los cuales aportan alguna característica a la entidad.
 
 [#img-componentes-uml]
 .Ejemplo del uso de composición para crear distintos tipos de NPC.
@@ -90,7 +90,7 @@ Solo tenemos que adquirir el esquema mental adecuado para utilizarla correctamen
 
 == Los principios S.O.L.I.D.
 
-De hecho una solución muy común entre los que se aproximan a motores como Unity o Unreal Engine es la que se representa en la <<img-anti-solid>>.
+De hecho una solución muy común entre aquellos que se aproximan a motores como Unity o Unreal Engine es la que se representa en la <<img-anti-solid>>.
 
 [#img-anti-solid]
 .Ejemplo de un mal uso de la composición.
@@ -102,14 +102,14 @@ GameObject\nMagicFightingEntity *-- Entity
 GameObject\nMagicAndSwordFightingEntity *-- Entity
 ....
 
-En <<img-anti-solid>> todos los NPC necesita un solo componente `Entity` que lo sabe hacer todo.
+En la <<img-anti-solid>> todos los NPC necesitan un solo componente `Entity` que lo sabe hacer todo.
 Implementa diferentes tipos de combate, de formas de recibir daño, de comportamientos de inteligencia artificial, etc.
 Se supone que la elección de unas opciones u otras para cada _GameObject_ se toma por medio de variables, seguramente configurables desde el editor.
 
-Obviamente es un orgullo cuando hemos aprendido los suficiente como para ser capaces de meter todo junto en una sola clase de, seguramente, 1000 líneas de código o más.
-Pero lo que no vemos es que cada vez va a ser mas difícil añadir características nuevas y que seguramente seamos los único del equipo del proyecto que vamos a entender el código.
+Obviamente es un orgullo cuando hemos aprendido lo suficiente como para ser capaces de meter todo junto en una sola clase de, seguramente, 1000 líneas de código o más.
+Pero lo que no vemos es que cada vez va a ser mas difícil añadir características nuevas y que seguramente seamos los únicos del equipo del proyecto que vamos a entender el código.
 Y eso si no lo dejamos aparcado mucho tiempo.
-Tal vez en unas semanas tampoco nosotros sepamos por donde coger.
+Tal vez en unas semanas tampoco nosotros sepamos por donde cogerlo.
 
 Al diseñar nuestros componentes y nuestras clases —dado que cada componente es una clase— una regla básica a respetar es el _Principio de responsabilidad única_: La noción de que una clase solo debería tener una única responsabilidad.
 
@@ -119,26 +119,26 @@ El _Principio de responsabilidad única_ es el primero de una serie de principio
 
 . *Principio de responsabilidad única*: La noción de que una clase solo debería tener una única responsabilidad.
 
-. *Principio abierto/cerrado*: La noción de que las entidades de software deben estar abiertas para su extensión pero cerradas para su modificación. Esto se traduce en la recomendación de usar interfaces y clases abstractas de las que heredar para para desarrollar implementaciones concretas.
+. *Principio abierto/cerrado*: La noción de que las entidades de software deben estar abiertas para su extensión pero cerradas para su modificación. Esto se traduce en la recomendación de usar interfaces y clases abstractas de las que heredar para desarrollar implementaciones concretas.
 
-. *Principio de substitución de Liskov*: La noción de que los objetos de un programa deben poder ser reemplazables por instancias de clases derivadas sin alterar el correcto funcionamiento del programa.
+. *Principio de sustitución de Liskov*: La noción de que los objetos de un programa deben poder ser reemplazables por instancias de clases derivadas sin alterar el correcto funcionamiento del programa.
 
 . *Principio de segregación de la interfaz*: La noción de que tener muchas interfaces específicas, para cosas concretas, es mucho mejor que tener una única interfaz de propósito general que sirva para todo.
 
-. *Principio de inversión de la dependencia*: La noción de que se debe depender de abstracciones en lugar de depender de implementaciones. Lo que básicamente indica que a las clases se les debería inyectar sus dependencias como interfaces.
+. *Principio de inversión de la dependencia*: La noción de que se debe depender de abstracciones en lugar de depender de implementaciones. Lo que básicamente indica que a las clases se les deberían inyectar sus dependencias como interfaces.
 
 En realidad es complicado entender estos 5 principios sin ver ejemplos completos.
 Por eso merece la pena dedicarle un rato al siguiente vídeo, dónde en la primera mitad se explica la aplicación de los principios S.O.L.I.D. al desarrollo en Unity.
 
 .Vídeo de la conferencia "S.O.L.I.D. Unity" en Unite Austin 2017.
-video::eIf3-aDTOOA&__s[youtube,opts="modest",width=640,height=360]
+video::eIf3-aDTOOA[youtube,opts="modest",width=640,height=360]
 
 [TIP]
 ====
 Para profundizar en estos principios, lo primero es aplicarlas en nuestros propios proyectos.
-Para ser buenos desarrolladores también es recomendable dedicar algo de tiempo a asimilar y poner en prácticas las reglas y principios del https://puntoq.ull.es/permalink/f/6auhvr/ullabsysULL00512351c-X[Clean Code].
+Para ser buenos desarrolladores también es recomendable dedicar algo de tiempo a asimilar y poner en práctica las reglas y principios del https://puntoq.ull.es/permalink/f/6auhvr/ullabsysULL00512351c-X[Clean Code].
 
-Aparte del libro de Clean Code es bastante sencillo encontrar en Internet resúmenes —cómo https://juanmaperezblog.wordpress.com/2020/03/09/libro-resumido-clean-code/[este]— con las ideas principales y cursos —como https://openwebinars.net/cursos/clean-code/[este]—.
+Aparte del libro de Clean Code, es bastante sencillo encontrar en Internet resúmenes —como https://juanmaperezblog.wordpress.com/2020/03/09/libro-resumido-clean-code/[este]— con las ideas principales y cursos —como https://openwebinars.net/cursos/clean-code/[este]—.
 ====
 
 ====
@@ -174,35 +174,35 @@ GameObject\nHealingPotion *-- Healer
 GameObject\nHealingPotion *-- InventoryItem
 ....
 
-Esto se podría resolver añadiendo un componente a cada objeto que puede pertenecer al inventario y otro a cada personaje que tiene un inventario dónde almacenar objetos.
+Esto se podría resolver añadiendo un componente a cada objeto que puede pertenecer al inventario y otro a cada personaje que tiene un inventario donde almacenar objetos.
 En la <<img-inventory-system>> al primero lo hemos llamado `InventoryItem` y al segundo `InventoryManager`
 Ambos tipos de componentes trabajar de forma coordinada para implementar un _sistema de inventario_.
 
 === Sistemas
 
-Un sistema es una combinación de de componentes de software que trabajan juntos para implementar cierta funcionalidad.
+Un sistema es una combinación de componentes de software que trabajan juntos para implementar cierta funcionalidad.
 
 :fn-spawn-system: pass:n[El _spawn system_ determina donde aparecen el jugador y los NPC durante el juego.]
 En un videojuego suelen haber múltiples sistemas: inventario, locomoción, salvado, meteorología, conducción, _spawn_{blank}footnote:[{fn-spawn-system}], interfaz de usuario, etc.
 
 [TIP]
 ====
-Es muy recomendable el uso de espacios de nombres para agrupan los componentes de los distintos sistemas.
-Los espacios de nombre proporcionan límites bien definidos entre sistemas, evidenciando, gracias al uso de las cláusulas `using` cuando un sistema depende de otro.
-Eso ayuda a pensar si esas dependencias son necesarias o hace falta pensarla mejor el diseño.
+Es muy recomendable el uso de espacios de nombres para agrupar los componentes de los distintos sistemas.
+Los espacios de nombre proporcionan límites bien definidos entre sistemas, evidenciando, gracias al uso de las cláusulas `using` cuándo un sistema depende de otro.
+Eso ayuda a pensar si esas dependencias son necesarias o hace falta pensar mejor el diseño.
 ====
 
 === _Manager_
 
-Los _managers_ gestiona una colección de entidades. Por ejemplo, NPC, proyectiles, enemigos, cámaras, sistemas de partículas, etc.
-Para mejorar el rendimiento, pueden gestionar un _pool_ del tipo de objetos que gestionan.
+Los _managers_ gestionan una colección de entidades. Por ejemplo, NPC, proyectiles, enemigos, cámaras, sistemas de partículas, etc.
+Para mejorar el rendimiento, pueden almacenar los objetos en un _pool_ de objetos.
 
 Los _managers_ también facilitan encontrar rápidamente todos los objetos de cierto tipo evitando usar las funciones de búsqueda del motor —como las funciones `FindXXXXXX()` en Unity— que son más lentas.
 
 Por ejemplo, es buena idea tener un `CameraManager` que permita conocer las cámaras existentes y obtener rápidamente una referencia a la cámara activa.
 En Unity se puede usar `camera.main` para conocer la cámara activa, pero esta propiedad usa la función FindGameObjectsWithTag(), lo que es más lento que tener un _manager_.
 
-De igual forma, en juegos multijugador es buena idea tener en la escena un `PlayerManager` a quién preguntarle por todos los jugadores conocidos, en lugar de pedirle al motor que los busque de entre todos los objetos de la escena.
+De igual forma, en juegos multijugador es buena idea tener en la escena un `PlayerManager` a quien preguntarle por todos los jugadores conocidos, en lugar de pedirle al motor que los busque de entre todos los objetos de la escena.
 
 Aunque por lo comentado pueda parecer que de cada tipo de _manager_ solo hay uno en cada escena, lo cierto es que no es así.
 En la <<img-inventory-system>> se puede observar como cada personaje que puede llevar `InventoryItem` tiene su `InventoryManager`.
@@ -212,7 +212,7 @@ En general no parece interesante conocer y gestionar todos los `InventoryItem` d
 
 El _game manager_ es un tipo especial de manager dedicado a llevar el flujo del juego: carga de escenas y transiciones, modos de pausa y de menus, etc.
 
-En los juegos pequeños puede ser responsable de centralizar otros aspectos del estado del juego, como: puntaciones, vidas, etc.
+En los juegos pequeños puede ser responsable de centralizar otros aspectos del estado del juego, como: puntuaciones, vidas, etc.
 Pero en juegos grandes es mejor separar esas responsabilidades en otros componentes.
 
 === Controlador
@@ -220,11 +220,11 @@ Pero en juegos grandes es mejor separar esas responsabilidades en otros componen
 Un controlador es un componente que va en una entidad específica y sirve para orquestar varios componentes de la entidad o controlar la entidad por completo.
 
 En la <<img-inventory-system>>, `PlayerController`, `Weapon` y `Entity` son controladores.
-Y su tuviéramos proyectiles seguramente también tendrían que tener su controlador, encargado de disparar, mover, causar daño y destruir la entidad al final de su recorrido.
+Y si tuviéramos proyectiles seguramente también tendrían que tener su controlador, encargado de disparar, mover, causar daño y destruir la entidad al final de su recorrido.
 
 Un ejemplo típico de controlador es el `PlayerController`, cuya función es controlar todos los aspectos del personaje del jugador.
 En función de la complejidad del juego, el `PlayerController` puede implementar toda la funcionalidad o —algo mucho mejor— esta puede estar repartida en controladores más pequeños: `LocomotionController` —encargado del a dónde queremos ir y cómo llegar— `AnimationController` —estados de animación y controlar los _blends_— `StatsController` —encargado de las estadísticas del personaje— o el `InputController` —responsable de leer la entrada de un jugador—.
-Incluso el `LocomotionController` puede repartir su funcionalidad en varios controladores si existen varios modos de movimiento: a pié, nadar o escalada; activando un controlador un otro según el modo de cada momento.
+Incluso el `LocomotionController` puede repartir su funcionalidad en varios controladores si existen varios modos de movimiento: a pie, nadar o escalada; activando un controlador u otro según el modo de cada momento.
 Todos estos controladores diferentes funcionarían orquestados por el `PlayerController`.
 
 === Componentes cuando es necesario
@@ -241,11 +241,11 @@ Sin embargo, las clases convencionales son más sencillas y rápidas de testear,
 Basta con crear un test que aisle el componente y lo pruebe, usando algún _framework_ de pruebas de software.
 
 Por un momento, volvamos al sistema de inventario de la <<img-inventory-system>>.
-¿Realmente los `InventoryManager` necesitan de alguna funcionalidad especial a la que solo tiene acceso siendo componentes?
+¿Realmente los `InventoryManager` necesitan de alguna funcionalidad especial a la que solo tienen acceso siendo componentes?
 Probablemente no.
 A fin de cuentas seguramente no sean más que listas en las que añadir y eliminar unos cuantos `InventoryItem`.
 
-El motivo para que hayamos decidio implementar los `InventoryManager` como componentes es porque queremos que los diseñadores pueda decidir que entidades los tienen y configurarlos a su criterio.
+El motivo para que hayamos decidio implementar los `InventoryManager` como componentes es porque queremos que los diseñadores puedan decidir qué entidades los tienen y configurarlos a su criterio.
 Pero eso se puede resolver separando la creación y configuración del `InventoryManager` del `InventoryManager` en si mismo.
 
 [#img-inventory-system-plus]
@@ -280,7 +280,7 @@ Una vez tenemos clara la arquitectura, con los componentes y sistemas que necesi
 Durante ese proceso seguramente surgirán una serie de problemas a los que deberemos buscar soluciones.
 
 Por suerte, por lo general no va a ser necesario inventarse nada nuevo.
-Estos problemas aparecen una y otra vez durante el desarrollo, en diferentes proyectos, así que hay quién las han recopilado en la forma de _patrones de diseño de software_.
+Estos problemas aparecen una y otra vez durante el desarrollo, en diferentes proyectos, así que hay quien las ha recopilado en la forma de _patrones de diseño de software_.
 
 Hay muchos, por lo que nosotros nos centraremos fundamentalmente en aquellos que nos puedan ser más útiles en el desarrollo de videojuegos.
 
@@ -316,7 +316,7 @@ En Unity el problema es que la clase `MonoBehaviour` de la que deben heredar tod
 El mecanismo usado en https://es.wikipedia.org/wiki/Singleton#C#[el ejemplo de Wikipedia] de hacer el constructor privado no funciona con clases deridadas de `MonoBehaviour`.
 De hecho `MonoBehaviour` hace privado por constructor para sus propios fines.
 
-Así que hay optar otras soluciones.
+Así que hay optar por otras soluciones.
 Una de las más completas sería la siguiente clase `Singleton`, de la que podríamos derivar nuestros _managers singleton_:
 
 [source,csharp]
@@ -325,41 +325,37 @@ public class Singleton : MonoBehaviour
 {
     private static Singleton _instance; <!--1-->
 
-    public static Singleton Instance <!--4-->
+    public static Singleton Instance <!--2-->
     {
         get
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<Singleton>(); <!--5-->
+                _instance = FindObjectOfType<Singleton>(); <!--3-->
                 if (_instance == null)
                 {
                     var gameObject = new GameObject();
-                    _instance = gameObject.AddComponent<Singleton>(); <!--6-->
+                    _instance = gameObject.AddComponent<Singleton>(); <!--4-->
                 }
             }
 
-            return instance;
+            return _instance;
         }
     }
 
     private void Awake()
     {
-        if (_instance != null)
-        {
-            Destroy(this); <!--2-->
-            return;
-        }
-        DontDestroyOnLoad(this); <!--3-->
+        DontDestroyOnLoad(this); <!--5-->
     }
 }
 ----
 <1> `_instance` se define como `static` para que sea un campo compartido por todas las instancias de las clase `Singleton`. La idea es que aquí se guarde una referencia a la primera de estas instancias, que es la única que al final debe existir.
-<2> Al iniciar un objeto con este componente `Singleton` se comprueba si ya hay otro mirando si `_instance` no es nulo. Si ya hay otra instancia, el objeto es destruido.
-<3> Se le indica a Unity que no destruya el objeto cuando cargue una nueva escena que sustituya a esta.
-<4> Como `_instance` es privado, otras partes del código accederán a la instancia del _singleton_ usando esta propiedad de la siguiente manera: `Singleton.Instance`.
-<5> Al acceder se comprueba si ya existe existe una instancia. Sino es así, se busca el primer `GameObject` con el componente `Singleton` y se guarda su referencia en `_instance`.
-<6> Si no se encontrase ningún objeto con el componente `Singleton`, se crea uno, se añade el componente `Singleton` y esta es la instancia que se guarda en `_instance` y que se devuelve desde la propiedad.
+<2> Como `_instance` es privado, otras partes del código accederán a la instancia del _singleton_ usando esta propiedad de la siguiente manera: `Singleton.Instance`.
+<3> Al acceder se comprueba si ya existe una instancia.
+Sino es así, se busca el primer `GameObject` con el componente `Singleton` y se guarda su referencia en `_instance`.
+<4> Si no se encontrase ningún objeto con el componente `Singleton`, se crea uno, se añade el componente `Singleton` y esta es la instancia que se guarda en `_instance` y que se devuelve desde la propiedad.
+<5> Se le indica a Unity que no destruya el objeto cuando cargue una nueva escena que sustituya a esta.
+Esto solo es necesario cuando nos interese ese comportamiento.
 
 [NOTE]
 ====
@@ -367,14 +363,18 @@ Al ejecutar el juego en el editor, Unity resetea el estado de los _scripts_.
 En proyectos grandes eso puede llegar a consumir bastante tiempo, haciendo que cada vez sea mas díficil iterar rápidamente entre programar y probar, durante el desarrollo del proyecto.
 
 El https://docs.unity3d.com/2019.3/Documentation/Manual/DomainReloading.html[Domain Reloading], que es cómo se llama este mecanismo, se puede desactivar.
-Pero entonces es necesario modificar el proyecto para que los campos y eventos estáticos se reseten adecuadamente al ejecutar el juego.
+Pero entonces es necesario modificar el proyecto para que los campos y eventos estáticos se reseteen adecuadamente al ejecutar el juego.
 Cómo hacerlo está perfectamente explicado en la https://docs.unity3d.com/2019.3/Documentation/Manual/DomainReloading.html[documentación].
 ====
 
-Lo cierto es que el ejemplo anterior es complejo porque considera muchos casos y hace muchas cosas por nosotros.
-Una de las que menos convencen es lo de crear el objeto si no existe y añadir un componente `Singleton`.
-Porque si, por ejemplo, lo hemos derivado de `Singleton` para crear `AudioManager` lo que queremos es que el componente añadido sea `AudioManager`, no `Singleton`.
-Y porque implementado así deja en manos de cualquier parte del código llamar a la propiedad `Instance` y crear un objeto que a lo mejor no está en la escena porque no debería hacer falta.
+Lo cierto es que el ejemplo anterior es algo complejo porque hace algunas cosas por nosotros.
+Una de las que menos me convencen es lo de crear el objeto si no existe y añadir un componente `Singleton`:
+
+1. Porque si, por ejemplo, lo hemos derivado de `Singleton` para crear `AudioManager` lo que queremos es que el componente añadido sea `AudioManager`, no `Singleton`.
+Esto se podría solucionar usando genéricos, pero complica aun más el código de la clase `Singleton`.
+2. Porque el componente `Singleton` o el que use `Singleton` como clase base podría necesitar que se configurara algún campo desde el editor que desde el código, al añadir el componente, no sepamos que valor darle.
+
+Otra cuestión es que al implementarlo así se deja en manos de cualquier parte del código llamar a la propiedad `Instance` y crear un objeto que a lo mejor no está en la escena porque no debería hacer falta.
 
 Así que puede que en ocasiones nos interese utilizar una versión más simple:
 
@@ -398,12 +398,12 @@ public class Singleton : MonoBehaviour
 }
 ----
 
-Ahora es responsabilidad nuestra crear un objeto vacía en la escena y añadir el componente.
-Lo que nos asegura el código anterior es que nunca habrán dos `GameObject` con el mismo componente.
+Ahora es responsabilidad nuestra crear un objeto vacío en la escena, añadir el componente y, donde lo necesitemos, buscarlo con `FindObjectOfType<Singleton>()`.
+Lo que sí nos asegura el código anterior es que nunca habrán dos `GameObject` con el mismo componente.
 
 ==== Criterios de uso
 
-Algunos desarrolladores consideran el _singleton_ como un anti-patrón, pues se utiliza frecuentemente en situaciones dónde no es necesario con el inconveniente de introducir una forma de variable global en la aplicación, por lo que tienden a evitarlos.
+Algunos desarrolladores consideran el _singleton_ como un anti-patrón, pues se utiliza frecuentemente en situaciones donde no es necesario con el inconveniente de introducir una forma de variable global en la aplicación, por lo que tienden a evitarlos.
 
 Antes de usarlo es importarte asegurarse de que no existe otra opción, por ejemplo comprobando primero la siguiente lista de criterios:
 
@@ -422,7 +422,7 @@ El patrón https://es.wikipedia.org/wiki/State_(patr%C3%B3n_de_dise%C3%B1o)[stat
 Las máquinas de estados finitos —FSM del inglés https://es.wikipedia.org/wiki/Aut%C3%B3mata_finito[Finite-State Machine]— que en videojuegos son de gran utilidad, pueden implementarse con este patrón.
 
 Las máquinas de estados no se utilizan solo para implementar la inteligencia artificial de los NPC.
-También sirven se utilizan en los sistemas de animación que incorporan los motores de videojuegos, para seleccionar la animación que se reproduce en cada momento.
+También se utilizan en los sistemas de animación que incorporan los motores de videojuegos, para seleccionar la animación que se reproduce en cada momento.
 O se puede utilizar en el `GameManager` para gestionar el modo en el que se encuentra el juego en cada momento.
 
 En la <<img-game-state-machine>> se puede observar un esquema típico de lo que podrían ser los estados de cualquier juego.
@@ -456,7 +456,7 @@ Cuando estos otros objetos se instancian en el constructor de la clase del prime
 que dificulta poder reutilizar y extender el código.
 Por ejemplo, si la clase NPC instancia desde su constructor la clase que implementa la IA, más adelante puede ser complicado reutilizar la clase del NPC para crear entidades que utilizen otra IA.
 
-En la <<img-npc-factory>> se puede observar como el patrón _factory_ consiste en utilizar una clase o función _factory_ para construir los NPC y los componentes de los que depende.
+En la <<img-npc-factory>> se puede observar cómo el patrón _factory_ consiste en utilizar una clase o función _factory_ para construir los NPC y los componentes de los que depende.
 
 [#img-npc-factory]
 .Ejemplo del patrón _factory_ aplicado a crear NPC.
@@ -481,15 +481,15 @@ NPC -- StateMachine
 NPC -- SimpleAIBrain
 ....
 
-En la <<img-npc-factory>> el `NPCFactory` tiene un método  `getSimpleNPC()` que crear NPC con una IA simple llamada `SimpleAIBrain`.
+En la <<img-npc-factory>> el `NPCFactory` tiene un método  `getSimpleNPC()` que crea NPC con una IA simple llamada `SimpleAIBrain`.
 Si se quisiera crear un NPC con otro tipo de IA, sólo haría falta añadir otro método a `NPCFactory` que creara un NPC con componentes diferentes.
 
 === _Strategy_
 
-El patrón https://es.wikipedia.org/wiki/Strategy_(patr%C3%B3n_de_dise%C3%B1o)[strategy] ofrece una forma de seleccionar dinámicamente algoritmos y asignarnos a un objeto en tiempo de ejecución, para que resuelva cierta tarea o tenga cierto comportamiento.
+El patrón https://es.wikipedia.org/wiki/Strategy_(patr%C3%B3n_de_dise%C3%B1o)[strategy] ofrece una forma de seleccionar dinámicamente algoritmos y asignarlos a un objeto en tiempo de ejecución, para que resuelva cierta tarea o tenga cierto comportamiento.
 
-Un ejemplo muy directo es si pensamos en que tenemos proyectiles guíados que pueden dirigirse a su destino por tres mecanismos: calor, sonar o ubicación exacta.
-Si todos los proyectiles se simulan de la misma manera y lo único que cambia es su sistema de guíado, no parece sensato implementar tres clases diferentes solo por esa pequeña diferencia.
+Un ejemplo muy directo es si pensamos en que tenemos proyectiles guiados que pueden dirigirse a su destino por tres mecanismos: calor, sonar o ubicación exacta.
+Si todos los proyectiles se simulan de la misma manera y lo único que cambia es su sistema de guiado, no parece sensato implementar tres clases diferentes solo por esa pequeña diferencia.
 En su lugar podemos tener una clase `Projectile` y tres estrategias: `SeekWithHeat`, `SeekWithSonar` y `SeekToFixedLocation`
 
 [#img-strategy-pattern]
@@ -518,7 +518,7 @@ Teniendo esto en cuenta, el patrón _strategy_ también puede ser interesante en
 
 Supongamos que el personaje del jugador tiene un `PlayerController` que orquesta los distintos controladores presentes: `LocomotionController`, `AnimationController`, etc.
 El `LocomotionController` es el responsable de cómo se desplaza el personaje, que puede hacerlo de diferentes maneras: caminar, esquiar, escalar, nadar, etc.
-Esto modos se pueden implementar directamente en el código del `LocomotionController`
+Esto modos se pueden implementar directamente en el código del `LocomotionController`.
 Sin embargo, es mucho mejor utilizar el patrón _strategy_ para implementarlos en sus propias clases y activarlos en el `LocomotionController` según lo adecuado para cada momento.
 
 Igual que antes, incluso cada uno de estos modos podría ser un componente en el _GameObject_ del personaje y que el `LocomotionController` se asegurara de que sólo uno de ellos está activo en cada momento para imponer su modo de desplazamiento al movimiento del personaje.
@@ -551,7 +551,7 @@ ProjectileLauncher -- ProjectileManager
 ProjectileManager -- "1" ProjectilePool
 ....
 
-Así los objetos se reutilizan, evitando tener que reservar, inicializar y liberar memoria en el momento y, por tanto, limitando las posibilidades de sufrir retados que afecten a la experiencia.
+Así los objetos se reutilizan, evitando tener que reservar, inicializar y liberar memoria en el momento y, por tanto, limitando las posibilidades de sufrir retardos que afecten a la experiencia.
 
 NOTE: Los _pool_ de objetos son especialmente interesantes en dispositivos móviles, que están más limitados en recursos que muchos PC y consolas.
 
@@ -565,7 +565,7 @@ Una implementación para Unity muy sencilla, donde se entiende muy bien la idea,
 
 === Patrón _Observer_
 
-El principal objetivo del patrón https://es.wikipedia.org/wiki/Observer_(patr%C3%B3n_de_dise%C3%B1o)[observer] es permitir que a unos objetos observar cambios en el estado interno de otros objetos.
+El principal objetivo del patrón https://es.wikipedia.org/wiki/Observer_(patr%C3%B3n_de_dise%C3%B1o)[observer] es permitir a unos objetos observar cambios en el estado interno de otros objetos.
 
 Los objetos pueden definir señales o eventos, que emiten cuando algo cambia.
 Otros objetos pueden suscribirse en cualquier momento a esos eventos indicando el método que debe ser llamado cuando el evento es emitido.
@@ -575,18 +575,18 @@ A ese evento puede suscribirse la barra de salud.
 Así cuando el nivel de salud cambie, la barra de salud será notificada.
 Esta solo tendrá que leer la propiedad con el nivel de jugador y actualizar el estado de la barra de acuerdo a dicho valor.
 
-=== Desacoplo de la interfaz de usuario
+=== Desacople de la interfaz de usuario
 
 El ejemplo anterior no está mal en el sentido que resuelve correctamente una duda común entre muchos desarolladores noveles: ¿la propiedad con el nivel de salud la debe tener el jugador o la barra de salud?
 
-La respuesta que los componentes de la interfaz de usuario no deben tener ninguna pieza del estado o de la lógica del juego.
+La respuesta es que los componentes de la interfaz de usuario no deben tener ninguna pieza del estado o de la lógica del juego.
 
 Usando el patrón _observer_, la lógica del juego puede notificar los cambios en el estado del juego y la interfaz de usuario puede estar suscrita a dichos cambios.
-Pero incluso así existen cierto nivel de acoplamiento.
+Pero incluso así existe cierto nivel de acoplamiento.
 Por ejemplo, la barra de salud debe conocer al objeto jugador para suscribirse y, llegado el momento, leer el nivel de salud.
 
-¿Y qué ocurre cuando el lógica del juego tiene que reacción a acciones e la interfaz de usuario?.
-Nuevamente esto obliga a que los componentes de la lógica del juego conozco botones y menus para suscribirse a los eventos que puedan emitir.
+¿Y qué ocurre cuando la lógica del juego tiene que reaccionar a acciones en la interfaz de usuario?.
+Nuevamente esto obliga a que los componentes de la lógica del juego conozca botones y menus para suscribirse a los eventos que puedan emitir.
 
 Aunque pueda parece que esto no es un problema, lo cierto es que es muy difícil de mantener en juego grandes, con interfaces complejas.
 Por eso es conveniente tomar algunas ideas de patrones como https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93presentador[MVP] —Modelo-Vista-Presentación— o https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel[MVVM] —Modelo-Vista-ViewModel— y adaptarlas, para desacoplar mejor la interfaz de usuario de la lógica del juego.
@@ -625,8 +625,8 @@ EventBus -> Suscriptor2: Enviar Evento "B"
 EventBus -> Suscriptor3: Enviar Evento "B"
 ....
 
-El motivo para usar este patrón es desacoplar todo los posible las clases.
-Unas emite eventos y otras consumen esos eventos, pero no tienen que conocerse las unas a las otras, con si ocurre con el patrón _observer_.
+El motivo para usar este patrón es desacoplar todo lo posible las clases.
+Unas emiten eventos y otras consumen esos eventos, pero no tienen que conocerse las unas a las otras, como si ocurre con el patrón _observer_.
 
 === Humble Object
 
@@ -634,7 +634,7 @@ Ya hemos comentado que los componentes son complejos de testear porque implican 
 Eso es lo que en Unity llaman test en modo _playmode_ y son más lentos de ejecutar.
 
 La idea detrás del patrón _Humble Object_ es que pongamos la lógica de nuestros componentes en una clase normal, que podamos testear.
-Y después se crearía un _Humble Object_ que no es sino una envoltura alrededor de eso objeto para que se pueda usar como un componente del motor.
+Y después se crearía un _Humble Object_ que no es sino una envoltura alrededor de ese objeto para que se pueda usar como un componente del motor.
 
 El objetivo es reducir la cantidad de código allí dónde la lógica del juego entra en contacto con la interfaz del motor de videojuegos, porque generalmente ese código es más difícil de testear.
 
@@ -662,8 +662,8 @@ Projectile -- "1" ProjectileController
 En Unity, por ejemplo, seguramente la lógica del controlador de un proyectil necesite el evento `Update()` de `MonoBehaviour`.
 Sin embargo, si implementamos esa lógica en una clase derivada de `MonoBehaviour` sería muy difícil de testear.
 
-En su lugar la lógica del controlador se puede implementar en una clase C# normal, con un método `Tick()` que se supone que debe ser llamado por "alguien" en cada fotograma.
-Esta clase es sencilla de testear fuera del motor de videojuegos porque no tendría ninguna dependencia de este último
+En su lugar, la lógica del controlador se puede implementar en una clase C# normal, con un método `Tick()` que se supone que debe ser llamado por "alguien" en cada fotograma.
+Esta clase es sencilla de testear fuera del motor de videojuegos porque no tendría ninguna dependencia de este último.
 Después se crearía el componente —el _Humble Object_— heredando de MonoBehaviour, cuya única función es envolver el controlador para que pueda ser usado por el motor.
 Así, cuando el motor llame al método `Update()` del _Humble Object_, este llamaría al método `Tick()` del controlador.
 
@@ -672,22 +672,22 @@ Así, cuando el motor llame al método `Update()` del _Humble Object_, este llam
 La https://es.wikipedia.org/wiki/Corrutina[corrutina] es un bloque de código similar a una función, con la diferencia de que puede suspenderse y reanudarse su ejecución varias veces antes de terminar.
 Por eso se trata un patrón de concurrencia que resuelve el problema de realizar tareas de larga duración sin bloquear la ejecución de la aplicación.
 
-Para ver como eso nos ayuda, reflexionemos por un momento en como se utiliza el método `Update()` de `MonoBehaviour`, ya que Unity es uno de los motores que soporta corrutinas:
+Para ver como eso nos ayuda, reflexionemos por un momento en cómo se utiliza el método `Update()` de `MonoBehaviour`, ya que Unity es uno de los motores que soporta corrutinas:
 
 . `Update()` se llama una vez para cada fotograma.
 
-. En `Update()` no podemos hacer tareas de larga duración porque si no salimos de `Update()` rápidamente el juego parecerá menos responsivo o incluso se quedará bloqueado.
+. En `Update()` no podemos hacer tareas de larga duración, porque si no salimos de `Update()` rápidamente el juego parecerá menos responsivo o incluso se quedará bloqueado.
 
 . Si tuviéramos la idea de detectar un combo como
 _"El ataque se iniciará si se pulsa kbd:[Z] y antes de 800ms. kbd:[X].
 Si se activa el combo, no podrá haber otro antes de 5seg."_,
 no podríamos implementarlo de forma sencilla en `Update()` porque si detectamos la pulsación de kbd:[A] no podemos esperar 800ms., comprobando si se pulsa kbd:[X], sin salir de `Update()` pues durante ese tiempo el juego estaría bloqueado.
 
-La solución más común al problema anterior es entrar en `Update()` comprobar lo que ha pasado y volver a salir.
+La solución más común al problema anterior es entrar en `Update()`, comprobar lo que ha pasado y volver a salir.
 La gestión de saber dónde estábamos y qué estamos esperando cada vez que llama a `Update()` —es decir, seguir el progreso de la tarea— se puede hacer con máquinas de estados.
 Aunque en este ejemplo en particular, se podría hacer de manera más sencilla con listas de acciones posibles y tiempos, que habría que comprobar en cada fotograma.
 
-Sin embargo, con las corrutinas podemos programar esta tarea casi como en un método convencional, si utilizar máquinas de estado:
+Sin embargo, con las corrutinas podemos programar esta tarea casi como en un método convencional, sin utilizar máquinas de estado:
 
 [source,csharp]
 ----
@@ -716,17 +716,17 @@ public IEnumerator ComboPressed(Action onComboDetected) <!--1-->
 <3> Se ha detectado la pulsación de kbd:[Z], así que inicializamos el tiempo que le queda al jugador para pulsar kbd:[X].
 <4> Esto es "lo diferente" respecto a una función convencional.
 Así se suspende la corrutina temporalmente durante un fotograma, puesto que no se ha detectado la pulsación de kbd:[X].
-La corrutina lo volverá a comprobar la pulsación de kbd:[X} en el fotograma siguiente.
+La corrutina volverá a comprobar la pulsación de kbd:[X] en el fotograma siguiente.
 <5> La corrutina continua tras la suspensión.
 Ha pasado un fotograma, así se resta el tiempo transcurrido antes de comprobar si aun queda tiempo en el `while`.
 <6> El combo ha sido detectado.
-La corrutina a ser suspendida 5seg. para no detectar más combos durante ese tiempo.
+La corrutina ha de ser suspendida 5seg. para no detectar más combos durante ese tiempo.
 
 [NOTE]
 ====
 No se debe confundir las corrutinas con los hilos o alguna otra técnica de paralelismo.
-Las corrutinas parece ejecutarse en paralelo pero realmente se ejecutan secuencialmente en el hilo principal del proceso.
-Así que no sirven para hacer tareas costosas en CPU repartiéndolas en entre los núcleos del procesador.
+Las corrutinas parecen ejecutarse en paralelo pero realmente se ejecutan secuencialmente en el hilo principal del proceso.
+Así que no sirven para hacer tareas costosas en CPU repartiéndolas entre los núcleos del procesador.
 
 Si se quiere hacer paralelismo en Unity, lo mejor es recurrir a su https://docs.unity3d.com/2018.3/Documentation/Manual/JobSystem.html[Jobs System]
 Por su parte Unreal Engine ofrece una solución similar a través de la clase `FQueuedThreadPool`.
@@ -735,7 +735,7 @@ Ambas opciones implementan un patrón de concurrencia llamado _thread pool_.
 
 Las corrutinas también sirven para hacer animaciones sencillas, como vibraciones y pequeños desplazamientos —al estilo de lo que pemite http://dotween.demigiant.com/[DOTween]— y para hacer consultas a bases de datos y API externas, sin bloquear el juego mientras llega la respuesta.
 
-Para conocer más acerca de la corrutina en Unity, como invocarlas y de tenerlas y otros detalles, lo recomendable es consultar la https://docs.unity3d.com/Manual/Coroutines.html[documentación].
+Para conocer más acerca de la corrutina en Unity, cómo invocarlas y detenerlas y otros detalles, lo recomendable es consultar la https://docs.unity3d.com/Manual/Coroutines.html[documentación].
 
 == _Scriptable Objects_ en Unity
 
@@ -771,7 +771,7 @@ public class FloatVariable : ScriptableObject
 <2> Con este atributo estamos añadiendo una opción al menú que permita a cualquier miembro del equipo —incluso a los que no tiene conocimientos de programación— crear fácilmente recursos de tipo `FloatVariable`.
 
 Ahora supongamos que vamos a usar uno de esos recursos para guardar el valor de salud del personaje.
-Primero crearíamos el recurso, lo meteríamos en una carpeta y tal vez le diéramos el nombre `Health`, y luego le asignaríamos un valor.
+Primero crearíamos el recurso, lo meteríamos en una carpeta y tal vez le daríamos el nombre `Health`, y luego le asignaríamos un valor.
 
 Después cualquier componente que quisiera usar el valor de `Health` necesitaría tener un campo `FloatVariable`:
 
@@ -807,12 +807,12 @@ Las escenas toman la información de los _Scriptable Objects_ y estos mantienen 
 El "inconveniente" es que los componentes en lugar de acceder a un _singleton_ directamente deben tener una referencia pública a cada _manager_ al que necesitan acceder.
 Por ejemplo, todos los componentes que necesiten acceder al `AudioManager` tendrán que tener un campo `AudioManager` accesible desde el editor, para desde él indicar el recuros _Scritable Object_ con el ``AudioManager` que se quiere que use.
 
-Esto esto pueda parecer tedioso, lo cierto es que el uso de _prefabs_ con valores preconfigurados por defecto ayuda a que este trabajo no tenga que repetirse muchas veces.
+Esto puede parecer tedioso, lo cierto es que el uso de _prefabs_ con valores preconfigurados por defecto ayuda a que este trabajo no tenga que repetirse muchas veces.
 Igualmente, se puede emplear el método `OnValidate` de los componentes para asignar automáticamente valores por defecto a este tipo de campos.
 
 === Recursos adicionales
 
-Todo el interés sobre el uso de _Scriptable Objects_ para mejora la arquitectura de los juegos surgió a raíz de dos conferencias bastante sorprendentes e ilustrativas:
+Todo el interés sobre el uso de _Scriptable Objects_ para mejorar la arquitectura de los juegos surgió a raíz de dos conferencias bastante sorprendentes e ilustrativas:
 
 .Vídeo de la conferencia "Overthrowing the MonoBehaviour Tyranny in a Glorious Scriptable Object Revolution" en Unite 2016.
 video::6vmRwLYWNRo[youtube,opts="modest",width=640,height=360]
@@ -841,8 +841,8 @@ Los datos específicos de jugadores se deben almacenar en una instancia de *Play
 
 Esta separación del _game manager_ entre una parte responsable de la lógica del juego y otra de los datos del juego es bastante conveniente:
 
-* Si estamos haciendo un juego en red, la lógica del juego debe ejecutarse únicamente en le servidor para evitar que se haga trampas.
-Mientras que los datos del juego confiables deben almacenarse en el servidor pero mantenerse una copia sincroniza en cada cliente.
+* Si estamos haciendo un juego en red, la lógica del juego debe ejecutarse únicamente en el servidor para evitar que se haga trampas.
+Mientras que los datos del juego confiables deben almacenarse en el servidor pero mantenerse una copia sincronizada en cada cliente.
 De hecho, así lo hace Unreal con `GameMode`, `GameState` y `PlayerState`.
 
 * Incluso si el juego no es en red, lo más normal es que tengan algún mecanismo de salvado de la partida.
@@ -889,12 +889,12 @@ Hay dos clases que heredan de `Controller`:
 
 * *PlayerController*, que lee la entrada del jugador y controla el personaje en base a ella.
 Entre sus propiedades está la clase de la cámara y la del HUD que se va a usar para generar la vista del jugador
-`PlayerController` es el responsable de instanciar esa clases para crear el actor cámara y el actor HUD.
+`PlayerController` es el responsable de instanciar esas clases para crear el actor cámara y el actor HUD.
 
 * *AIController*, donde el control proviene de la IA.
 
 NOTE: La clase HUD del _game framework_ es código antiguo.
-Sigue existiendo porque hay quien lo usa para acceder a lienzo para dibujar su propia interfaz de usuario.
+Sigue existiendo porque hay quien lo usa para acceder al lienzo para dibujar su propia interfaz de usuario.
 Pero en la actualidad es mucho mejor crear _widgets_ con UMG y mostrarlos con _Add To Viewport_.
 
 Conectar cámara y HUD con el `PlayerController` es interesante en juegos multijugador donde se juega con la pantalla partida.
@@ -909,7 +909,7 @@ Los `Controller` pueden tomar el control de dos tipos de actores del _game frame
 * *Pawn*, que son personajes muy básicos, no necesariamente humanoides.
 El `DefaultPawn` se pueden mover libre en 3D, sin ser afectados por la gravedad.
 
-* *Character*, que extiende `Pawn` añadirle todo lo que necesita un personaje tradicional: una cápsula de colisión, un `SkeletalMeshComponent` —una malla que puede ser animada mediante el sistema de animación de Unreal— y un `CharacterMovementComponent`, que implementa modos de movimiento típicos como caminar, correr, saltar, volar y nadar.
+* *Character*, que extiende `Pawn` para añadirle todo lo que necesita un personaje tradicional: una cápsula de colisión, un `SkeletalMeshComponent` —una malla que puede ser animada mediante el sistema de animación de Unreal— y un `CharacterMovementComponent`, que implementa modos de movimiento típicos como caminar, correr, saltar, volar y nadar.
 
 El código del `CharacterMovementComponent` puede ser muy ilustrativo sobre cómo hacer nuestro propio `LocomotionController` o `MovementController` de un personaje en cualquier otro motor.
 En Unity el `CharacterController` es demasiado simple y generalmente acaba teniendo que ser sustituido por una implementación propia —o una comprada en el Asset Store— en la mayor parte de los casos.
