@@ -1,8 +1,9 @@
 = Desarrollo de Videojuegos 3D: Arquitectura del software
 Jesús Torres <jmtorres@ull.es>
+Curso 20XX-20XY
 include::../config/attributes.adoc[]
-:imagesdir: {imagesdir}/arquitectura
-Curso 2019-2020
+include::enlaces.adoc[]
+include::docstats.adoc[]
 
 El desarrollo de un videojuego, como el de cualquier otro programa, puede convertirse en infierno si:
 
@@ -34,6 +35,7 @@ Pero veremos que la necesidad de este cambio de mentalidad no es un capricho de 
 === Componentes frente a herencia
 
 :fn-npc: pass:n[NPC son las siglas de _Non-player character_ o personaje no jugador.]
+
 Supongamos que estamos desarrollando una serie de NPC{blank}footnote:[{fn-npc}] para nuestro juego.
 Como es habitual tendrán un controlador de IA y un nivel de salud.
 Así que esas características comunes las implementamos en la clase `Entity` para no repetir código.
@@ -183,6 +185,7 @@ Ambos tipos de componentes trabajar de forma coordinada para implementar un _sis
 Un sistema es una combinación de componentes de software que trabajan juntos para implementar cierta funcionalidad.
 
 :fn-spawn-system: pass:n[El _spawn system_ determina donde aparecen el jugador y los NPC durante el juego.]
+
 En un videojuego suelen haber múltiples sistemas: inventario, locomoción, salvado, meteorología, conducción, _spawn_{blank}footnote:[{fn-spawn-system}], interfaz de usuario, etc.
 
 [TIP]
@@ -210,9 +213,9 @@ En general no parece interesante conocer y gestionar todos los `InventoryItem` d
 
 === _Game Manager_
 
-El _game manager_ es un tipo especial de manager dedicado a llevar el flujo del juego: carga de escenas y transiciones, modos de pausa y de menus, etc.
+El _game manager_ es un tipo especial de manager dedicado a llevar el flujo del juego: carga de escenas y transiciones, modos de pausa y de menús, etc.
 
-En los juegos pequeños puede ser responsable de centralizar otros aspectos del estado del juego, como: puntuaciones, vidas, etc.
+En los juegos pequeños puede ser responsable de centralizar otros aspectos del estado del juego, como: puntuaciones, vidas, aparición de enemigos y jugadores, etc.
 Pero en juegos grandes es mejor separar esas responsabilidades en otros componentes.
 
 === Controlador
@@ -245,7 +248,7 @@ Por un momento, volvamos al sistema de inventario de la <<img-inventory-system>>
 Probablemente no.
 A fin de cuentas seguramente no sean más que listas en las que añadir y eliminar unos cuantos `InventoryItem`.
 
-El motivo para que hayamos decidio implementar los `InventoryManager` como componentes es porque queremos que los diseñadores puedan decidir qué entidades los tienen y configurarlos a su criterio.
+El motivo para que hayamos decidido implementar los `InventoryManager` como componentes es porque queremos que los diseñadores puedan decidir qué entidades los tienen y configurarlos a su criterio.
 Pero eso se puede resolver separando la creación y configuración del `InventoryManager` del `InventoryManager` en si mismo.
 
 [#img-inventory-system-plus]
@@ -362,7 +365,7 @@ Esto solo es necesario cuando nos interese ese comportamiento.
 Al ejecutar el juego en el editor, Unity resetea el estado de los _scripts_.
 En proyectos grandes eso puede llegar a consumir bastante tiempo, haciendo que cada vez sea mas díficil iterar rápidamente entre programar y probar, durante el desarrollo del proyecto.
 
-El https://docs.unity3d.com/2019.3/Documentation/Manual/DomainReloading.html[Domain Reloading], que es cómo se llama este mecanismo, se puede desactivar.
+El https://docs.unity3d.com/{2019.3/Documentation/Manual/DomainReloading.html[Domain Reloading], que es cómo se llama este mecanismo, se puede desactivar.
 Pero entonces es necesario modificar el proyecto para que los campos y eventos estáticos se reseteen adecuadamente al ejecutar el juego.
 Cómo hacerlo está perfectamente explicado en la https://docs.unity3d.com/2019.3/Documentation/Manual/DomainReloading.html[documentación].
 ====
@@ -382,23 +385,23 @@ Así que puede que en ocasiones nos interese utilizar una versión más simple:
 ----
 public class Singleton : MonoBehaviour
 {
-    private static bool _initialized
+    public static Singleton Instance { get; private set }
 
     private void Awake()
     {
-        if (_initialized)
+        if (Instance != null)
         {
-            Destroy(this);
-            return
+            Destroy(gameObject);
+            return;
         }
 
-        _initialized = true;
+        Instance = this;
         DontDestroyOnLoad(this);
     }
 }
 ----
 
-Ahora es responsabilidad nuestra crear un objeto vacío en la escena, añadir el componente y, donde lo necesitemos, buscarlo con `FindObjectOfType<Singleton>()`.
+Ahora es responsabilidad nuestra crear un objeto vacío en la escena, añadir el componente y, donde lo necesitemos, obtenerlo con Singleton.Instance.
 Lo que sí nos asegura el código anterior es que nunca habrán dos `GameObject` con el mismo componente.
 
 ==== Criterios de uso

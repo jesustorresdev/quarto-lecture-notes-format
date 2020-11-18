@@ -240,7 +240,7 @@ En Unreal Engine la estrategia para colaborar más fácilmente puede ser similar
 En un nivel solo puede haber una persona trabajando al mismo tiempo, pero Unreal permite descomponer un nivel en varios subniveles y que estos se carguen a demanda —por ejemplo, cuando el jugador está cerca— usando lo que llaman https://docs.unrealengine.com/en-US/Engine/LevelStreaming/index.html[Level Streaming].
 Si los subniveles se marcan como https://docs.unrealengine.com/en-US/Engine/Levels/CollaborateWithSublevels/index.html[Always Streaming], ya no se cargan a demanda, sino que se cargan todos juntos al cargar el nivel principal —llamado _Persistent Level_—.
 
-Esto permite que multiples desarrolladores trabajen en el mismo escenario al mismo tiempo, solo que en diferentes subniveles.
+Esto permite que múltiples desarrolladores trabajen en el mismo escenario al mismo tiempo, solo que en diferentes subniveles.
 Como ocurre en Unity, no estamos obligados a usar distintos niveles para distintas regiones del mundo.
 Sino que la descomposición puede ser de otro tipo, en función de como se haya planificado repartir el trabajo.
 Así, por ejemplo, un subnivel puede tener las mallas estáticas que dan forma al mundo, otro los NPC y otro todos los sonidos; permitiendo a diferentes desarrolladores trabajar en cada uno de estos subniveles
@@ -287,7 +287,7 @@ Generalmente, si se hacen cambios directos en ella para resolver errores, estos 
 
 * De _mainline_ cuelgan también los _streams_ _development_ cuyo contenido es menos estable que su padre.
 Son los _streams_ donde ocurre el desarrollo de nuevas funcionalidades.
-Se espera que se combinene cambios desde el padre pero que a su vez se copien cambios desde los _streams_ hijos de desarrollo hacia arriba.
+Se espera que se combinen cambios desde el padre pero que a su vez se copien cambios desde los _streams_ hijos de desarrollo hacia arriba.
 
 En https://www.perforce.com/video-tutorials/streams-overview[Streams Overview] hay un pequeño video-tutorial donde se explica claramente su funcionamiento.
 
@@ -305,7 +305,14 @@ Aunque Perforce es una herramienta ideal para proyectos grandes, hay que reconoc
 Perforce es gratuito para hasta 5 usuarios.
 Los estudios _indie_ pueden pedir también acceso gratuito para hasta 5 usuarios el software de gestión de proyectos Handsoft y precio especial para más de 5 usuarios a través del https://www.perforce.com/indie-studio-pack[Perforce Indie Studio Pack].
 
-La instalación del cliente de Perforce incluye un servidor personal que se puede utilizar para clonar el servidor central y trabajar de forma aislada.
+La instalación del cliente de Perforce incluye un servidor personal que se puede utilizar tanto para trabajar de forma aislada en proyectos personales en un servidor propio, como para trabajar en proyecto colaborativos de forma distribuida; de forma similar a como se trabaja con Git.
+
+En este último caso se clona en el servidor personal los archivos del proyecto en el que interesa colaborar, para trabajar en él de manera aislada.
+Una vez se ha terminado, se envían los cambios al servidor compartido.
+También se pueden traer al servidor personal las actualizaciones realizadas por otros colaboradores.
+
+[TIP]
+Todos los detalles de esta forma de trabajar se explican en el manual https://www.perforce.com/manuals/dvcs/Content/DVCS/Home-dvcs.html[Using Helix Core Server for Distributed Versioning].
 
 == Recursos adicionales
 

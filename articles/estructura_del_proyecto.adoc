@@ -104,34 +104,47 @@ salt
 {T
  + Assets
  ++ <b>Editor
- ++ <b>Environment
- +++ Level01
+ ++ <b>Levels
+ +++ <b>Level01
  ++++ Materials
  ++++ Meshes
+ ++++ Prefabs
  ++++ Textures
+ ++++ Scripts
  ++ <b>NPC
- +++ <b>Final Boss
+ +++ <b>Tanks
  ++++ Meshes
  ++++ Materials
+ ++++ Prefabs
  ++++ Scripts
  ++++ Sounds
  ++++ Textures
  +++ <b>Robots
  ++++ Meshes
  ++++ Materials
+ ++++ Prefabs
  ++++ Scripts
  ++++ Sounds
  ++++ Textures
  ++ <b>Player
  +++ Meshes
  +++ Materials
+ +++ Prefabs
  +++ Scripts
  +++ Sounds
  +++ Textures
- ++ Prefabs
  ++ Scenes
  ++ Tests
  ++ <b>UI
+ +++ <b>HMD
+ ++++ Prefabs
+ ++++ Scripts
+ ++++ Textures
+ +++ <b>Menus
+ ++++ Prefabs
+ ++++ Scripts
+ ++++ Sounds
+ ++++ Textures
 }
 }
 ....
@@ -149,7 +162,7 @@ Sin duda hace muy sencillo encontrar y utilizar recursos, tanto para prototipar 
 Sin embargo, también hace que sea muy sencillo cargar nuestro proyecto con recursos, ejemplos y documentación que no necesitamos.
 
 Por eso es importante seleccionar solo lo que realmente nos interesa durante el proceso de importación.
-Por si no estamos seguros, es buena idea tener un proyecto vacio donde importar los paquetes desde la _Asset Store_ para luego exportar solo los _prefabs_ que nos interesen con sus dependencias.
+Por si no estamos seguros, es buena idea tener un proyecto vacío donde importar los paquetes desde la _Asset Store_ para luego exportar solo los _prefabs_ que nos interesen con sus dependencias.
 Incluso podemos modificarlos en este proyecto antes de exportarlos, si fuera necesario eliminar algún componente que no nos interese.
 
 El paquete exportado es el que importaríamos en nuestro proyecto, para así asegurarnos que sólo metemos lo que realmente vamos a utilizar.
@@ -183,25 +196,29 @@ salt
 
 Algunos desarrolladores prefieren colocar la jerarquía de recursos propios del proyecto dentro su propia carpeta.
 Por ejemplo, en la <<img-unit-gameassets>> se observa como la jerarquía de la <<img-assets-tree-by-type>> ahora está dentro de una carpeta llamada `GameAssets` en el primer nivel de `Assets`.
+Otro nombre común es `Project` o simplemente el nombre del proyecto.
 
 El motivo es que en Unity los _plugins_ y _assets_ importados desde el _Asset Store_ se copian directamente en `Assets`, mezclándose con las carpetas con contenidos propios.
 Eso complica mantener una estructura organizada donde se separe qué es nuestro y qué un plugin o recurso importado.
 
 [TIP]
 ====
-En la <<img-unit-gameassets>> también se puede ver otra práctica que puede resultar interesante a los desarrolladores.
-Se trata de llamar `_Scripts` a la carpeta que contiene el código en C#.
-El motivo es que así aparece la primera del proyecto y, por tanto, es más fácil de localizar.
+Una práctica interesante es colocar un '_' en el primer caracter del nombre de la carpeta.
+Por ejemplo, llamándola `_GameAssets` o `_Project`.
+Así siempre aparece la primera del proyecto y, por tanto, es más fácil de localizar.
+
+Por el mismo motivo, otra práctica que suele ser interesante —al menos para los programadores— es llamar `_Scripts` a la carpeta que contiene el código en C#.
+En la misma <<img-unit-gameassets>> se puede ver un ejemplo. 
 ====
 
-==== Evitar el uso de "Resources"
+==== Evitar abusar de "Resources"
 
 `Resources` es una carpeta especial en `Assets` donde colocar recursos que van a ser cargados dinámicamente, durante la ejecución.
 
 Debido a que esos recursos van a ser cargados dinámicamente, Unity no puede detectar los recursos en `Resources` que nunca son usados en el proyecto, para dejarlos fuera de la compilación.
 Así que los incluirá todos.
 
-TIP: Actualmente para utilizar contenidos dinámicos es mucho mejor utilizar https://docs.unity3d.com/Packages/com.unity.addressables@0.4/manual/index.html[Addresables].
+TIP: Actualmente para utilizar contenidos dinámicos es mucho mejor emplear https://docs.unity3d.com/Packages/com.unity.addressables@0.4/manual/index.html[Addresables].
 
 ==== Usar Assembly Definitions
 
@@ -213,10 +230,13 @@ Esto reduce los tiempos de compilación porque si se modifica un archivo de cód
 
 El uso de _Assembly Definitions_ tiene además importantes ventajas:
 
-* Son necesarios para hacer tests del código del proyecto.
+* Son necesarios para hacer tests del código del proyecto sin que el código de los test acabe en el producto definitivo.
 
-* Fuerza una buena práctica de programación que es preferentemente tener dependencias en un solo sentido.
+* Fuerza una buena práctica de programación que es que entre los componentes de software solo hayan dependencias en un solo sentido.
 Esto es debido a que un _assembly_ —una DLL— A no puede depender de un _assembly_ B que a su vez dependa de A.
+Además, gracias a los modificadores de accesibilidad `internal` y `public` se puede controlar la interfaz pública que un _assembly_ expone al resto del proyecto.
+
+* Facilita controlar que código se incluye o deja de incluir según la plataforma del proyecto.
 
 == Jerarquía de la escena
 
