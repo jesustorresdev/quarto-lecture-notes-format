@@ -5,8 +5,6 @@ include::locale/attributes.adoc[]
 // Activar las referencias de texto completo con: etiqueta, número y título.
 :sectnums:
 :xrefstyle: short
-// Ubicación de imágenes y vídeos.
-:imagesdir: ../media
 // Usar Font Awesome para los iconos.
 :icons: font
 // Activar el coloreado de sintaxis.
@@ -16,6 +14,6 @@ include::locale/attributes.adoc[]
 // Activar las macros de interfaz de usuario, como kbd o menu.
 :experimental:
 // Incluir la tabla de contenidos.
-:toc:
+:toc: left
 // Configuración del backend PDF
 ifdef::backend-pdf[include::pdf/attributes.adoc[]]
