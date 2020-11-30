@@ -1,0 +1,99 @@
+require 'rake/clean'
+
+require_relative '../task_helpers/docstats.rb'
+require_relative '../task_helpers/project.rb'
+require_relative '../task_helpers/tests.rb'
+
+# TODO: output name
+
+Project::find_documents().each do |document|
+    namespace "#{document[:namespace_prefix]}build" do
+        task :default => [:docstats, :html]
+
+        desc "Generar todas las versiones de '#{document[:pathname]}'"
+        task :all => [:html, :pdf, :epub]
+
+        desc "Generar la versión en HTML de '#{document[:pathname]}'"
+        task :html => [ document[:output_pathname][:html], :html_media_files ]
+
+        file document[:output_pathname][:html] => document[:dependencies] do |t|
+            sh "asciidoctor", '--backend', 'html', '--out-file', t.name, t.prerequisites.first()
+        end
+
+        task :html_media_files => document[:media_files].keys
+
+        document[:media_files].each do |output, source|
+            file output => [source] do |t|
+                mkdir_p File.dirname(t.name)
+                cp *t.prerequisites, t.name
+            end
+        end
+
+        desc "Generar la versión en PDF de '#{document[:pathname]}'"
+        task :pdf => [ document[:output_pathname][:pdf] ]
+
+        file document[:output_pathname][:pdf] => document[:dependencies] do |t|
+            sh "asciidoctor", '--backend', 'pdf', '--require', 'asciidoctor-pdf', '--out-file', t.name, t.prerequisites.first()
+        end
+
+        desc "Generar la versión en EPUB de '#{document[:pathname]}'"
+        task :epub => [ document[:output_pathname][:epub] ]
+
+        file document[:output_pathname][:epub] => document[:dependencies] do |t|
+            sh "asciidoctor", '--backend', 'epub3', '--require', 'asciidoctor-epub3', '--out-file', t.name, t.prerequisites.first()
+        end
+
+        desc "Generar el archivo de estadística de '#{document[:pathname]}'"
+        task :docstats do |t|
+            Rake::Task["#{document[:namespace_prefix]}build:html"].invoke
+            html_output_document = open(document[:output_pathname][:html])
+            docstats = Docstats::get_document_stats(html_output_document)
+            Docstats.generate_docstats_document(docstats, document[:docstats_pathname])
+        end
+    end
+
+    namespace :build do
+        desc 'Generar la versión en HTML de todos los documentos del proyecto'
+        task :html => "#{document[:namespace_prefix]}build:html"
+
+        desc 'Generar la versión en PDF de todos los documentos del proyecto'
+        task :pdf => "#{document[:namespace_prefix]}build:pdf"
+
+        desc 'Generar la versión en EPUB de todos los documentos del proyecto'
+        task :epub => "#{document[:namespace_prefix]}build:epub"
+    end
+
+    namespace "#{document[:namespace_prefix]}tests" do
+        task :default => :all
+
+        desc "Ejecutar todos los tests sobre '#{document[:pathname]}'"
+        task :all => [:missing_variables, :htmlproofer]
+    
+        desc "Ejecutar el test de HTMLProofer sobre '#{document[:pathname]}'"
+        task :htmlproofer => 'build:html' do |t|
+            Tests::HTMLProofer::htmlproofer document[:output_directories][:html]
+        end
+    
+        desc "Ejecutar el test de variables no definidas sobre '#{document[:pathname]}'"
+        task :missing_variables => document[:output_pathname][:html] do |t|
+            missing = Tests::find_missing_variables(t.prerequisites.first())
+            fail "Se han encontrado #{missing.size} variables no definidas:\n#{missing.join("\n")}" unless missing.empty?
+        end
+    end
+
+    namespace :tests do
+
+        desc 'Ejecutar todos los tests en todos los documentos del proyecto'
+        task :all => "#{document[:namespace_prefix]}tests:all"
+
+        desc 'Ejecutar el test de HTMLProofer en todos los documentos del proyecto'
+        task :htmlproofer => "#{document[:namespace_prefix]}tests:htmlproofer"
+
+        desc 'Ejecutar el test de variables no definidas en todos los documentos del proyecto'
+        task :missing_variables => "#{document[:namespace_prefix]}tests:missing_variables"
+
+    end
+
+    # Tareas de limpieza
+    CLOBBER.include(document[:output_directory])
+end
