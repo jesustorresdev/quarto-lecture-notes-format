@@ -1,8 +1,16 @@
 = Desarrollo de Videojuegos 3D: Estructura del proyecto
 Jesús Torres <jmtorres@ull.es>
-include::../config/attributes.adoc[]
-:imagesdir: {imagesdir}/estructura_del_proyecto
-Curso 2019-2020
+Curso 20XX-20XY
+include::../../config/attributes.adoc[]
+include::enlaces.adoc[]
+include::docstats.adoc[]
+:imagesdir: media
+
+[.right]
+====
+.Tiempo estimado de lectura
+{reading_time}
+====
 
 Poner algo de orden en un proyecto es importante para asegurar su mantenibilidad.
 Facilita que cada miembro del equipo sepa dónde buscar o añadir aquello que necesite para hacer su trabajo.

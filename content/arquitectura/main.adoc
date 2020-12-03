@@ -16,11 +16,13 @@ El desarrollo de un videojuego, como el de cualquier otro programa, puede conver
 
 * Primero no nos sentamos a diseñar una arquitectura de software adecuada, antes de lanzarnos a programar.
 
+* A la hora de resolver los problemas que surjan, no optamos por soluciones preestablecidas y conocidas en la comunidad de desarrolladores.
 
 * No dedicamos tiempo a hacer tests.
 
 * No seguimos buenas prácticas de diseño y de programación, como por ejemplo SOLID o https://puntoq.ull.es/permalink/f/6auhvr/ullabsysULL00512351c-X[Clean Code].
 
+A continuación, haremos un resumen de algunas buenas prácticas y consejos que deberíamos tener presentes mientras diseñamos y desarrollamos el software de nuestros juegos.
 
 == Arquitectura basada en componentes
 
@@ -31,7 +33,10 @@ En Unity los objetos o entidades de una escena se llaman _GameObjects_ y les pod
 Esa agregación de componentes que se comunican entre sí es lo que determina las funcionalidades de cada objeto.
 De hecho, un objeto sin componentes —si tal cosa fuera posible, porque en Unity el componente `Transform` no se puede eliminar— no tiene ninguna funcionalidad en absoluto.
 
+Y lo mismo ocurre en Unreal Engine, solo que las entidades de la escena se llaman _Actors_ que, al igual que en Unity, reciben su funcionalidad por medio de los componentes que se le añadan.
+Quizás la principal diferencia entre un motor y el otro, en este aspecto, es que en Unreal Engine los componentes se pueden agregar en una jerarquía de componentes —es decir, unos componentes puede ser hijo de otros— mientras que en Unity eso no es posible.
 
+Pensar en términos de programación orientada a componentes no es sencillo para quienes aterrizamos desde la programación orientada a objetos tradicional, dónde lo común  es construir jerarquías inmensas de clases en un esfuerzo por asegurar la reutilización del código y evitar repetirnos.
 Pero veremos que la necesidad de este cambio de mentalidad no es un capricho de los diseñadores de motores de videojuegos.
 
 === Componentes frente a herencia
@@ -39,6 +44,7 @@ Pero veremos que la necesidad de este cambio de mentalidad no es un capricho de 
 :fn-npc: pass:n[NPC son las siglas de _Non-player character_ o personaje no jugador.]
 
 Supongamos que estamos desarrollando una serie de NPC{blank}footnote:[{fn-npc}] para nuestro juego.
+Como es habitual, tendrán un controlador de IA y un nivel de salud.
 Así que esas características comunes las implementamos en la clase `Entity` para no repetir código.
 
 De `Entity` se heredan para crear cada uno de los tipos de personaje: luchadores con espada, hechiceros y hechiceros con espada.

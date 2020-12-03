@@ -1,8 +1,16 @@
 = Desarrollo de Videojuegos 3D: Físicas en 3D
 Jesús Torres <jmtorres@ull.es>
-include::../config/attributes.adoc[]
-:imagesdir: {imagesdir}/físicas
-Curso 2019-2020
+Curso 20XX-20XY
+include::../../config/attributes.adoc[]
+include::enlaces.adoc[]
+include::docstats.adoc[]
+:imagesdir: media
+
+[.right]
+====
+.Tiempo estimado de lectura
+{reading_time}
+====
 
 Aunque en los videojuegos se suele hacer mucho hincapié en la calidad del _render_, en un buen motor de videojuegos hay otro componente igual de importante para dotar de realismo a la simulación: el motor de físicas.
 

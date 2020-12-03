@@ -1,8 +1,16 @@
 = Desarrollo de Videojuegos 3D: Sistemas de partículas
 Jesús Torres <jmtorres@ull.es>
-include::../config/attributes.adoc[]
-:imagesdir: {imagesdir}/sistemas_de_partículas
-Curso 2019-2020
+Curso 20XX-20XY
+include::../../config/attributes.adoc[]
+include::enlaces.adoc[]
+include::docstats.adoc[]
+:imagesdir: media
+
+[.right]
+====
+.Tiempo estimado de lectura
+{reading_time}
+====
 
 En cualquier aplicación gráfica, cuando queremos mostrar objetos sólidos 2D usamos _sprites_.
 Y si es en 3D usamos mallas.
