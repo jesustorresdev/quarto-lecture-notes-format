@@ -39,9 +39,7 @@ module Project
                     File.join(source_directory, "**/*.adoc"),
                     *CONFIG_FILES
                 ],
-                :media_files => find_media_files(source_directory).map { |pathname|
-                    [pathname.sub(source_directory_regex, output_directories[:html]), pathname]
-                }.to_h,
+                :media_files => find_media_files(source_directory),
                 :output_pathname => {
                     :html => File.join(output_directories[:html], "index.html"), 
                     :pdf => File.join(output_directories[:html], get_output_documment_filename(namespaces, "pdf")),

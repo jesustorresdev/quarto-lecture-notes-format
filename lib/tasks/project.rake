@@ -1,10 +1,12 @@
 require 'rake/clean'
 
+require_relative '../task_helpers/config.rb'
 require_relative '../task_helpers/docstats.rb'
 require_relative '../task_helpers/project.rb'
 require_relative '../task_helpers/tests.rb'
+require_relative '../task_helpers/utils.rb'
 
-# TODO: output name
+task :config
 
 Project::find_documents().each do |document|
     namespace "#{document[:namespace_prefix]}build" do
@@ -16,31 +18,29 @@ Project::find_documents().each do |document|
         desc "Generar la versión en HTML de '#{document[:pathname]}'"
         task :html => [ document[:output_pathname][:html], :html_media_files ]
 
-        file document[:output_pathname][:html] => document[:dependencies] do |t|
-            sh "asciidoctor", '--backend', 'html', '--out-file', t.name, t.prerequisites.first()
+        file document[:output_pathname][:html] => [*document[:dependencies], :config] do |t|
+            asciidoctor_opts = CONFIG[:asciidoctor_opts]
+            sh "asciidoctor", '--backend', 'html', *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
         end
 
-        task :html_media_files => document[:media_files].keys
-
-        document[:media_files].each do |output, source|
-            file output => [source] do |t|
-                mkdir_p File.dirname(t.name)
-                cp *t.prerequisites, t.name
-            end
+        task :html_media_files do |t|
+           Utils.copy_files(document[:media_files], document[:output_directories][:html], document[:source_directory]) 
         end
 
         desc "Generar la versión en PDF de '#{document[:pathname]}'"
         task :pdf => [ document[:output_pathname][:pdf] ]
 
-        file document[:output_pathname][:pdf] => document[:dependencies] do |t|
-            sh "asciidoctor", '--backend', 'pdf', '--require', 'asciidoctor-pdf', '--out-file', t.name, t.prerequisites.first()
+        file document[:output_pathname][:pdf] => [*document[:dependencies], :config] do |t|
+            asciidoctor_opts = CONFIG[:asciidoctor_opts]
+            sh "asciidoctor", '--backend', 'pdf', '--require', 'asciidoctor-pdf', *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
         end
 
         desc "Generar la versión en EPUB de '#{document[:pathname]}'"
         task :epub => [ document[:output_pathname][:epub] ]
 
-        file document[:output_pathname][:epub] => document[:dependencies] do |t|
-            sh "asciidoctor", '--backend', 'epub3', '--require', 'asciidoctor-epub3', '--out-file', t.name, t.prerequisites.first()
+        file document[:output_pathname][:epub] => [*document[:dependencies], :config] do |t|
+            asciidoctor_opts = CONFIG[:asciidoctor_opts]
+            sh "asciidoctor", '--backend', 'epub3', '--require', 'asciidoctor-epub3', *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
         end
 
         desc "Generar el archivo de estadística de '#{document[:pathname]}'"
