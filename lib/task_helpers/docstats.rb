@@ -64,7 +64,7 @@ module Docstats
     module_function :get_document_stats
 
     def generate_docstats_document(document_stats, output_pathname)
-        output_content = <<-EOF
+        output_content = <<~EOF
         :document_characters: #{document_stats[:characters]}
         :document_words: #{document_stats[:words]}
         :document_paragraphs: #{document_stats[:paragraphs]}
@@ -74,7 +74,7 @@ module Docstats
         output_content += document_stats[:sections].map do |stats|
             next unless not stats[:sec1tion_number].nil?
             section_number = "%02i" % stats[:sec1tion_number]
-            <<-EOF
+            <<~EOF
             :S#{section_number}_characters: #{stats[:characters]}
             :S#{section_number}_words: #{stats[:words]}
             :S#{section_number}_paragraphs: #{stats[:paragraphs]}
