@@ -1,0 +1,13 @@
+// Manual de Unity
+:unity-csharp-job-system: https://docs.unity3d.com/Manual/particle-system-job-system-integration.html[C# Job System]
+:unity-builtin-particlesystem: https://docs.unity3d.com/Manual/Built-inParticleSystem.html[Built-in Particle System]
+:unity-gpuinstancing-platforms: https://docs.unity3d.com/Manual/GPUInstancing.html#_leavefeedback:~:text=GPU%20Instancing%20is%20available%20on%20the%20following%20platforms%20and%20APIs%3A
+:unity-srp: https://docs.unity3d.com/Manual/ScriptableRenderPipeline.html[Scritable Render Pipeline]
+:unity-visual-effect-graph: https://docs.unity3d.com/Manual/VFXGraph.html[Visual Effect Graph]
+
+// API de Unity
+:unity-class-particlesystem: https://docs.unity3d.com/Manual/class-ParticleSystem.html[Particle System]
+
+// Manual de Unreal Engine
+:ue-cascade: https://docs.unrealengine.com/en-US/RenderingAndGraphics/ParticleSystems/index.html[Cascade]
+:ue-gpuinstancing-platforms: https://docs.unrealengine.com/en-US/RenderingAndGraphics/ParticleSystems/Reference/TypeData/GPUSprites/index.html#gpuspritesonmobiledevices:~:text=GPU%20Sprites%20on%20Mobile%20Devices,-GPU%20particles
