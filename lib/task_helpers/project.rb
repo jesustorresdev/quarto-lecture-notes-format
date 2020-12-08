@@ -42,8 +42,8 @@ module Project
                 :media_files => find_media_files(source_directory),
                 :output_pathname => {
                     :html => File.join(output_directories[:html], "index.html"), 
-                    :pdf => File.join(output_directories[:html], get_output_documment_filename(namespaces, "pdf")),
-                    :epub => File.join(output_directories[:html], get_output_documment_filename(namespaces, "epub")),
+                    :pdf => File.join(output_directories[:pdf], get_output_documment_filename(namespaces, "pdf")),
+                    :epub => File.join(output_directories[:epub], get_output_documment_filename(namespaces, "epub")),
                 },
                 :docstats_pathname => File.join(source_directory, DOCUMENT_STATS_FILE),
             }
