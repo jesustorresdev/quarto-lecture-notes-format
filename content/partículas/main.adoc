@@ -89,16 +89,16 @@ Unity soporta dos tipos de sistemas de partículas.
 
 ==== Built-in Particle System
 
-El {unity-builtin-particlesystem} es el sistema de partículas tradicional en Unity.
-Se utiliza añadiendo el componente {unity-class-particlesystem} a cualquier *GameObject*.
+El {unity-builtin-particlesystem}[Built-in Particle System] es el sistema de partículas tradicional en Unity.
+Se utiliza añadiendo el componente {unity-class-particlesystem}[Particle System] a cualquier *GameObject*.
 Este componente contiene las propiedades básicas que hemos comentado anteriormente, pero se puede extender con funcionalidades más avanzadas activando módulos adicionales.
 
-{unity-builtin-particlesystem} se puede utilizar tanto con el _pipeline_ de render integrado, como con URP y HDRP.
+{unity-builtin-particlesystem}[Built-in Particle System] se puede utilizar tanto con el _pipeline_ de render integrado, como con URP y HDRP.
 
 [NOTE]
 ====
 El _pipeline_ de render integrado de Unity tiene el inconveniente de que no se puede personalizar, dado que el código fuente de Unity no está disponible.
-Por eso Unity ha desarrollado un _pipeline_ nuevo completamente programable, llamado {unity-srp} (SRP).
+Por eso Unity ha desarrollado un _pipeline_ nuevo completamente programable, llamado {unity-srp}[Scritable Render Pipeline] (SRP).
 
 Sobre la base de SRP, Unity ofrece dos _pipelines_ prediseñados: _Universal Render Pipeline_ (URP) y _High Definition Render Pipeline_ (HDRP).
 El primero ha sido optimizado para un gran número de plataformas —desde móviles a consolas y PC— mientras que el segundo está dirigido a consolas y PC de gama alta.
@@ -108,17 +108,17 @@ El sistema de partículas, por defecto, utiliza la CPU para los cálculos.
 Es posible instanciar las partículas en la GPU para que parte de los cálculos se hagan en ella, en aquellas plataformas que {unity-gpuinstancing-platforms}[soportan «instanciación en la GPU»].
 Solo es necesario activar la opción *Enable GPU Instanciating* del módulo *Render* del componente dle sistema de partículas y el _shader_ de la partícula debe ser *Particles/Standard Surface*.
 
-En el caso de que el sistema de partículas integrado no tengan los efectos que buscamos, Unity permite utilizar su {unity-csharp-job-system}{blank}footnote:[{fn-csharp-job-system}] para personalizar el comportamiento de las partículas del {unity-builtin-particlesystem}, ejecutando los cálculos de forma eficiente en los múltiples núcleos del sistema.
+En el caso de que el sistema de partículas integrado no tengan los efectos que buscamos, Unity permite utilizar su {unity-csharp-job-system}[C# Job System]footnote:[{fn-csharp-job-system}] para personalizar el comportamiento de las partículas del {unity-builtin-particlesystem}[Built-in Particle System], ejecutando los cálculos de forma eficiente en los múltiples núcleos del sistema.
 Cuando esto no es suficiente, es bastante común que tengamos que desarrollar un sistema propio o buscar uno alternativo en la *Asset Store*, implementado por otro desarrollador.
 
 ==== Visual Effect Graph
 
-{unity-visual-effect-graph} es un nuevo paquete que permite crear sistemas de partículas simulados en la GPU, por lo que puede gestionar millones de partículas al mismo tiempo.
+{unity-visual-effect-graph}[Visual Effect Graph] es un nuevo paquete que permite crear sistemas de partículas simulados en la GPU, por lo que puede gestionar millones de partículas al mismo tiempo.
 Se instala a través del *Package Manager* y el comportamiento de los sistemas de partículas se define a través de un lenguaje de programación visual.
 
 image::visual_effect_graph.png[]
 
-Los sistemas de partículas creados con el editor de {unity-visual-effect-graph} solo se pueden utilizar con los _pipelines_ URP y HDRP.
+Los sistemas de partículas creados con el editor de {unity-visual-effect-graph}[Visual Effect Graph] solo se pueden utilizar con los _pipelines_ URP y HDRP.
 
 La definición de cada sistema de partículas se guarda en un _assets_.
 Para usarlo, es necesario añadir el componente *Visual Effect* a un *GameObject* e indicar en las propiedades del componente el _asset_.
@@ -127,14 +127,14 @@ El componente *Visual Effect* también ofrece una interfaz para enviar al sistem
 
 === Unreal Engine
 
-En Unreal Engine los sistemas de partículas son recursos almacenados en `Content` —y no un componente, como en Unity— que se crean con el editor de sistemas de partículas {ue-cascade}.
+En Unreal Engine los sistemas de partículas son recursos almacenados en `Content` —y no un componente, como en Unity— que se crean con el editor de sistemas de partículas {ue-cascade}[Cascade].
 Para usarlos, en la escena se debe añadir un componente *Particle System* a cualquier actor y configurarlo para que use un recurso de sistema de partículas en concreto.
 
 El sistema de partículas viene con un *Emitter* —o *Emisor*— con funcionalidad básica.
 Se pueden añadir múltiples *Emitter* a un mismo sistema de partículas y de cada uno se puede extender su funcionalidad añadiendo módulos especializados en efectos adicionales.
 En caso de que ninguno de los módulos ofrecidos tenga los efectos que buscamos, podemos crear nuestros propios módulos heredando de la clase `ParticleModule`.
 
-{ue-cascade} admite un tipo especial de módulo llamado *Type Data*.
+{ue-cascade}[Cascade] admite un tipo especial de módulo llamado *Type Data*.
 Añadiendo un módulo de este tipo a un *Emitter* del sistema de partículas, se altera el tipo de partículas que genera.
 Por ejemplo, por defecto se utiliza la CPU para los cálculos, pero es posible que un *Emitter* instancie partículas en la GPU, añadiéndole un módulo *GPU Sprites* de tipo *Type Data*.
 Sin embargo, debemos tener presente que la instanciación de partículas en la GPU no es compatible con todos los módulos disponibles {ue-gpuinstancing-platforms}[ni con todas las plataformas].
