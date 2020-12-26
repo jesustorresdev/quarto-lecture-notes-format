@@ -1,0 +1,1 @@
+:fn-mixamo: pass:n[Nosotros usaremos los personajes proporcionados por {mixamo}.]
