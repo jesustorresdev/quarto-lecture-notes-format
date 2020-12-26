@@ -5,3 +5,7 @@ title-page:
       name_only: "{author}"
       with_email: "{author} <{email}>"
       with_url: "{url}[{author}]"
+image:
+  align: center
+  caption:
+    align: inherit
