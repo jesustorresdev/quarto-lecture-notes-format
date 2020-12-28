@@ -10,7 +10,7 @@ include::docstats.adoc[]
 [.right]
 ====
 .Tiempo estimado de lectura
-{document_reading_time}
+{document-reading-time}
 ====
 
 Una de las técnicas de animación de personajes por las que más se suele preguntar es el _root motion_, que básicamente consiste en que el movimiento del actor o *GameObject* del personaje esté controlada por la traslación y la rotación global del modelo según indica su animación.
@@ -24,7 +24,7 @@ Y la respuesta es *nunca o prácticamente nunca*.
 Generalmente no interesa que el movimiento del objeto del personaje venga determinado por la animación, sino por el controlador del jugador o por la IA —si se trata de un NPC—.
 El controlador establece el estado del personaje, lo que sirve para desencadenar una animación u otra; siendo las animaciones las que deben ajustarse para encajar con el movimiento del personaje.
 
-[[control-estándar-del-personaje]]
+[[fig-control-estándar-del-personaje]]
 .Relación común entre control del personaje y animación
 include::diagrams/character_control.adoc[]
 
@@ -45,24 +45,24 @@ video::s9-qDWpIcJA[youtube, opts="autoplay,loop,muted,nocontrols"]
 Si lo importamos correctamente, tendremos la malla del personaje con su esqueleto.
 Esto en Unity lo gestiona el componente *Skinned Mesh*, mientras que en Unreal Engine se llama *Skeletal Mesh*.
 
-El esqueleto del personaje es un árbol de huesos, como se puede observar en la <<img-character-skeleton>>.
+El esqueleto del personaje es un árbol de huesos, como se puede observar en la <<fig-character-skeleton>>.
 
-[[img-character-skeleton]]
+[[fig-character-skeleton]]
 .Esqueleto del personaje.
 image::character_skeleton.jpg[]
 
 Al importar también obtendremos el *_rigging_*, así como varias animaciones.
 El *_rigging_* se define mediante los pesos con los que cada hueso del esqueleto influye sobre cada vértice de la malla, deformándola al animar el esqueleto.
 Mientras que cada animación no es sino una serie temporal de transformaciones sobre cada uno de los huesos.
-Cada transformación de cada hueso, en cada instante de la serie de una animación, viene definida mediante una {transform_matrix}[matriz de transformación] de 4x4; donde se incluye la traslación y rotación del hueso respecto a su padre.
-La aplicación de estas transformaciones, desde la raíz del esqueleto, para obtener la postura actual del personaje, es lo que se conoce como {forward_kinematics}[cinemática directa].
+Cada transformación de cada hueso, en cada instante de la serie de una animación, viene definida mediante una {transform-matrix}[matriz de transformación] de 4x4; donde se incluye la traslación y rotación del hueso respecto a su padre.
+La aplicación de estas transformaciones, desde la raíz del esqueleto, para obtener la postura actual del personaje, es lo que se conoce como {forward-kinematics}[cinemática directa].
 
 En la base del esqueleto del personaje está el hueso raíz.
-En el modelo que estamos usando de ejemplo (véase la <<img-character-skeleton>>) lo han llamado _Hips_ —caderas, en inglés—.
-En el vídeo «<<video-walking-character-skeleton>>», el hueso raíz es el aparece destacado en rojo.
+En el modelo que estamos usando de ejemplo (véase la <<fig-character-skeleton>>) lo han llamado _Hips_ —caderas, en inglés—.
+En «<<video-walking-character-skeleton>>», el hueso raíz es el aparece destacado en rojo.
 
 [[video-walking-character-skeleton]]
-.Vídeo del esqueleto del personaje mientras camina.
+.Vídeo: Esqueleto del personaje mientras camina.
 video::zHYAbhDGBdY[youtube, opts="autoplay,loop,muted,nocontrols"]
 
 Como se puede observar, durante la animación se mantiene anclado al origen, pero rota y se estira para hacer que el resto del esqueleto se desplace hacia adelante.
@@ -70,7 +70,7 @@ Como se puede observar, durante la animación se mantiene anclado al origen, per
 == Root motion
 
 Para usar _root motion_ lo que hace el motor de juego es obtener las diferencias entre estas transformaciones del hueso raíz cada instante y una postura de referencia.
-Esta postura de referencia suele ser la postura de referencia del modelo —es decir, la postura sin animación— que por lo general es una {pose_t}[pose T], que es la que tiene el modelo en la <<img-character-skeleton>>.
+Esta postura de referencia suele ser la postura de referencia del modelo —es decir, la postura sin animación— que por lo general es una {pose-t}[pose T], que es la que tiene el modelo en la <<fig-character-skeleton>>.
 Para también puede ser la postura en el _primer fotograma de la animación_, la postura resultado de _promediar todas las posturas de la animación_ o cualquier otra postura obtenida por otras técnicas disponibles en el motor de videojuegos.
 
 El objetivo es calcular cómo se está moviendo globalmente el esqueleto respecto a la posición de origen.
@@ -85,7 +85,7 @@ Para usar _root motion_ solo hay que activarlo en motor de videojuegos, si tiene
 En el siguiente vídeo en Unreal Engine, se puede ver cómo al activar _Enable Root Motion_ en las opciones _Root Motion_ el personaje ya no avanza, sino que se mueve en el sitio.
 El movimiento ha sido extraído de la animación para aplicárselo después al actor del personaje en la escena.
 
-.Vídeo de ejemplo con _Enable Root Motion_ usando como referencia la posición de referencia del modelo.
+.Vídeo: Ejemplo con _Enable Root Motion_ usando como referencia la posición de referencia del modelo.
 video::wGJtSPulz2M[youtube, opts="autoplay,loop,muted,nocontrols"]
 
 Sin embargo, como este modelo no estaba preparado para usarlo con _root motion_ —como comentaremos en el <<_importancia_de_tener_un_modelo_adecuado>>— los resultados no son del todo satisfactorios.
@@ -100,17 +100,17 @@ image::character_pose_t_vs_first_frame.jpg[pdfwidth="10cm"]
 
 En el siguiente vídeo se aprecia lo que ocurre al usar como postura de referencia la del primer fotograma de la animación.
 
-.Vídeo de ejemplo con _Enable Root Motion_ usando como referencia el primer fotograma de la animación.
+.Vídeo: Ejemplo con _Enable Root Motion_ usando como referencia el primer fotograma de la animación.
 video::bivpxGH2Fjg[youtube, opts="autoplay,loop,muted,nocontrols"]
 
 Como en ese fotograma es más parecido a los del resto de la animación —con un hueso _Hips_ ligeramente más corto para ajustarse a la altura del personaje con las rodillas ligeramente dobladas— el resultado es mucho mejor.
 Claro que los pies parece que se meten ligeramente en el suelo, pero si viéramos el resultado en la escena, con la cámara en tercera persona sobre la cabeza, veríamos que no se nota.
 
-Como comentaremos en el <<_importancia_de_tener_un_modelo_adecuado>>, aunque no queramos utilizar la técnica del _root motion_, si el modelo trae rotaciones y traslaciones globales del esqueleto —como es el caso de las animaciones de {mixamo}[Mixamo]— y no vamos a substraerlo con otra herramienta; tendremos igualmente que sustraer el _root motion_ en el editor del motor, tal y como hemos explicado, para que las animaciones sean «en el sitio».
+Como comentaremos en el <<_importancia_de_tener_un_modelo_adecuado>>, aunque no queramos utilizar la técnica del _root motion_, si el modelo trae rotaciones y traslaciones globales del esqueleto —como es el caso de las animaciones de {mixamo}— y no vamos a substraerlo con otra herramienta; tendremos igualmente que sustraer el _root motion_ en el editor del motor, tal y como hemos explicado, para que las animaciones sean «en el sitio».
 Lo único es que le indicaremos al motor que no aplique al actor del personaje el _root motion_ sustraído .
-Para eso solo tenemos que cambiar *Root Motion Mode* a *Ignore Root Motion* en el *Animation Blueprint*, tal y como se observa en la <<ue-ignore-root-motion>>.
+Para eso solo tenemos que cambiar *Root Motion Mode* a *Ignore Root Motion* en el *Animation Blueprint*, tal y como se observa en la <<fig-ue-ignore-root-motion>>.
 
-[[ue-ignore-root-motion]]
+[[fig-ue-ignore-root-motion]]
 .Ignorando el _root motion_ sustraído de la animación en Unreal Engine.
 image::ue_ignore_root_motion.jpg[]
 
@@ -118,11 +118,11 @@ image::ue_ignore_root_motion.jpg[]
 
 Por su parte Unity, ofrece diversas opciones en función de si el modelo es humanoide o genérico:
 
-[[unity_root_motion_generic]]
+[[fig-unity-root-motion-generic]]
 .Configuración del _root node_ en modelos con esqueletos genéricos.
 image::unity_root_motion_generic.png[pdfwidth="7.57cm"]
 
-* Con animaciones y esqueletos genéricos, permite {unity_animation_imported_root_motion}[elegir uno de los huesos como _root node_] de tal forma que la posición y rotación animada de ese hueso se trasladará directamente al _GameObject_ (véase la <<unity_root_motion_generic>>).
+* Con animaciones y esqueletos genéricos, permite {unity-animation-imported-root-motion}[elegir uno de los huesos como _root node_] de tal forma que la posición y rotación animada de ese hueso se trasladará directamente al _GameObject_ (véase la <<fig-unity-root-motion-generic>>).
 Además este _root node_ se toma como centro de masas, desde el punto de vista de la simulación física.
 +
 Obviamente, lo adecuado es que el modelo ya traiga su hueso raíz convenientemente animado y que sea ese hueso el que configuremos como _root node_.
@@ -138,40 +138,40 @@ A esto lo llama _root transform_.
 
 . En cada fotograma de la animación se calcula como cambia _root transform_, siendo estos cambios relativos los que se trasladan al _GameObject_.
 
-[[unity_root_motion_humanoid]]
+[[fig-unity-root-motion-humanoid]]
 .Configuración de _root transform_ en modelos humanoides.
 image::unity_root_motion_humanoid.png[pdfwidth="11.34cm"]
 
-En la <<unity_root_motion_humanoid>>, en la vista previa del modelo en la parte inferior del panel, se puede observar cómo se señala con una flecha azul la orientación de referencia de _root transform_.
+En la <<fig-unity-root-motion-humanoid>>, en la vista previa del modelo en la parte inferior del panel, se puede observar cómo se señala con una flecha azul la orientación de referencia de _root transform_.
 El círculo y la flecha roja nos muestran _root transform_ en el _frame_ actual.
 
 Unity permite seleccionar qué componentes del movimiento —como rotación, movimiento en Y o movimiento en XY— se suprimen de la animación del personaje y trasladan al _root transform_ en cada _frame_ y, por tanto, al _GameObject_, y cuáles se quedan en la animación.
 
-En el recuadro verde en la <<unity_root_motion_humanoid>> se pueden observar estos controles.
+En el recuadro verde en la <<fig-unity-root-motion-humanoid>> se pueden observar estos controles.
 Por ejemplo, si se marcamos *Animation > Root Transform Position (XZ) > Bake Into Pose*, los cambios en la posición de _root transform_ en el plano XZ en cada _frame_ se quedan en la animación y no se trasladan al _GameObject_.
 Como resultado, la malla se sale de la cápsula del personaje en el _GameObject_ al caminar.
 Por el contrario, si no seleccionamos la opción anterior, este desplazamiento se substrae de la animación y se traslada al _GameObject_, haciendo que todo se mueva como indicaba la animación original. 
 
-Todas estas posibilidades están perfectamente explicadas en {unity_root_motion}[Root Motion — how it works].
+Todas estas posibilidades están perfectamente explicadas en {unity-root-motion}[Root Motion — how it works].
 
 Como ocurren con Unreal Engine, en Unity podemos elegir sustraer la información para _root motion_ sin aplicarla finalmente al _GameObject_.
-Para ello solo tenemos que asegurarnos de que la opción *Apply Root Motion* del componente *Animator* del _GameObject_ no está activada (véase la <<<unity_root_motion_humanoid>>).
+Para ello solo tenemos que asegurarnos de que la opción *Apply Root Motion* del componente *Animator* del _GameObject_ no está activada (véase la <<fig-unity-root-motion-humanoid>>).
 Esto se hace porque generalmente preferimos controlar directamente el movimiento del personaje.
 
 == Importancia de tener un modelo adecuado
 
-En realidad los modelos de {mixamo}[Mixamo] que estamos usando de ejemplo no son los más adecuados ni para trabajar con _root motion_ ni sin _root motion_.
+En realidad los modelos de {mixamo} que estamos usando de ejemplo no son los más adecuados ni para trabajar con _root motion_ ni sin _root motion_.
 
 Si no vamos a usar _root motion_, somos nosotros los responsables de mover adecuadamente el actor o _GameObject_ del personaje por la escena.
 Por lo tanto, no nos interesa que la animación contenga traslaciones o rotaciones globales del esqueleto.
 Es decir, debemos pedir a los animadores que todas las animaciones del personaje sean «en el sitio».
 
-En el siguiente vídeo se puede observar como, debido a que en los modelos de {mixamo}[Mixamo] el esqueleto se desplaza, si no hacemos nada para sustraer esta parte de la animación, la malla se sale de la cápsula al caminar.
+En el siguiente vídeo se puede observar como, debido a que en los modelos de {mixamo} el esqueleto se desplaza, si no hacemos nada para sustraer esta parte de la animación, la malla se sale de la cápsula al caminar.
 
-.Ejemplo de cómo la animación saca al modelo de la cápsula.
+.Vídeo: Ejemplo de cómo la animación saca al modelo de la cápsula.
 video::zfcDwyf0HpA[youtube, opts="autoplay,loop,muted,nocontrols"]
 
-Si queremos usar los modelos y animaciones de {mixamo}[Mixamo], esto nos obliga a:
+Si queremos usar los modelos y animaciones de {mixamo}, esto nos obliga a:
 
 * O bien a editar todas las animaciones en un programa adecuado, para suprimir esa parte del movimiento del hueso raíz y que la animación sea «en el sitio». 
 * O bien pedirle al motor que sustraiga por nosotros, como pueda, ese movimiento global. 
@@ -179,13 +179,13 @@ Es decir, es como si quisiéramos hacer _root motion_ pero sin luego aplicarlo a
 
 Sin embargo, no debemos olvidar que lo recomendable sería tener animaciones «en el sitio».
 
-NOTE: Actualmente {mixamo}[Mixamo] ofrece la opción _in place_ para descargar la animación seleccionada «en el sitio».
+NOTE: Actualmente {mixamo} ofrece la opción _in place_ para descargar la animación seleccionada «en el sitio».
 
 Si por el contrario queremos usar _root motion_, lo ideal es que hubiera un verdadero hueso _Root_, padre de _Hips_, de tamaño 0, a nivel del suelo, que estuviera animado solo con el movimiento global del personaje.
 Así las transformaciones del hueso _Root_ serían puramente traslaciones y rotaciones globales del esqueleto, y se podrían trasladar directamente al objeto del personaje, sin necesitar más cálculos.
 De esta forma, _Hips_ estaría solamente animado con las transformaciones locales correspondientes al movimiento de las caderas, en el punto marcado por _Root_.
 
-Con las animaciones de Mixamo —que no tiene hueso _Root_— podemos utilizar un {mixamo_converter}[_plugin_ para Blender] que crea el hueso _Root_, extrae el movimiento global de _Hips_ y lo utiliza para animar _Root_.
+Con las animaciones de Mixamo —que no tiene hueso _Root_— podemos utilizar un {mixamo-converter}[_plugin_ para Blender] que crea el hueso _Root_, extrae el movimiento global de _Hips_ y lo utiliza para animar _Root_.
 Este _plugin_ está especialmente indicado para crear animaciones para usar en Unreal Engine.
 
 Otra opción es intentar jugar con las opciones que tienen algunos motores para calcular de diferentes maneras el _root motion_ y aplicar esas transformaciones extraídas al objeto del personaje, como hicimos anteriormente.
@@ -215,7 +215,7 @@ La animación puede mostrar que el personaje está esprintando, en respuesta a q
 Pero realmente el personaje no se mueve, porque al trasladar el _root motion_ al _GameObject_ este no puede realizar el movimiento.
 
 Por eso el control suele hacerse al revés, permitiendo que el estado del juego se actualice primero, considerando la física y la entrada del jugador.
-Y, después, se determina las animaciones que deben reproducirse (véase la <<control-estándar-del-personaje>>).
+Y, después, se determina las animaciones que deben reproducirse (véase la <<fig-control-estándar-del-personaje>>).
 
 Es cierto que en ciertos casos el _root motion_ es muy cómodo.
 Por ejemplo, cuando el paso es irregular —como ocurre con los zombies— mover el _GameObject_ desde el código entraña mas dificultad que seguir la animación.
@@ -223,7 +223,7 @@ Pero para eso se pueden utilizar curvas con esa velocidad irregular, ajustadas p
 
 Otro caso es el salto con ataque del siguiente vídeo:
 
-.Vídeo de ejemplo de ataque con salto.
+.Vídeo: Ejemplo de ataque con salto.
 video::wgBKap4y9UQ[youtube, opts="autoplay,loop,muted,nocontrols"]
 
 donde sería muy cómodo que el objeto del personaje sincronizara su movimiento con la animación.

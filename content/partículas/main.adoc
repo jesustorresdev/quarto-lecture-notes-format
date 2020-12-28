@@ -10,7 +10,7 @@ include::docstats.adoc[]
 [.right]
 ====
 .Tiempo estimado de lectura
-{document_reading_time}
+{document-reading-time}
 ====
 
 En cualquier aplicación gráfica, cuando queremos mostrar objetos sólidos 2D, usamos _sprites_.
@@ -64,7 +64,7 @@ image::emision_rate_curve.png[]
 == Partículas con física
 
 En muchos motores las partículas, como cualquier otro objeto del juego, pueden tener física.
-Pueden "caer" después de haber sido emitidas, al verse efectadas por la gravedad.
+Pueden "caer" después de haber sido emitidas, al verse afectadas por la gravedad.
 Y pueden colisionar o funcionar como un _trigger_, ejecutando cierta acción cuando entran o salen del _collider_ de otro objeto.
 
 image::particle_system_with_gravity.png[]
@@ -106,7 +106,7 @@ El primero ha sido optimizado para un gran número de plataformas —desde móvi
 
 El sistema de partículas, por defecto, utiliza la CPU para los cálculos.
 Es posible instanciar las partículas en la GPU para que parte de los cálculos se hagan en ella, en aquellas plataformas que {unity-gpuinstancing-platforms}[soportan «instanciación en la GPU»].
-Solo es necesario activar la opción *Enable GPU Instanciating* del módulo *Render* del componente dle sistema de partículas y el _shader_ de la partícula debe ser *Particles/Standard Surface*.
+Solo es necesario activar la opción *Enable GPU Instanciating* del módulo *Render* del componente del sistema de partículas y el _shader_ de la partícula debe ser *Particles/Standard Surface*.
 
 En el caso de que el sistema de partículas integrado no tengan los efectos que buscamos, Unity permite utilizar su {unity-csharp-job-system}[C# Job System]footnote:[{fn-csharp-job-system}] para personalizar el comportamiento de las partículas del {unity-builtin-particlesystem}[Built-in Particle System], ejecutando los cálculos de forma eficiente en los múltiples núcleos del sistema.
 Cuando esto no es suficiente, es bastante común que tengamos que desarrollar un sistema propio o buscar uno alternativo en la *Asset Store*, implementado por otro desarrollador.

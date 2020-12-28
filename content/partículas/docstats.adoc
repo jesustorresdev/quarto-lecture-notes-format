@@ -1,4 +1,4 @@
-:document_characters: 7768
-:document_words: 1487
-:document_paragraphs: 27
-:document_reading_time: 7 minutos
+:document-characters: 7721
+:document-words: 1477
+:document-paragraphs: 27
+:document-reading-time: 7 minutos

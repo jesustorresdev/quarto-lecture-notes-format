@@ -65,20 +65,20 @@ module Docstats
 
     def generate_docstats_document(document_stats, output_pathname)
         output_content = <<~EOF
-        :document_characters: #{document_stats[:characters]}
-        :document_words: #{document_stats[:words]}
-        :document_paragraphs: #{document_stats[:paragraphs]}
-        :document_reading_time: #{format_reading_time(document_stats[:reading_time])}
+        :document-characters: #{document_stats[:characters]}
+        :document-words: #{document_stats[:words]}
+        :document-paragraphs: #{document_stats[:paragraphs]}
+        :document-reading-time: #{format_reading_time(document_stats[:reading_time])}
         EOF
 
         output_content += document_stats[:sections].map do |stats|
             next unless not stats[:sec1tion_number].nil?
             section_number = "%02i" % stats[:sec1tion_number]
             <<~EOF
-            :S#{section_number}_characters: #{stats[:characters]}
-            :S#{section_number}_words: #{stats[:words]}
-            :S#{section_number}_paragraphs: #{stats[:paragraphs]}
-            :S#{section_number}_reading_time: #{format_reading_time(stats[:reading_time])}
+            :S#{section_number}-characters: #{stats[:characters]}
+            :S#{section_number}-words: #{stats[:words]}
+            :S#{section_number}-paragraphs: #{stats[:paragraphs]}
+            :S#{section_number}-reading-time: #{format_reading_time(stats[:reading_time])}
             EOF
         end.join()
 

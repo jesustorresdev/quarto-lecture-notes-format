@@ -22,7 +22,7 @@ module Tests
         document = Nokogiri::HTML.parse(string_or_io)
         # Ignorar bloques stem: <div class='stemblock'> o \$texto\$
         variables = document.xpath('//body//text()[not(ancestor::div[@class="stemblock"])]').flat_map do |text|
-            text.content.gsub(/\\\$.*?\\\$/, "").scan(/\{\w+\}/)
+            text.content.gsub(/\\\$.*?\\\$/, "").scan(/\{[\w-]+\}/)
         end
 
         return variables.uniq.sort
