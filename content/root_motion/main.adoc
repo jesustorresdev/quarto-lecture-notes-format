@@ -40,7 +40,7 @@ Sin embargo, vamos a profundizar en el tema porque involucra opciones que es int
 Supongamos que los animadores del proyecto nos entregan el modelo y las animaciones de un personaje{blank}footnote:[{fn-mixamo}] que importamos en el motor.
 
 .Vídeo del personaje de ejemplo caminando en la web de Mixamo.
-video::s9-qDWpIcJA[youtube, opts="autoplay,loop,muted,nocontrols"]
+video::s9-qDWpIcJA[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Si lo importamos correctamente, tendremos la malla del personaje con su esqueleto.
 Esto en Unity lo gestiona el componente *Skinned Mesh*, mientras que en Unreal Engine se llama *Skeletal Mesh*.
@@ -63,7 +63,7 @@ En «<<video-walking-character-skeleton>>», el hueso raíz es el aparece destac
 
 [[video-walking-character-skeleton]]
 .Vídeo: Esqueleto del personaje mientras camina.
-video::zHYAbhDGBdY[youtube, opts="autoplay,loop,muted,nocontrols"]
+video::zHYAbhDGBdY[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Como se puede observar, durante la animación se mantiene anclado al origen, pero rota y se estira para hacer que el resto del esqueleto se desplace hacia adelante.
 
@@ -86,7 +86,7 @@ En el siguiente vídeo en Unreal Engine, se puede ver cómo al activar _Enable R
 El movimiento ha sido extraído de la animación para aplicárselo después al actor del personaje en la escena.
 
 .Vídeo: Ejemplo con _Enable Root Motion_ usando como referencia la posición de referencia del modelo.
-video::wGJtSPulz2M[youtube, opts="autoplay,loop,muted,nocontrols"]
+video::wGJtSPulz2M[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Sin embargo, como este modelo no estaba preparado para usarlo con _root motion_ —como comentaremos en el <<_importancia_de_tener_un_modelo_adecuado>>— los resultados no son del todo satisfactorios.
 En el vídeo se aprecia claramente que los pies flotan en el aire, en lugar de apoyarse en el suelo.
@@ -101,7 +101,7 @@ image::character_pose_t_vs_first_frame.jpg[pdfwidth="10cm"]
 En el siguiente vídeo se aprecia lo que ocurre al usar como postura de referencia la del primer fotograma de la animación.
 
 .Vídeo: Ejemplo con _Enable Root Motion_ usando como referencia el primer fotograma de la animación.
-video::bivpxGH2Fjg[youtube, opts="autoplay,loop,muted,nocontrols"]
+video::bivpxGH2Fjg[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Como en ese fotograma es más parecido a los del resto de la animación —con un hueso _Hips_ ligeramente más corto para ajustarse a la altura del personaje con las rodillas ligeramente dobladas— el resultado es mucho mejor.
 Claro que los pies parece que se meten ligeramente en el suelo, pero si viéramos el resultado en la escena, con la cámara en tercera persona sobre la cabeza, veríamos que no se nota.
@@ -169,7 +169,7 @@ Es decir, debemos pedir a los animadores que todas las animaciones del personaje
 En el siguiente vídeo se puede observar como, debido a que en los modelos de {mixamo} el esqueleto se desplaza, si no hacemos nada para sustraer esta parte de la animación, la malla se sale de la cápsula al caminar.
 
 .Vídeo: Ejemplo de cómo la animación saca al modelo de la cápsula.
-video::zfcDwyf0HpA[youtube, opts="autoplay,loop,muted,nocontrols"]
+video::zfcDwyf0HpA[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Si queremos usar los modelos y animaciones de {mixamo}, esto nos obliga a:
 
@@ -224,7 +224,7 @@ Pero para eso se pueden utilizar curvas con esa velocidad irregular, ajustadas p
 Otro caso es el salto con ataque del siguiente vídeo:
 
 .Vídeo: Ejemplo de ataque con salto.
-video::wgBKap4y9UQ[youtube, opts="autoplay,loop,muted,nocontrols"]
+video::wgBKap4y9UQ[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 donde sería muy cómodo que el objeto del personaje sincronizara su movimiento con la animación.
 Pero por los mismos motivos que hemos comentado antes, lo mejor es controlar el movimiento desde la lógica del juego.
