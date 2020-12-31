@@ -3,17 +3,34 @@ Jesús Torres <jmtorres@ull.es>
 Curso 20XX-20XY
 include::../../config/attributes.adoc[]
 include::enlaces.adoc[]
+include::footnotes.adoc[]
 include::docstats.adoc[]
 :imagesdir: media
 
-http://www.perforce.com[Perforce] es la compañía que desarrolla http://www.perforce.com/products/helix-core[Helix Core], un sistema de control de versiones (en inglés, _Version Control System_ o _VCS_) diseñado para manejar proyectos realmente grandes.
+[.right]
+====
+.Tiempo estimado de lectura
+{document-reading-time}
+====
+
+{Perforce} es la compañía que desarrolla {helix-core}, un sistema de control de versiones —en inglés, _Version Control System_ o _VCS_— que escala muy bien para manejar proyectos y equipos realmente grandes (véase <<fig-helix-code-scalability>>).
+
+[[fig-helix-code-scalability]]
+.{going-remote}[«Going Remote: Build Up Your Game Dev Team» -- Robert Cowham]
+image::helix_core_scalability.jpg[]
 
 Como el nombre original de Helix Core era Perforce Helix, en muchos foros, manuales y aplicaciones se sigue denominando a este VCS simplemente como Perforce.
 
+A diferencia de lo que ocurre con Git, Perforce puede gestionar adecuadamente tanto archivos de código fuente como binarios —no porque sepa resolver conflictos e integrar diferencias, sino porque facilita su bloqueo mientras trabajamos en ellos—.
+Por eso en su {perforce-customers}[lista de clientes] vemos compañías de industrias muy diversas, que generalmente utilizan este software para guardar en un solo sitio todos los documentos de sus proyectos: código fuente, ejecutables, configuraciones, imágenes, vídeos, texturas, modelos, planos, manuales, diseños, conjuntos de datos, etc.
+
+En lo que respecta a la industria del videojuego, Perforce ha llegado a afirmar que {perforce-in-games}[18 de las 20 principales empresas editoras de videojuegos utilizaban su software], incluyendo Ubisoft y EA.
+Perforce tiene {game-development-process}[algunas guías y vídeos] sobre cómo utilizan sus productos los estudios más conocidos y cómo se integran con los motores de videojuegos y herramientas de diseño más comunes.
+
 == Git en proyectos grandes
 
-Git es actualmente el VCS por excelencia. Se puede utilizar sin problemas en proyectos grandes.
-Por ejemplo, veamos el tamaño y los tiempos —obtenidos desde mi casa— para algunos proyectos conocidos:
+Git es actualmente el VCS por excelencia y, obviamente, se puede utilizar sin problemas en proyectos bastante grandes.
+Por ejemplo, veamos el tamaño y los tiempos —obtenidos sin ningún rigor, desde mi propia casa— para algunos proyectos conocidos:
 
 .Tiempos y tamaños de los repositorios Git de algunos proyectos conocidos.
 |===
@@ -27,30 +44,35 @@ La diferencia entre el tamaño del proyecto y el tamaño real del repositorio se
 Cada vez que se clona un repositorio se crea una copia completa, con todo el historial de cambios desde el principio.
 Por eso, por ejemplo, el proyecto de Unreal Engine 4 necesita 1.7GiB pero el repositorio completo clonado ocupa 4.4GiB.
 
-NOTE: Aunque Unreal Engine está disponible en GitHub, los desarrolladores no trabajan directamente en este repositorio.
-Epic Games utiliza internamente Perforce pero usa GitHub para hacer públicas las versiones definitivas de su motor.
+[NOTE]
+====
+Aunque Unreal Engine está disponible en GitHub, los desarrolladores de Epic Games no trabajan directamente en ese repositorio.
+Epic Games usa internamente Perforce para desarrollar Unreal Engine y solo traslada a GitHub las versiones definitivas de su motor.
 
-Como se puede observar los tiempos de clonado son relativamente largos.
+Aquellos estudios que licencian Unreal Engine pueden obtener acceso al código fuente del motor través del servidor Perforce de Epic Games.
+====
+
+Como se puede observar, los tiempos de clonado son relativamente largos.
 A más historial tenga el proyecto, más ocupará cada copia del repositorio y más tiempo tarda en clonarse.
 Si esto se volviera un problema, Git permite limitar la antigüedad del historial que se clona.
 Sin embargo, como Git solo almacena las diferencias entre una revisión y la siguiente, hacen falta muchos años de desarrollo y muchas revisiones para tener que llegar a eso.
 
-Todo eso cambia cuando una revisión no se puede guardar como una diferencia sino que hay que guardar el archivo completo.
+Todo eso cambia cuando una revisión no se puede guardar como una diferencia, sino que es necesario guardar el archivo completo.
 Cosa que ocurre cuando se quiere utilizar el VCS para controlar las versiones de archivos en formatos binarios.
-Entonces almacenar cada revisión necesita más espacio y la diferencia entre el tamaño del repositorio y el proyecto real crece muy rápidamente.
+En ese caso, almacenar cada revisión necesita más espacio y la diferencia entre el tamaño del repositorio y el proyecto real crece muy rápidamente.
 
 Podríamos pensar que esto no es común en proyectos de software.
 Pero si vemos la lista de clientes de Perforce nos saltarán nombres como Honda, Nvidia, Boeing o Verizon.
-En proyectos grandes muchas veces no solo se quiere controlar las versiones de código fuente, sino también incluir documentos de diseño, manuales, esquemas, etc.
-Incluso los binarios compilados más recientes, para hacer pruebas del producto.
+Estas compañías muchas veces no solo se quiere controlar las versiones de código fuente, sino también incluir documentos de diseño, manuales, planos, etc.
+Incluso los binarios compilados más recientes, para facilitar la realización de pruebas sobre el producto.
 
-En Git esto se resuelve utilizando una extensión llamada https://git-lfs.github.com/[Git LFS].
-Con ella los binarios no se clonan con el repositorio sino que se almacenan en un servidor central del que se copia solo la versión más reciente.
+En Git esto se resuelve utilizando una extensión llamada {git-lfs}[Git LFS].
+Con ella los binarios no se clonan con el repositorio, sino que se almacenan en un servidor central del que se copia solo la versión más reciente.
 Así se evita que cada desarrollador tenga que guardar una copia de todas las revisiones para cada archivo de este tipo.
-Esto, además resuelve otro problema, que es de la colaboración modificando este tipo de archivos.
+Además, esto resuelve otro problema, que es el de la colaboración al modificar al mismo tiempo archivos binarios.
 
-Cuando varios desarrolladores modifican un archivo binario, no es posible integrar los cambios y que todos se queden contentos.
-En su lugar una de las versiones va a reemplazar a la versión actual y el resto se perderán.
+Cuando varios desarrolladores modifican un archivo binario, no es posible integrar los cambios de cada uno y que todos queden contentos.
+En su lugar, una de las versiones va a reemplazar a la versión actual y el resto de los cambios se perderán.
 Como Git LFS usa un servidor central, es posible bloquear el acceso a estos archivos mientras se está trabajando en ellos, informado a otros desarrolladores de lo que ocurre y evitando que puedan hacer cambios en los archivos al mismo tiempo.
 
 Sin Git LFS, trabajar en Git con proyectos grandes que contengan binarios, como es el caso de los videojuegos, es realmente complicado.
@@ -61,7 +83,7 @@ Podemos clasificar los VCS de las siguiente manera:
 
 * *Centralizados*: donde existe un repositorio central con todo el proyecto y los clientes se conectan a él para descargar versiones concretas, subir revisiones, etc.
 Los VCS anteriores a Git, como CVS o Subversion eran de este tipo.
-Y, como hemos comentado, también es lo que permite Git LFS.
+Y, como hemos comentado, esta es la forma de trabajar de Git LFS.
 
 * *Distribuidos*: donde cada usuario tiene su propia copia del repositorio y pueden intercambiar revisiones entre ellos.
 Lo normal es que en algún sitio haya un servidor remoto que haga de punto de sincronización de los repositorios de cada uno de los usuarios.
@@ -74,47 +96,143 @@ Los VCS distribuidos como Git se han impuesto a los centralizados porque entre o
 * No hace falta estar conectado a la red para trabajar con el VCS.
 Ni tampoco ocurre nada si el servidor remoto cae.
 
-* Como cada repositorio es una copia del proyecto, existen múltiples réplicas, lo que reduce las posibilidades de perder datos.
+* Como cada repositorio es una copia del proyecto, por lo que existen múltiples réplicas, lo que reduce las posibilidades de perder datos.
 
-* Ofrece a los desarrolladores la libertad de trabajar de forma independiente y experimental para luego solo subir los cambios relevantes para el resto del equipo.
+* Ofrece a los desarrolladores la libertad de trabajar de forma independiente y experimental, para luego solo subir los cambios relevantes para el resto del equipo.
 
-* El servidor remoto necesita menos recursos ya que la mayor parte del trabajo se hace en los repositorios locales.
+* El servidor remoto necesita menos recursos, ya que la mayor parte del trabajo se hace en los repositorios locales.
 
-Sin embargo, por lo que hemos comentado al hablar de los problemas de Git, no son los mas adecuados en proyectos grandes donde sea necesario controlar también archivos en formato binario.
-Por eso hasta hace bastante poco era común encontrar estudios que seguían usando un VCS centralizado como Subversion.
+Sin embargo, por lo que hemos comentado al hablar de los problemas de Git, no son los mas adecuados en proyectos grandes, donde sea necesario controlar también revisiones de archivos en formato binario.
+Por eso, hasta hace bastante poco era común encontrar estudios que seguían usando Subversion, un VCS centralizado.
 
 === Ventajas de Perforce
 
-Perforce es un VCS puramente centralizado, por lo que escala mucho mejor que Git en este tipo de proyectos.
-En el servidor central se almacenan los distintos repositorios —llamados _depots_— mientras que los clientes tienen espacios de trabajo de trabajo —o _workspaces_— donde se descargan únicamente los archivos del repositorio en la revisión que nos interese de histórico para trabajar.
+Perforce es un VCS centralizado, por lo que escala mucho mejor que Git en proyectos grandes.
+En el servidor central se almacenan los distintos repositorios mientras que los clientes tienen espacios de trabajo de trabajo donde se descargan únicamente los archivos del repositorio en la revisión que nos interese de histórico para trabajar.
 
-NOTE: Como Git es tan popular entre los desarrolladores, existe un producto llamado https://www.perforce.com/products/helix4git[Helix4Git] que se adquiere a parte.
-Permite a los desarrolladores utilizar Git sobre un servidor Perforce, que escala mucho mejor.
+NOTE: Como Git es tan popular entre los desarrolladores, existe un producto llamado {helix4git} que se adquiere a parte.
+Permite a los desarrolladores utilizar Git sobre un servidor Perforce, de tal forma que se obtiene una solución que escala mucho mejor que los servidores Git usados frecuentemente, sin que los desarrolladores tengan que aprender a usar una herramienta diferente.
 
-Perforce permite configurar servidores en _cluster_, ya sea para escalar, repartir la carga de trabajo entre servidores, o para ofrecer alta disponibilidad con el modo maestro / réplica.
+Perforce permite configurar servidores en _cluster_, ya sea para repartir la carga de trabajo entre servidores o para ofrecer alta disponibilidad en modo primario / réplica.
+También permite tener servidores repartidos en distintas sedes, para que los equipos en ellas trabajen de forma independiente, y sincronizar los cambios periódicamente.
 
 == VCS basado en _snapshots_ frente a _changesets_
 
 Otra forma de clasificar los VCS es según el modelo en el que se basan:
 
 * *Snapshots*: donde el VCS maneja los archivos completos —probablemente con optimizaciones para reducir el espacio ocupado—.
-Este es el modelo de Git, que calcula las diferencias a demanda y las almacena como forma de optimizar, pero que trabaja con archivos completos.
+Este es el modelo de Git, que calcula las diferencias a demanda y las almacena como forma de optimizar, pero cuyo modelo se basa en trabajar con archivos completos.
 
 * *Changesets*: donde el VCS solo maneja diferencias entre revisiones.
 Darcs, Perforce, Mercurial y muchos otros son de este tipo.
 
 Esta diferencia, si se aprovecha, es importante desde el punto de vista de lo bien que se integran las ramas en un _merge_ y cómo se resuelven los conflictos.
-Los VCS basados en _changesets_ suelen hacerlo mejor que los basados en _snapshots_, en este sentido.
+en este sentido, los VCS basados en _changesets_ suelen hacerlo mejor que los basados en _snapshots_.
+
+== Conceptos básicos
+
+El VCS de Perforce utiliza una arquitectura cliente-servidor.
+Esto quiere decir que Perforce necesita un servidor que aloja los repositorios con los archivos de los proyectos.
+Y que cada usuario tiene que tener un cliente en su ordenador que se conecta a ese servidor para descargar los archivos y subir revisiones, tras haberlos modificado.
+
+[[fig-centralized-model]]
+.Relación entre cliente y servidor con versionado centralizado -- Fuente: {perforce-dvcs}[«Using Helix Core Server for Distributed Versioning»]
+image::centralized_model.png[]
+
+=== Servidor Perforce
+
+En un mismo servidor pueden haber varios repositorios, llamados _depots_.
+El administrador del servidor tiene control total sobre los permisos de cada usuario en cada _depot_.
+Incluso puede establecer permisos según la ruta de archivos y directorios, usando {perforce-file-specifications}[especificadores de ruta] con comodines.
+
+.Ejemplos de especificadores de ruta en Perforce.
+[%autowidth.stretch]
+|===
+| Expresión             | Descripción
+
+| `//project/...`       | Todos los archivos en el _depot_ `project`.
+| `//project/.../help`  | Todos los archivos llamados `help` en cualquier subdirectorio del _depot_ `project`.
+| `//...`               | Todos los archivos en cualquier _depot_.
+| `//.../J*`            | Todos los archivos que empiezan por `J` en cualquier _depot_.
+
+|===
+
+Actualmente hay servidor de Perforce para Linux, Windows y macOS.
+Los clientes y servidores de distintas plataformas pueden comunicarse sin problemas, pero hay que tener en cuenta las diferencias entre plataformas en cuanto a codificación de caracteres sensibilidad a mayúsculas y minúsculas.
+Por eso, al instalar el servidor es importante configurarlo adecuadamente, tomando en consideración los sistemas que utilizarán los clientes.
+
+=== Clientes de Perforce
+
+Perforce tiene una lista bastante extensa de clientes:
+
+.Lista de clientes de Perforce
+[%autowidth.stretch]
+|===
+| Nombre                                        | Descripción
+
+| Helix Command-Line Client (P4)                | Cliente de línea de comandos. Se utiliza ejecutando `p4 <comando>`.
+| Helix Visual Client (P4V)                     | Cliente de escritorio.
+| Helix Plugin for Visual Studio (P4VS)         | Plugin para Visual Studio.
+| Helix Plugin for File Explorer (P4EXP)        | Plugin para el explorador de Windows.
+| Helix Plugin for Eclipse (P4Eclipse)          | Plugin para Eclipse.
+| Helix Plugin for Graphical Tools (P4GT)       | Plugins para Photoshop, 3ds Max y Maya.
+| Helix Admin Tool (P4Admin)                    | Herramienta de escritorio para la administración del servidor.
+
+|===
+
+Algunas herramientas vienen con soporte integrado de Perforce, aunque por lo general es necesario tener instalado P4 o P4V para poder usarlo.
+Por ejemplo: {ue-perforce}[Unreal Engine], {unity-perforce}[Unity], {rider-perforce}[Rider] o {vscode-perforce}[Visual Studio Code].
+
+=== Espacios de trabajo (_Workspaces_)
+
+Los clientes necesitan un espacio de trabajo o _workspace_. 
+Un _workspace_ es una especificación que indica qué archivos de un _depot_ en el servidor nos interesan y dónde se almacena las copias de esos archivos en el sistema del cliente.
+Respecto a los _workspace_ debemos tener en cuenta que:
+
+* Con la ayuda de {perforce-file-specifications}[especificadores de ruta] podemos seleccionar directorios y archivos concretos para el _workspace_.
+No es necesario descargar el _depot_ completo, como ocurren con otros VCS.
+
+* Solo el contenido de los archivos en la revisión que nos interese —por lo general, la última—.
+Se puede pedir al servidor cualquier revisión, pero no se descarga todo el historial, como ocurre en Git y otros VCS distribuidos.
+
+* Los archivos descargados se marcan, generalmente, como de solo lectura.
+Para modificar un archivo debemos indicar al cliente nuestra intención mediante la acción *{p4v-checkout}* de P4V o el comando `{p4-edit}`.
+Esto permite al cliente comprobar con el servidor si el archivo está bloqueado y, si es necesario, bloquearlo antes de permitir su edición.
+
+NOTE: Por lo general, cada acción pedida al cliente debe trasladarse al servidor, por lo que puede parecer que el cliente no responde, si hay problemas de red.
+
+=== Listas de cambios (_changelists_)
+
+Las modificaciones realizadas en los distintos archivos en el _workspace_ se agrupan en listas de cambios o _changelists_.
+Se pueden tener varias _changeLists_ abiertas al mismo tiempo, de tal forma que se pueden ir agrupando cambios relacionados en distintas _changelists_.
+Al terminar, cada _changelists_ se consolidad en una revisión diferente mediante la acción *{p4v-submit}*.
+
+=== Operaciones comunes
+
+En la <<fig-perforce-helix-cheatsheet>> se puede ver un resumen de las acciones más comunes en el cliente de escritorio P4V.
+Se trata de una hoja de referencia rápida está extraída de la que ofrece Perforce en su {perforce-cheat-sheet}[web].
+El documento completo también incluye una referencia de los comandos del cliente de línea de comandos P4.
+
+[[fig-perforce-helix-cheatsheet]]
+.Hoja de referencia rápida de P4V -- Fuente: {perforce-cheat-sheet}[Perforce Cheat Sheet].
+image::perforce_helix_cheatsheet.png[]
+
+En «<<video-guía-de-inicio-rápido-de-perforce>>» se explica cómo conectar a un servidor de Perforce y se repasan brevemente las acciones más básicas.
+Para conocer más del VCS de Perforce, lo recomendable es consultar el {perforce-p4v-manual}[manual de P4V].
+
+[[video-guía-de-inicio-rápido-de-perforce]]
+.Video: Guía de inicio rápido de Perforce.
+video::zHYAbhDGBdY[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 == Gestión de tipos de archivo
 
 Una de las características clave de Perforce es la gestión tan flexible que tiene de los tipos de archivo.
 
 Los VCS que deben trabajar con archivos binarios —que se guardan completos y no se pueden combinar cambios— y archivos de texto —de los que solo se guardan las diferencias— debe saber distinguir un tipo del otro.
-Para esto cada VCS usa sus propias heurísticas pero como pueden equivocarse, es buena idea disponer de algún mecanismo para indicar cómo debe ser trata cada archivo según su extensión o la ruta dónde esta ubicado.
+Para esto cada VCS usa sus propias heurísticas pero, como pueden equivocarse, es buena idea disponer de algún mecanismo para indicar cómo debe ser tratado cada archivo según su extensión o la ruta dónde esta ubicado.
 
-Esto en Git se hace con un archivo `https://git-scm.com/docs/gitattributes[.gitattributes]` que debe incorporarse al repositorio.
-Mientras que en Perforce se configura en el servidor ejecutando el comando `https://www.perforce.com/manuals/v16.1/cmdref/file.types.html[p4 typemap]`.
+Esto en Git se hace con un archivo `{gitattributes}[.gitattributes]` que debe incorporarse al repositorio.
+Mientras que en Perforce se configura en el servidor ejecutando el comando `{p4-typemap}`.
 
 La configuración de tipos de archivo en Perforce es mucho más potente que en Git.
 Para mostrarlo vamos a ver un ejemplo de posible configuración para alojar proyectos de Unreal Engine:
@@ -167,28 +285,43 @@ Perforce los añade para documentar el formato que espera para esta configuraci�
 <2> En cada línea se indica el tipo de archivo seguido por el patrón de la ruta para identificar a los archivos de este tipo.
 En este caso se indica que son binarios todos los archivos con extensión `.png` en cualquier subdirectorio del _depot_ de nombre 'depot'.
 Estos archivos se guardarán completos.
++
 Por la extensión se ve que estos archivos son texturas y modelos en el formato original, antes de importarlos en el proyecto.
 Se guardan en el proyecto para preservarlos, por si en el futuro hay que modificarlos y volver a importar.
 
 <3> Los archivos con extensión `.cpp` son archivos de texto.
 De estos archivos sólo se guardarán las diferencias entre cada revisión.
 
-<4> Los archivos con extensión `.uasset` —archivo de recursos en el editor— y `.umap` —archivo de escena— también son binarios pero en el momento que un cliente los abra para editar, automáticamente quedará bloqueada la edición para el resto de clientes.
+<4> Los archivos con extensión `.uasset` —archivo de recursos en el editor— y `.umap` —archivo de escena— también son binarios pero en el momento que un cliente los abra para editar, automáticamente quedará bloqueada la edición para el resto de clientes —por eso el `+l`—.
++
 A diferencia de los binarios mencionados anteriormente, estos corresponden a recursos ya importados en el proyecto.
 Sin el bloqueo, podrían ser editados al mismo tiempo desde varios editores de Unreal Engine al mismo tiempo, lo que crearía un conflicto que sería muy difícil de resolver.
 
-<5> Los archivos con extensión `.exe` también son binarios pero solo se almacenan en el VCS las dos últimas revisiones y el archivo siempre puede ser modificado por el cliente.
-Obviamente se trata así a los archivos ejecutables del proyecto.
-Por un lado, se quiere que los binarios estén disponibles en el repositorio para hacer rápidamente pruebas y demos.
-Pero teniendo las fuentes del proyecto en el VCS, no es necesario guardar todas las revisiones del ejecutable.
-Por el otro, se quiere que cualquier desarrollador pueda compilar el proyecto y sobrescribir su copia local del ejecutable sin restricciones.
+<5> Los archivos con extensión `.exe` también son binarios pero solo se almacenan en el VCS las dos últimas revisiones —el `+S2`— y el archivo siempre puede ser modificado por el cliente —el `w`—.
 
-:fn-unity-behind-the-scenes: pass:n[Ver https://docs.unity3d.com/Manual/BehindtheScenes.html[Unity - Behind The Scenes] para conocer más detalles sobre el proceso de importación de recursos.]
+El ejemplo de como tratar los ejecutables `.exe` es un caso interesante por varios motivos:
 
-En https://github.com/ull-master-videojuegos/perforce-typemaps[este repositorio] se puede encontrar este mismo ejemplo de archivo de configuración de tipos para Unreal Engine y otro para Unity.
+* Por defecto Perforce crea los archivos en el _workspace_ donde estamos trabajando en modo solo lectura.
+Así nos obliga a usar *{p4v-checkout}* —o el comando `{p4-edit}`— antes de intentar modificar cualquier de ellos.
+El comando *Check Out* notifica al servidor nuestra intención de modificar el archivo, bloqueándolo automáticamente en caso de que esté configurado así en el *typemap*, y cambia los atributos del archivo para permitir su modificación.
++
+Con los ejecutables se quiere que cualquier desarrollador pueda compilar el proyecto y sobrescribir su copia local del ejecutable, sin restricciones y sin bloquear el archivo a otros desarrolladores.
+Por eso no se pone `l` para forzar el bloqueo y sí se indica `w`, para que estos archivo en el _workspace_ tengan permisos de escritura por defecto.
+
+* Los binarios se incluyen en el control de versiones porque así el departamento de garantía de calidad y otros miembros del equipo pueden probar el desarrollo rápidamente.
+Pero teniendo las fuentes del proyecto en el VCS, no parece necesario guardar todas las revisiones del ejecutable.
+Por eso hemos optado por guardar solo las dos últimas revisiones.
+
+En {typemaps-examples}[este repositorio] se puede encontrar este mismo ejemplo de archivo de configuración de tipos tanto para Unreal Engine como para Unity.
+
+[NOTE]
+====
 En el caso de Unity los archivos de recursos en su formato original si se deben bloquear, porque el editor de Unity los necesita para regenerar el contenido del directorio `Library` —que nunca debe incluirse en el repositorio— donde se guardan convertidos en un formato interno adecuado para el motor{blank}footnote:[{fn-unity-behind-the-scenes}].
 
-// TODO: Añadir algún vídeo explicando como se usa.
+Es decir, Unreal Engine no necesita los archivos originales.
+Una vez los hemos importando, el editor trabaja sobre las versiones importadas. 
+Mientras que en Unity los archivos originales forman parte del proyecto y se reimportan automáticamente cada vez que los modificamos o abrimos el proyecto por primera vez. 
+====
 
 == Directorios en el control de versiones
 
@@ -204,121 +337,75 @@ Mientras que en un proyecto de Unreal Engine se deben incluir:
  * `Config`, porque tiene la configuración del proyecto.
  * El archivo `.uproject`, que es el archivo del proyecto.
 
-En ambos casos se puede incluir el directorio a donde se compila el proyecto si queremos que los binarios estén disponibles para todo el equipo en el control de versiones —por ejemplo, para que el equipo de garantía de calidad pueda tener acceder a ellos rápidamente—.
+En ambos casos se puede incluir el directorio donde se compila el proyecto, si queremos que los binarios estén disponibles para todo el equipo en el control de versiones —por ejemplo, para que el departamento de garantía de calidad pueda tener acceder a ellos rápidamente—.
 
-== Colaborar en Unity
-
-Es evidente que, a menos que un proyecto sea muy pequeño, nos interesará que varios desarrolladores y diseñadores puedan trabajar en un mismo nivel al mismo tiempo.
-¿Pero cómo podríamos hacer para lograrlo?.
-
-Lo primero que hay que mencionar es que Unity trae una herramienta para integrar cambios en escenas y _prefabs_ que han sido modificados al mismo tiempo por varios desarrolladores.
-Lo llaman https://docs.unity3d.com/Manual/SmartMerge.html[Smart Merge].
-Sin embargo no siempre podemos estar seguros de que vayamos a quedar satisfechos con el resultado.
-Por eso el archivo de ejemplo de _typemaps_ para Unity indica que los archivos `.unity` —las escenas— y `.perfab` —los _prefabs_— debe bloquearse para su edición.
-Pero claro, con esa configuración no parece posible colaborar en el desarrollo de un nivel.
-
-//TODO: Colocar alguna imagen ilustrativa.
-
-La solución para colaborar desarrollando en Unity, tanto con Git como con Perforce, o cualquier otro VCS, está en seguir las siguientes indicaciones:
-
-. Borrar de nuestra cabeza la idea de que cada nivel es una y solo una escena.
-En general un nivel del juego debería estar compuesto por varias escenas cargadas de forma aditiva.
-
-. Crear escenas para agrupar objetos relacionados de un mismo nivel.
-Por ejemplo, un escena para la interfaz de usuario, otra para el mundo del nivel, una escena para cada misión que el jugador tenga que superar en el nivel, etc.
-Como hemos dicho anteriormente, estas escenas se deben ir cargando de forma aditiva según sea necesario durante el desarrollo del juego.
-
-. Cada escena debería ser básicamente una colección de _prefabs_.
-Las escenas se construirían añadiendo y posicionando _prefabs_ en ellas.
-
-De esta forma varios desarrolladores podrían estar modificando diferentes aspectos de un mismo nivel siempre que estén trabajando en _prefabs_ o escenas diferentes.
-
-== Colaborar en Unreal Engine
-
-En Unreal Engine la estrategia para colaborar más fácilmente puede ser similar.
-
-=== Subniveles
-
-En un nivel solo puede haber una persona trabajando al mismo tiempo, pero Unreal permite descomponer un nivel en varios subniveles y que estos se carguen a demanda —por ejemplo, cuando el jugador está cerca— usando lo que llaman https://docs.unrealengine.com/en-US/Engine/LevelStreaming/index.html[Level Streaming].
-Si los subniveles se marcan como https://docs.unrealengine.com/en-US/Engine/Levels/CollaborateWithSublevels/index.html[Always Streaming], ya no se cargan a demanda, sino que se cargan todos juntos al cargar el nivel principal —llamado _Persistent Level_—.
-
-Esto permite que múltiples desarrolladores trabajen en el mismo escenario al mismo tiempo, solo que en diferentes subniveles.
-Como ocurre en Unity, no estamos obligados a usar distintos niveles para distintas regiones del mundo.
-Sino que la descomposición puede ser de otro tipo, en función de como se haya planificado repartir el trabajo.
-Así, por ejemplo, un subnivel puede tener las mallas estáticas que dan forma al mundo, otro los NPC y otro todos los sonidos; permitiendo a diferentes desarrolladores trabajar en cada uno de estos subniveles
-
-=== _Prefabs_
-
-:fn-unreal-prefabs: pass:n[Unreal Engine no soporta _prefabs_ de serie, pero en el Marketplace si existen diferentes soluciones que los implementan.]
-En Unreal Engine no existe el concepto de _prefabs{blank}footnote:[{fn-unreal-prefabs}]_ pero los actores _Blueprint_ se pueden utilizar para hacer algo, hasta cierto punto, similar.
-
-Basta con crear un actor _Blueprint_ y, sin necesidad de añadirle código, incorporar como componentes mallas, luces, sistemas de partículas y el resto de elementos que nos interesen.
-Después el actor se pone en el lugar, o lugares del nivel que queramos, ya que puede ser instanciado varias veces.
-
-Se puede editar el _Blueprint_ en el explorador de contenidos, si se quiere hacer un cambio global en todas las instancias.
-O modificar cada instancia ubicada en el nivel, si se quieren hacer cambios individuales.
-
-=== Child Actors Component
-
-En Unreal Engine a veces hay características que solo están disponibles como un actor y no como un componente que puedas poner dentro de un actor.
-Eso significa que esas características no se podrían agrupar dentro del actor _Blueprint_ usado a modo de _prefab_ que hemos comentado en el apartado anterior.
-
-En ese caso se puede añadir al actor _Blueprint_ un componente llamado _Child Actor Component_.
-Este recibe como argumento un actor que queremos instanciar o destruir cuando el actor principal sea instanciado o destruido, respectivamente.
-Así que ese actor que no podemos incluir como componente en el _prefab_ sería el actor hijo que el _Child Actor Component_ del _prefab_ gestionará.
-
-En general no se recomienda usar actores hijos.
-En lo posible es siempre mejor utilizar componentes.
+El resto de archivos son temporales y se generan al abrir el proyecto o compilarlo, por lo que no se deben incluir en el VCS.
 
 == Perforce Streams
 
-Obviamente Perforce soporta ramas, como muchos otros VCS.
-Pero merece la pena mencionar una característica avanzada llamada _streams_.
+Merece la pena mencionar una característica avanzada de Perforce llamada _streams_.
 
-Los _streams_ son ramas pero incluyen reglas que definen como se pueden manipular los archivos, incluyendo como se mueven los cambios en los archivos entre _streams_.
+Obviamente Perforce soporta ramas, como muchos otros VCS, pero le han dado una vuelta de tuerca al concepto al desarrollar los _streams_.
+Los _streams_ son ramas que incluyen reglas que definen cómo se pueden manipular los archivos, incluyendo como se mueven los cambios en los archivos entre _streams_.
 
 Vamos a resumir brevemente sus principales características:
 
 * Los _streams_ se organizan en árbol.
 
-* En la raíz del _depot_ está el _stream_ _mainline_ que hace la función de la rama _master_ en Git.
+* En la raíz del _depot_ está el _stream mainline_, que hace la función de la rama _master_ en Git.
 
-* De _mainline_ cuelgan los _streams_ _release_ cuyo contenido es más estable que el de su padre.
+* De _mainline_ cuelgan los _streams release_, cuyo contenido es más estable que el de su padre.
 Se crean cuando llega el momento de publicar una versión del producto.
-Generalmente, si se hacen cambios directos en ella para resolver errores, estos se combinen en el padre.
+Se hacen cambios directos en ellas para resolver errores en versiones ya publicadas que generalmente, después se integran en el padre con *merge*.
 
-* De _mainline_ cuelgan también los _streams_ _development_ cuyo contenido es menos estable que su padre.
+* De _mainline_ cuelgan también los _streams development_ cuyo contenido es menos estable que su padre.
 Son los _streams_ donde ocurre el desarrollo de nuevas funcionalidades.
-Se espera que se combinen cambios desde el padre pero que a su vez se copien cambios desde los _streams_ hijos de desarrollo hacia arriba.
+Se espera que se integren cambios con *merge* desde el padre pero que a su vez se copien cambios desde los _streams_ hijos de desarrollo hacia arriba.
 
-En https://www.perforce.com/video-tutorials/streams-overview[Streams Overview] hay un pequeño video-tutorial donde se explica claramente su funcionamiento.
+En {perforce-streams-overview}[«Streams Overview»] hay un pequeño video-tutorial donde se explica claramente su funcionamiento.
 
-Una característica interesante es que en los _streams_ se pueden filtrar los archivos que ven los clientes y los que pueden modificar.
-Por ejemplo, se puede crear un _stream_ para el departamento de arte que les permita modificar los recursos del proyecto pero no tocar los archivos de código fuente.
-O crear una rama donde solo se puede trabajar en el código del motor para actualizarlo de versión, sin tocar el resto del proyecto.
+Una característica interesante es que se pueden crear _streams virtuales_ para filtrar los archivos que ven los clientes de Perforce y los que pueden modificar.
+Por ejemplo, se puede crear un _stream_ para el departamento de arte que les permita modificar los recursos del proyecto, pero no tocar los archivos de código fuente.
+O crear una rama donde solo se puede trabajar en el código del motor para actualizar la versión, sin tocar el resto del proyecto.
 
 [TIP]
-Para entender mejor cómo se pueden aprovechar las características de los _streams_, merece la pena ver el webinar https://www.perforce.com/webinars/vcs/best-practices-game-development-using-streams[Best Practices for Game Development Using Streams] donde el estudio Sumo Digital explica cómo los usan ellos en sus proyectos con Unreal Engine.
+Merece la pena ver el webinar {perforce-streams-best-practices}[«Best Practices for Game Development Using Streams»] para entender mejor cómo se pueden aprovechar las características de los _streams_.
+En el webinar el estudio Sumo Digital explica cómo los usan ellos en sus proyectos con Unreal Engine.
 
 == Perforce en un estudio _indie_
 
 Aunque Perforce es una herramienta ideal para proyectos grandes, hay que reconocer que algunas de sus características pueden ser interesantes para cualquier estudio _indie_.
 
 Perforce es gratuito para hasta 5 usuarios.
-Los estudios _indie_ pueden pedir también acceso gratuito para hasta 5 usuarios el software de gestión de proyectos Handsoft y precio especial para más de 5 usuarios a través del https://www.perforce.com/indie-studio-pack[Perforce Indie Studio Pack].
+Los estudios _indie_ pueden pedir también acceso gratuito para hasta 5 usuarios al software de gestión de proyectos Handsoft y precio especial para más de 5 usuarios a través del {perforce-indie-studio-pack}[Perforce Indie Studio Pack].
 
-La instalación del cliente de Perforce incluye un servidor personal que se puede utilizar tanto para trabajar de forma aislada en proyectos personales en un servidor propio, como para trabajar en proyecto colaborativos de forma distribuida; de forma similar a como se trabaja con Git.
+La instalación del cliente de Perforce incluye un servidor personal que se puede utilizar tanto para trabajar de forma aislada en proyectos personales, como para trabajar en proyecto colaborativos de forma distribuida; de manera similar a como se trabaja con Git.
 
-En este último caso se clona en el servidor personal los archivos del proyecto en el que interesa colaborar, para trabajar en él de manera aislada.
-Una vez se ha terminado, se envían los cambios al servidor compartido.
-También se pueden traer al servidor personal las actualizaciones realizadas por otros colaboradores.
+TIP: Todos los detalles de esta forma de trabajar se explican con detalle en {perforce-dvcs}[«Using Helix Core Server for Distributed Versioning»].
 
-[TIP]
-Todos los detalles de esta forma de trabajar se explican en el manual https://www.perforce.com/manuals/dvcs/Content/DVCS/Home-dvcs.html[Using Helix Core Server for Distributed Versioning].
+En este caso:
+
+. Se clonan con `{p4v-clone}` la ruta que nos interesa del servidor compartido en el servidor personal, para trabajar en los archivos de manera aislada.
++
+Esto crea un _remote mapping_ en el servidor personal.
+Los _remote mappings_ definen cómo se mapean las rutas en dicho servidor con las del servidor compartido.
+Se pueden crear reglas complejas para solo mapear un subconjunto de los archivos, en lugar de descargar todos, como ocurre en Git.
+
+. En el servidor personal se trabaja con normalidad, usando *{p4v-checkout}* antes de modificar los archivos y *{p4v-submit}* para guardar una nueva revisión con los cambios.
+
+. Una vez se ha terminado de trabajar en los archivos, se envían los cambios al servidor compartido usando *{p4v-push}*.
+
+. Se puede usar *{p4v-fetch}* periódicamente para traer al servidor personal las actualizaciones realizadas por otros colaboradores en el servidor compartido.
+
+.Relación entre servidores Perforce con versionado distribuido -- Fuente: {perforce-dvcs}[«Using Helix Core Server for Distributed Versioning»]
+image::dvcs_personal_shared.png[]
 
 == Recursos adicionales
 
+* {game-development-process}[Game Development Process: How Game Development Works]
+* {perforce-indie-studio-pack}[Perforce Indie Studio Pack]
 * https://www.perforce.com/manuals/overview/Content/Overview/basic_concepts.basics.html[Conceptos básicos de Perforce]
-* https://www.perforce.com/manuals/p4v/[Guía de usuario del cliente de Perforce].
-* https://www.perforce.com/manuals/v15.1/dvcs/_git_perforce_command_mappings.html[Mapeo de la línea de comandos de Git a Perforce].
+* {perforce-p4v-manual}[Guía de usuario del cliente de Perforce]
+* {perforce-cheat-sheet}[Hoja de referencia rápida de Perforce]
+* https://www.perforce.com/manuals/dvcs/Content/DVCS/chapter.git.html[Mapeo de la línea de comandos de Git a Perforce]
 * https://www.perforce.com/blog/vcs/perforce-vs-git-commands-you-should-know[Perforce vs. Git Commands You Should Know]
