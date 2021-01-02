@@ -1,13 +1,8 @@
 // Mixamo
 :mixamo: https://www.mixamo.com/[Mixamo]
-:mixamo-converter: https://github.com/enziop/mixamo_converter
 
 // Wikipedia
 :qte: https://es.wikipedia.org/wiki/Quick_time_event
 :pose-t: https://en.wikipedia.org/wiki/T-pose
 :transform-matrix: https://es.wikipedia.org/wiki/Matriz_de_transformaci%C3%B3n
 :forward-kinematics: https://en.wikipedia.org/wiki/Forward_kinematics
-
-// Unity 
-:unity-animation-imported-root-motion: https://docs.unity3d.com/Manual/AnimationRootMotionNodeOnImportedClips.html
-:unity-root-motion: https://docs.unity3d.com/Manual/RootMotion.html

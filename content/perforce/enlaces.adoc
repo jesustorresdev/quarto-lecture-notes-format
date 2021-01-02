@@ -3,20 +3,12 @@
 :git-lfs: https://git-lfs.github.com/
 
 // Perforce
-:game-development-process: https://www.perforce.com/resources/game-development-process
 :going-remote: https://www.perforce.com/webinars/vcs/going-remote-build-your-game-dev-team
 :helix-core: http://www.perforce.com/products/helix-core[Helix Core]
 :helix4git: https://www.perforce.com/products/helix4git[Helix4Git]
 :perforce: http://www.perforce.com[Perforce]
 :perforce-customers: https://www.perforce.com/customers
-:perforce-cheat-sheet: https://www.perforce.com/blog/vcs/perforce-cheat-sheet
-:perforce-dvcs: https://www.perforce.com/manuals/dvcs/Content/DVCS/Home-dvcs.html
 :perforce-file-specifications: https://www.perforce.com/manuals/v18.1/cmdref/Content/CmdRef/filespecs.html
-:perforce-indie-studio-pack: https://www.perforce.com/indie-studio-pack
-:perforce-in-games: https://www.perforce.com/sites/default/files/top-games-publishers-perforce-manage-digital-assets.pdf
-:perforce-p4v-manual: https://www.perforce.com/manuals/p4v/
-:perforce-streams-overview: https://www.perforce.com/video-tutorials/streams-overview
-:perforce-streams-best-practices: https://www.perforce.com/webinars/vcs/best-practices-game-development-using-streams
 
 // Perforce comandos
 :p4-typemap: https://www.perforce.com/manuals/v18.1/cmdref/Content/CmdRef/p4_typemap.html[p4 typemap]

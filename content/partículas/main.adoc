@@ -105,7 +105,7 @@ El primero ha sido optimizado para un gran número de plataformas —desde móvi
 ====
 
 El sistema de partículas, por defecto, utiliza la CPU para los cálculos.
-Es posible instanciar las partículas en la GPU para que parte de los cálculos se hagan en ella, en aquellas plataformas que {unity-gpuinstancing-platforms}[soportan «instanciación en la GPU»].
+Es posible instanciar las partículas en la GPU para que parte de los cálculos se hagan en ella, en aquellas plataformas que soportan «instanciación en la GPU»<<Unity-GPU-Instancing>>.
 Solo es necesario activar la opción *Enable GPU Instanciating* del módulo *Render* del componente del sistema de partículas y el _shader_ de la partícula debe ser *Particles/Standard Surface*.
 
 En el caso de que el sistema de partículas integrado no tengan los efectos que buscamos, Unity permite utilizar su {unity-csharp-job-system}[C# Job System]footnote:[{fn-csharp-job-system}] para personalizar el comportamiento de las partículas del {unity-builtin-particlesystem}[Built-in Particle System], ejecutando los cálculos de forma eficiente en los múltiples núcleos del sistema.
@@ -137,7 +137,7 @@ En caso de que ninguno de los módulos ofrecidos tenga los efectos que buscamos,
 {ue-cascade}[Cascade] admite un tipo especial de módulo llamado *Type Data*.
 Añadiendo un módulo de este tipo a un *Emitter* del sistema de partículas, se altera el tipo de partículas que genera.
 Por ejemplo, por defecto se utiliza la CPU para los cálculos, pero es posible que un *Emitter* instancie partículas en la GPU, añadiéndole un módulo *GPU Sprites* de tipo *Type Data*.
-Sin embargo, debemos tener presente que la instanciación de partículas en la GPU no es compatible con todos los módulos disponibles {ue-gpuinstancing-platforms}[ni con todas las plataformas].
+Sin embargo, debemos tener presente que la instanciación de partículas en la GPU no es compatible con todos los módulos disponibles ni con todas las plataformas<<UE4-GPUSprites>>.
 
 == Consejos
 
@@ -150,3 +150,12 @@ Una posible solución es al menos tener una copia del sistema de partículas ins
 Así la carga del sistema de partículas por primera vez ocurrirá durante la carga de la escena.
 
 TIP: La solución ideal es haber implementado un _pool_ de objetos que, entre otros, gestione instancias de los sistemas de partículas que vayamos a utilizar
+
+[bibliography]
+== Referencias
+
+* [[[Unity-GPU-Instancing,1]]]
+Unity Technologies. GPU Instancing. En _Unity Manual_. https://docs.unity3d.com/Manual/GPUInstancing.html
+
+* [[[UE4-GPUSprites,2]]]
+Epic Games, Inc. GPUSprites Type Data. En _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/RenderingAndGraphics/ParticleSystems/Reference/TypeData/GPUSprites/index.html

@@ -16,7 +16,7 @@ include::docstats.adoc[]
 {Perforce} es la compañía que desarrolla {helix-core}, un sistema de control de versiones —en inglés, _Version Control System_ o _VCS_— que escala muy bien para manejar proyectos y equipos realmente grandes (véase <<fig-helix-code-scalability>>).
 
 [[fig-helix-code-scalability]]
-.{going-remote}[«Going Remote: Build Up Your Game Dev Team» -- Robert Cowham]
+.{going-remote}[«Going Remote: Build Up Your Game Dev Team» -- Robert Cowham].
 image::helix_core_scalability.jpg[]
 
 Como el nombre original de Helix Core era Perforce Helix, en muchos foros, manuales y aplicaciones se sigue denominando a este VCS simplemente como Perforce.
@@ -24,8 +24,8 @@ Como el nombre original de Helix Core era Perforce Helix, en muchos foros, manua
 A diferencia de lo que ocurre con Git, Perforce puede gestionar adecuadamente tanto archivos de código fuente como binarios —no porque sepa resolver conflictos e integrar diferencias, sino porque facilita su bloqueo mientras trabajamos en ellos—.
 Por eso en su {perforce-customers}[lista de clientes] vemos compañías de industrias muy diversas, que generalmente utilizan este software para guardar en un solo sitio todos los documentos de sus proyectos: código fuente, ejecutables, configuraciones, imágenes, vídeos, texturas, modelos, planos, manuales, diseños, conjuntos de datos, etc.
 
-En lo que respecta a la industria del videojuego, Perforce ha llegado a afirmar que {perforce-in-games}[18 de las 20 principales empresas editoras de videojuegos utilizaban su software], incluyendo Ubisoft y EA.
-Perforce tiene {game-development-process}[algunas guías y vídeos] sobre cómo utilizan sus productos los estudios más conocidos y cómo se integran con los motores de videojuegos y herramientas de diseño más comunes.
+En lo que respecta a la industria del videojuego, Perforce ha llegado a afirmar que 18 de las 20 principales empresas editoras de videojuegos utilizaban su software<<Perforce-In-Games>>, incluyendo Ubisoft y EA.
+Perforce tiene algunas guías y vídeos<<Perforce-Game-Development-Process>> sobre cómo utilizan sus productos los estudios más conocidos y cómo se integran con los motores de videojuegos y herramientas de diseño más comunes.
 
 == Git en proyectos grandes
 
@@ -136,7 +136,7 @@ Esto quiere decir que Perforce necesita un servidor que aloja los repositorios c
 Y que cada usuario tiene que tener un cliente en su ordenador que se conecta a ese servidor para descargar los archivos y subir revisiones, tras haberlos modificado.
 
 [[fig-centralized-model]]
-.Relación entre cliente y servidor con versionado centralizado -- Fuente: {perforce-dvcs}[«Using Helix Core Server for Distributed Versioning»]
+.Relación entre cliente y servidor con versionado centralizado -- Fuente: Using Helix Core Server for Distributed Versioning<<Perforce-DVCS>>.
 image::centralized_model.png[]
 
 === Servidor Perforce
@@ -210,15 +210,18 @@ Al terminar, cada _changelists_ se consolidad en una revisión diferente mediant
 === Operaciones comunes
 
 En la <<fig-perforce-helix-cheatsheet>> se puede ver un resumen de las acciones más comunes en el cliente de escritorio P4V.
-Se trata de una hoja de referencia rápida está extraída de la que ofrece Perforce en su {perforce-cheat-sheet}[web].
+Se trata de una hoja de referencia rápida, extraída de la que ofrece Perforce en su web<<Perforce-Cheat-Sheet>>.
 El documento completo también incluye una referencia de los comandos del cliente de línea de comandos P4.
 
 [[fig-perforce-helix-cheatsheet]]
-.Hoja de referencia rápida de P4V -- Fuente: {perforce-cheat-sheet}[Perforce Cheat Sheet].
+.Hoja de referencia rápida de P4V -- Fuente: Perforce Cheat Sheet<<Perforce-Cheat-Sheet>>.
 image::perforce_helix_cheatsheet.png[]
 
+Perforce también ofrece guías para quiénes están familiarizados con Git<<Perforce-Git-Command-Mappings>><<Perforce-Top-Git-Commands>>.
+
+
 En «<<video-guía-de-inicio-rápido-de-perforce>>» se explica cómo conectar a un servidor de Perforce y se repasan brevemente las acciones más básicas.
-Para conocer más del VCS de Perforce, lo recomendable es consultar el {perforce-p4v-manual}[manual de P4V].
+Para conocer más del VCS de Perforce, lo recomendable es consultar el manual de P4V<<Perforce-P4V-Manual>>.
 
 [[video-guía-de-inicio-rápido-de-perforce]]
 .Video: Guía de inicio rápido de Perforce.
@@ -346,7 +349,7 @@ El resto de archivos son temporales y se generan al abrir el proyecto o compilar
 Merece la pena mencionar una característica avanzada de Perforce llamada _streams_.
 
 Obviamente Perforce soporta ramas, como muchos otros VCS, pero le han dado una vuelta de tuerca al concepto al desarrollar los _streams_.
-Los _streams_ son ramas que incluyen reglas que definen cómo se pueden manipular los archivos, incluyendo como se mueven los cambios en los archivos entre _streams_.
+Los _streams_ son ramas que incluyen reglas que definen cómo se pueden manipular los archivos, incluyendo como se mueven los cambios en los archivos entre _streams_<<Perforce-Streams-Overview>>.
 
 Vamos a resumir brevemente sus principales características:
 
@@ -362,26 +365,25 @@ Se hacen cambios directos en ellas para resolver errores en versiones ya publica
 Son los _streams_ donde ocurre el desarrollo de nuevas funcionalidades.
 Se espera que se integren cambios con *merge* desde el padre pero que a su vez se copien cambios desde los _streams_ hijos de desarrollo hacia arriba.
 
-En {perforce-streams-overview}[«Streams Overview»] hay un pequeño video-tutorial donde se explica claramente su funcionamiento.
+En <<Perforce-Streams-Overview>> hay un pequeño video-tutorial donde se explica claramente su funcionamiento.
 
 Una característica interesante es que se pueden crear _streams virtuales_ para filtrar los archivos que ven los clientes de Perforce y los que pueden modificar.
 Por ejemplo, se puede crear un _stream_ para el departamento de arte que les permita modificar los recursos del proyecto, pero no tocar los archivos de código fuente.
 O crear una rama donde solo se puede trabajar en el código del motor para actualizar la versión, sin tocar el resto del proyecto.
 
 [TIP]
-Merece la pena ver el webinar {perforce-streams-best-practices}[«Best Practices for Game Development Using Streams»] para entender mejor cómo se pueden aprovechar las características de los _streams_.
-En el webinar el estudio Sumo Digital explica cómo los usan ellos en sus proyectos con Unreal Engine.
+Merece la pena ver el webinar en <<Perforce-Streams-Best-Practices>> para entender mejor cómo se pueden aprovechar las características de los _streams_.
+En el webinar, el estudio Sumo Digital explica cómo los usan ellos en sus proyectos con Unreal Engine.
 
 == Perforce en un estudio _indie_
 
 Aunque Perforce es una herramienta ideal para proyectos grandes, hay que reconocer que algunas de sus características pueden ser interesantes para cualquier estudio _indie_.
 
 Perforce es gratuito para hasta 5 usuarios.
-Los estudios _indie_ pueden pedir también acceso gratuito para hasta 5 usuarios al software de gestión de proyectos Handsoft y precio especial para más de 5 usuarios a través del {perforce-indie-studio-pack}[Perforce Indie Studio Pack].
+Los estudios _indie_ pueden pedir también acceso gratuito para hasta 5 usuarios al software de gestión de proyectos Handsoft y precio especial para más de 5 usuarios a través del Perforce Indie Studio Pack<<Perforce-Indie-Studio-Pack>>.
 
 La instalación del cliente de Perforce incluye un servidor personal que se puede utilizar tanto para trabajar de forma aislada en proyectos personales, como para trabajar en proyecto colaborativos de forma distribuida; de manera similar a como se trabaja con Git.
-
-TIP: Todos los detalles de esta forma de trabajar se explican con detalle en {perforce-dvcs}[«Using Helix Core Server for Distributed Versioning»].
+Todos los detalles de esta forma de trabajar se explican con detalle en <<Perforce-DVCS>>.
 
 En este caso:
 
@@ -397,15 +399,41 @@ Se pueden crear reglas complejas para solo mapear un subconjunto de los archivos
 
 . Se puede usar *{p4v-fetch}* periódicamente para traer al servidor personal las actualizaciones realizadas por otros colaboradores en el servidor compartido.
 
-.Relación entre servidores Perforce con versionado distribuido -- Fuente: {perforce-dvcs}[«Using Helix Core Server for Distributed Versioning»]
+.Relación entre servidores Perforce con versionado distribuido -- Fuente: Using Helix Core Server for Distributed Versioning<<Perforce-DVCS>>.
 image::dvcs_personal_shared.png[]
 
-== Recursos adicionales
+[bibliography]
+== Referencias
 
-* {game-development-process}[Game Development Process: How Game Development Works]
-* {perforce-indie-studio-pack}[Perforce Indie Studio Pack]
-* https://www.perforce.com/manuals/overview/Content/Overview/basic_concepts.basics.html[Conceptos básicos de Perforce]
-* {perforce-p4v-manual}[Guía de usuario del cliente de Perforce]
-* {perforce-cheat-sheet}[Hoja de referencia rápida de Perforce]
-* https://www.perforce.com/manuals/dvcs/Content/DVCS/chapter.git.html[Mapeo de la línea de comandos de Git a Perforce]
-* https://www.perforce.com/blog/vcs/perforce-vs-git-commands-you-should-know[Perforce vs. Git Commands You Should Know]
+* [[[Perforce-In-Games,1]]]
+Perforce Software, Inc. (2008). 18 of ‘Top 20’ Games Publishers Use Perforce to Manage Digital Assets. https://www.perforce.com/sites/default/files/top-games-publishers-perforce-manage-digital-assets.pdf
+
+* [[[Perforce-Game-Development-Process,2]]]
+Perforce Software, Inc. Game Development Process: How Game Development Works. https://www.perforce.com/resources/game-development-process
+
+* [[[Perforce-Basic-Concepts,3]]]
+Perforce Software, Inc. The basics of version control. En _Solutions Overview: Helix Core Version Control System_. https://www.perforce.com/manuals/overview/Content/Overview/basic_concepts.basics.html
+
+* [[[Perforce-Git-Command-Mappings,4]]]
+Perforce Software, Inc. Git:Helix server Command Mappings. En _Using Helix Core Server for Distributed Versioning_. https://www.perforce.com/manuals/dvcs/Content/DVCS/chapter.git.html
+
+* [[[Perforce-Top-Git-Commands,5]]]
+Perforce Software, Inc. (2019). Top Git Commands (Plus Comparison to Perforce). https://www.perforce.com/blog/vcs/perforce-vs-git-commands-you-should-know
+
+* [[[Perforce-Cheat-Sheet,6]]]
+Perforce Software, Inc. (2020). Perforce Cheat Sheet: Commands and Features in Helix Core. https://www.perforce.com/blog/vcs/perforce-cheat-sheet
+
+* [[[Perforce-P4V-Manual,7]]]
+Perforce Software, Inc. P4V User Guide. https://www.perforce.com/manuals/p4v/
+
+* [[[Perforce-Streams-Overview,8]]]
+Perforce Software, Inc. Streams Overview. https://www.perforce.com/video-tutorials/streams-overview
+
+* [[[Perforce-Streams-Best-Practices,9]]] 
+Perforce Software, Inc. Best Practices for Game Development Using Streams. https://www.perforce.com/webinars/vcs/best-practices-game-development-using-streams
+
+* [[[Perforce-Indie-Studio-Pack,10]]]
+Perforce Software, Inc. Perforce Indie Studio Pack. https://www.perforce.com/indie-studio-pack
+
+* [[[Perforce-DVCS,11]]]
+Perforce Software, Inc. Using Helix Core Server for Distributed Versioning. https://www.perforce.com/manuals/dvcs/Content/DVCS/Home-dvcs.html

@@ -1,4 +1,4 @@
-:document-characters: 20079
-:document-words: 3821
-:document-paragraphs: 58
-:document-reading-time: 19 minutos
+:document-characters: 21442
+:document-words: 4018
+:document-paragraphs: 57
+:document-reading-time: 20 minutos
