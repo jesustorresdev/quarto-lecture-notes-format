@@ -39,7 +39,7 @@ Sin embargo, vamos a profundizar en el tema porque involucra opciones que es int
 
 Supongamos que los animadores del proyecto nos entregan el modelo y las animaciones de un personaje{blank}footnote:[{fn-mixamo}] que importamos en el motor.
 
-.Vídeo del personaje de ejemplo caminando en la web de Mixamo.
+.{video-caption} {counter:video-number}. Personaje de ejemplo caminando en la web de Mixamo.
 video::s9-qDWpIcJA[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Si lo importamos correctamente, tendremos la malla del personaje con su esqueleto<<Wikipedia-Skeletal-Animation>><<Fernando2007>>.
@@ -59,10 +59,10 @@ La aplicación de estas transformaciones, desde la raíz del esqueleto, para obt
 
 En la base del esqueleto del personaje está el hueso raíz.
 En el modelo que estamos usando de ejemplo (véase la <<fig-character-skeleton>>) lo han llamado _Hips_ —caderas, en inglés—.
-En «<<video-walking-character-skeleton>>», el hueso raíz es el aparece destacado en rojo.
+En el <<video-walking-character-skeleton>>, el hueso raíz es el aparece destacado en rojo.
 
-[[video-walking-character-skeleton]]
-.Vídeo: Esqueleto del personaje mientras camina.
+[[video-walking-character-skeleton, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Esqueleto del personaje mientras camina.
 video::zHYAbhDGBdY[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Como se puede observar, durante la animación se mantiene anclado al origen, pero rota y se estira para hacer que el resto del esqueleto se desplace hacia adelante.
@@ -85,7 +85,7 @@ Para usar _root motion_ solo hay que activarlo en motor de videojuegos, si tiene
 En el siguiente vídeo en Unreal Engine, se puede ver cómo al activar _Enable Root Motion_ en las opciones _Root Motion_ el personaje ya no avanza, sino que se mueve en el sitio.
 El movimiento ha sido extraído de la animación para aplicárselo después al actor del personaje en la escena.
 
-.Vídeo: Ejemplo con _Enable Root Motion_ usando como referencia la posición de referencia del modelo.
+.{video-caption} {counter:video-number}. Ejemplo con _Enable Root Motion_ usando como referencia la posición de referencia del modelo.
 video::wGJtSPulz2M[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Sin embargo, como este modelo no estaba preparado para usarlo con _root motion_ —como comentaremos en el <<_importancia_de_tener_un_modelo_adecuado>>— los resultados no son del todo satisfactorios.
@@ -100,7 +100,7 @@ image::character_pose_t_vs_first_frame.jpg[pdfwidth="10cm"]
 
 En el siguiente vídeo se aprecia lo que ocurre al usar como postura de referencia la del primer fotograma de la animación.
 
-.Vídeo: Ejemplo con _Enable Root Motion_ usando como referencia el primer fotograma de la animación.
+.{video-caption} {counter:video-number}. Ejemplo con _Enable Root Motion_ usando como referencia el primer fotograma de la animación.
 video::bivpxGH2Fjg[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Como en ese fotograma es más parecido a los del resto de la animación —con un hueso _Hips_ ligeramente más corto para ajustarse a la altura del personaje con las rodillas ligeramente dobladas— el resultado es mucho mejor.
@@ -168,7 +168,7 @@ Es decir, debemos pedir a los animadores que todas las animaciones del personaje
 
 En el siguiente vídeo se puede observar como, debido a que en los modelos de Mixamo el esqueleto se desplaza, si no hacemos nada para sustraer esta parte de la animación, la malla se sale de la cápsula al caminar.
 
-.Vídeo: Ejemplo de cómo la animación saca al modelo de la cápsula.
+.{video-caption} {counter:video-number}. Ejemplo de cómo la animación saca al modelo de la cápsula.
 video::zfcDwyf0HpA[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Si queremos usar los modelos y animaciones de Mixamo, esto nos obliga a:
@@ -223,7 +223,7 @@ Pero para eso se pueden utilizar curvas con esa velocidad irregular, ajustadas p
 
 Otro caso es el salto con ataque del siguiente vídeo:
 
-.Vídeo: Ejemplo de ataque con salto.
+.{video-caption} {counter:video-number}. Ejemplo de ataque con salto.
 video::wgBKap4y9UQ[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 donde sería muy cómodo que el objeto del personaje sincronizara su movimiento con la animación.

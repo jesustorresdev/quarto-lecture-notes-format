@@ -16,7 +16,7 @@ include::docstats.adoc[]
 {Perforce} es la compañía que desarrolla {helix-core}, un sistema de control de versiones —en inglés, _Version Control System_ o _VCS_— que escala muy bien para manejar proyectos y equipos realmente grandes (véase <<fig-helix-code-scalability>>).
 
 [[fig-helix-code-scalability]]
-.{going-remote}[«Going Remote: Build Up Your Game Dev Team» -- Robert Cowham].
+.{going-remote}[Going Remote: Build Up Your Game Dev Team] -- Robert Cowham.
 image::helix_core_scalability.jpg[]
 
 Como el nombre original de Helix Core era Perforce Helix, en muchos foros, manuales y aplicaciones se sigue denominando a este VCS simplemente como Perforce.
@@ -220,11 +220,11 @@ image::perforce_helix_cheatsheet.png[]
 Perforce también ofrece guías para quiénes están familiarizados con Git<<Perforce-Git-Command-Mappings>><<Perforce-Top-Git-Commands>>.
 
 
-En «<<video-guía-de-inicio-rápido-de-perforce>>» se explica cómo conectar a un servidor de Perforce y se repasan brevemente las acciones más básicas.
+En el <<video-guía-de-inicio-rápido-de-perforce>> se explica cómo conectar a un servidor de Perforce y se repasan brevemente las acciones más básicas.
 Para conocer más del VCS de Perforce, lo recomendable es consultar el manual de P4V<<Perforce-P4V-Manual>>.
 
-[[video-guía-de-inicio-rápido-de-perforce]]
-.Video: Guía de inicio rápido de Perforce.
+[[video-guía-de-inicio-rápido-de-perforce, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Guía de inicio rápido de Perforce.
 video::zHYAbhDGBdY[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 == Gestión de tipos de archivo
