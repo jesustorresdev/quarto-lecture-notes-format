@@ -250,7 +250,7 @@ Los _eventos de animación_ se utilizan, más bien, para lanzar efectos de sonid
 Skeletal Animation. En _Wikipedia_. https://en.wikipedia.org/wiki/Skeletal_animation
 
 * [[[Fernando2007,2]]]
-Fernando, R. (2004). 4.4. Skinning. _GPU Gems: Programming Techniques, Tips and Tricks for Real-Time Graphics_. Addison-Wesley Professional. https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-4-animation-dawn-demo.
+Fernando, R. (2004). Skinning. En _GPU Gems: Programming Techniques, Tips and Tricks for Real-Time Graphics_. Addison-Wesley Professional. https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-4-animation-dawn-demo.
 
 * [[[Mixamo,3]]]
 Adobe Systems Inc. _Mixamo_. {mixamo}
@@ -259,7 +259,7 @@ Adobe Systems Inc. _Mixamo_. {mixamo}
 [enziop]. _Mixamo Converter_. https://github.com/enziop/mixamo_converter
 
 * [[[Unity-RootMotionOnImportedClips,5]]]
-Unity Technologies. Root Motion Node. En _Model Import Settings window -- Unity Manual_. https://docs.unity3d.com/Manual/AnimationRootMotionNodeOnImportedClips.html
+Unity Technologies. Root Motion Node. En la sección _Model Import Settings window_ en _Unity Manual_. https://docs.unity3d.com/Manual/AnimationRootMotionNodeOnImportedClips.html
 
 * [[[Unity-RootMotion,6]]]
 Unity Technologies. Root Motion - how it works. En _Unity Manual_. https://docs.unity3d.com/Manual/RootMotion.html
