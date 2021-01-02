@@ -25,7 +25,7 @@ Generalmente no interesa que el movimiento del objeto del personaje venga determ
 El controlador establece el estado del personaje, lo que sirve para desencadenar una animación u otra; siendo las animaciones las que deben ajustarse para encajar con el movimiento del personaje.
 
 [[fig-control-estándar-del-personaje]]
-.{figure-caption} {counter:figure-number}. Relación común entre control del personaje y animación.
+.Relación común entre control del personaje y animación.
 include::diagrams/character_control.adoc[]
 
 En realidad, _root motion_ solo se debe usar en desarrollos donde la fidelidad de la animación es clave, como puede ser cuando el motor de videojuegos se utiliza para generar películas o series, o en juegos muy cinematográficos, donde la interacción está basada en {qte}[QTE].
