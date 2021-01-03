@@ -20,7 +20,7 @@ Project::find_documents().each do |document|
 
         file document[:output_pathname][:html] => [*document[:dependencies], :config] do |t|
             asciidoctor_opts = CONFIG[:asciidoctor_opts]
-            sh "asciidoctor", '--backend', 'html', *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
+            sh "asciidoctor", '--backend', 'html5', '--attribute', "basedir=#{Project::PROJECT_DIRECTORY}", *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
         end
 
         task :html_media_files do |t|
@@ -32,7 +32,7 @@ Project::find_documents().each do |document|
 
         file document[:output_pathname][:pdf] => [*document[:dependencies], :config] do |t|
             asciidoctor_opts = CONFIG[:asciidoctor_opts]
-            sh "asciidoctor", '--backend', 'pdf', '--require', 'asciidoctor-pdf', *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
+            sh "asciidoctor", '--backend', 'pdf', '--require', 'asciidoctor-pdf', '--attribute', "basedir=#{Project::PROJECT_DIRECTORY}", *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
         end
 
         desc "Generar la versión en EPUB de '#{document[:pathname]}'"
@@ -40,7 +40,7 @@ Project::find_documents().each do |document|
 
         file document[:output_pathname][:epub] => [*document[:dependencies], :config] do |t|
             asciidoctor_opts = CONFIG[:asciidoctor_opts]
-            sh "asciidoctor", '--backend', 'epub3', '--require', 'asciidoctor-epub3', *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
+            sh "asciidoctor", '--backend', 'epub3', '--require', 'asciidoctor-epub3', '--attribute', "basedir=#{Project::PROJECT_DIRECTORY}", *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
         end
 
         desc "Generar el archivo de estadística de '#{document[:pathname]}'"

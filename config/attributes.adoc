@@ -15,5 +15,7 @@ include::locale/attributes.adoc[]
 :experimental:
 // Incluir la tabla de contenidos.
 :toc: left
+// Configuración del backend HTML5
+ifdef::backend-html5[include::html5/attributes.adoc[]]
 // Configuración del backend PDF
 ifdef::backend-pdf[include::pdf/attributes.adoc[]]
