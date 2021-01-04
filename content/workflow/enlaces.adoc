@@ -1,0 +1,11 @@
+:ue-marketplace: https://unrealengine.com/marketplace/
+
+// Blocking: Figuras y vídeos
+:blocking-in-maya: https://www.worldofleveldesign.com/categories/3d-game-modeling/block-in-level-design-maya.php
+:greybox-shoot-squad: https://twitter.com/BlazeDillon/status/966413330410651648
+:blaze-dillon: https://twitter.com/BlazeDillon
+:making-of-jedi-fallen-order: https://www.youtube.com/watch?v=_1JGO4HL0Qs
+:mathew-wadstein: https://twitter.com/mathewwadstein
+
+:ue-greometry-editing-tutorials: https://youtube.com/playlist?list=PL9J8qtfVcvqFeFiiLLS815bZc6bJPmVDY
+:ue-blockout: https://www.unrealengine.com/marketplace/en-US/product/blockout-tools-plugin

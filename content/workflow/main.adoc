@@ -1,20 +1,192 @@
-= Desarrollo de Videojuegos 3D: Estructura del proyecto
+= Desarrollo de Videojuegos 3D: Flujo del trabajo
 Jesús Torres <jmtorres@ull.es>
 Curso 20XX-20XY
 include::../../config/attributes.adoc[]
 include::enlaces.adoc[]
+include::footnote.adoc[]
 include::docstats.adoc[]
 :imagesdir: media
 
 [.right]
 ====
 .Tiempo estimado de lectura
-{reading_time}
+{document-reading-time}
 ====
 
-Poner algo de orden en un proyecto es importante para asegurar su mantenibilidad.
+Como ya hemos visto en otras asignaturas, el ciclo de vida del desarrollo de un videojuego se puede dividir en distintas etapas.
+Aunque obviamente estas etapas pueden variar entre proyectos y estudios, en general el proceso siempre es muy similar:
+
+[[fig-gamedev-cycle]]
+.Ciclo de vida del desarrollo de un videojuego.
+include::diagrams/gamedev_cycle.adoc[]
+
+En los siguientes apartados vamos a ver los pasos involucrados en la creación de los niveles de un juego, enmarcados en las etapas generales del desarrollo de un videojuego.
+También veremos algunas recomendaciones para organizar el proyecto y facilitar la colaboración entre los diferentes equipos involucrados.
+
+A fin de cuentas, poner algo de orden en un proyecto es importante para asegurar su mantenibilidad.
 Facilita que cada miembro del equipo sepa dónde buscar o añadir aquello que necesite para hacer su trabajo.
-Por eso a continuación vamos a ver algunas buenas prácticas comunes.
+Por eso vamos a ver algunas buenas prácticas comunes.
+
+== Proceso de creación de niveles
+
+En la <<fig-level-production-pipeline>> podemos ver un esquema de los pasos involucrados en la creación de un nivel:
+
+[[fig-level-production-pipeline]]
+.Proceso de creación de niveles.
+include::diagrams/level_production_pipeline.adoc[]
+
+Se han destacado en azul las tareas correspondientes a la etapa de preproducción y en naranja las de producción.
+Sin embargo, no debemos olvidar que esto depende del proyecto y que algunas tareas realmente pueden aparecer en varias etapas.
+
+Por ejemplo, el *diseño del juego* se define en las primeras etapas del desarrollo del videojuego, que son: *concepto* y *preproducción*.
+Durante la etapa de *concepto* se establecen aspectos como el género, el argumento o el estilo artístico.
+En esta etapa se elabora parte del *arte conceptual* —aunque no lo hayamos indicado así en la <<fig-level-production-pipeline>>— de cara a mostrar adecuadamente el juego que se va a hacer, por ejemplo, con vistas a buscar la financiación necesaria.
+Buena parte del *arte conceptual* se elabora durante la *preproducción* —según se van definiendo aspectos concretos del juego— al mismo tiempo que se diseña el juego con detalle y se elaboran documentos como el _Game Design Document_ (GDD) o el _Art Design Document_ (ADD).
+El trabajo de los artistas conceptuales puede continuar durante la *producción*, bocetando niveles y elementos del juego antes de su modelado o cambios y elementos nuevos añadidos durante esa etapa.
+
+Si, por ejemplo, miramos el arte conceptual de Sonic the Hedgehog<<SonicRetro>>, podemos observar como en las primeras etapas, durante la conceptualización del juego, en algunos bocetos el personaje es completamente irreconocible, mientras que en otros es bastante similar al que conocemos.
+En esas etapas los artistas desarrollan múltiples alternativas, hasta que se seleccionan aquellas que encajan con el estilo artístico, la historia, etc.
+También podemos ver el trabajo posterior de los artistas conceptuales en producción, haciendo bocetos de los niveles y de las escenas cinemáticas.
+
+El arte conceptual sirve como fuente de información y de inspiración para el modelado de personajes, objetos y edificaciones, y para la posterior composición de los niveles con ellos, durante la *producción*.
+
+=== Prototipado
+
+Con el prototipado de niveles y mecánicas ocurre algo similar.
+Buena parte del prototipado se realiza durante la *preproducción*, donde se hacen pruebas del _gameplay_ y las reglas del juego para ver si «funcionan».
+El resultado de la *preproducción* es el GDD —entre otros documentos— que debe incluir todos los detalles del diseño del juego, incluyendo las características —o _stats_— de personajes, armaduras y armas, temporizaciones de eventos y sistemas de combate, y la algoritmia involucrada. 
+Muchos de estos detalles se obtienen probando diferentes alternativas sobre los prototipos desarrollados.
+
+También es posible que durante la etapa de *concepto* se desarrolle algún pequeño prototipo del juego, como forma de demostrar la viabilidad de la idea.
+Y, durante la segunda mitad de la *preproducción*, a veces es necesario hacer un *_vertical slice_*, que consiste en tomar un pequeña parte del juego y desarrollarla de forma acelerada hasta el final.
+El objeto de este prototipo es ofrecer al editor e inversores una idea de como será el juego final, dado que seguramente tengan que aprobar el presupuesto y la planificación.
+Además permite identificar futuros problemas y ayuda en la estimación de las tareas y su tiempo, ya que permite obtener una idea de todo lo que debemos considerar durante el trabajo en la etapa de *producción*.
+
+El prototipado de niveles en *preproducción* se puede hacer de múltiples maneras, según el tipo de juego y lo que se pretenda probar.
+Puede ser usando herramientas analógicas, como lápiz y papel o legos, o con herramientas digitales, como Photoshop, Sketchup, Maya o el propio motor de videojuegos.
+Sea como fuere, posteriormente el nivel se prototipa en el motor de videojuegos usando un conjunto mínimo de recursos.
+Generalmente se emplean cajas y modelos de _stock_ o de proyectos previos, y pocas o ninguna textura.
+Por eso a esta fase se la denomina con nombres como: *_blocking_*, *_greyboxing_* o *_whiteboxing_*.
+
+En algunos estudios se hace pronto el *_greyboxing_*, desde fases muy tempranas de la *preproducción*. 
+
+=== _Greyboxing_
+
+La idea del *_greyboxing_* es obtener bosquejo aproximado del nivel, sin detalles, para centrar la atención sobre sus características principales de diseño —como distribución, escala, navegabilidad o durabilidad— probar el _gameplay_ e ir refinando el diseño del juego.
+Durante la *producción*, cuando los modelos estáticos y animados estén listos, las cajas del _greyboxing_ son reemplazadas para componer el nivel definitivo.
+
+En una primera etapa, es buena idea crear planos en papel de las diferentes plantas del nivel, considerando las restricciones establecidas por los equipos de diseño y desarrollo.
+Posteriormente, estos planos se trasladan al _greyboxing_ del nivel, usando grandes bloques, sin detalles ni texturas.
+Es importante recordar que el *_greyboxing_* es un prototipo del diseño, por lo que cambiarán según se prueba y avanza el desarrollo del juego.
+Así que debe ser modular, sencillo de modificar y sin destalles; porque durante las iteraciones del diseño muchos aspectos serán desechados o cambiados.
+
+.Blocking en Maya a partir de un diseño en papel -- Fuente: {blocking-in-maya}[World of Level Design].
+image::blocking_in_maya.jpg[]
+
+Es recomendable comenzar a trabajar a un nivel macro, haciendo uso de cajas de gran tamaño, con las que repartir los espacios, para posteriormente ir añadiendo algo más de detalle.
+Si está bastante claro cómo debe jugarse, entonces tendremos una idea clara de cómo deben organizarse el espacio funcional{blank}footnote:[{fn-espacio-funcional}] del juego, lo que nos puede servir como punto de partida para construir el nivel.
+Si por el contrario estamos en una etapa muy temprana del desarrollo y aun no tenemos claro cómo es el espacio del juego, podemos comenzar explorando alguno de los patrones más comunes: lineal, rejilla, telaraña, puntos en el espacio o espacio dividido (véase <<Schell2019>> para conocer más detalles sobre estos patrones y algunos ejemplos).
+
+[[fig-greybox-shooty-squad]]
+.Greybox para Shooty Squad por {blaze-dillon}[@BlazeDillon] -- Fuente: {greybox-shoot-squad}[Twitter].
+image::blocking.jpg[]
+
+También es importante considerar desde un primero momento la escala de los objetos, personajes y edificaciones.
+Para escalar adecuadamente los elementos del nivel, se puede añadir desde el principio un modelo de «dimensiones humanas» como referencia, o cualquier otro objeto que tenga sentido según el caso.
+
+TIP: En proyectos de realidad virtual se pueden utilizar como referencia los modelos de los controladores que hacen de manos.
+
+Otro aspecto a considerar en el diseño del nivel es el campo de visión y las distorsiones derivadas del punto de vista del jugador.
+En juegos en primera persona, situar la cámara demasiado alto —más de 2 m.— o demasiado bajo —menos de 1.5 m.— tiende a distorsionar la perspectiva, dado que el cerebro del jugador asume que la altura de los ojos debe ser similar a la real<<Schell2019>>.
+Mientras que en juegos en tercera persona, en interiores con escala real, el jugador tiene la impresión de que el espacio es demasiado pequeño.
+Por eso se tiende a crear habitaciones más amplias, con mobiliario de tamaño real —o solo un poco más grande— repartido por la habitación para llenarla<<Schell2019>>.
+
+// TODO: Poner algún ejemplo de la distorsión en tercera persona. Aquí o en el tema donde tratemos lo de la cámara.
+
+Según avanza el prototipo, se van añadiendo personajes y elementos, se programan eventos y se prueba el diseño de niveles y el _gameplay_.
+En base a los resultados de estas pruebas, se modifican las mecánicas y los niveles y se vuelve a iterar.
+Con las iteraciones el equipo de diseño comenzará a reunir requisitos del _gameplay_ y características del diseño de niveles, que irán al GDD.
+
+[[video-jedi-fallen-order-prototype, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Prototipo de combate en Star Wars: Jedi Fallen Order -- Fuente: {making-of-jedi-fallen-order}[The Making of STAR WARS Jedi: Fallen Order].
+video::omuUzRic2Jk[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
+
+Si bien el prototipado de niveles es una tarea en la que participan principalmente programadores y diseñadores, es importante que haya comunicación con el equipo de arte para coordinar el _look-and-feel_.
+Los artistas trabajan con los diseñadores de nivel mientras crean el arte conceptual, que posteriormente servirá para el modelado de los elementos que compondrán los niveles.
+Los bloques del _greyboxing_ pueden representar cualquier cosa, así que es importante documentar las intenciones para facilitar la comunicación.
+Incluso puede ser buena idea hacer algunas capturas del nivel desde distintos ángulos y pintar encima, con el objeto de comunicar expectativas, incluso dentro del equipo de diseñadores.
+
+Finalmente, cuando las mecánicas y las características del diseño de niveles estén lo suficientemente bien definidas, el proyecto pasa a la etapa de *producción*.
+Para que eso ocurra no es necesario haber prototipado todo el juego, si no algunos niveles y las mecánicas principales, en los que se ha iterado hasta refinar el diseño lo suficiente como para tener unas guías claras para la siguiente etapa.
+Durante la producción el _greyboxing_ sigue siendo extremadamente útil para el diseño y prototipado del resto de niveles del juego.
+
+=== Herramientas para _greyboxing_
+
+Se puede hacer _greyboxing_ en programas 3D como Maya, 3ds max o Sketchup.
+Sin embargo eso implicar tener que exportar e importar los diseños de un programa a otro para probarlos.
+Así que, si el motor de videojuegos tiene un editor adecuado, es mejor el _greyboxing_ en él para ahorrar tiempo e iterar más rápido durante el diseño.  
+
+==== Unreal Engine
+
+En Unreal Engine se pueden utilizar *Geometry Brushes*<<UE-Geometric-Brushes>> para prototipar.
+Las *Geometry Brushes* se empleaban en el pasado para construir la geometría definitiva del nivel, pero en la actualidad es preferible que los modeladores la creen con herramientas externas, para luego importarla como *Static Meshes* en el editor de UE.
+Por eso, actualmente, las *Geometry Brushes* prácticamente solo se usan para prototipar mecánicas y niveles.
+
+Las *Geometry Brushes* permiten crear formas básicas, como: cajas, esferas, conos, cilindros o escaleras.
+También permite operar con ellas, modificando sus propiedades o sumando y restando formas, para crear otras más complejas.
+
+[[video-ue-geometry-brushes, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Greyboxing con *Geometry Brushes* en UE4 por {mathew-wadstein}[Mathew Wadstein].
+video::efzAoJAeLco[youtube, width=854, height=480]
+
+El <<video-ue-geometry-brushes>> es un sencillo tutorial sobre el uso de *Geometry Brushes*.
+Es interesante observar cómo crea materiales para _greyboxing_ con diferentes colores.
+Estos son útiles para señalar distintas zonas de juego, tipos de elementos o señalar nuestros cambios respecto a un diseño anterior.
+
+Unreal Engine tiene además un conjunto de herramientas de edición denominadas *Geometry Editing*, con el que se pueden modificar directamente las figuras en el editor.
+El mismo autor de el <<video-ue-geometry-brushes>> tiene una interesante {ue-greometry-editing-tutorials}[colección de tutoriales] sobre los modos de *Geometry Editing*: *Edit*, *Pen*, *Lathe*, *Brush Clip* y *Extrude*.
+El <<video-ue-geometry-editing>> es el primero, sobre el modo *Edit*.
+
+[[video-ue-geometry-editing, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. *Geometry Editing* en UE4 por {mathew-wadstein}[Mathew Wadstein].
+video::tvhnDT31EeA[youtube, width=854, height=480]
+
+TIP: Además de las herramientas del editor de Unreal Engine, en el {ue-marketplace}[marketplace] hay algunos complementos interesantes para prototipar.
+Uno que merece la pena destacar es {ue-blockout}[Blockout Tools Plugin].
+
+==== Unity
+
+Unity trae de serie algunos objetos primitivos que se pueden usar para prototipar: cubo, plano, esfera, cápsula, cilindro y cuadrado.
+Sin embargo es recomendable aprender a usar ProBuilder<<Unity-ProBuilder>>, que se distribuye como un paquete independiente.
+
+ProBuilder está optimizado para crear formas sencillas, pero también ofrece herramientas de edición avanzadas, asignación de materiales y edición de UV, de forma similar a otros programs de modelado 3D.
+La <<fig-greybox-shooty-squad>> es una muestra de lo que permite hacer.
+
+ProBuilder trae algunas formas básicas que se pueden combinar mediante operaciones booleanas, para dar lugar a objetos más complejos.
+También permite modificar los objetos directamente, mediante distintos modos de edición: *Vertex*, *Edge* y *Face*.
+En estos modos se pueden seleccionar vértices, aristas o caras, respectivamente, para transformarlos y cambiar totalmente la forma de la geometría.
+Una vez tenemos el objeto deseado, se pueden asignar colores a los vértices para marcar zonas del diseño o aplicar materiales.
+
+[[video-probuilder-greyboxing-fps, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Greyboxing de un nivel para un FPS con ProBuilder.
+video::dYBOBgfcTgY[youtube, width=854, height=480]
+
+En la página principal de <<Unity-ProBuilder>> hay enlazados varios tutoriales dónde se explica cómo utilizar ProBuilder.
+Uno de ellos es <<video-probuilder-greyboxing-fps>>, que muestra cómo hacer el _greyboxing_ de un nivel para un FPS.
+
+[[video-probuilder-collision, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Añadir geometría de colisión con ProBuilder.
+video::Nm2TsnKVGi8[youtube, width=854, height=480]
+
+Otro tarea para la que se puede utilizar ProBuilder es para añadir la geometría de colisión del nivel para, por ejemplo, limitar las áreas por las que pueden desplazarse los personajes.
+En el <<video-probuilder-collision>> se muestra cómo se hace esto mediante un ejemplo muy sencillo.
+
+ProBuilder es más cómodo y rápido de usar si se emplea junto a ProGrids<<Unity-ProGrids>>, una herramienta que ofrece mejoras funcionales y visuales respecto a la rejilla y el _snapping_ que trae el editor de Unity.
+
+NOTE: Las ventajas de usar ProGrids se notan menos a partir de Unity 2019.4, ya que el editor ha incorporado algunas de las características de ProGrids.
+
+== Control de versiones
+
 
 == Organización de los recursos
 
@@ -329,3 +501,24 @@ salt
 }
 }
 ....
+
+[bibliography]
+== Referencias
+
+* [[[SonicRetro,1]]] 
+Concept Art. En _Sonic the Hedgehog (16-bit)/Development_. http://info.sonicretro.org/Sonic_the_Hedgehog_(16-bit)/Development#Concept_Art
+
+* [[[Schell2019,2]]]
+Schell, J. (2019). Capítulo 21: Worlds Contain Spaces. _The Art of Game Design: A Book of Lenses_. (3ª ed.) A K Peters/CRC Press
+
+* [[[UE-Geometric-Brushes,3]]]
+Epic Games, Inc. Geometric Brush Actors. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/Basics/Actors/Brushes/index.html
+
+* [[[Unity-ProBuilder,4]]]
+Unity Technologies. ProBuilder. https://www.procore3d.com/probuilder/
+
+* [[[Unity-ProGrids,5]]]
+Unity Technologies. ProGrids. https://www.procore3d.com/progrids/
+
+* [[[Unity-Polybrush,6]]]
+Unity Technologies. Polybrush. https://www.procore3d.com/polybrush/
