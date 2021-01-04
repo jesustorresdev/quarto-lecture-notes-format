@@ -187,6 +187,44 @@ NOTE: Las ventajas de usar ProGrids se notan menos a partir de Unity 2019.4, ya 
 
 == Control de versiones
 
+Durante el desarrollo es fundamental seguir la pista a todo los cambios, asegurando que disponemos un histórico de ellos.
+Esto permite probar diferentes alternativas, con la seguridad de que podemos volver a cualquier version anterior, si decidimos que los cambios que estamos probando no funcionan.
+Para eso es fundamental contar con herramientas de control de versiones —en inglés, _Version Control System_ o VCS— como Git, {perforce}[Perforce] o {plastic-scm}[Plastic SCM].
+
+En desarrollo de videojuegos, herramientas como Plastic SCM y Perforce —que es considerado el estándar de facto de la industria— tienen una ventaja importante respecto a Git en que tienen la capacidad de almacenar y versionar los recursos del juego, contenidos de arte y documentos de diseño, además del código fuente{blank}footnote:[{fn-git-lfs}].
+
+En los estudios más grandes se suele utilizar un gestor de recursos digitales —en inglés, _Digital Asset Manager_ o DAM— para gestionar específicamente los recursos artísticos.
+El ejemplo más común es {shotgun}[Shotgun].
+
+Gracias a las facilidades que ofrece un DAM, el director creativo y los _lead artiss_ puede ofrecer feedback en el estilo que se busca y pedir cambios y mejoras, al tiempo que se mantiene un registro de todas las pruebas que se hacen a nivel artístico.
+
+En los estudios más pequeños no suele compensar el coste extra de un DAM.
+Por eso se suele optar por utilizar el software de control de versiones o incluso soluciones de almacenamiento más convencionales, como Dropbox o un servidor de archivos.
+
+=== Directorios en el control de versiones
+
+A la hora de utilizar correctamente un VCS es importante saber qué rutas del proyecto debe incluirse en el VCS, para no perder información relevante, y cuales no debe incluirse nunca.
+Obviamente, esto depende del motor de videojuegos con el que estemos trabajando, por lo que debemos consultar su documentación.
+
+Del directorio de un proyecto en Unity, solo los siguientes subdirectorios deben ser incluidos en el control de versiones:
+
+ * `Assets`, porque tiene los recursos del proyecto.
+ * `Packages`, porque contiene los paquetes que hemos instalado en el proyecto desde el editor.
+ * `ProjectSettings`, porque contiene la configuración del proyecto.
+
+Mientras que en un proyecto de Unreal Engine se deben incluir:
+
+ * `Content`, porque contiene los recursos del proyecto.
+ * `Config`, porque tiene la configuración del proyecto.
+ * El archivo `.uproject`, que es el archivo del proyecto.
+
+En ambos casos se puede incluir el directorio donde se compila el proyecto, si queremos que los binarios estén disponibles para todo el equipo en el control de versiones —por ejemplo, para que el departamento de garantía de calidad pueda acceder a ellos rápidamente, sin tener que compilar—.
+
+El resto de archivos son temporales y se generan al abrir el proyecto o compilarlo, por lo que no se deben incluir en el VCS.
+
+=== Tipos de archivos
+
+
 
 == Organización de los recursos
 

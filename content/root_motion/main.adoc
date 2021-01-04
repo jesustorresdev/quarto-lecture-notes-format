@@ -1,6 +1,7 @@
 = Desarrollo de Videojuegos 3D: Root motion
 Jesús Torres <jmtorres@ull.es>
-Curso 20XX-20XY
+include::../version.adoc[]
+Curso {academic-year}
 include::../../config/attributes.adoc[]
 include::enlaces.adoc[]
 include::footnotes.adoc[]
