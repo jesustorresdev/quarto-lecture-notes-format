@@ -1,5 +1,6 @@
 // Mixamo
 :mixamo: https://www.mixamo.com/[Mixamo]
+:mixamo-converter: https://github.com/enziop/mixamo_converter
 
 // Wikipedia
 :qte: https://es.wikipedia.org/wiki/Quick_time_event

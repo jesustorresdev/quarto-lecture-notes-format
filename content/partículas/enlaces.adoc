@@ -1,11 +1,3 @@
-// Manual de Unity
-:unity-csharp-job-system: https://docs.unity3d.com/Manual/particle-system-job-system-integration.html
-:unity-builtin-particlesystem: https://docs.unity3d.com/Manual/Built-inParticleSystem.html
 :unity-srp: https://docs.unity3d.com/Manual/ScriptableRenderPipeline.html
 :unity-visual-effect-graph: https://docs.unity3d.com/Manual/VFXGraph.html
-
-// API de Unity
 :unity-class-particlesystem: https://docs.unity3d.com/Manual/class-ParticleSystem.html
-
-// Manual de Unreal Engine
-:ue-cascade: https://docs.unrealengine.com/en-US/RenderingAndGraphics/ParticleSystems/index.html

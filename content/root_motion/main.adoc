@@ -39,7 +39,8 @@ Sin embargo, vamos a profundizar en el tema porque involucra opciones que es int
 
 Supongamos que los animadores del proyecto nos entregan el modelo y las animaciones de un personaje{blank}footnote:[{fn-mixamo}] que importamos en el motor.
 
-.{video-caption} {counter:video-number}. Personaje de ejemplo caminando en la web de Mixamo.
+[[video-walking-mixamo, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Personaje de ejemplo caminando en la web de Mixamo.
 video::s9-qDWpIcJA[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Si lo importamos correctamente, tendremos la malla del personaje con su esqueleto<<Wikipedia-Skeletal-Animation>><<Fernando2007>>.
@@ -80,12 +81,13 @@ El motor sustrae este movimiento global de la animación —para que la animaci�
 
 Para usar _root motion_ solo hay que activarlo en motor de videojuegos, si tiene soporte.
 
-=== Unreal Egine
+=== Unreal Engine
 
 En el siguiente vídeo en Unreal Engine, se puede ver cómo al activar _Enable Root Motion_ en las opciones _Root Motion_ el personaje ya no avanza, sino que se mueve en el sitio.
 El movimiento ha sido extraído de la animación para aplicárselo después al actor del personaje en la escena.
 
-.{video-caption} {counter:video-number}. Ejemplo con _Enable Root Motion_ usando como referencia la posición de referencia del modelo.
+[[video-ue-root-motion-refpose, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Ejemplo con _Enable Root Motion_ usando como referencia la posición de referencia del modelo.
 video::wGJtSPulz2M[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Sin embargo, como este modelo no estaba preparado para usarlo con _root motion_ —como comentaremos en el <<_importancia_de_tener_un_modelo_adecuado>>— los resultados no son del todo satisfactorios.
@@ -100,7 +102,8 @@ image::character_pose_t_vs_first_frame.jpg[pdfwidth="10cm"]
 
 En el siguiente vídeo se aprecia lo que ocurre al usar como postura de referencia la del primer fotograma de la animación.
 
-.{video-caption} {counter:video-number}. Ejemplo con _Enable Root Motion_ usando como referencia el primer fotograma de la animación.
+[[video-ue-root-motion-frame, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Ejemplo con _Enable Root Motion_ usando como referencia el primer fotograma de la animación.
 video::bivpxGH2Fjg[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Como en ese fotograma es más parecido a los del resto de la animación —con un hueso _Hips_ ligeramente más corto para ajustarse a la altura del personaje con las rodillas ligeramente dobladas— el resultado es mucho mejor.
@@ -160,7 +163,7 @@ Esto se hace porque generalmente preferimos controlar directamente el movimiento
 
 == Importancia de tener un modelo adecuado
 
-En realidad los modelos de Mixamo que estamos usando de ejemplo no son los más adecuados ni para trabajar con _root motion_ ni sin _root motion_.
+En realidad los modelos de {mixamo}[Mixamo] que estamos usando de ejemplo no son los más adecuados ni para trabajar con _root motion_ ni sin _root motion_.
 
 Si no vamos a usar _root motion_, somos nosotros los responsables de mover adecuadamente el actor o _GameObject_ del personaje por la escena.
 Por lo tanto, no nos interesa que la animación contenga traslaciones o rotaciones globales del esqueleto.
@@ -168,7 +171,8 @@ Es decir, debemos pedir a los animadores que todas las animaciones del personaje
 
 En el siguiente vídeo se puede observar como, debido a que en los modelos de Mixamo el esqueleto se desplaza, si no hacemos nada para sustraer esta parte de la animación, la malla se sale de la cápsula al caminar.
 
-.{video-caption} {counter:video-number}. Ejemplo de cómo la animación saca al modelo de la cápsula.
+[[video-ue-mesh-out-capsule, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Ejemplo de cómo la animación saca al modelo de la cápsula.
 video::zfcDwyf0HpA[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 Si queremos usar los modelos y animaciones de Mixamo, esto nos obliga a:
@@ -185,7 +189,7 @@ Si por el contrario queremos usar _root motion_, lo ideal es que hubiera un verd
 Así las transformaciones del hueso _Root_ serían puramente traslaciones y rotaciones globales del esqueleto, y se podrían trasladar directamente al objeto del personaje, sin necesitar más cálculos.
 De esta forma, _Hips_ estaría solamente animado con las transformaciones locales correspondientes al movimiento de las caderas, en el punto marcado por _Root_.
 
-Con las animaciones de Mixamo —que no tiene hueso _Root_— podemos utilizar Mixamo Converter<<MixamoConverter>> en Blender, que se encarga de crear el hueso _Root_, extrae el movimiento global de _Hips_ y lo utiliza para animar _Root_.
+Con las animaciones de Mixamo —que no tiene hueso _Root_— podemos utilizar el _plugin_ para Blender Mixamo Converter<<MixamoConverter>>, que se encarga de crear el hueso _Root_, extrae el movimiento global de _Hips_ y lo utiliza para animar _Root_.
 Este _plugin_ está especialmente indicado para crear animaciones para usar en Unreal Engine.
 
 Otra opción es intentar jugar con las opciones que tienen algunos motores para calcular de diferentes maneras el _root motion_ y aplicar esas transformaciones extraídas al objeto del personaje, como hicimos anteriormente.
@@ -223,7 +227,8 @@ Pero para eso se pueden utilizar curvas con esa velocidad irregular, ajustadas p
 
 Otro caso es el salto con ataque del siguiente vídeo:
 
-.{video-caption} {counter:video-number}. Ejemplo de ataque con salto.
+[[video-jump-attack, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Ejemplo de ataque con salto.
 video::wgBKap4y9UQ[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 donde sería muy cómodo que el objeto del personaje sincronizara su movimiento con la animación.
@@ -250,16 +255,13 @@ Los _eventos de animación_ se utilizan, más bien, para lanzar efectos de sonid
 Skeletal Animation. En _Wikipedia_. https://en.wikipedia.org/wiki/Skeletal_animation
 
 * [[[Fernando2007,2]]]
-Fernando, R. (2004). Skinning. En _GPU Gems: Programming Techniques, Tips and Tricks for Real-Time Graphics_. Addison-Wesley Professional. https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-4-animation-dawn-demo.
+Fernando, R. (2004). Skinning. _GPU Gems: Programming Techniques, Tips and Tricks for Real-Time Graphics_. Addison-Wesley Professional. https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-4-animation-dawn-demo
 
-* [[[Mixamo,3]]]
-Adobe Systems Inc. _Mixamo_. {mixamo}
+* [[[MixamoConverter,3]]]
+_Mixamo Converter_. https://github.com/enziop/mixamo_converter
 
-* [[[MixamoConverter,4]]]
-[enziop]. _Mixamo Converter_. https://github.com/enziop/mixamo_converter
+* [[[Unity-RootMotionOnImportedClips,4]]]
+Unity Technologies. Root Motion Node. _Unity Manual_. https://docs.unity3d.com/Manual/AnimationRootMotionNodeOnImportedClips.html
 
-* [[[Unity-RootMotionOnImportedClips,5]]]
-Unity Technologies. Root Motion Node. En la sección _Model Import Settings window_ en _Unity Manual_. https://docs.unity3d.com/Manual/AnimationRootMotionNodeOnImportedClips.html
-
-* [[[Unity-RootMotion,6]]]
-Unity Technologies. Root Motion - how it works. En _Unity Manual_. https://docs.unity3d.com/Manual/RootMotion.html
+* [[[Unity-RootMotion,5]]]
+Unity Technologies. Root Motion - how it works. _Unity Manual_. https://docs.unity3d.com/Manual/RootMotion.html

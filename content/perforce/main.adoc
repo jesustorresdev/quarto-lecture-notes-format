@@ -406,34 +406,34 @@ image::dvcs_personal_shared.png[]
 == Referencias
 
 * [[[Perforce-In-Games,1]]]
-Perforce Software, Inc. (2008). 18 of ‘Top 20’ Games Publishers Use Perforce to Manage Digital Assets. https://www.perforce.com/sites/default/files/top-games-publishers-perforce-manage-digital-assets.pdf
+Perforce Software, Inc. (2008). _18 of ‘Top 20’ Games Publishers Use Perforce to Manage Digital Assets_. https://www.perforce.com/sites/default/files/top-games-publishers-perforce-manage-digital-assets.pdf
 
 * [[[Perforce-Game-Development-Process,2]]]
-Perforce Software, Inc. Game Development Process: How Game Development Works. https://www.perforce.com/resources/game-development-process
+Perforce Software, Inc. _Game Development Process: How Game Development Works_. https://www.perforce.com/resources/game-development-process
 
 * [[[Perforce-Basic-Concepts,3]]]
-Perforce Software, Inc. The basics of version control. En _Solutions Overview: Helix Core Version Control System_. https://www.perforce.com/manuals/overview/Content/Overview/basic_concepts.basics.html
+Perforce Software, Inc. The basics of version control. _Solutions Overview: Helix Core Version Control System_. https://www.perforce.com/manuals/overview/Content/Overview/basic_concepts.basics.html
 
 * [[[Perforce-Git-Command-Mappings,4]]]
-Perforce Software, Inc. Git:Helix server Command Mappings. En _Using Helix Core Server for Distributed Versioning_. https://www.perforce.com/manuals/dvcs/Content/DVCS/chapter.git.html
+Perforce Software, Inc. Git:Helix server Command Mappings. _Using Helix Core Server for Distributed Versioning_. https://www.perforce.com/manuals/dvcs/Content/DVCS/chapter.git.html
 
 * [[[Perforce-Top-Git-Commands,5]]]
-Perforce Software, Inc. (2019). Top Git Commands (Plus Comparison to Perforce). https://www.perforce.com/blog/vcs/perforce-vs-git-commands-you-should-know
+Perforce Software, Inc. (2019). _Top Git Commands (Plus Comparison to Perforce)_. https://www.perforce.com/blog/vcs/perforce-vs-git-commands-you-should-know
 
 * [[[Perforce-Cheat-Sheet,6]]]
-Perforce Software, Inc. (2020). Perforce Cheat Sheet: Commands and Features in Helix Core. https://www.perforce.com/blog/vcs/perforce-cheat-sheet
+Perforce Software, Inc. (2020). _Perforce Cheat Sheet: Commands and Features in Helix Core_. https://www.perforce.com/blog/vcs/perforce-cheat-sheet
 
 * [[[Perforce-P4V-Manual,7]]]
-Perforce Software, Inc. P4V User Guide. https://www.perforce.com/manuals/p4v/
+Perforce Software, Inc. _P4V User Guide_. https://www.perforce.com/manuals/p4v/
 
 * [[[Perforce-Streams-Overview,8]]]
-Perforce Software, Inc. Streams Overview. https://www.perforce.com/video-tutorials/streams-overview
+Perforce Software, Inc. _Streams Overview_. https://www.perforce.com/video-tutorials/streams-overview
 
 * [[[Perforce-Streams-Best-Practices,9]]] 
-Perforce Software, Inc. Best Practices for Game Development Using Streams. https://www.perforce.com/webinars/vcs/best-practices-game-development-using-streams
+Perforce Software, Inc. _Best Practices for Game Development Using Streams_. https://www.perforce.com/webinars/vcs/best-practices-game-development-using-streams
 
 * [[[Perforce-Indie-Studio-Pack,10]]]
-Perforce Software, Inc. Perforce Indie Studio Pack. https://www.perforce.com/indie-studio-pack
+Perforce Software, Inc. _Perforce Indie Studio Pack_. https://www.perforce.com/indie-studio-pack
 
 * [[[Perforce-DVCS,11]]]
-Perforce Software, Inc. Using Helix Core Server for Distributed Versioning. https://www.perforce.com/manuals/dvcs/Content/DVCS/Home-dvcs.html
+Perforce Software, Inc. _Using Helix Core Server for Distributed Versioning_. https://www.perforce.com/manuals/dvcs/Content/DVCS/Home-dvcs.html
