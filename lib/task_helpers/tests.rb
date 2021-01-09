@@ -7,6 +7,9 @@ module Tests
     module HTMLProofer
 
         TYPHOEUS_CONFIG = {
+            :headers => {
+                "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0",
+            },
             :ssl_verifyhost => 0,
             :ssl_verifypeer => false,
         }
