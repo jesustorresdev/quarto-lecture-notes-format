@@ -9,3 +9,16 @@
 
 :ue-greometry-editing-tutorials: https://youtube.com/playlist?list=PL9J8qtfVcvqFeFiiLLS815bZc6bJPmVDY
 :ue-blockout: https://www.unrealengine.com/marketplace/en-US/product/blockout-tools-plugin
+
+// Organización de los archivos del proyecto
+:unity-package-manager: https://docs.unity3d.com/Manual/upm-ui.html
+
+// Colaboración
+:git-lfs: https://git-lfs.github.com/
+:perforce: https://www.perforce.com/products/helix-core
+:plastic-scm: https://www.plasticscm.com/
+:shotgun: https://www.shotgunsoftware.com/
+
+:ue-perforce: https://docs.unrealengine.com/en-US/ProductionPipelines/SourceControl/Perforce/index.html
+:unity-perforce: https://docs.unity3d.com/Manual/perForceIntegration.html
+:unity-smart-merge: https://docs.unity3d.com/Manual/SmartMerge.html

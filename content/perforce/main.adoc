@@ -1,6 +1,7 @@
-= Desarrollo de Videojuegos 3D: Colaborar usando Perforce
+= Desarrollo de Videojuegos 3D: Control de versiones con Perforce
 Jesús Torres <jmtorres@ull.es>
 include::../version.adoc[]
+Curso {academic-year}
 include::../../config/attributes.adoc[]
 include::enlaces.adoc[]
 include::footnotes.adoc[]
@@ -13,7 +14,7 @@ include::docstats.adoc[]
 {document-reading-time}
 ====
 
-{Perforce} es la compañía que desarrolla {helix-core}, un sistema de control de versiones —en inglés, _Version Control System_ o _VCS_— que escala muy bien para manejar proyectos y equipos realmente grandes (véase <<fig-helix-code-scalability>>).
+{Perforce} es la compañía que desarrolla {helix-core}, un sistema de control de versiones —en inglés, _Version Control System_ o VCS— que escala muy bien para manejar proyectos y equipos realmente grandes (véase <<fig-helix-code-scalability>>).
 
 [[fig-helix-code-scalability]]
 .{going-remote}[Going Remote: Build Up Your Game Dev Team] -- Robert Cowham.
@@ -325,24 +326,6 @@ Es decir, Unreal Engine no necesita los archivos originales.
 Una vez los hemos importando, el editor trabaja sobre las versiones importadas. 
 Mientras que en Unity los archivos originales forman parte del proyecto y se reimportan automáticamente cada vez que los modificamos o abrimos el proyecto por primera vez. 
 ====
-
-== Directorios en el control de versiones
-
-Del directorio de un proyecto en Unity, solo los siguientes subdirectorios deben ser incluidos en el control de versiones:
-
- * `Assets`, porque tiene los recursos del proyecto.
- * `Packages`, porque contiene los paquetes que hemos instalado en el proyecto desde el editor.
- * `ProjectSettings`, porque contiene la configuración del proyecto.
-
-Mientras que en un proyecto de Unreal Engine se deben incluir:
-
- * `Content`, porque contiene los recursos del proyecto.
- * `Config`, porque tiene la configuración del proyecto.
- * El archivo `.uproject`, que es el archivo del proyecto.
-
-En ambos casos se puede incluir el directorio donde se compila el proyecto, si queremos que los binarios estén disponibles para todo el equipo en el control de versiones —por ejemplo, para que el departamento de garantía de calidad pueda tener acceder a ellos rápidamente—.
-
-El resto de archivos son temporales y se generan al abrir el proyecto o compilarlo, por lo que no se deben incluir en el VCS.
 
 == Perforce Streams
 
