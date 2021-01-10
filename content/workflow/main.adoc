@@ -535,7 +535,7 @@ Por eso es importante asegurarse de que todo lo que hay en `Resources` es realme
 ====
 El uso de la carpeta `Resources` puede presentar algunos problemas por lo que se recomienda no usarla<<Unity-Learn-Resources>>.
 
-En su lugar, es preferible utilizar *AssetBundles*<<[Unity-AssetBundles>>, que son una forma de empaquetar recursos para cagarlos durante la ejecución, de forma selectiva.
+En su lugar, es preferible utilizar *AssetBundles*<<Unity-AssetBundles>>, que son una forma de empaquetar recursos para cagarlos durante la ejecución, de forma selectiva.
 Gracias al *Addressables Assets System*<<Unity-Addressables>> se puede asignar a la cada *AssetBundle* una dirección única que sirve para localizarlos y cargarlos en la aplicación, independientemente de dónde estén ubicados.
 ====
 
@@ -762,7 +762,7 @@ Este recibe como argumento un actor que queremos instanciar o destruir cuando el
 Así que ese actor que no podemos incluir como componente en el _prefab_ sería el actor hijo que el _Child Actor Component_ del _prefab_ gestionará.
 
 En general no se recomienda usar actores hijos.
-En lo posible, es mucho mejor utilizar componentes.
+En lo posible, es mejor utilizar componentes.
 
 [bibliography]
 == Referencias
