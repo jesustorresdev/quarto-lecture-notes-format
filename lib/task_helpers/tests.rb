@@ -2,6 +2,8 @@ require 'json'
 require 'nokogiri'
 require 'rake'
 
+require_relative './config.rb'
+
 module Tests
 
     module HTMLProofer
@@ -15,7 +17,8 @@ module Tests
         }
 
         def htmlproofer(pathname)
-            Rake::FileUtilsExt.sh "htmlproofer", "--typhoeus_config", TYPHOEUS_CONFIG.to_json, pathname
+            htmlproofer_opts = CONFIG[:htmlproofer_opts]
+            Rake::FileUtilsExt.sh "htmlproofer", "--typhoeus_config", TYPHOEUS_CONFIG.to_json, *htmlproofer_opts, pathname
         end
         module_function :htmlproofer
         
