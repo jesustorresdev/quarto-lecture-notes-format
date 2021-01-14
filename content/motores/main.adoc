@@ -1,0 +1,215 @@
+= Desarrollo de Videojuegos 3D: Motores de videojuegos
+Jesús Torres <jmtorres@ull.es>
+Curso 20XX-20XY
+include::../../config/attributes.adoc[]
+include::enlaces.adoc[]
+include::footnote.adoc[]
+include::docstats.adoc[]
+:imagesdir: media
+
+[.right]
+====
+.Tiempo estimado de lectura
+{document-reading-time}
+====
+
+Durante la etapa de *preproducción* en el desarrollo de un videojuego se definen las características técnicas del proyecto.
+Entre ellas, el motor de videojuegos y las herramientas externas e internas a utilizar durante el desarrollo.
+
+[[fig-gamedev-cycle]]
+.Ciclo de vida del desarrollo de un videojuego.
+include::../flujo_de_trabajo/diagrams/gamedev_cycle.adoc[]
+
+Por eso merece la pena que nos detengamos un momento a analizar las diferentes opciones, con sus principales características y los criterios que podríamos utilizar para seleccionar una u otra.
+
+== Triángulo de oro
+
+Antes de entrar en las cuestiones más técnicas es importante considerar el *Triángulo de oro* y su implicaciones a la hora de escoger la tecnología de nuestro proyecto porque, en función de nuestro caso, quizás no haya nada más que considerar.
+
+.Triángulo de oro: Personas, procesos y tecnología.
+image::golden_triangle.svg[]
+
+El *Triángulo de oro* se popularizo en 1999 en el mundo de la seguridad, de la mano de Bruce Schneier, aunque es posible encontrar referencias anteriores —a mediados de los 80— en los pilares fundamentales de ITIL (_(Information Technology Infrastructure Library_).
+La idea principal es que las personas, los procesos y la tecnología deben colaborar para que una implementación tecnológica tenga éxito:
+
+* *Personas*.
+Es importante tener un buen equipo, con la actitud adecuada y la experiencia y cualificación correctas.
+
+* *Procesos*.
+Es el «cómo» hacer para entregar el producto o servicio a los clientes.
+Es decir, que en nuestro caso el proyecto en sí mismo es un proceso, solo que no es repetitivo, que es lo que se indica generalmente en la definición de proceso.
++
+Los procesos —o el proyectos— deben definirse desde el principio y el equipo debería estar entrenado en ellos.
+Eso significa que deberíamos tener en cuenta la dificultad adicional de enfrentar nuevos proyectos, donde el «cómo» sea diferente.
+
+* *Tecnología*.
+La tecnología que utilizaremos para desarrollar el producto o servicio.
+
+Para que el proyecto tenga éxito no es necesario que los 3 aspectos estén maduros al 100%, sino que varios de ellos sean lo bastante sólidos como para que todos puedan madurar en conjunto durante el desarrollo del proyecto.
+
+Esto nos advierte de invertir recursos en adoptar la mejor tecnología —o en nuestro caso, el mejor motor de videojuegos— para el proyecto.
+Si no tenemos un equipo bien consolidado o no conoce bien el tipo de proyecto al que va a hacer frente, quizás deberíamos ser mas conservadores al escoger la tecnología.
+
+== Motor propio o comercial
+
+Es evidente que aparentemente existe poca justificación para empezar un proyecto desarrollando un motor propip.
+Sin embargo, no esta de más plantearnos las ventajas de esta aproximación, así como comentar algunos casos recientes donde se ha hecho de esta manera.
+
+=== Orígenes
+
+Los videojuegos son programas informáticos y como tales su desarrollo ha evolucionado con el avance de la ingeniería de software y la tecnología.
+El concepto de motor de videojuegos, como ese conjunto de componentes de software de un videojuegos reutilizables entre proyectos diferentes, surge fundamentalmente de la mano de los FPS en 3D de mediados de los 90.
+Gracias a la popularidad de algunos de estos juegos, otros estudios comenzaron a licenciar esos componentes para utilizarlos en sus proyectos, con su propios personajes, niveles, contenidos y mecánicas.
+
+El éxito de esta estrategia llevo a que comenzara a usarse en desarrollos posteriores, separando desde el principio el motor de los contenidos y mecánicas del juego.
+Fue lo que hizo id Software y Epic Games a finales de los 90.
+La estrategia era interesante incluso para los grandes estudios, que no tenían licenciar su tecnología como una parte fundamental de su modelo de negocio, porque facilita el desarrollo y mantenimiento de distintos productos sobre una base común.
+Así que la idea llegó para quedarse.
+
+.La primera versión de UnrealEd, desarrollada en Visual Basic -- Fuente: {first-unrealed}[Gamasutra].
+image::unrealed.png[]
+
+Los estudios —como Epic Games, id Software, Bioware, CryTek— hacían los motores para sus propios juegos, aunque después los licenciaran a otros estudios.
+Sin embargo, los motores de videojuegos se volvieron cada vez son más costosos de hacer, por lo que comenzaron a aparecer empresas especializadas exclusivamente en crear motores —como {gamebryo}[Gamebryo], {unigine}[Unigine] o Unity— y a ser más común el desarrollar videojuegos con motores licenciados a otras compañías.
+
+TIP: Al desarrollar un motor de videojuegos es preferible hacerlo a la par que el desarrollo de un juego.
+Después se pueden reusar sus componentes en proyectos posterior y seguir evolucionándolo según las necesidades.
+Así es más sencillo controla el alcance del proyecto.
+
+=== Uso de motores propios
+
+Los motores son componentes complejos y lleva mucho tiempo desarrollarlos, por lo que algunos estudios optaron por licenciar motores de otras compañías, aunque con los años han acabado desarrollado tecnología propia que evoluciona según avanzan las necesidades de sus títulos.
+Por ejemplo:
+
+* CD Projekt licenció Aurora Engine a Bioware para desarrollar The Witcher (2008), pero para The Witcher 2 (2011) creo el motor {redengine}[REDengine], con el que ha seguido trabajando en todas sus producciones posteriores, hasta el reciente Cyberpunk 2077<<Wikipedia-CD-Projekt>>.
+
+* Rockstar usaba {renderware}[RenderWare] en los primeros juegos de la franquicia de Grand Theft Auto (2001-2006) y Max Payne 2 (2003), entre otros<<Wikipedia-List-RenderWare>>, pero desde Grand Theft Auto IV (2008) usa en todas sus producciones sus propio motor, llamado {rage}[RAGE].
+
+* Ubisoft uso Unreal Engine para las sagas Tom Clancy's Splinter Cell(2002-2013)<<Wikipedia-Splinter-Cell>> y Rainbow Six(2002-2008)<<Wikipedia-List-UnrealEngine>>, modificado para adaptarse a las necesidades de cada título.
+A partir de ahí han venido desarrollando diferentes motores adaptados a diferentes proyectos:
+
+** En 2007 publicaron Assassin's Creed, desarrollado sobre {anvil}[Anvil], un motor creado expresamente para ese título y que han venido usando en el resto de la misma franquicia y en otros juegos de acción<<Wikipedia-AnvilNext>>, como: la serie Principe de Persia (2008-2021) y posteriores, Tom Clancy's Rainbow Six Siege (2015), Ghost Recon (2017 y 2019, For Honor (2017), Hyper Scape (2020) y Immortals Fenyx Rising (2020).
+También se ha usado en juegos deportivos como Steep (2016).
+
+** Para la franquicia Watch Dog usan un motor diferente, llamado Disrupt y creado _ex profeso_ para estos juegos.
+
+** Para la serie Far Cry utilizan Dunia Engine —originalmente una versión modificada de CryEngine, con el que se desarrolló el primer Far Cry—.
+
+** Y para Tom Clancy's The Division utilizan {snowdrop}[Snowdrop].
+
+En general, las grandes compañías con múltiples estudios optan por crear sus propios motores, porque les ofrece control, independencia respecto a terceros y evita la pérdida de ingresos por _royalties_ —especialmente cuando los _royalties_ del motor licenciado son un porcentaje de los ingresos, ya que estas compañías desarrollan proyectos de gran presupuesto y, por tanto, esperan grandes ingresos—.
+
+.God of War se desarrollo sobre un motor creado por SIE Santa Mónica Studios _ex profeso_ para el juego.
+image::god_of_war.jpg[]
+
+Entre los estudios de tamaño medio, muchas compañías han optado por motores comerciales, como Unreal Engine, pero bastantes estudio de éxito siguen optando por usar los suyos propios<<Santamaria>>.
+Obviamente, donde más se observa el uso de motores comerciales es en las producciones _indie_ de los estudios de menor tamaño, donde los costes, el tiempo y el tamaño de los equipos no suelen permitir afrontar la creación de un motor propio —especialmente si es un motor 3D—.
+
+Como siempre, hay algunas excepciones, que conviene analizar para conocer mejor qué lleva a desarrollar un motor propio y qué implicaciones tiene.
+Por ejemplo, Thekla es el pequeño estudio detrás del juego de puzzles The Witness (2016), para el que desarrolló su propio motor, dado que querían control sobre todos los aspectos del juego.
+Lo cierto es que The Witness necesitó 7 años de desarrollo y un presupuesto que podría estar cerca de los 6 millones de dólares, lo que lo aleja de los típicos juegos _indie_ y lo acerca a los AAA.
+
+Hello Games también creó su propio motor para No Man's Sky (2016), lo que tiene mucho sentido al tratarse de un universo que en su mayoría se genera proceduralmente.
+Y el premiado Hades (2019) fue creado por Supergiant Games —un estudio de aproximadamente 20 empleados— usando un motor propio desarrollado sobre MonoGame y usando también en sus dos juegos anteriores —desde Transistor (2014) y Pyre (2017)—.
+
+En el otro extremo, algunas grandes compañías sorprendentemente han optado por Unreal Engine para algunos de sus títulos<<Santamaria>>.
+Es el caso de Capcom —con Street Fighter V— Bandai Namco —con Jump Force, Dragon Ball Fighter Z, Dragon Ball Z: Kakarot y Tales of Arise— Square Enix —con Dragon Quest XI, Kingdom Hearts III y Final Fantasy VII Remake—.
+Mientras que Riot Games usó Unreal Engine para su _shooter_ táctico multijugador Valorant (2020) y Unity para Legends of Runeterra (2020), aunque para League of Legends (2009) utiliza un motor propio.
+
+¿Significa esto que veremos cada vez más el uso de motores comerciales entre las grandes compañías?
+Lo que si es evidente que han ayudado democratizar el acceso al desarrollo de videojuegos, por lo que es difícil que vayan a dejar de crecer entre los estudios de tamaño medio y pequeño.
+
+=== Ventajas e incovenientes
+
+El uso de un motor propio presenta algunas ventajas importantes:
+
+* *Control*. Poder hacer lo que se quiera donde se quiera en el motor, suele ser uno de los principales argumentos a favor de desarrollar tecnología propia.
+Por eso la falta de control es uno de las críticas fundamentales que se hace a los motores de fuentes cerradas, como Unity.
++
+Entrar en el espacios de los AAA tradicionalmente ha sido muy complicado, sino se ofrece el código fuente del motor para su modificación en caso de que sea necesario.
+Seguramente por eso algunos de los componentes nuevos que se están incorporando a Unity son paquetes en C#, lo que facilita ver como funcionan y modificarlos, y han ido incorporado la posibilidad de modificar mediante _scritps_ el comportamiento de algunos componentes internos, como ocurre con el _Scriptable Render Pipeline_ (SRP).
+No solo se trata de poder añadir nuevas funcionalidades donde es mejor, sino también que para poder ofrece un producto bien pulido, es necesario poder corregir errores sin dependen de los ciclos del desarrollo de la empresa que desarrolla el motor.
++
+En este sentido, los motores que ofrecen el código fuente tienen ventaja, pero aun así modificar un motor no es algo trivial.
+Es necesario tener especialistas que lo conozcan bien, solo que entonces ¿no estaríamos bastante cerca de tener el conocimiento necesario para desarrollar tecnología propia que se ajuste perfectamente a las necesidades del proyecto?.
+
+* *Adaptación*. Como sabemos, existen muchos tipos de juegos.
+Un motor comercial que intenta servir para todo, probablemente no tenga cosas que interesante para el tipo de juego que queremos hacer, quizás si traiga otras que no nos interesan y seguramente añadir la funcionalidad que queremos no sea algo trivial.
+Algunos motores se han desarrollado para cierto tipo de juegos, por lo que muchas de las decisiones de diseño han venido condicionados por eso.
+Así que cuando se intenta crear un tipo de juego diferente —o incorporar mecánicas poco comunes— es muy sencillo acabar peleando contra el motor, teniendo que buscar trucos y desarrollando soluciones complejas para hacer lo que queremos.
++
+Por ejemplo, es evidente que Unreal Engine nació como un motor para para _shooters_ en primer persona.
+Hoy en día es bastante sencillo utilizarlo para juegos de acción aventura, _shooters_ en primera o tercera persona y juegos similares, con multiples o un solo jugador.
+Pero si intentamos utilizarlo para hacer un RTS (_Real-Time Strategy_), un juego deportivo realista, o un MMORPG (_Massively Multiplayer Online Role-Playing_) seguramente acabemos peleando contra el motor e incluso tengamos que desechar partes de este.
+En estos casos ¿sería más adecuado desarrollar tecnología propia?, en caso de que podamos, obviamente.
+
+* *Independencia*. La independencia tecnológica es otro factor importante, al menos para las compañías de tamaño medio o grande.
+Por ejemplo, muchos estudios utilizan {bink-video}[Blink Video], el _codec_ de vídeo de RAD Video Tools, especialmente diseñado para videojuegos.
+Pero a principios de 2021 Epic Games anunciaba la adquisición de RAD ¿qué pasaría si Epic Games decidiera que la tecnología de RAD es en exclusiva para Unreal Engine?.
++
+En realidad Epic Games anunció que RAD seguiría vendiendo sus productos libremente y, además, no es tan complicado sustituir un _codec_, pero da una idea lo que implica depender del motor de otra compañía y un buen día tener que dejar de usarlo.
+
+* *Inversión*. Desarrollar tecnología propia es un inversión que puede aportar valor a la compañía.
+No solo es que la tecnología se pueda vender a otros estudios, permitiendo obtener una segunda fuente de ingresos.
+Sino que puede hacer mas atractiva la compañía desde la perspectiva de una posible adquisición por un estudio mayor.
+
+Por otro lado, como hemos comentado, el desarrollo de un motor propio conlleva tiempo y dinero.
+Debemos tener presente que muchos motores han llegado a su estado actual después de años de desarrollo y de multiples iteraciones en el desarrollo de distintos juegos.
+En algunos casos, son más que nada un conjunto de componentes que se reutilizan y personalizan según las necesidades de cada proyecto.
+
+También hemos de tener presente que generalmente los motores no se programan enteramente desde cero.
+Generalmente se utiliza _middleware_{blank}footnote:[{fn-middleware}] que reduce considerablemente el trabajo que es necesario realizar.
+Por ejemplo, si miramos el listado de juegos 2D en <<Santamaria>>, comprobaremos que muchos se basan en MonoGame o SDL y seguramente, aquellos que necesiten un motor de físicas, usaran uno como Box2D, en lugar de implementar el suyo propio.
+Obviamente es posible conseguir otros componentes para hacer un motor de videojuegos 3D, tanto con licencias libres como comerciales: librerías matemáticas, _renders_, motores de físicas, librerías y motores de sonido, librerías de red, serialización y compresión, etc.
+
+Finalmente, debemos considerar que no es suficiente con desarrollar el motor, sino que también es necesario crear herramientas para importar los recursos y construir los niveles.
+Por eso una de las grandes ventajas de los motores comerciales como Unreal Engine y Unity es que ofrecen editores con los que componer el juego.
+
+Así que por lo general los estudios deben crear sus propias herramientas para sus propios motores.
+Algo bastante común es utilizar aplicaciones gráficas 3D como Maya y 3ds max, personalizándolas mediante extensiones para utilizarlas como editores de nivel y para exportar los recursos en los formatos que el motor utiliza.
+
+== Motores disponibles
+
+https://en.wikipedia.org/wiki/List_of_game_engines
+
+* Unity
+* Lumberyard
+* Unreal Engine
+* Godot 
+* CryEngine
+
+== Unreal Engine frente a Unity
+
+* Curva de parendizaje
+
+* Costes
+
+* Herramientas incluidas
+
+* Programación
+
+* Especialistas
+
+[bibliography]
+== Referencias
+
+* [[[Wikipedia-List-Game-Engines,1]]] 
+List of game engines. En _Wikipedia_. https://en.wikipedia.org/wiki/List_of_game_engines
+
+* [[[Wikipedia-CD-Projekt,2]]]
+CD Projekt. En _Wikipedia_. https://en.wikipedia.org/wiki/CD_Projekt
+
+* [[[Wikipedia-List-RenderWare,3]]]
+List of RenderWare games. En _Wikipedia_. https://en.wikipedia.org/wiki/List_of_RenderWare_games
+
+* [[[Wikipedia-Splinter-Cell,4]]]
+Tom Clancy's Splinter Cell. En _Wikipedia_. https://en.wikipedia.org/wiki/Tom_Clancy%27s_Splinter_Cell
+
+* [[[Wikipedia-List-UnrealEngine,5]]]
+List of Unreal Engine games. En _Wikipedia_. https://en.wikipedia.org/wiki/List_of_Unreal_Engine_games
+
+* [[[Wikipedia-AnvilNext,6]]]
+AnvilNext. En _Wikipedia_. https://en.wikipedia.org/wiki/AnvilNext
+
+* [[[Santamaria]]]
+Ramon Santamaria. _CUSTOM GAME ENGINES: A Small Study_. https://gist.github.com/raysan5/909dc6cf33ed40223eb0dfe625c0de74
