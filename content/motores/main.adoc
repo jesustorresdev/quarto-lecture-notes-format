@@ -136,7 +136,7 @@ Es necesario tener especialistas que lo conozcan bien, solo que entonces ¿no es
 * *Adaptación*. Como sabemos, existen muchos tipos de juegos.
 Un motor comercial que intenta servir para todo, probablemente no tenga cosas que interesante para el tipo de juego que queremos hacer, quizás si traiga otras que no nos interesan y seguramente añadir la funcionalidad que queremos no sea algo trivial.
 Algunos motores se han desarrollado para cierto tipo de juegos, por lo que muchas de las decisiones de diseño han venido condicionados por eso.
-Así que cuando se intenta crear un tipo de juego diferente —o incorporar mecánicas poco comunes— es muy sencillo acabar peleando contra el motor, teniendo que buscar trucos y desarrollando soluciones complejas para hacer lo que queremos.
+Así que cuando se intenta crear un tipo de juego diferente  o incorporar mecánicas poco comunes— es muy sencillo acabar peleando contra el motor, teniendo que buscar trucos y desarrollando soluciones complejas para hacer lo que queremos.
 +
 Por ejemplo, es evidente que Unreal Engine nació como un motor para para _shooters_ en primer persona.
 Hoy en día es bastante sencillo utilizarlo para juegos de acción aventura, _shooters_ en primera o tercera persona y juegos similares, con multiples o un solo jugador.
@@ -162,11 +162,50 @@ Generalmente se utiliza _middleware_{blank}footnote:[{fn-middleware}] que reduce
 Por ejemplo, si miramos el listado de juegos 2D en <<Santamaria>>, comprobaremos que muchos se basan en MonoGame o SDL y seguramente, aquellos que necesiten un motor de físicas, usaran uno como Box2D, en lugar de implementar el suyo propio.
 Obviamente es posible conseguir otros componentes para hacer un motor de videojuegos 3D, tanto con licencias libres como comerciales: librerías matemáticas, _renders_, motores de físicas, librerías y motores de sonido, librerías de red, serialización y compresión, etc.
 
-Finalmente, debemos considerar que no es suficiente con desarrollar el motor, sino que también es necesario crear herramientas para importar los recursos y construir los niveles.
-Por eso una de las grandes ventajas de los motores comerciales como Unreal Engine y Unity es que ofrecen editores con los que componer el juego.
+Finalmente, debemos considerar que no es suficiente con desarrollar el motor, sino que también es necesario crear herramientas para importar los recursos, crear los niveles y configurar los distintos aspectos del juego.
+Así que los estudios deben crear sus propias herramientas para sus propios motores.
 
-Así que por lo general los estudios deben crear sus propias herramientas para sus propios motores.
-Algo bastante común es utilizar aplicaciones gráficas 3D como Maya y 3ds max, personalizándolas mediante extensiones para utilizarlas como editores de nivel y para exportar los recursos en los formatos que el motor utiliza.
+=== Herramientas de desarrollo
+
+Gran parte del trabajo se hace en iteraciones donde se añaden cosas, se prueban y se vuelven a modificar.
+Cuanto más adecuadas sean las herramientas, menos interrupciones habrá en el flujo de trabajo y menos tiempo consumirá cada iteración durante el desarrollo. 
+Por eso una de las grandes ventajas de los motores comerciales como Unreal Engine y Unity es que ofrecen editores muy completos, que además son fácilmente extensibles.
+
+.Captura de pantalla del editor de Frostbite -- Fuente: {frosted-screenshot}[@EA_DICE]
+image::frosted.jpg[]
+
+Los estudios que desarrollan sus propios motores pueden tener un equipo dedicado al desarrollo de herramientas y optar por crear sus propios editores.
+Sin embargo, tener un buen editor —como los de los motores comerciales— puede ser incluso más costoso de desarrollar el motor, así que es algo que los estudios con menos recursos van haciendo a lo largo de varios títulos. 
+
+Algo bastante común es utilizar aplicaciones gráficas 3D como Maya y 3ds Max, personalizándolas mediante extensiones para utilizarlas como editores de nivel, para visualizar los resultados con el _render_ del motor y para exportar los recursos en los formatos que el motor utiliza.
+
+Como estas aplicaciones gráficas no tienen las características necesarias, ya que se han diseñado para modelar y animar, suele se necesario utilizar de forma «creativa» algunas de sus características para obtener la funcionalidad deseada.
+Por ejemplo, se pueden establecer ciertas convenciones en los nombres de grupos de objetos y materiales para señalar propiedades, como si es: una geometría de colisión, una malla visible estática o una superficie por la que no se puede caminar.
+Estas herramientas también permiten añadir atributos personalizados a los materiales.
+Y en Maya, particularmente, se puede almacenar información adicional personalizada en los polígonos (véase {maya-blimd-data}[blind data]).
+
+Aprovechando adecuadamente todas estas funcionalidades se pueden definir características útiles para el motor del juego.
+Solo necesitamos que al exportar los recursos esta información se mapeen adecuadamente en el formato utilizado con el motor.
+
+.Evolución de las herramientas de desarrollo de Guerrilla Games
+****
+Guerrilla Games utiliza para sus desarrollo un motor propio llamado {decima}[Decima].
+Se utilizó por primera vez para desarrollar Killzone Shadow Fall (2013) y, como hemos comentado, a parte del motor tuvieron que desarrollar una serie de herramientas.
+Sin embargo, estaban muy lejos de la comodidad y funcionalidad de los típicos editores de los motores comerciales.
+
+Decima necesita los datos del juego en un formato llamado CoreText, así que crearon un editor de CoreText para crear y configurar estos archivos.
+Usaban Maya como editor de escenas, por lo que importaban en el programa los recursos, componían el entorno, iluminaban la escena y finalmente exportaban a CoreText.
+Así que tuvieron que desarrollar un _plugin_ de Maya para poder visualizar el _render_ de Decima en Maya y para exportar los datos de las escenas a archivos CoreText.
+Y además tuvieron que desarrollar otras muchas herramientas, como un editor de máquinas de estado.
+
+// https://www.gdcvault.com/play/1024124/Creating-a-Tools-Pipeline-for
+[[video-creating-tools-pipeline, {video-caption} {counter:video-number}]]
+.Video de la conferencia «Creating a Tools Pipeline for Horizon: Zero Dawn» en GDC 2017.
+video::KRJkBxKv1VM[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
+
+En <<video-creating-tools-pipeline>> podemos ver una ponencia sobre la evolución de estas herramientas, desde como eran cuando las que usaron originalmente para desarrollar Killzone Shadow Fall al editor que crearon durante la producción de Horizon: Zero Dawn (2017).
+Obviamente el objetivo es tener un futuro todo integrado en un único editor, como ocurre con los editores de los motores comerciales.
+****
 
 == Motores disponibles
 
