@@ -88,7 +88,7 @@ Si está bastante claro cómo debe jugarse, entonces tendremos una idea clara de
 Si por el contrario estamos en una etapa muy temprana del desarrollo y aun no tenemos claro cómo es el espacio del juego, podemos comenzar explorando alguno de los patrones más comunes: lineal, rejilla, telaraña, puntos en el espacio o espacio dividido (véase <<Schell2019>> para conocer más detalles sobre estos patrones y algunos ejemplos).
 
 [[fig-greybox-shooty-squad]]
-.Greybox para Shooty Squad por {blaze-dillon}[@BlazeDillon] -- Fuente: {greybox-shoot-squad}[Twitter].
+.Greybox para Shooty Squad -- Fuente: {greybox-shoot-squad}[@BlazeDillon].
 image::blocking.jpg[]
 
 También es importante considerar desde un primero momento la escala de los objetos, personajes y edificaciones.
