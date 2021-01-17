@@ -22,9 +22,9 @@ include::../flujo_de_trabajo/diagrams/gamedev_cycle.adoc[]
 
 Por eso merece la pena que nos detengamos un momento a analizar las diferentes opciones, con sus principales características y los criterios que podríamos utilizar para seleccionar una u otra.
 
-== Triángulo de oro
+== El triángulo de oro
 
-Antes de entrar en las cuestiones más técnicas es importante considerar el *Triángulo de oro* y su implicaciones a la hora de escoger la tecnología de nuestro proyecto porque, en función de nuestro caso, quizás no haya nada más que considerar.
+Antes de entrar en las cuestiones más técnicas es importante considerar el *triángulo de oro* y su implicaciones a la hora de escoger la tecnología de nuestro proyecto porque, en función de nuestro caso, quizás no haya nada más que considerar.
 
 .Triángulo de oro: Personas, procesos y tecnología.
 image::golden_triangle.svg[]
@@ -182,7 +182,7 @@ Algo bastante común es utilizar aplicaciones gráficas 3D como Maya y 3ds Max, 
 Como estas aplicaciones gráficas no tienen las características necesarias, ya que se han diseñado para modelar y animar, suele se necesario utilizar de forma «creativa» algunas de sus características para obtener la funcionalidad deseada.
 Por ejemplo, se pueden establecer ciertas convenciones en los nombres de grupos de objetos y materiales para señalar propiedades, como si es: una geometría de colisión, una malla visible estática o una superficie por la que no se puede caminar.
 Estas herramientas también permiten añadir atributos personalizados a los materiales.
-Y en Maya, particularmente, se puede almacenar información adicional personalizada en los polígonos (véase {maya-blimd-data}[blind data]).
+Y en Maya, particularmente, se puede almacenar información adicional personalizada en los polígonos (véase {maya-blind-data}[blind data]).
 
 Aprovechando adecuadamente todas estas funcionalidades se pueden definir características útiles para el motor del juego.
 Solo necesitamos que al exportar los recursos esta información se mapeen adecuadamente en el formato utilizado con el motor.
@@ -207,27 +207,143 @@ En <<video-creating-tools-pipeline>> podemos ver una ponencia sobre la evolució
 Obviamente el objetivo es tener un futuro todo integrado en un único editor, como ocurre con los editores de los motores comerciales.
 ****
 
-== Motores disponibles
+== Motores de videojuegos 3D
 
-https://en.wikipedia.org/wiki/List_of_game_engines
+Si consideramos los motores comerciales, los motores libres, en repositorios como GitHub, y los motores desarrollados por los propios estudios, la lista de opciones es inmensa [[[Wikipedia-List-Game-Engines]]].
+Sin embargo, a menos que trabajemos en un estudio grande con un buen presupuesto, es complicado que tengamos acceso a uno de esos motores propios.
+Y entre los proyectos libres, sobre todo hay componentes que podemos usar como _middleware_ para crear nuestro propio motor y herramientas.
+Así que vamos a quedarnos con una selección de los motores 3D que podríamos optar a utilizar en un hipotético futuro proyecto y comentar muy brevemente algunas de sus características:
 
-* Unity
-* Lumberyard
-* Unreal Engine
-* Godot 
-* CryEngine
+* {cryengine}[*CryEngine*]. Es el famoso motor de videojuegos creado para Far Cry (2004) y la saga Crysis (2007-2020).
+Estos juegos han servido para que CryTek mostrara las capacidades de su motor, que siempre ha ofrecido una gran calidad visual, especialmente en exteriores.
++
+CryEngine se entrega con su código fuente y editor llamado Sandbox.
+Se considera uno de los motores más difíciles de utilizar, por su curva de aprendizaje, por la falta de documentation y por su código.
+Por lo que solo parece la opción adecuada en títulos AAA, cuando se quiere la mejor validad visual y se tiene un equipo acorde a las exigencias del proyecto.
++
+CryTek ofrece CryEngine gratis para proyectos por debajo de 5.000€ de ingreso anual.
+Por encima exigen un 5% de los ingresos brutos.
+
+* {godot}[*Godot*]. Es un motor multiplataforma con licencia libre de 2D y 3D. 
+Trae un editor sencillo similar al de Unity y en cierta forma la manera de trabajar es similar.
+Las principales diferencias son que el _gameplay_ se puede programar en multitud de lenguajes —incluido uno propio llamado GDScript— y que está más orientado a juegos 2D que a 3D.
+De hecho, las herramientas para hacer juegos 3D son bastante limitadas.
+
+* {lumberyard}[*Lumberyard*]. Amazon licenció CryEngine a CryTek para tener su propio motor de videojuegos: Amazon Lumberyard.
+Pese a estar basado en CryEngine, buena parte del motor ha sido reescrita y modernizada y se han incluido componentes nuevos para facilitar su integración con Twitch y con AWS.
+Esto hace que sea una opción muy interesante para crear juegos multijugador, donde el servidor vaya a ejecutarse en los servidores de Amazon.
+El motor es gratuito y se distribuye con el código fuente y un editor.
+
+* {unigine}[*Unigine*]. Es un motor cuya principal características entornos realmente grandes, de escala planetaria.
+No se ha utilizado muchos juegos, pero si tiene un hueco importante el desarrollo de simuladores y de experiencias de realidad virtual.
+Es gratuito para proyectos con unos ingresos por debajo de 100.000$ anuales.    
+
+* {unity}[Unity]. Es un motor multiplataforma de código cerrado para 2D y 3D.
+Tradicionalmente se le ha caracterizado por tener menor curva de aprendizaje que los típicos motores AAA para videojuegos, por el gran número de plataformas que soporta —siendo uno de los favoritos para juegos móviles— y por su _marketplace_, donde es posible adquirir fácilmente todo tipo de recursos y _plugins_ para nuestros juegos.
++
+A diferencia de otros motores, cuyo coste viene determinado por los ingresos del proyecto, Unity se adquiere mediante una suscripción anual fija por puesto.
+Es gratuito para uso personal o comercial, si los ingresos se mantienen por debajo de los 100.000$ anuales.
+
+* {unreal}[Unreal Engine]. Es un motor multiplataforma para juegos 3D —y 2D, aunque esto no es muy común—.
+El código es abierto y va acompañado de un editor más cómodo y con más funcionalidad que el de otros motores profesionales, como CryEngine o Lumberyard.
+También es más versátil en cuanto a opciones para ajustarse a diferentes plataformas con distintos niveles de calidad gráfica.
++
+Unreal Engine es gratuito para uso interno, proyectos gratuitos o proyectos comerciales por debajo de 1.000.000$ de ingresos por producto.
+En otro caso exigen un 5% de los ingresos.
+Los estudios de tamaño medio o grande que lo utilizan negocian otras condiciones, donde se incluye soporte _premium_, formación y acceso directo a nuevas versiones y parches. 
 
 == Unreal Engine frente a Unity
 
-* Curva de parendizaje
+En juegos 2D es factible decidir optar por desarrollar un motor propio sobre alguna librería —como SDL, MonoGame, Phaser (si es web) o SFML—.
+Pero en juegos 3D, lo más común es limitar las opciones de la lista anterior a Unity o Unreal Engine.
 
-* Costes
+Mucho se ha habla de estos dos motores en las webs, foros y grupos de desarrolladores.
+Ambos son capaces de ofrecer gráficos de calidad y vienen con un conjunto muy completo de herramientas, pero es sencillo encontrar opiniones a favor y en contra para todos los gustos.
+Así que no está de más hacer un repaso a sus diferencias y a los aspectos que deben tenerse en cuenta a la hora de decidir utilizar uno u otro.
 
-* Herramientas incluidas
+En cualquier caso, lo que no se debe perder de vista es que la tecnología no es lo único a considerar al elegir un motor de videojuegos.
+A veces la mejor alternativa tecnológica no es la mejor opción, según el equipo y otros condicionantes del proyecto (véase <<_triángulo_de_oro>>).
 
-* Programación
+=== Calidad gráfica
 
-* Especialistas
+Si se quiere crear una obra maestra a nivel gráfico, seguramente la mejor opción sea Unreal Engine.
+Unreal Engine puede manejar más polígonos y mas efectos de partículas, permite utilizar _shaders_ más complejos y avanzados y viene de serie con mejores herramientas.
+Sin embargo, debemos tener en cuenta que esto solo nos debe preocupar si pretendemos obtener el máximo en el apartado gráfico.
+No significa que no se puede conseguir grandes resultados visuales con Unity, ni que la elección de Unreal Engine garantice que el juego vaya a lucir mejor, sino que probablemente se pueden conseguir mejores resultados con el segundo si dispone del suficiente presupuesto como para exprimirlo al máximo.
+
+.Rust por Facepunch Studios en Unity.
+image::rust.jpg[]
+
+NOTE: Unreal Engine viene con una configuración por defecto con la que en un primer vistazo las escenas se ven mejor que en Unity.
+Fundamentalmente se debe a la configuración por defecto de posprocesado, que en Unity hay que añadirla a mano para obtener un aspecto similar.
+
+Como contrapartida, Unity suele ser más ligero en plataformas móviles, que no tienen sino una fracción de la potencia gráfica de otras plataformas, por lo que suele ser el primer candidato, incluso para 3D.
+
+=== Curva de aprendizaje
+
+La comparación de la curva de aprendizaje es un asunto complejo porque se puede ver desde diversos puntos de vista.
+
+Si atendemos a cómo de sencilla de usar es la herramienta y a los recursos que existentes para aprender sobre ella, sin duda Unity tiene una curva menos pronunciada.
+Unity tiene una interfaz más simple, donde todo está integrado en una única vista con relativamente pocas opciones.
+Por el contrario, Unreal Engine tiene enormes listados de opciones y múltiples vistas de edición.
+Por eso, si se va a trabajar con Unreal Engine, es conveniente tener especialistas en las distintas áreas.
+
+[NOTE]
+====
+Sin embargo, como comentaremos en el <<_herramientas>>, esto también significa que Unreal Engine tiene casi todo lo que puede hacer falta en cualquier proyecto.
+Mientras que en Unity, con mucha frecuencia es necesario recurrir a su _marketplace_.
+====
+
+Unity se programa C#, que es más asequible que C++ —utilizado en Unreal Engine— por lo que es más sencillo conseguir desarrolladores formados y suele ser más atractivo para los programadores.
+La documentación de Unity cubre todos los aspectos del editor, de los componentes y de la API y está llena de ejemplos y recomendaciones.
+Mientras que en Unreal Engine la documentación es bastante extensa en lo que respecta al editor y el desarrollo con _blueprints_, pero no curre lo mismo con la API de C++, que prácticamente se limita a ser una referencia de clases y funciones.
+
+Sin embargo, como veremos en el <<_estructura>>, el asunto de quien tiene mejor curva de aprendizaje cambia cuando, una vez superadas las primeras faces del aprendizaje, se quiere hacer frente a proyectos más realistas.
+
+=== Estructura
+
+Unity es un motor de videojuegos que de serie trae lo básico.
+Con eso debemos entender que tiene característica como: simulación física, _render_, sonido, gestión de la entrada, animación, efectos de partículas y muchas cosas más, que podemos usar como queramos; pero que no trae otras abstracciones de mayor nivel, muy comunes videojuego, como: _game managers_, _level managers_, controlador de personajes, controlador de IA, sistemas de salud o de daño, o ayuda a la animación de apuntado del arma. 
+Unity Tampoco prescribe ninguna forma de crear estos componentes ni de organizarlos, por lo que da total libertad a la hora de diseñar la arquitectura del juego.
+Esto puede ser interesante si se tiene experiencia, pero es un gran inconveniente en los primeros proyectos, porque no ofrece ninguna guía de cómo organizar los componentes del juego de forma que sea escalable y mantenible.
+Es común que los equipos vayan construyendo sus propio _game framework_ para Unity, creando estos componentes y desarrollándolos en base a la experiencia adquirido a lo largo de varios proyectos.
+
+Por el contrario, Unreal Engine trae su _game framework_ con todos los elemento mencionados y prescribe una arquitectura, lo que ahorra trabajo y sirve de guía a la hora de saber donde colocar cada cosa.
+El único pero es que el _game framework_ de Unreal Engine están muy orientado al tipo de juegos que se suelen hacer con ese motor —como _shooters_ y juegos de acción-ventura en primera o tercera persona— lo quiere decir que si se pretende hacer un juego de ese tipo —o similar, como un _walking simulator_— el desarrollo con Unreal Engine es bastante cómodo.
+Por el contrario, las dificultades se pueden incrementar notablemente si pretende hacer otros géneros.
+
+En todo caso, el _game framework_ de Unreal Engine puede ser una buena guía de referencia para aprender a diseñar la arquitectura de nuestros videojuegos.
+Ese conocimiento luego se puede utilizar en otros proyectos, con ese mismo u otros motores, como Unity.
+
+=== Herramientas
+
+Unreal Engine trae un conjunto completo de herramientas, con casi todo lo que se puede necesitar.
+Mientras que, como hemos comentado anteriormente, el editor de Unity es mucho más simple y limitado en opciones, por lo que frecuentemente es necesario recurrir al _marketplace_ para conseguir las funcionalidades que faltan, o que las desarrolle el propio equipo.
+
+.Opciones del *Character Controller* de Unity.
+image::character-controller.png[]
+
+Un ejemplo lo podemos ver en el *Character Controller* de Unity, que está mucho más limitado que el de Unreal Engine.
+Por lo que, con mucha frecuencia, es necesario desarrollar un controlador propio o adquirirlo de la _Asset Store_.
+Otro ejemplo es el soporte de red en Unity, que es existente —después de que lo retiraran en Unity 2018.4— por lo que para juegos multijugador online también hace falta recurrir a soluciones externas o desarrollar una solución propia.
+
+Aunque adquirir estos componentes es la vía más rápida y es fantástico tener un enorme _marketplace_ en el que elegir, debemos tener en cuenta que cada _plugin_ comprado añade una dependencia adicional al proyecto.
+Es decir, que no solo dependemos del equipo de desarrollo de Unity, sino también del de las extensiones de la _Asset Store_ que usemos.
+
+NOTE: En todo caso es conveniente señalar que en lo respecta al desarrollo de videojuegos 2D y móvil, Unity ofrece por defecto un mejor conjunto herramientas.
+
+=== Estructura de costes
+
+El coste de estos productos es algo importante a considera, especialmente en estudios pequeños.
+
+Unity es gratuito mientras los ingresos no superen los 100.000$, en cuyo caso se pueden adquirir licencias Plus para cada puesto por 399$ al año.
+Si los ingresos superan los 200.000$, es necesario adquirir al menos licencias Pro, que cuestan 1.800$ al año. 
+
+Por el contrario Unreal Engine no tiene un coste fijo, sino que piden un 5% de los ingresos de cada proyecto.
+Por fortuna han puesto un margen bastante generoso antes de comenzar a cobrar, puesto que el primer millón de ingresos del proyecto está libre de _royalties_.
+Esto, significa que en un juego de 20$, Epic Game se llevaría 1$ a partir del momento en que se vendan más de 50.000 copias.
+
+NOTE: Un detalle importante es que ese 5% está incluido en el 12% que se lleva Epic por cada copia vendida en su Epic Store.
 
 [bibliography]
 == Referencias
