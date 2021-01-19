@@ -1,6 +1,7 @@
 = Desarrollo de Videojuegos 3D: Motores de videojuegos
 Jesús Torres <jmtorres@ull.es>
-Curso 20XX-20XY
+include::../version.adoc[]
+Curso {academic-year}
 include::../../config/attributes.adoc[]
 include::enlaces.adoc[]
 include::footnote.adoc[]
