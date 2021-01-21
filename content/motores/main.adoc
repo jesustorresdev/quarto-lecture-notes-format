@@ -4,7 +4,7 @@ include::../version.adoc[]
 Curso {academic-year}
 include::../../config/attributes.adoc[]
 include::enlaces.adoc[]
-include::footnote.adoc[]
+include::footnotes.adoc[]
 include::docstats.adoc[]
 :imagesdir: media
 
