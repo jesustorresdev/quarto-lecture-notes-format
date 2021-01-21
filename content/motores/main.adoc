@@ -222,7 +222,7 @@ CryEngine se entrega con su código fuente y editor llamado Sandbox.
 Se considera uno de los motores más difíciles de utilizar, por su curva de aprendizaje, por la falta de documentation y por su código.
 Por lo que solo parece la opción adecuada en títulos AAA, cuando se quiere la mejor validad visual y se tiene un equipo acorde a las exigencias del proyecto.
 +
-CryTek ofrece CryEngine gratis para proyectos por debajo de 5.000€ de ingreso anual.
+CryTek ofrece CryEngine gratis para proyectos por debajo de 5{K}000€ de ingreso anual.
 Por encima exigen un 5% de los ingresos brutos.
 
 * {godot}[*Godot*]. Es un motor multiplataforma con licencia libre de 2D y 3D. 
@@ -237,19 +237,19 @@ El motor es gratuito y se distribuye con el código fuente y un editor.
 
 * {unigine}[*Unigine*]. Es un motor cuya principal características entornos realmente grandes, de escala planetaria.
 No se ha utilizado muchos juegos, pero si tiene un hueco importante el desarrollo de simuladores y de experiencias de realidad virtual.
-Es gratuito para proyectos con unos ingresos por debajo de 100.000$ anuales.    
+Es gratuito para proyectos con unos ingresos por debajo de 100{K}000$ anuales.    
 
 * {unity}[Unity]. Es un motor multiplataforma de código cerrado para 2D y 3D.
 Tradicionalmente se le ha caracterizado por tener menor curva de aprendizaje que los típicos motores AAA para videojuegos, por el gran número de plataformas que soporta —siendo uno de los favoritos para juegos móviles— y por su _marketplace_, donde es posible adquirir fácilmente todo tipo de recursos y _plugins_ para nuestros juegos.
 +
 A diferencia de otros motores, cuyo coste viene determinado por los ingresos del proyecto, Unity se adquiere mediante una suscripción anual fija por puesto.
-Es gratuito para uso personal o comercial, si los ingresos se mantienen por debajo de los 100.000$ anuales.
+Es gratuito para uso personal o comercial, si los ingresos se mantienen por debajo de los 100{K}000$ anuales.
 
 * {unreal}[Unreal Engine]. Es un motor multiplataforma para juegos 3D —y 2D, aunque esto no es muy común—.
 El código es abierto y va acompañado de un editor más cómodo y con más funcionalidad que el de otros motores profesionales, como CryEngine o Lumberyard.
 También es más versátil en cuanto a opciones para ajustarse a diferentes plataformas con distintos niveles de calidad gráfica.
 +
-Unreal Engine es gratuito para uso interno, proyectos gratuitos o proyectos comerciales por debajo de 1.000.000$ de ingresos por producto.
+Unreal Engine es gratuito para uso interno, proyectos gratuitos o proyectos comerciales por debajo de 1{K}000{K}000$ de ingresos por producto.
 En otro caso exigen un 5% de los ingresos.
 Los estudios de tamaño medio o grande que lo utilizan negocian otras condiciones, donde se incluye soporte _premium_, formación y acceso directo a nuevas versiones y parches. 
 
@@ -263,7 +263,7 @@ Ambos son capaces de ofrecer gráficos de calidad y vienen con un conjunto muy c
 Así que no está de más hacer un repaso a sus diferencias y a los aspectos que deben tenerse en cuenta a la hora de decidir utilizar uno u otro.
 
 En cualquier caso, lo que no se debe perder de vista es que la tecnología no es lo único a considerar al elegir un motor de videojuegos.
-A veces la mejor alternativa tecnológica no es la mejor opción, según el equipo y otros condicionantes del proyecto (véase <<_triángulo_de_oro>>).
+A veces la mejor alternativa tecnológica no es la mejor opción, según el equipo y otros condicionantes del proyecto (véase el <<_el_triángulo_de_oro>>).
 
 === Calidad gráfica
 
@@ -337,12 +337,12 @@ NOTE: En todo caso es conveniente señalar que en lo respecta al desarrollo de v
 
 El coste de estos productos es algo importante a considera, especialmente en estudios pequeños.
 
-Unity es gratuito mientras los ingresos no superen los 100.000$, en cuyo caso se pueden adquirir licencias Plus para cada puesto por 399$ al año.
-Si los ingresos superan los 200.000$, es necesario adquirir al menos licencias Pro, que cuestan 1.800$ al año. 
+Unity es gratuito mientras los ingresos no superen los 100{K}000$, en cuyo caso se pueden adquirir licencias Plus para cada puesto por 399$ al año.
+Si los ingresos superan los 200{K}000$, es necesario adquirir al menos licencias Pro, que cuestan 1{K}800$ al año. 
 
 Por el contrario Unreal Engine no tiene un coste fijo, sino que piden un 5% de los ingresos de cada proyecto.
 Por fortuna han puesto un margen bastante generoso antes de comenzar a cobrar, puesto que el primer millón de ingresos del proyecto está libre de _royalties_.
-Esto, significa que en un juego de 20$, Epic Game se llevaría 1$ a partir del momento en que se vendan más de 50.000 copias.
+Esto, significa que en un juego de 20$, Epic Game se llevaría 1$ a partir del momento en que se vendan más de 50{K}000 copias.
 
 NOTE: Un detalle importante es que ese 5% está incluido en el 12% que se lleva Epic por cada copia vendida en su Epic Store.
 
