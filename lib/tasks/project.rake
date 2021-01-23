@@ -19,7 +19,7 @@ Project::find_documents().each do |document|
         task :html => [ document[:output_pathname][:html], :html_media_files ]
 
         file document[:output_pathname][:html] => [*document[:dependencies], :config] do |t|
-            asciidoctor_opts = CONFIG[:asciidoctor_opts]
+            asciidoctor_opts = CONFIG[:asciidoctor_opts] + CONFIG[:asciidoctor_html_opts]
             sh "asciidoctor", '--backend', 'html5', '--attribute', "basedir=#{Project::PROJECT_DIRECTORY}", *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
         end
 
@@ -31,7 +31,7 @@ Project::find_documents().each do |document|
         task :pdf => [ document[:output_pathname][:pdf] ]
 
         file document[:output_pathname][:pdf] => [*document[:dependencies], :config] do |t|
-            asciidoctor_opts = CONFIG[:asciidoctor_opts]
+            asciidoctor_opts = CONFIG[:asciidoctor_opts] + CONFIG[:asciidoctor_pdf_opts]
             sh "asciidoctor", '--backend', 'pdf', '--require', 'asciidoctor-pdf', '--attribute', "basedir=#{Project::PROJECT_DIRECTORY}", *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
         end
 
@@ -39,7 +39,7 @@ Project::find_documents().each do |document|
         task :epub => [ document[:output_pathname][:epub] ]
 
         file document[:output_pathname][:epub] => [*document[:dependencies], :config] do |t|
-            asciidoctor_opts = CONFIG[:asciidoctor_opts]
+            asciidoctor_opts = CONFIG[:asciidoctor_opts] + CONFIG[:asciidoctor_epub_opts]
             sh "asciidoctor", '--backend', 'epub3', '--require', 'asciidoctor-epub3', '--attribute', "basedir=#{Project::PROJECT_DIRECTORY}", *asciidoctor_opts, '--out-file', t.name, t.prerequisites.first()
         end
 

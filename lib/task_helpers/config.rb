@@ -1,13 +1,20 @@
-Struct.new('Config', :asciidoctor_opts, :htmlproofer_opts) do
-    def self.build(asciidoctor_opts: nil, htmlproofer_opts: nil)
-        asciidoctor_opts ||= []
-        htmlproofer_opts ||= []
-
-        if ENV.key?('HTMLPROOFER_DISABLE_EXTERNAL')
-            htmlproofer_opts |= ["--disable-external"]
-        end
-        Struct::Config.new(asciidoctor_opts, htmlproofer_opts)
+Struct.new('Config',
+            :asciidoctor_opts,
+            :asciidoctor_html_opts,
+            :asciidoctor_epub_opts,
+            :asciidoctor_pdf_opts,
+            :htmlproofer_opts,
+            keyword_init: true) do
+    def initialize()
+        default_values = {
+            asciidoctor_opts: [],
+            asciidoctor_html_opts: [],
+            asciidoctor_epub_opts:  [],
+            asciidoctor_pdf_opts: [],
+            htmlproofer_opts:  ENV.key?('HTMLPROOFER_DISABLE_EXTERNAL') ? ["--disable-external"] : []
+        }
+        super(default_values)
     end
 end
 
-CONFIG = Struct::Config.build()
+CONFIG = Struct::Config.new()
