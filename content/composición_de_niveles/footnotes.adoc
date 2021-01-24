@@ -1,0 +1,1 @@
+:fn-unity-dots: pass:n[_Data-Oriented Technology Stack_ (DOTS) es una combinación de tecnologías que promueven el diseño orientado a datos en Unity. Esto permite aprovechar mejor las ventajas de los procesador multinúcleo y mejorar el rendimiento de las aplicaciones.]

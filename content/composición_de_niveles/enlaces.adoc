@@ -1,0 +1,3 @@
+:unity-loadsceneasync: https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.LoadSceneAsync.html[`SceneManager.LoadSceneAsync()`]
+:unity-unloadsceneasync: https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.UnloadSceneAsync.html[`SceneManager.UnloadSceneAsync()`]
+:physx-originshift: https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/OriginShift.html[`PxScene::shiftOrigin()`]
