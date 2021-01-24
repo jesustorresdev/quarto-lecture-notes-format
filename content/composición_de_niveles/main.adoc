@@ -31,16 +31,20 @@ Para disimular la carga de la siguiente parte del nivel, se colocan ascensores, 
 .{video-caption} {video-number}. Video de pasadizo en el _gamaplay_ de "Star Wars Jedi: Fallen Order" mostrado en el EA Play 2019.
 video::GtzLWZ0LCNs[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
-En mundos abiertos en exteriores, se puede dividir el nivel en varias escenas e ir cargándolas dinámicamente cuando el jugador se aproxima, al tiempo que se descargan las escenas más alejadas que el jugador ya no puede ver.
-Para limitar el alcance de la visión del jugador, se ponen barreras visuales —como montañas o edificios— pero en todo caso hay que tener en cuenta que la cámara nunca mostrará más allá de la distancia que tenga configurada como _far clipping plane_.
+En mundos abiertos en exteriores, se puede dividir el nivel en varios pedazos, para ir cargándolos dinámicamente cuando el jugador se aproxima, al tiempo que se descargan los pedazos más alejadas que el jugador ya no puede ver.
+Para limitar el alcance de la visión del jugador, se juega con la ubicación de las barreras visuales, como montañas o edificios.
 
 [[fig-world-chunk-loading]]
 .Esquema de la división del mundo en subniveles cargándolas y descargándolas a demanda.
 include::diagrams/world_chunk_loading.adoc[]
 
+// TODO: Spiderman e impostors, hexagonal
+
+En todo caso, hay que tener en cuenta que la cámara nunca mostrará nada más allá de la distancia que tenga configurada en el _far clipping plane_ de la cámara.
+
 == Level streaming en Unreal Engine
 
-La solución de Unreal Engine 4 para este problema se llama *level streaming*<<UE-Level-Streaming>> que, como suele ocurrir con este motor, prácticamente viene lista para ser usada.
+La solución de Unreal Engine 4 para este problema se llama *Level Streaming*<<UE-Level-Streaming>> que, como suele ocurrir con este motor, prácticamente viene lista para ser usada.
 
 En Level Streaming existen 3 elementos:
 
@@ -49,34 +53,42 @@ Su función es gestionar los subniveles que se van a ir cargando y descargando s
 Puede tener actores que van a ser permanentes, como el cielo o exteriores que se ven en la distancia.
 
 * *Streaming Levels*.
-Son los subniveles que se van a ir cargando y descargando en lugares concretos del *persistent level*.
+Son los subniveles que se van a ir cargando y descargando en lugares concretos del *Persistent Level*.
 
 * *Level Streaming Volumes*.
-Son volúmenes que cargan o descargan los *streaming levels* que se le indiquen cuando el jugador entra en el volumen.
+Son volúmenes que cargan o descargan los *Streaming Levels* que se le indiquen cuando el jugador entra en el volumen.
 
-Obviamente el motor provee funciones para cargar y descargar *streaming levels* desde código por si queremos programa un comportamiento más complejo.
+Obviamente el motor provee funciones para cargar y descargar *Streaming Levels* desde código, por si queremos programar un comportamiento diferente para nuestro juego.
 
 == Word Composition en Unreal Engine
 
-Unreal Engine 4 también soporta una versión de *level streaming* en la que los *streaming levels* están distribuidos en una rejilla 2D y se van cargando y descargando según se acerca el jugador.
-
-En *Word Composition*<<UE-Word-Composition>> el nivel persistente no contiene información sobre los *streaming levels*, sino que estos se descubren buscando en la carpeta de contenidos que los contiene.
-Cada *streaming level* contiene la información necesaria para cargar el nivel en el lugar adecuado.
-De esta forma tanto el nivel persistente como los *streaming levels* son realmente independientes, permitiendo que varios desarrolladores trabajen al mismo tiempo en distintas ubicaciones del mundo.
-Lo que es especialmente importante en juegos de mundo abierto realmente grandes.
+Unreal Engine 4 también soporta una versión de *Level Streaming* en la que no se usan volúmenes para activar la carga y descarga de los niveles, sino que esta ocurre en base a la distancia del jugador al nivel.
+Esto permiten dividir el mundo en varios *Streaming Levels*, distribuidos en una rejilla 2D, que se van cargando y descargando según se acerca o se aleja el jugador.
 
 .Ventana de *Word Composition* donde se observa la disposición de los distintos niveles en el escenario.
 image::world_layout.jpg[]
 
-TIP: Aunque Unreal Engine no es un motor muy utilizado para juegos 2D, lo cierto es que posible hacerlo.
-En ese caso, se puede usar *Word Cls omposition* para tener niveles muy grandes que se van cargando a demanda, como suele ser necesario en los juegos del género metroidvania.
+En el *Word Composition*<<UE-Word-Composition>> el nivel persistente no contiene información sobre los *Streaming Levels*, sino que estos se descubren buscando en una carpeta de contenidos.
+Cada *Streaming Level* contiene la información de su ubicación y la distancia a la que debe estar el jugador para cargar el nivel.
+De esta forma, tanto el nivel persistente como los *Streaming Levels* son realmente independientes, permitiendo que varios desarrolladores trabajen al mismo tiempo en distintas ubicaciones del mundo.
+Lo que es especialmente importante en juegos de mundo abierto, donde los mapas suelen ser enormes.
+
+TIP: Los *Streaming Levels* también se pueden marcar como *Always Streaming* para cargarlos automáticamente al cargar el nivel persistente.
+Esto es útil para facilitar la colaboración, al permitir que múltiples desarrolladores trabajen en el mismo nivel al mismo tiempo, solo que en diferentes subniveles<<UE-Collaborate-Sublevels>> entre los que reparten diferentes elementos del nivel: entorno, iluminación, _gameplay_, etc.
+
+Unreal Engine también permite mostrar representaciones de los *Streaming Levels* con menor nivel de detalle (LOD) cuando el usuario está a mayor distancia que la distancia de carga del nivel.
+Esto permite ahorra recursos al no tener que cargar el *Streaming Level* completo hasta que el usuario no está lo bastante cerca como para ver los detalles.
+
+TIP: Aunque Unreal Engine no es un motor muy utilizado para juegos 2D, lo cierto es que posible utilizarlo mediante Paper2D.
+En ese caso, se puede usar *Word Composition* para tener niveles muy grandes que se van cargando a demanda, como suele ser necesario en los juegos del género metroidvania.
 
 == Composición de niveles en Unity
 
 En Unity las soluciones son las mismas que las comentadas anteriormente para Unreal Engine, pero no vienen implementadas en el motor.
+Como es habitual, tendremos que hacerlo nosotros mismos o adquirir alguna solución de la _Asset Store_<<Unity-World-Streamer>>.
 
-Como es habitual, tendremos que hacerlo nosotros mismos, usando los métodos {unity-loadsceneasync} —en modo aditivo— y {unity-unloadsceneasync}.
-En cualquier caso, no es nada complejo y nos da mucha flexibilidad para darle otros usos a las escenas.
+Para hacerlo nosotros mismos necesitaremos usar los métodos {unity-loadsceneasync} —en modo aditivo— y {unity-unloadsceneasync} para cargar y descargar las escenas.
+En cualquier caso, no es nada complejo y nos da mucha flexibilidad para hacerlo como queramos o para darle otros usos a las escenas —como, por ejemplo, para descomponer los niveles para facilitar la colaboración—.
 
 NOTE: Es importante utilizar las versiones «Async» para no detener el juego mientras se cargan las escenas.
 
@@ -86,10 +98,12 @@ Tanto Unreal Engine como Unity utilizan números punto flotante de 32 bits —o 
 
 Algunos motivos para esta decisión podrían ser:
 
-* Si hubieran optado por números de punto flotantes de 64 bits, necesitarían más memoria, porque cada uno ocuparía el doble de lo que ocupan ahora.
+* Si hubieran optado por números de punto flotantes de 64 bits, necesitarían más memoria, se aprovecharían peor las memorias caché y el ancho de banda de la memoria, porque cada número ocuparía el doble de lo que ocupan ahora.
 
 * Aunque ya no es tan común, han existido arquitecturas sin soporte para números de punto flotante de 64 bits.
 Esto es algo a tener en cuenta si se quiere desarrollar un motor que sea portable a diferentes arquitecturas.
+
+* Las GPU suelen ofrece peor rendimiento trabajando con punto flotante de 64 bits, lo que obliga a usar el truco de transformar las coordenadas de los vértices para que sean relativas a la posición de la cámara, de forma que puedan almacenarse en punto flotante de 32 bits durante el _render_.
 
 El problema es que la precisión de los números de punto flotante no es fija.
 Como se puede ver en la <<fig-ieee754-precision>>, a mayor sea el valor que almacenan, peor es la precisión.
@@ -114,23 +128,28 @@ image::traslación_del_origen.svg[]
 
 === En Unreal Engine
 
-Nuevamente, en Unreal Engine ya viene implementado.
+Nuevamente, en Unreal Engine ya viene implementado, permitiendo crear mundos de hasta 20 Km.⨯20 Km sin problemas de precisión.
 Tan solo hay que activar la opción _Enable World Origin Rebasing_.
 
-Esto funciona incluso en juegos en red, permitiendo mundos de hasta 20 Km.⨯20 Km sin problemas de precisión.
-Los detalles de como lo hace se pueden leer en el foro de Unreal Engine<<UE-Forums-Origin-Shifting>> y en el correspondiente _pull Request_ en GitHub<<UE-Github-PR-Origin-Shifting>>.
+NOTE: Los detalles de como lo hace se pueden leer en el foro de Unreal Engine<<UE-Forums-Origin-Shifting>> y en el correspondiente _pull Request_ en GitHub<<UE-Github-PR-Origin-Shifting>>.
+
+Sin embargo, Unreal Engine no soporta actualmente la traslación del origen en juegos multijugador en red.
+Así que los estudios que lo necesitan deben implementar su propia solución en el lado del servidor del juego.
 
 === En Unity
 
-En Unity, como es más común, tendremos que hacerlo nosotros mismos:
+En Unity, como es más común, tendremos que recurrir a alguna solución de la _Asset Store_<<Unity-World-Streamer>> o hacerlo nosotros mismos:
 
 . Iterar sobre todos los _GameObject_ de cada escena para desplazarlos, de tal forma que el jugador vuelva a estar cerca del origen del sistema de referencia.
 
 . Hay que tener cuidado con tener muchos _collider_ estáticos —aquellos en _GameObjects_ sin un component _Rigidbody_— por que moverlos tiene un gran impacto en el motor de físicas, ya que le obliga a recalcular ciertas estructuras de datos internas, haciendo que se pierdan _frames_ o provocando problemas con el sonido.
 El cualquier caso, para evitar problemas con el motor de físicas, el mejor sitio para mover los objetos es `FixedUpdate()`.
 
-. Otros componentes que necesiten coordenadas globales estáticas también pueden dar problemas.
-Por ejemplo, si se usa _Nav Mesh_, deben ser recalcularlos tras el desplazamiento.
+. No se puede usar _static batching_ porque los _GameObjects_ incluidos en un _static batch_ son bloqueados por Unity, ya que son combinados con otros _GameObjects_ en una malla común.
+En caso necesario, podemos implementar nuestra propia solución de _static batching_ o combinar las mallas manualmente.
+
+. Otros componentes y recursos de la _Asset Store_ que usen coordenadas globales estáticas también pueden dar problemas.
+Por ejemplo, si se usa _Nav Mesh_, es necesario recalcularlos tras el desplazamiento.
 Mientras que no se puede utilizar _Global Illumination_, porque la información de iluminación se ha precalculado para objetos estáticos en posiciones concretas del mundo, lo que obliga a usar técnicas alternativas que puedan proporcionar resultados similares —como, por ejemplo, _Ambient Occlusion_—.
 
 ==== Renderizado relativo a la cámara
@@ -200,23 +219,30 @@ Epic Games, Inc. Level Streaming. _Unreal Engine 4 Documentation_. https://docs.
 * [[[UE-Word-Composition,2]]]
 Epic Games, Inc. World Composition User Guide. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/BuildingWorlds/LevelStreaming/WorldBrowser/index.html
 
-* [[[UE-Forums-Origin-Shifting,3]]]
+* [[[UE-Collaborate-Sublevels,3]]]
+Epic Games, Inc. Collaborate with Sublevels. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/Basics/Levels/CollaborateWithSublevels/index.html
+
+* [[[Unity-World-Streamer,4]]]
+NatureManufacture. _World Streamer 2_. Unity Asset Store.
+https://assetstore.unity.com/packages/tools/terrain/world-streamer-2-176482
+
+* [[[UE-Forums-Origin-Shifting,5]]]
 Michail Nikolaev. [27059-nkey]. (5 de enero de 2016). _[PLUGIN] Pull Request - World Origin Shifting in MP_. Unreal Engine Forums. https://forums.unrealengine.com/community/work-in-progress/81424-pull-request-world-origin-shifting-in-mp
 
-* [[[UE-Github-PR-Origin-Shifting,4]]]
+* [[[UE-Github-PR-Origin-Shifting,6]]]
 Michail Nikolaev. [michail-nikolaev]. (5 de mayo de 2016). _UE-13079: World Origin Shifting for Multiplayer #2359_. Unreal Engine Pull Request. https://github.com/EpicGames/UnrealEngine/pull/2359
 
-* [[[Unity-Forums-PhysX-Plugin,5]]]
+* [[[Unity-Forums-PhysX-Plugin,7]]]
 HerrVR. [herrvr.2831671]. (29 de marzo de 2019). _NVIDIA PhysX plugin - preview_. Unity Forums. https://forum.unity.com/threads/nvidia-physx-plugin-preview.645004/
 
-* [[[Unity-Forums-Thread01,6]]]
+* [[[Unity-Forums-Thread01,8]]]
 Marcos-Elias. [marcos-elias.71314]. (9 de mayo de 2019). _How to handle truly open world maps with Unity, due to floating point limitations?_ Unity Forums. https://forum.unity.com/threads/how-to-handle-truly-open-world-maps-with-unity-due-to-floating-point-limitations.530575/
 
-* [[[Unity-Forums-Thread02,7]]]
+* [[[Unity-Forums-Thread02,9]]]
 Marcos-Elias. [marcos-elias.71314]. (22 de marzo de 2019). _Feature request: a native origin shifter integrated with physics like on UE_. Unity Forums. https://forum.unity.com/threads/feature-request-a-native-origin-shifter-integrated-with-physics-like-on-ue.648736/
 
-* [[[Unity-Forums-Thread03,8]]]
+* [[[Unity-Forums-Thread03,10]]]
 Phelan-Simpson. [phelan-simpson.516717]. (15 de abril 2018). _Floating Point Errors and Large Scale Worlds_. Unity Forums. https://forum.unity.com/threads/floating-point-errors-and-large-scale-worlds.526807/
 
-* [[[Unity-Wiki-Floating-Origin,9]]]
+* [[[Unity-Wiki-Floating-Origin,11]]]
 Floating Origin. En _Unity Community_. http://wiki.unity3d.com/index.php?title=Floating_Origin&_ga=2.158366650.1017864420.1581032515-2049087233.1564526278
