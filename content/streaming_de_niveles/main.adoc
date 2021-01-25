@@ -1,4 +1,4 @@
-= Desarrollo de Videojuegos 3D: Composición de niveles
+= Desarrollo de Videojuegos 3D: Streaming de niveles
 Jesús Torres <jmtorres@ull.es>
 include::../version.adoc[]
 Curso {academic-year}
