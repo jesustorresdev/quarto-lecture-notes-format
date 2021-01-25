@@ -28,7 +28,7 @@ Hoy en día estas transiciones no destacan tanto.
 Para disimular la carga de la siguiente parte del nivel, se colocan ascensores, túneles bajo el agua o pasadizos estrechos en los que apenas se puede ver lo que hay delante.
 
 [[video-pasadizo-jedi-fallen-order, {video-caption} {counter:video-number}]]
-.{video-caption} {video-number}. Video de pasadizo en el _gamaplay_ de "Star Wars Jedi: Fallen Order" mostrado en el EA Play 2019.
+.{video-caption} {video-number}. Video de pasadizo en el _gamaplay_ de «Star Wars Jedi: Fallen Order» mostrado en el EA Play 2019.
 video::GtzLWZ0LCNs[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 En mundos abiertos en exteriores, se puede dividir el nivel en varios pedazos, para ir cargándolos dinámicamente cuando el jugador se aproxima, al tiempo que se descargan los pedazos más alejadas que el jugador ya no puede ver.
@@ -38,9 +38,26 @@ Para limitar el alcance de la visión del jugador, se juega con la ubicación de
 .Esquema de la división del mundo en subniveles cargándolas y descargándolas a demanda.
 include::diagrams/world_chunk_loading.adoc[]
 
-// TODO: Spiderman e impostors, hexagonal
+En mapas extensos sin barreras visuales, donde el jugador puede ver durante gran parte del tiempo hasta el horizonte, se pueden usar *impostores* para aproximar con menor nivel de detalle las regiones no cargadas del mapa.
+Los *impostores* consisten en mallas muy simples —como un plano cuadrado o una figura polinomial básica— que siempre se orientan de cara a la cámara.
+El objeto o la escena suplantada es renderizado desde varios ángulos y cada imagen se almacena en un atlas de textura, de tal forma que después, durante el juego, el *impostor* muestra la textura más adecuada para el ángulo de visión de la cámara.
+En el caso más extremo, el *impostor* se puede implementar como un sencillo plano rectangular de cara a la cámara con una única textura —tradicionalmente llamado *billboard*—.
 
-En todo caso, hay que tener en cuenta que la cámara nunca mostrará nada más allá de la distancia que tenga configurada en el _far clipping plane_ de la cámara.
+// Referencias:
+// https://philliphamlyn.wordpress.com/2013/04/03/billboards-imposters-and-meshes/
+// https://wiki.amplify.pt/index.php?title=Unity_Products:Amplify_Impostors/Manual
+
+En cualquier caso, hay que tener en cuenta que nunca se renderizará nada más allá de la distancia máxima configurada en la cámara —a veces llamada _far clipping plane_—.
+
+[[video-spiderman-level-streaming, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Conferencia «Marvel's Spider-Man: A Technical Postmortem» en GDC 2019.
+video::KDhKyIZd3O8[youtube, start="891", width=854, height=480]
+
+En Marvel's Spider-Man (2018), las calles de Manhattan atraviesan la ciudad de extremo a extremo, por lo que el jugador debe poder ver amplias porciones del mapa.
+Adicionalmente, el personaje se puede mover muy rápidamente por la ciudad, lo que representa un reto para cargar lo bastante rápido las porciones que puede alcanzar.
+
+En el <<video-spiderman-level-streaming>> se explica que optaron por dividir el mapa en regiones hexagonales, puesto que así solo es necesario tener cargadas 6 regiones alrededor de la actual —y no 8, como ocurre si se divide el mapa en cuadrados—.
+Más allá de esas regiones se usan impostores, para que el jugador no vea que el esto de la ciudad no está cargada.
 
 == Level streaming en Unreal Engine
 
@@ -76,7 +93,7 @@ Lo que es especialmente importante en juegos de mundo abierto, donde los mapas s
 TIP: Los *Streaming Levels* también se pueden marcar como *Always Streaming* para cargarlos automáticamente al cargar el nivel persistente.
 Esto es útil para facilitar la colaboración, al permitir que múltiples desarrolladores trabajen en el mismo nivel al mismo tiempo, solo que en diferentes subniveles<<UE-Collaborate-Sublevels>> entre los que reparten diferentes elementos del nivel: entorno, iluminación, _gameplay_, etc.
 
-Unreal Engine también permite mostrar representaciones de los *Streaming Levels* con menor nivel de detalle (LOD) cuando el usuario está a mayor distancia que la distancia de carga del nivel.
+Unreal Engine también permite mostrar representaciones de los *Streaming Levels* con menor nivel de detalle (LOD{blank}footnote:[{fn-lod}]) cuando el usuario está a mayor distancia que la distancia de carga del nivel.
 Esto permite ahorra recursos al no tener que cargar el *Streaming Level* completo hasta que el usuario no está lo bastante cerca como para ver los detalles.
 
 TIP: Aunque Unreal Engine no es un motor muy utilizado para juegos 2D, lo cierto es que posible utilizarlo mediante Paper2D.
@@ -138,7 +155,7 @@ Así que los estudios que lo necesitan deben implementar su propia solución en 
 
 === En Unity
 
-En Unity, como es más común, tendremos que recurrir a alguna solución de la _Asset Store_<<Unity-World-Streamer>> o hacerlo nosotros mismos:
+En Unity, como es más común, tendremos que tirar de la _Asset Store_ o hacerlo nosotros mismos:
 
 . Iterar sobre todos los _GameObject_ de cada escena para desplazarlos, de tal forma que el jugador vuelva a estar cerca del origen del sistema de referencia.
 
@@ -151,6 +168,8 @@ En caso necesario, podemos implementar nuestra propia solución de _static batch
 . Otros componentes y recursos de la _Asset Store_ que usen coordenadas globales estáticas también pueden dar problemas.
 Por ejemplo, si se usa _Nav Mesh_, es necesario recalcularlos tras el desplazamiento.
 Mientras que no se puede utilizar _Global Illumination_, porque la información de iluminación se ha precalculado para objetos estáticos en posiciones concretas del mundo, lo que obliga a usar técnicas alternativas que puedan proporcionar resultados similares —como, por ejemplo, _Ambient Occlusion_—.
+
+Por suerte, existen soluciones en la _Asset Store_ que ofrecen en Unity funcionalidades muy similares a las de Unreal Engine<<Unity-World-Streamer>>. 
 
 ==== Renderizado relativo a la cámara
 
@@ -170,17 +189,18 @@ En resumen, si hiciera falta, sería posible hacer una implementación propia de
 
 ==== El problema en los foros de Unity
 
-Unity no es un motor para crear mundos abiertos —al menos hasta que DOTS{blank}footnote:[{fn-unity-dots}] deje de estar en estado de _preview_— pero no por eso algunos han dejado de intentarlo.
+Unity no es un motor diseñado para crear mundos abiertos, pero no por eso algunos se han resistido a intentarlo.
 
 En caso de que tengamos que enfrentarnos a ese problema, un buen lugar para extraer ideas son los foros de Unity.
 Los hilos <<Unity-Forums-Thread01>>, <<Unity-Forums-Thread02>> y <<Unity-Forums-Thread03>> son muy interesantes, aunque un poco antiguos.
+También es interesante la documentación de <<Unity-World-Streamer>> y los hilos del foro relativos a ese paquete.
 
 En algunos mensajes se hace referencia a este script <<Unity-Wiki-Floating-Origin>> para trasladar todos los objetos de la escena, aunque hay que tener en cuenta que se puede optimizar muchísimo.
 Por ejemplo, usando `FixedUpdate()` en lugar de `LateUpdate()`, para lanzar la acción, o evitando el uso de `FindObjectOfType()` para localizar los objetos, haciendo que estos se registren previamente en algún _array_ o lista.
 Entre los mensajes del foro hay bastantes sugerencias de optimización y hasta alguna implementación mucho mejor que la anterior.
 
 // TODO: Actualizar esto cuando se sepa más.
-Unity esta trabajando en facilitar la traslación del origen en proyectos con DOTS, pero por el momento no se conocen más detalles.
+Unity ha anunciado varias veces que está trabajando en facilitar la traslación del origen en proyectos con DOTS{blank}footnote:[{fn-unity-dots}], pero por el momento no se conocen más detalles.
 
 == ¿Y si cambiamos la escala?
 
