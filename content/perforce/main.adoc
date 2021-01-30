@@ -368,6 +368,9 @@ Los estudios _indie_ pueden pedir también acceso gratuito para hasta 5 usuarios
 La instalación del cliente de Perforce incluye un servidor personal que se puede utilizar tanto para trabajar de forma aislada en proyectos personales, como para trabajar en proyecto colaborativos de forma distribuida; de manera similar a como se trabaja con Git.
 Todos los detalles de esta forma de trabajar se explican con detalle en <<Perforce-DVCS>>.
 
+.Relación entre servidores Perforce con versionado distribuido -- Fuente: Using Helix Core Server for Distributed Versioning<<Perforce-DVCS>>.
+image::dvcs_personal_shared.png[]
+
 En este caso:
 
 . Se clonan con `{p4v-clone}` la ruta que nos interesa del servidor compartido en el servidor personal, para trabajar en los archivos de manera aislada.
@@ -382,8 +385,19 @@ Se pueden crear reglas complejas para solo mapear un subconjunto de los archivos
 
 . Se puede usar *{p4v-fetch}* periódicamente para traer al servidor personal las actualizaciones realizadas por otros colaboradores en el servidor compartido.
 
-.Relación entre servidores Perforce con versionado distribuido -- Fuente: Using Helix Core Server for Distributed Versioning<<Perforce-DVCS>>.
-image::dvcs_personal_shared.png[]
+[NOTE]
+====
+Actualmente, ni Unity ni Unreal Engine soportan trabajar con el servidor personal.
+Esto es debido a que no «escucha» en la red, sino que cada comando del cliente lanza un programa que manipula directamente el sistema de archivos local.
+
+Para utilizar el modo DVCS con estos motores, o instalamos y usamos localmente un servidor de Perforce P4S completo o hacemos accesible nuestro servidor personal, a través de `localhost`, ejecutando el siguiente comando:
+
+[source,console]
+----
+> "C:\Program Files\Perforce\DVCS\p4d" -r "X:\Ruta hasta\.p4root\en el servidor personal" -p 1666
+----
+
+====
 
 [bibliography]
 == Referencias
