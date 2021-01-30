@@ -647,7 +647,7 @@ Durante el desarrollo es fundamental seguir la pista a todo los cambios, asegura
 Esto permite probar diferentes alternativas, con la seguridad de que podemos volver a cualquier version anterior, si decidimos que los cambios que estamos probando no funcionan.
 Para eso es fundamental contar con herramientas de control de versiones —en inglés, _Version Control System_ o VCS— como Git, {perforce}[Perforce] o {plastic-scm}[Plastic SCM].
 
-En desarrollo de videojuegos, herramientas como Plastic SCM y Perforce —que es considerado el estándar de facto de la industria— tienen una ventaja importante respecto a Git en que tienen la capacidad de almacenar y versionar los recursos del juego, contenidos de arte y documentos de diseño, además del código fuente{blank}footnote:[{fn-git-lfs}].
+En desarrollo de videojuegos, herramientas como Plastic SCM y Perforce —que es considerado el estándar _de facto_ de la industria— tienen una ventaja importante respecto a Git en que tienen la capacidad de almacenar y versionar los recursos del juego, contenidos de arte y documentos de diseño, además del código fuente{blank}footnote:[{fn-git-lfs}].
 
 En los estudios más grandes se suele utilizar un gestor de recursos digitales —en inglés, _Digital Asset Manager_ o DAM— para gestionar específicamente los recursos artísticos.
 El ejemplo más común es {shotgun}[Shotgun].

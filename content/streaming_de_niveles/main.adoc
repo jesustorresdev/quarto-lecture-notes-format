@@ -51,7 +51,7 @@ En cualquier caso, hay que tener en cuenta que nunca se renderizará nada más a
 
 [[video-spiderman-level-streaming, {video-caption} {counter:video-number}]]
 .{video-caption} {video-number}. Conferencia «Marvel's Spider-Man: A Technical Postmortem» en GDC 2019.
-video::KDhKyIZd3O8[youtube, start="891", width=854, height=480]
+video::KDhKyIZd3O8[youtube, opts="modest", start="891", width=854, height=480]
 
 En Marvel's Spider-Man (2018), las calles de Manhattan atraviesan la ciudad de extremo a extremo, por lo que el jugador debe poder ver amplias porciones del mapa.
 Adicionalmente, el personaje se puede mover muy rápidamente por la ciudad, lo que representa un reto para cargar lo bastante rápido las porciones que puede alcanzar.
@@ -247,22 +247,22 @@ NatureManufacture. _World Streamer 2_. Unity Asset Store.
 https://assetstore.unity.com/packages/tools/terrain/world-streamer-2-176482
 
 * [[[UE-Forums-Origin-Shifting,5]]]
-Michail Nikolaev. [27059-nkey]. (5 de enero de 2016). _[PLUGIN] Pull Request - World Origin Shifting in MP_. Unreal Engine Forums. https://forums.unrealengine.com/community/work-in-progress/81424-pull-request-world-origin-shifting-in-mp
+Michail Nikolaev. [27059-nkey]. (2016, 5 de enero). _[PLUGIN] Pull Request - World Origin Shifting in MP_. Unreal Engine Forums. https://forums.unrealengine.com/community/work-in-progress/81424-pull-request-world-origin-shifting-in-mp
 
 * [[[UE-Github-PR-Origin-Shifting,6]]]
-Michail Nikolaev. [michail-nikolaev]. (5 de mayo de 2016). _UE-13079: World Origin Shifting for Multiplayer #2359_. Unreal Engine Pull Request. https://github.com/EpicGames/UnrealEngine/pull/2359
+Michail Nikolaev. [michail-nikolaev]. (2016, 5 de mayo). _UE-13079: World Origin Shifting for Multiplayer #2359_. Unreal Engine Pull Request. https://github.com/EpicGames/UnrealEngine/pull/2359
 
 * [[[Unity-Forums-PhysX-Plugin,7]]]
-HerrVR. [herrvr.2831671]. (29 de marzo de 2019). _NVIDIA PhysX plugin - preview_. Unity Forums. https://forum.unity.com/threads/nvidia-physx-plugin-preview.645004/
+HerrVR. (2019, 29 de marzo). _NVIDIA PhysX plugin - preview_. Unity Forums. https://forum.unity.com/threads/nvidia-physx-plugin-preview.645004/
 
 * [[[Unity-Forums-Thread01,8]]]
-Marcos-Elias. [marcos-elias.71314]. (9 de mayo de 2019). _How to handle truly open world maps with Unity, due to floating point limitations?_ Unity Forums. https://forum.unity.com/threads/how-to-handle-truly-open-world-maps-with-unity-due-to-floating-point-limitations.530575/
+Marcos-Elias. (2019, 9 de mayo). _How to handle truly open world maps with Unity, due to floating point limitations?_ Unity Forums. https://forum.unity.com/threads/how-to-handle-truly-open-world-maps-with-unity-due-to-floating-point-limitations.530575/
 
 * [[[Unity-Forums-Thread02,9]]]
-Marcos-Elias. [marcos-elias.71314]. (22 de marzo de 2019). _Feature request: a native origin shifter integrated with physics like on UE_. Unity Forums. https://forum.unity.com/threads/feature-request-a-native-origin-shifter-integrated-with-physics-like-on-ue.648736/
+Marcos-Elias. (2019, 22 de marzo). _Feature request: a native origin shifter integrated with physics like on UE_. Unity Forums. https://forum.unity.com/threads/feature-request-a-native-origin-shifter-integrated-with-physics-like-on-ue.648736/
 
 * [[[Unity-Forums-Thread03,10]]]
-Phelan-Simpson. [phelan-simpson.516717]. (15 de abril 2018). _Floating Point Errors and Large Scale Worlds_. Unity Forums. https://forum.unity.com/threads/floating-point-errors-and-large-scale-worlds.526807/
+Phelan-Simpson. (2018, 15 de abril). _Floating Point Errors and Large Scale Worlds_. Unity Forums. https://forum.unity.com/threads/floating-point-errors-and-large-scale-worlds.526807/
 
 * [[[Unity-Wiki-Floating-Origin,11]]]
 Floating Origin. En _Unity Community_. http://wiki.unity3d.com/index.php?title=Floating_Origin&_ga=2.158366650.1017864420.1581032515-2049087233.1564526278
