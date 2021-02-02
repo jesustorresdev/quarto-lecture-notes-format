@@ -276,9 +276,10 @@ No significa que no se puede conseguir grandes resultados visuales con Unity, ni
 image::rust.jpg[]
 
 NOTE: Unreal Engine viene con una configuración por defecto con la que en un primer vistazo las escenas se ven mejor que en Unity.
-Fundamentalmente se debe a la configuración por defecto de posprocesado, que en Unity hay que añadirla a mano para obtener un aspecto similar.
+Fundamentalmente se debe a la configuración por defecto de posprocesado, que en Unity hay que añadir y ajustar a mano para obtener un aspecto similar.
 
-Como contrapartida, Unity suele ser más ligero en plataformas móviles, que no tienen sino una fracción de la potencia gráfica de otras plataformas, por lo que suele ser el primer candidato, incluso para 3D.
+En móviles —o en la web— donde la potencia gráfica es una fracción de la disponible en otras plataformas, no se notan tanto estas diferencias y se valoran más otras características.
+En general, Unity ofrece mejor soporte 2D y mejores herramientas para desarrollar en estas plataformas.
 
 === Curva de aprendizaje
 
@@ -331,7 +332,15 @@ Otro ejemplo es el soporte de red en Unity, que es existente —después de que 
 Aunque adquirir estos componentes es la vía más rápida y es fantástico tener un enorme _marketplace_ en el que elegir, debemos tener en cuenta que cada _plugin_ comprado añade una dependencia adicional al proyecto.
 Es decir, que no solo dependemos del equipo de desarrollo de Unity, sino también del de las extensiones de la _Asset Store_ que usemos.
 
-NOTE: En todo caso es conveniente señalar que en lo respecta al desarrollo de videojuegos 2D y móvil, Unity ofrece por defecto un mejor conjunto herramientas.
+En todo caso, como ya hemos comentado, es conveniente señalar que en lo respecta al desarrollo de videojuegos 2D y móvil, Unity ofrece por defecto un mejor conjunto herramientas.
+También permite crear aplicaciones más pequeñas y posiblemente tengan una ligera ventaja en el consumo de batería<<Nilsson2019>>.
+
+La diferencia en el tamaño no es demasiado relevante en juegos 3D con cientos de MB de contenido, ya que apenas es significativa.
+Pero si lo es en pequeños juegos 2D, donde ajustando las opciones de Unity adecuadamente se puede llegar a generar paquetes por debajo de 10MB.
+En Android, eso significa que la aplicación es compatible con Google Play Instant, por lo que los usuarios pueden jugar sin instalarla.
+Mientras que los desarrollos con Unreal Engine difícilmente bajan de 30MB, y solo después de jugar bastante con los ajustes de configuración<<Nowakowski2018>><<UE-Huge-APK>>.
+
+// TODO: Hacer una prueba para comprobar el límite inferior con Paper2D.
 
 === Estructura de costes
 
@@ -367,5 +376,14 @@ List of Unreal Engine games. En _Wikipedia_. https://en.wikipedia.org/wiki/List_
 * [[[Wikipedia-AnvilNext,6]]]
 AnvilNext. En _Wikipedia_. https://en.wikipedia.org/wiki/AnvilNext
 
-* [[[Santamaria]]]
-Ramon Santamaria. _CUSTOM GAME ENGINES: A Small Study_. https://gist.github.com/raysan5/909dc6cf33ed40223eb0dfe625c0de74
+* [[[Santamaria,7]]]
+Santamaria, R. _CUSTOM GAME ENGINES: A Small Study_. https://gist.github.com/raysan5/909dc6cf33ed40223eb0dfe625c0de74
+
+* [[[Nilsson2019,8]]]
+Nilsson, R. _Battery Performance Comparison Of Unreal Engine 4 And Unity Applications running on Android_. http://bth.diva-portal.org/smash/record.jsf?pid=diva2%3A1327691&dswid=2790
+
+* [[[Nowakowski2018,9]]]
+Novakowski, D. (2018, 11 de diciembre). Reducing build size of Android game in Unreal Engine 4. _Damian Nowakowski_. https://damnow.blogspot.com/2018/12/reducing-build-size-of-android-game-in.html
+
+* [[[UE-Huge-APK,10]]]
+Read, H. [14852-henry-read]. (2015, 24 de junio). _Mobile Game Package Size is so huge_. Unreal Engine Forums. https://forums.unrealengine.com/development-discussion/android-development/45246-mobile-game-package-size-is-so-huge
