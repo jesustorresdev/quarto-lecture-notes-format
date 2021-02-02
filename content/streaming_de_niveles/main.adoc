@@ -247,10 +247,10 @@ NatureManufacture. _World Streamer 2_. Unity Asset Store.
 https://assetstore.unity.com/packages/tools/terrain/world-streamer-2-176482
 
 * [[[UE-Forums-Origin-Shifting,5]]]
-Michail Nikolaev. [27059-nkey]. (2016, 5 de enero). _[PLUGIN] Pull Request - World Origin Shifting in MP_. Unreal Engine Forums. https://forums.unrealengine.com/community/work-in-progress/81424-pull-request-world-origin-shifting-in-mp
+Nikolaev, M. [27059-nkey]. (2016, 5 de enero). _[PLUGIN] Pull Request - World Origin Shifting in MP_. Unreal Engine Forums. https://forums.unrealengine.com/community/work-in-progress/81424-pull-request-world-origin-shifting-in-mp
 
 * [[[UE-Github-PR-Origin-Shifting,6]]]
-Michail Nikolaev. [michail-nikolaev]. (2016, 5 de mayo). _UE-13079: World Origin Shifting for Multiplayer #2359_. Unreal Engine Pull Request. https://github.com/EpicGames/UnrealEngine/pull/2359
+Nikolaev, M. [michail-nikolaev]. (2016, 5 de mayo). _UE-13079: World Origin Shifting for Multiplayer #2359_. Unreal Engine Pull Request. https://github.com/EpicGames/UnrealEngine/pull/2359
 
 * [[[Unity-Forums-PhysX-Plugin,7]]]
 HerrVR. (2019, 29 de marzo). _NVIDIA PhysX plugin - preview_. Unity Forums. https://forum.unity.com/threads/nvidia-physx-plugin-preview.645004/
