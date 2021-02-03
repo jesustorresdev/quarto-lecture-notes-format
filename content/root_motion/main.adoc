@@ -259,7 +259,7 @@ Skeletal Animation. En _Wikipedia_. https://en.wikipedia.org/wiki/Skeletal_anima
 Fernando, R. (2004). Skinning. _GPU Gems: Programming Techniques, Tips and Tricks for Real-Time Graphics_. Addison-Wesley Professional. https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-4-animation-dawn-demo
 
 * [[[MixamoConverter,3]]]
-_Mixamo Converter_. https://github.com/enziop/mixamo_converter
+enziop. Mixamo Converter [Repositorio de software]. https://github.com/enziop/mixamo_converter
 
 * [[[Unity-RootMotionOnImportedClips,4]]]
 Unity Technologies. Root Motion Node. _Unity Manual_. https://docs.unity3d.com/Manual/AnimationRootMotionNodeOnImportedClips.html
