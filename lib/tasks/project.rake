@@ -61,6 +61,9 @@ Project::find_documents().each do |document|
 
         desc 'Generar la versión en EPUB de todos los documentos del proyecto'
         task :epub => "#{document[:namespace_prefix]}build:epub"
+
+        desc 'Generar el archivo de estadísticas de todos los documentos del proyecto'
+        task :docstats => "#{document[:namespace_prefix]}build:docstats"
     end
 
     namespace "#{document[:namespace_prefix]}tests" do
