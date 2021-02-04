@@ -1,4 +1,4 @@
-:document-characters: 25974
-:document-words: 5018
-:document-paragraphs: 59
-:document-reading-time: 25 minutos
+:document-characters: 27159
+:document-words: 5228
+:document-paragraphs: 61
+:document-reading-time: 26 minutos
