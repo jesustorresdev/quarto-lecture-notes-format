@@ -601,7 +601,7 @@ Así que la regla general es que es mejor tener muchos árboles en la raíz de l
 
 A efectos prácticos esto se traduce en que:
 
-* Como los objetos estáticos del escenario —mallas, luces, terreno, etc— no se mueven, se pueden poner todos juntos en un único árbol, lo que resulta muy cómodo para organizar esos objetos en la escena.
+* Como los objetos estáticos de la escena —mallas, luces, terreno, etc— no se mueven, se pueden poner todos juntos en un único árbol, lo que resulta muy cómodo para organizar esos objetos en la escena.
 
 * Pero los _GameObject_ de _gameplay_ —el jugador, los enemigos, etc.— deberían estar en la raíz.
 Y los _GameObject_ creados dinámicamente nunca hacerlos hijos de quién los creó, a menos que tengan que moverse con ese objeto.
