@@ -14,6 +14,20 @@ include::docstats.adoc[]
 {document-reading-time}
 ====
 
+Los motores utilizan diferentes estrategias para optimizar recursos y permitirnos explorar niveles relativamente grandes.
+Lo hacen especialmente bien en lo que respecta a optimizar el _render_ para el máximo aprovechamiento de la GPU.
+Por ejemplo, un paso estándar en las etapas de _render_ es excluir los objetos fuera del ángulo de visión de la cámara —lo que se denomina _frustum culling_—.
+Otra técnica disponible comúnmente es el _occlusion culling_, con la que durante la compilación se genera una estructura de datos que el motor puede consultar rápidamente en tiempo de ejecución, para saber qué objetos son visibles para el punto de vista actual de la cámara, siendo estos los únicos enviados al _render_.
+
+A nivel de _gameplay_ la responsabilidad cae más bien de nuestro lado.
+Podemos considerar los objetos que deben estar activos en cada momento del juego y mantener desactivados el resto hasta que son necesario, evitando que el código que los controla consuma recursos inútilmente.
+Usando _triggers_ dispuestos adecuadamente en la escena, podemos hacer que lo objetos se activen cuándo sea necesario —mientras otros que ya no lo son, son desactivados—.
+
+Sin embargo, pese a todo el cuidado que le pongamos, pueden llegar un momento en que el nivel que queremos desarrollar no quepa en la memoria.
+Especialmente si hablamos de consolas o plataformas móviles, donde este recursos está mucho más limitado que en PC.
+
+== Streaming de niveles
+
 Cuando el nivel o el mundo —en los juegos de mundo abierto— que queremos desarrollar es demasiado extenso como para cargarlo de una sola vez, estamos obligados a dividirlo en diferentes mapas o escenas, cargándolas y descargándolas bajo demanda según se desarrolla el juego.
 Esto, indudablemente, condiciona el diseño del nivel.
 
@@ -65,7 +79,7 @@ La solución de Unreal Engine 4 para este problema se llama *Level Streaming*<<U
 
 En Level Streaming existen 3 elementos:
 
-* *Persistent Level*. Es el nivel del escenario completo.
+* *Persistent Level*. Es el nivel de la escena completo.
 Su función es gestionar los subniveles que se van a ir cargando y descargando según sea necesario.
 Puede tener actores que van a ser permanentes, como el cielo o exteriores que se ven en la distancia.
 
@@ -82,7 +96,7 @@ Obviamente el motor provee funciones para cargar y descargar *Streaming Levels* 
 Unreal Engine 4 también soporta una versión de *Level Streaming* en la que no se usan volúmenes para activar la carga y descarga de los niveles, sino que esta ocurre en base a la distancia del jugador al nivel.
 Esto permiten dividir el mundo en varios *Streaming Levels*, distribuidos en una rejilla 2D, que se van cargando y descargando según se acerca o se aleja el jugador.
 
-.Ventana de *Word Composition* donde se observa la disposición de los distintos niveles en el escenario.
+.Ventana de *Word Composition* donde se observa la disposición de los distintos niveles en la escena.
 image::world_layout.jpg[]
 
 En el *Word Composition*<<UE-Word-Composition>> el nivel persistente no contiene información sobre los *Streaming Levels*, sino que estos se descubren buscando en una carpeta de contenidos.
@@ -99,7 +113,7 @@ Esto permite ahorra recursos al no tener que cargar el *Streaming Level* complet
 TIP: Aunque Unreal Engine no es un motor muy utilizado para juegos 2D, lo cierto es que posible utilizarlo mediante Paper2D.
 En ese caso, se puede usar *Word Composition* para tener niveles muy grandes que se van cargando a demanda, como suele ser necesario en los juegos del género metroidvania.
 
-== Composición de niveles en Unity
+== Streaming de niveles en Unity
 
 En Unity las soluciones son las mismas que las comentadas anteriormente para Unreal Engine, pero no vienen implementadas en el motor.
 Como es habitual, tendremos que hacerlo nosotros mismos o adquirir alguna solución de la _Asset Store_<<Unity-World-Streamer>>.
