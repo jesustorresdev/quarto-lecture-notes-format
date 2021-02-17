@@ -296,9 +296,9 @@ Sin embargo, como comentaremos en el <<_herramientas>>, esto también significa 
 Mientras que en Unity, con mucha frecuencia es necesario recurrir a su _marketplace_.
 ====
 
-Unity se programa C#, que es más asequible que C++ —utilizado en Unreal Engine— por lo que es más sencillo conseguir desarrolladores formados y suele ser más atractivo para los programadores.
+Unity se programa C#, que es más asequible que {cpp} —utilizado en Unreal Engine— por lo que es más sencillo conseguir desarrolladores formados y suele ser más atractivo para los programadores.
 La documentación de Unity cubre todos los aspectos del editor, de los componentes y de la API y está llena de ejemplos y recomendaciones.
-Mientras que en Unreal Engine la documentación es bastante extensa en lo que respecta al editor y el desarrollo con _blueprints_, pero no curre lo mismo con la API de C++, que prácticamente se limita a ser una referencia de clases y funciones.
+Mientras que en Unreal Engine la documentación es bastante extensa en lo que respecta al editor y el desarrollo con _blueprints_, pero no curre lo mismo con la API de {cpp}, que prácticamente se limita a ser una referencia de clases y funciones.
 
 Sin embargo, como veremos en el <<_estructura>>, el asunto de quien tiene mejor curva de aprendizaje cambia cuando, una vez superadas las primeras faces del aprendizaje, se quiere hacer frente a proyectos más realistas.
 

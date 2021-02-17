@@ -495,6 +495,8 @@ Unreal Engine trae varios tipos de uniones preajustadas que son de uso muy comú
 
 Pero en el fondo las 3 no son más que _constraints_ con ciertos valores concretos de configuración.
 Podemos diseñar nuestras propias uniones con otros parámetros, si nos hace falta.
+Además, Unreal Engine ofrece un componente llamado *Physics Handler* que se utilizar para coger un objeto con simulación física y trasladarlo, teniendo en cuenta el comportamiento físico.
+El objeto no queda unido al actor que lo «coge», que no este último debe ir actualizando la posición deseada del objeto según se mueve él.
 
 === Unity
 
@@ -651,11 +653,11 @@ En Unreal Engine estos _Physical Bodies_ y las _constraints_ de las articulacion
 A la hora de activar el _ragdoll_ es necesario:
 
 . Activar la simulación de la física en todos los huesos del personaje. Para eso en _blueprint_ se llama a *Set All Bodies Below Simulate Physics* indicado el hueso de la cadera —o el que corresponda— como el primero de la jerarquía.
-En C++ se usa el método `SetAllBodiesBelowSimulatePhysics()` del componente `USkeletalMeshComponent`.
+En {cpp} se usa el método `SetAllBodiesBelowSimulatePhysics()` del componente `USkeletalMeshComponent`.
 
 . Indicar que el peso de la simulación física en la animación es 1.0.
 Para es en _blueprint_ se usa *Set All Bodies Below Physics Blend Weight*.
-En C++ se usa el método `SetAllBodiesBelowPhysics Blend Weight()` del componente `USkeletalMeshComponent`.
+En {cpp} se usa el método `SetAllBodiesBelowPhysics Blend Weight()` del componente `USkeletalMeshComponent`.
 
 TIP: Si queremos, este último parámetro nos permite crear un efecto mas cinematográfico, al poder cambiar el peso con el tiempo, siguiendo una curva.
 Esto permite que primero tuviera más peso la animación que se estaba reproduciendo, pero que tras unos instantes vaya dominando el movimiento la simulación física.
@@ -712,7 +714,7 @@ El editor de *Destructible Assets* también permite ajustar parámetros de la co
 Para que el actor se destruya en caso de colisión, debemos recordar que las opciones *Simulate Physics* y *Simulation Generates Hit Events* del actor deben estar activados.
 También podemos hacerlo desde el código del juego, usando los métodos de *DestructibleComponent*<<UE-Destructible-Component>>.
 
-En caso de problemas es conveniente consultar la guía de problemas en el Wiki de Unreal Engine<<UE-Destructible-Troubleshooting-Guide>>.
+En caso de problemas es conveniente consultar la guía de problemas en el Wiki de Unreal Engine<<UE-Wiki-Destructible-Troubleshooting-Guide>>.
 
 ==== Blast
 
@@ -870,8 +872,8 @@ Epic Games, Inc. Destructible Properties Matrix. _Unreal Engine 4 Documentation_
 * [[[UE-Destructible-Component,33]]]
 Epic Games, Inc. Destructible Component. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/BlueprintAPI/Components/Destructible/index.html
 
-* [[[UE-Destructible-Troubleshooting-Guide,34]]]
-Destructible Troubleshooting Guide. En _Unreal Engine Wiki_. Archivado en https://web.archive.org/web/20190622184203/https://wiki.unrealengine.com/Destructible_Troubleshooting_Guide
+* [[[UE-Wiki-Destructible-Troubleshooting-Guide,34]]]
+Destructible Troubleshooting Guide. En _Old UE4 Wiki_. https://nerivec.github.io/old-ue4-wiki/pages/destructible-troubleshooting-guide.html
 
 * [[[NVIDIA-Blast-GitHub,35]]]
 NVIDIA. Blast [Repositorio de software]. https://github.com/NVIDIAGameWorks/Blast
