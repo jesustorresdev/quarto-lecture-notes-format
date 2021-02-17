@@ -1,0 +1,32 @@
+[plantuml, format="svg"]
+....
+hide empty members
+class ClientClass
+
+abstract class AbstractFactory {
+  +Create()
+}
+
+class FactoryCatalog {
+  +GetFactory(factoryType) : AbstractFactory
+}
+
+class NPCFactory<<factory>> {
+  +Create() : NPC
+}
+
+class WeaponFactory<<factory>> {
+  +Create() : Weapon
+}
+
+entity NPC
+entity Weapon
+
+ClientClass --> FactoryCatalog : Obtener un factory
+ClientClass --> AbstractFactory : Crear una entidad
+NPCFactory --> "NPC" : Crear
+WeaponFactory --> "Weapon" : Crear
+
+AbstractFactory <|-- NPCFactory
+AbstractFactory <|-- WeaponFactory
+....

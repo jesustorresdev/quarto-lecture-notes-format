@@ -1,0 +1,2 @@
+:fn-npc: pass:n[NPC son las siglas de _Non-player character_ o personaje no jugador.]
+:fn-spawn-system: pass:n[El _spawn system_ determina donde aparecen el jugador y los NPC durante el juego.]

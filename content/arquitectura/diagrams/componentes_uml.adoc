@@ -1,0 +1,29 @@
+[plantuml, format="svg"]
+....
+hide empty members
+entity SwordFightingEntity
+entity MagicFightingEntity
+entity BowFightingEntity
+entity MagicAndSwordFightingEntity
+
+SwordFightingEntity *-- Damageable
+SwordFightingEntity *-- SwordFighting
+SwordFightingEntity *-- AIController
+
+AggressiveSwordFightingEntity *-- Damageable
+AggressiveSwordFightingEntity *-- SwordFighting
+AggressiveSwordFightingEntity *-- AggressiveAIController
+
+MagicFightingEntity *-- Damageable
+MagicFightingEntity *-- MagicFighting
+MagicFightingEntity *-- AIController
+
+BowFightingEntity *-- BowFighting
+BowFightingEntity *-- Damageable
+BowFightingEntity *-- AIController
+
+MagicAndSwordFightingEntity *-- Damageable
+MagicAndSwordFightingEntity *-- SwordFighting
+MagicAndSwordFightingEntity *-- MagicFighting
+MagicAndSwordFightingEntity *-- AIController
+....

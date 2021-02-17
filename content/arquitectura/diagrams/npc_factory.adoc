@@ -1,0 +1,20 @@
+[plantuml, format="svg"]
+....
+hide empty members
+
+class NPCFactory<<factory>> {
+  +CreateSimpleNPC(): NPC
+}
+
+ClientClass --> NPCFactory : Crear un SimpleNPC
+NPCFactory --> "NPC " : Crear
+
+package "NPC " <<Rectangle>> {
+  entity NPC
+  class Damageable
+  class SimpleAIBrain
+}
+
+NPC *-- Damageable
+NPC *-- SimpleAIBrain
+....

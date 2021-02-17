@@ -1,0 +1,12 @@
+[plantuml, format="svg"]
+....
+hide empty members
+Entity <|-- SwordFightingEntity
+Entity <|-- MagicFightingEntity
+Entity <|-- BowFightingEntity
+SwordFightingEntity <|-- MagicAndSwordFightingEntity
+SwordFightingEntity <|-- AggressiveSwordFightingEntity
+MagicFightingEntity <|-- AggressiveMagicFightingEntity
+BowFightingEntity <|-- AggressiveBowFightingEntity
+MagicAndSwordFightingEntity <|-- AggressiveMagicAndSwordFightingEntity
+....

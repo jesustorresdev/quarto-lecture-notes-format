@@ -1,0 +1,22 @@
+[plantuml, format="svg"]
+....
+hide empty members
+entity Weapon
+
+class ProjectileLauncher<<componente>> {
+    Fire()
+}
+
+class ProjectileManager <<(S,#FF7700) singleton>>{
+    +SpawnProjectile(location, rotation) : Projectile
+}
+
+class ProjectilePool <<ObjectPool>>{
+    +AddProjectile(projectile : Projectile)
+    +GetProjectile() : Projectile
+}
+
+Weapon *-- ProjectileLauncher
+ProjectileLauncher "*" --> "1" ProjectileManager
+ProjectileManager "1" --> "1" ProjectilePool
+....

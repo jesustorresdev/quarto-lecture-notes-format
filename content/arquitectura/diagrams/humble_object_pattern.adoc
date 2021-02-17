@@ -1,0 +1,21 @@
+[plantuml, format="svg"]
+....
+hide empty members
+entity Tomahawk
+
+class Projectile {
+    +Start()
+    +Update()
+    +OnCollisionEnter()
+    +OnCollisionExit()
+}
+
+class ProjectileController {
+    +Tick()
+    +HandleCollision()
+}
+
+Tomahawk *-- Projectile
+MonoBehaviour <|-- Projectile
+Projectile "1" --> "1" ProjectileController
+....

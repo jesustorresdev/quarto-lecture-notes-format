@@ -1,0 +1,6 @@
+:diamond-problem: https://es.wikipedia.org/wiki/Problema_del_diamante
+:localidad-referencia: https://es.wikipedia.org/wiki/Cercan%C3%ADa_de_referencias
+:dotween: http://dotween.demigiant.com/
+
+:unity-dots: https://unity.com/dots
+:ue-ucanvas: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/UCanvas/index.html

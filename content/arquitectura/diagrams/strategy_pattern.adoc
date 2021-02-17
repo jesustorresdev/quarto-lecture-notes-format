@@ -1,0 +1,15 @@
+[plantuml, format="svg"]
+....
+hide empty members
+entity Projectile {
+    -seekBehaviour : ISeekBehaviour
+    +SetSeekBehaviour(behaviour: ISeekBehaviour)
+}
+
+interface ISeekBehaviour
+
+Projectile *-- ISeekBehaviour
+ISeekBehaviour <|-- SeekWithHeat
+ISeekBehaviour <|-- SeekWithSonar
+ISeekBehaviour <|-- SeekToFixedLocation
+....

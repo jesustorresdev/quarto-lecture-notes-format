@@ -1,0 +1,11 @@
+[plantuml, format="svg"]
+....
+hide empty members
+entity SwordFightingEntity
+entity MagicFightingEntity
+entity MagicAndSwordFightingEntity
+
+SwordFightingEntity *-- NPCFightingController
+MagicFightingEntity *-- NPCFightingController
+MagicAndSwordFightingEntity *-- NPCFightingController
+....
