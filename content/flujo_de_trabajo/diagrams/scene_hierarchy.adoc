@@ -1,0 +1,18 @@
+[plantuml, format="svg"]
+....
+salt
+{
+{T
++ Scene
+ ++ Main Camera
+ ++ <b>Environment
+ +++ <b>Buildings
+ +++ <b>Lights
+ +++ <b>Vehicles
+ +++ <b>Roads
+ +++ <b>Props
+ ++ <b>Enemies
+ ++ Character
+}
+}
+....

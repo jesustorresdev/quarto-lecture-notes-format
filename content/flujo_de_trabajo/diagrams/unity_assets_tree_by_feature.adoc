@@ -1,0 +1,52 @@
+[plantuml, format="svg"]
+....
+salt
+{
+{T
+ + Assets
+ ++ <b>Character
+ +++ Meshes
+ +++ Materials
+ +++ Textures
+ ++ Editor
+ ++ <b>Enemies
+ +++ <b>Tanks
+ ++++ Meshes
+ ++++ Materials
+ ++++ Textures
+ +++ <b>Robots
+ ++++ Meshes
+ ++++ Materials
+ ++++ Textures
+ ++ <b>Environment
+ +++ <b>Level01
+ ++++ Materials
+ ++++ Meshes
+ ++++ Textures
+ ++ Effects
+ ++ Prefabs
+ ++ Scenes
+ ++ Scripts
+ +++ Enemies
+ ++++ Tanks
+ ++++ Robots
+ +++ Character
+ ++ Sounds
+ ++ Tests
+ ++ <b>UI
+ +++ <b>HMD
+ ++++ Textures
+ +++ <b>Menus
+ ++++ Textures
+ ++ <b>Weapons
+ +++ <b>Gun
+ ++++ Meshes
+ ++++ Materials
+ ++++ Textures
+ +++ <b>Shotgun
+ ++++ Meshes
+ ++++ Materials
+ ++++ Textures
+}
+}
+....

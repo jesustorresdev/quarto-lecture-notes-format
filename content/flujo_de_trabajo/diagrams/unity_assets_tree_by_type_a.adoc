@@ -1,0 +1,18 @@
+[plantuml, format="svg"]
+....
+salt
+{
+{T
+ + Assets
+ ++ <b>Materials
+ ++ <b>Meshes
+ ++ <b>Textures
+ ++ <b>Audio
+ ++ <b>Editor
+ ++ <b>Prefabs
+ ++ <b>Scenes
+ ++ <b>Scripts
+ ++ <b>Tests
+}
+}
+....
