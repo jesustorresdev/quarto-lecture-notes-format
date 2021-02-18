@@ -1,0 +1,44 @@
+name: Publicar
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-20.04
+    steps:
+
+    - name: Obtener el proyecto
+      uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+
+    - name: Configurar Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+
+    - name: Instalar dependenciasç
+      run: sudo apt install pkg-config libxml2-dev libxslt-dev default-jre graphviz bison flex libffi-dev \
+           libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx cmake
+      run: bundle config build.nokogiri --use-system-libraries
+      run: bundle install
+    
+    - name: Testear
+      run: bundle exec rake tests:all
+
+    - name: Generar la documentación
+      run: bundle exec rake build:pdf
+
+    - name: Empaquetar la documentación
+      run: find output/pdf/* -type f -file '*.pdf' | zip -D desarrollo3d-pdf.zip -@
+
+    - name: Publicar
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: output/pdf/{*/*.pdf,*.zip}
+        file_glob: true
+        prerelease: true
