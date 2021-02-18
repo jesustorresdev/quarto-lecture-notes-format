@@ -1,0 +1,7 @@
+[plantuml, format="svg"]
+....
+[Vista] -> [Presentador] : Acción del usuario
+[Presentador] -> [Vista] : Actualizar interfaz
+[Presentador] -> [Gameplay] : Acción
+[Gameplay] -> [Presentador] : Cambio de estado
+....

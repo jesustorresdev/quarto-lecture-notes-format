@@ -64,7 +64,7 @@ Lo peor de todo es que en la <<fig-herencia-uml>> se ve que no se puede evitar l
 Por ejemplo, `MagicAndSwordFightingEntity` hereda de `SwordFightingEntity`, así que la primera puede aprovechar el código de la segunda para el combate con espada, pero no hereda de `MagicFightingEntity`, así que el código para el combate con magia no se reutiliza.
 Hay que volver a escribirlo para esta clase donde se combinan ambos tipos de combate.
 
-NOTE: En C++ y otros lenguajes de programación, una clase puede heredar de múltiples clases base, pero esto no suele ser una solución ya que conlleva otros problemas (véase el {diamond-problem}[problema del diamante]).
+NOTE: En {cpp} y otros lenguajes de programación, una clase puede heredar de múltiples clases base, pero esto no suele ser una solución ya que conlleva otros problemas (véase el {diamond-problem}[problema del diamante]).
 
 La solución a este problema es utilizar componentes, cada uno de los cuales aportan alguna característica a la entidad.
 
@@ -197,8 +197,8 @@ En Unity es muy recomendable el uso de espacios de nombres para agrupar los comp
 Los espacios de nombre proporcionan límites bien definidos entre sistemas, evidenciando, gracias al uso de las cláusulas `using` cuándo un sistema depende de otro.
 Eso ayuda a pensar si esas dependencias son necesarias o hace falta pensar mejor el diseño.
 
-En C++ el uso de espacios de nombres también es una buena práctica, pero el *UnrealHeaderTool* de Unreal Engine no los soporta.
-Eso significa que en Unreal Engine se pueden usar espacios de nombres con el código C++ puro, pero no con el código heredado de `UObject` que interactúa con el motor y el editor.
+En {cpp} el uso de espacios de nombres también es una buena práctica, pero el *UnrealHeaderTool* de Unreal Engine no los soporta.
+Eso significa que en Unreal Engine se pueden usar espacios de nombres con el código {cpp} puro, pero no con el código heredado de `UObject` que interactúa con el motor y el editor.
 En su lugar se recomienda agrupar diferentes sistemas en distintos módulos.
 ====
 
@@ -447,10 +447,10 @@ Hay muchos patrones, así que nosotros nos centraremos fundamentalmente en aquel
 Al hablar de los _managers_ hemos visto que en mucho casos solo nos hace falta una instancia de algunos de ellos.
 Es decir, puede que `InventoryManager` necesitemos uno por jugador, pero `GameManager`, `ParticleManager`, `AudioManager` o `CameraManager` seguramente sólo necesitaremos uno en cada nivel o, incluso, uno durante todo el juego.
 
-Eso es precisamente lo que nos asegura el patrón _singleton_<<Wikippedia-Singleton>>, que de una clase solo existirá un único objeto accesible a todo el resto del código.
+Eso es precisamente lo que nos asegura el patrón _singleton_<<Wikipedia-Singleton>>, que de una clase solo existirá un único objeto accesible a todo el resto del código.
 
 En <<Wikipedia-Singleton>> hay algunos ejemplos de implementaciones del patrón _singleton_ en diferentes lenguajes.
-Entre ellos C++ y C#.
+Entre ellos {cpp} y C#.
 Sin embargo, los motores de videojuegos pueden hacer algunas recomendaciones respecto a su uso.
 
 ==== _Singleton_ en Unreal Engine
@@ -464,7 +464,7 @@ En su lugar, es preferible extender alguna de las múltiples clases de actores d
 
 * *GameInstance*, que se usa para el resto del estado y lógica global del juego que no encaje en las clases anteriores.
 La forma adecuada de usar *GameInstance* es crear un _blueprint_ heredando de la clase `GameInstance`.
-Mientras que en C++ se debe heredar de `UGameInstance`.
+Mientras que en {cpp} se debe heredar de `UGameInstance`.
 
 Obviamente, hay que tener mucho cuidado estructurando el código porque *GameInstance* solo hay una en el juego, para toda la lógica y los datos que queremos meter ahí.
 
@@ -796,7 +796,7 @@ Sus campos guardan el estado origen y destino de la transición y una función q
 Es fácil encontrar en Internet implementaciones de máquinas de estados, algunas mucho más completas, con características adicionales.
 Para problemas realmente complejos, probablemente necesitaríamos una máquina de estados jerárquica, donde cada estado puede tener a su vez su propia máquina de estados.
 
-Las corrutinas —de las que hablaremos en el <<corrutinas>>— también son una forma implícita de implementar máquinas de estados.
+Las corrutinas —de las que hablaremos en el <<_corrutinas>>— también son una forma implícita de implementar máquinas de estados.
 Si nuestro entorno de desarrollo soporta corrutinas, elegir entre usar estas o una implementación explícita de máquina de estados como la anterior, depende del caso.
 Las corrutinas no son gratis, pero hasta que se detecta un problema de rendimiento, lo mejor es escoger la solución que sea más legible y más fácil de mantener para cada problema.
 
@@ -961,7 +961,7 @@ De lo contrario, el evento mantendrá una referencia al objeto suscripto, por lo
 
 ==== Eventos en Unreal Engine
 
-Unreal Engine soporta distintos tipos de delegados en C++ que pueden servir para implementar el patrón _observer_<<UE-Delegates>>.
+Unreal Engine soporta distintos tipos de delegados en {cpp} que pueden servir para implementar el patrón _observer_<<UE-Delegates>>.
 En _blueprints_ se utilizan *Event Dispatcher*<<UE-Event-Dispatchers>>.
 
 === _Event Bus_
@@ -1065,36 +1065,6 @@ Además, pueden ser invocados por cualquiera de las instancias de dicha clase.
 Son interesantes porque permiten usar el patrón _observer_ incluso cuando un objeto no puede tener una referencia al objeto que los va a emitir para suscribirse.
 ====
 
-== Arquitectura de la interfaz de usuario
-
-El ejemplo anterior no está mal en el sentido que resuelve correctamente una duda común entre muchos desarolladores noveles: ¿la propiedad con el nivel de salud la debe tener el jugador o la barra de salud?
-
-La respuesta es que los componentes de la interfaz de usuario no deben tener ninguna pieza del estado o de la lógica del juego.
-
-Usando el patrón _observer_, la lógica del juego puede notificar los cambios en el estado del juego y la interfaz de usuario puede estar suscrita a dichos cambios.
-Pero incluso así existe cierto nivel de acoplamiento.
-Por ejemplo, la barra de salud debe conocer al objeto jugador para suscribirse y, llegado el momento, leer el nivel de salud.
-
-¿Y qué ocurre cuando la lógica del juego tiene que reaccionar a acciones en la interfaz de usuario?.
-Nuevamente esto obliga a que los componentes de la lógica del juego conozca botones y menus para suscribirse a los eventos que puedan emitir.
-
-Aunque pueda parece que esto no es un problema, lo cierto es que es muy difícil de mantener en juego grandes, con interfaces complejas.
-Por eso es conveniente tomar algunas ideas de patrones como https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93presentador[MVP] —Modelo-Vista-Presentación— o https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel[MVVM] —Modelo-Vista-ViewModel— y adaptarlas, para desacoplar mejor la interfaz de usuario de la lógica del juego.
-
-TIP: En Unity es recomendable que los componentes de la interfaz de usuario se carguen en el motor desde su propia escena.
-
-Una opción puede ser incluir un objeto `UI Controller` que haga de intermediario.
-Que sea quien escucha los eventos de la lógica del juego, extrae el estado, lo prepara adecuadamente e invoca a los componentes de la interfaz de usuario para que se actualizen.
-También estaría pendiente de los eventos de la interfaz de usuario para notificárselos a la lógica del juego y que esta reaccione como corresponda.
-
-Así lógica del juego y interfaz de usuario quedarían completamente desacopladas.
-
-// MVP
-
-// Unity / Unreal 
-
-// Paneles / layouts
-
 == Corrutinas
 
 La corrutina es un bloque de código similar a una función, con la diferencia de que puede suspenderse y reanudarse su ejecución varias veces antes de terminar.
@@ -1181,22 +1151,133 @@ TIP: Crear objetos como `WaitForSeconds` para devolverlos con `yield return` da 
 
 Donde son más útiles las corrutinas es en operaciones asíncronas de larga duración, como: peticiones HTTP, lectura de archivos, carga de recursos o consultas a bases de datos.
 
-=== Corrutinas de Unity vs async/await
+=== Corrutinas de Unity frente a async/await
 
 Desde C# 5.0 / .NET 4.5, C# tiene soporte nativo de corrutinas a través de las palabras clave async/await, pudiéndose utilizar en Unity desde Unity 2017.
 Entonces ¿es mejor utilizar async/await que las corrutinas de Unity?
 
-La recomendación es usar async/await para tareas relacionadas con la E/S, como peticiones HTTP, acceso a bases de datos y a archivos o en el desarrollo de interfaces de usuario.
+La recomendación es usar async/await para tareas relacionadas con la E/S, como peticiones HTTP, acceso a bases de datos y a archivos o para esperar la entrada del usuario cuadros de diálogo y otros elementos de interfaz de usuario.
 Mientras que las corrutinas nativas de Unity son mejores para tareas que queremos lanzar en segundo plano y olvidarnos de ellas.
 
 [[video-unity-async-vs-coroutines, {video-caption} {counter:video-number}]]
 .{video-caption} {video-number}. Conferencia «Best practices: Async vs. coroutines» en Unite Copenhagen 2019.
 video::7eKi6NKri6I[youtube, opts="modest", start=808, end=1662, width=854, height=480]
 
+== Arquitectura de la interfaz de usuario
+
+En el <<_observer>> comentamos el patrón _observer_ usando un ejemplo, que nos ayuda a resolver correctamente una duda común entre muchos desarolladores noveles: ¿cosas como el nivel de salud o las vidas del jugador las debe tener el jugador o la propia barra de salud?
+La respuesta es que los componentes de la interfaz de usuario no deben contener elementos del estado o de la lógica del juego, sino ser completamente independientes.
+
+Usando el patrón _observer_, la lógica del juego puede notificar los cambios en el estado del juego mediante eventos y la interfaz de usuario puede estar suscrita a dichos eventos.
+Sin embargo, incluso así existe cierto nivel de acoplamiento.
+Por ejemplo, porque la barra de salud debe tener una referencia al objeto jugador para suscribirse al evento y, llegado el momento, leer el nivel de salud.
+
+[[fig-ui-observer-sequence]]
+.Interacción de la barra de salud con el personaje.
+include::diagrams/ui_observer_sequence.adoc[]
+
+El acople es aun mayor cuando la lógica del juego tiene que reaccionar a acciones en la interfaz de usuario —por ejemplo, en un sistema de diálogos— porque esto obliga a que los componentes de la lógica del juego conozca botones y menus para suscribirse a los eventos que puedan emitir.
+
+Aunque pueda parece que nada de esto no es un problema, lo cierto es que es muy difícil de mantener en juego grandes, con interfaces complejas.
+Por eso es conveniente tomar algunas ideas de patrones arquitecturales usados comúnmente para desarrollar interfaces de usuaro, como: Modelo-Vista-Presentación (MVP)<<Wikipedia-MVP>> o Modelo-Vista-ViewModel (MVVM)<<Wikipedia-MVVM>> y adaptarlas, para desacoplar mejor la interfaz de usuario de la lógica del juego.
+
+=== Modelo-Vista-Presentación
+
+En el patrón MVP<<Wikipedia-MVP>>:
+
+* El _modelo_ es la interfaz que define los datos que se mostrarán o sobre los que actuará la interfaz de usuario.
+En nuestro caso el modelo es el código de _gameplay_ del juego, ya que contienen los datos que se quieren mostrar y la lógica sobre la que se quieren actuar.
+
+* El _presentador_ hace de intermediario entre el modelo y la vista, de tal forma que el modelo y la vista solo se comunican con el presentador.
+Este recupera datos del modelo y los prepara para mostrarlos en la vista.
+
+* La _vista_ es la interfaz de usuario en sí
+Está formada por los controles y elementos visuales pasivos que muestran los datos del modelo y reciben las órdenes del usuario.
+
+[[fig-mvp-en-videojuegos]]
+.Esquema del patrón MVP.
+include::diagrams/mvp_en_videojuegos.adoc[]
+
+La vista puede contener la lógica necesaria para que los controles funcionen y para gestionar la navegación por la interfaz.
+Los controles que ofrecen los motores suelen ser muy básicos, en comparación con los de cualquier _toolkit_ gráfico.
+Así que a veces hace falta desarrollar controles más avanzados a partir de los controles básicos que proporcionan, como: cuadros de diálogo, barras de desplazamiento y paneles con _scroll_, barras de menú y menús desplegables, sistemas de navegación mediante pestañas o pila de paneles, entre otros. 
+
+Todo ese código de la interfaz debe estar en la vista.
+Así como aquel destinado enriquecerla con animaciones y otros efectos.
+Sin embargo, la interacción con el modelo y la preparación de los datos es manejada en exclusiva por el presentador.
+Es el presentador el que se subscribe a los eventos del juego para actualizar la interfaz, al tiempo que está subscrito a los eventos de la interfaz para actuar sobre el _gameplay_.
+
+=== Vista pasiva frente a controlador supervisor
+
+En realidad la arquitectura MVP descrita y mostrada en la <<fig-mvp-en-videojuegos>> corresponde a una variante denominada _vista pasiva_.
+Es interesante desde el punto de vista de facilitar la testabilidad, en tanto en cuanto para testear la mayor parte de la lógica de la interfaz de usuario basta con testear el presentador.
+Pero algo compleja porque incluso los cambios más simples en la interfaz implican introducir en el presentador el código que la actualiza.
+
+[[fig-mvp-sc-en-videojuegos]]
+.Esquema del patrón MVP controlador supervisor.
+include::diagrams/mvp_sc_en_videojuegos.adoc[]
+
+En la otra variante —denominada _controlador supervisor_— la vista puede actualizarse directamente en los casos más simples a partir del modelo a través de un mecanismo de _data binding_ (véase el _<<_data_binding>>), sin intervención del presentador.
+El presentador sigue siendo responsable de actualizar el modelo —en nuestro caso, actuar sobre el juego— y manipular la vista en los casos más complejos, que no puede resolverse por medio del _data binding_.
+
+El _controlador supervisor_ normalmente necesita menos código que la _vista pasiva_, ya que las cambios más simples en la interfaz muchas veces se pueden resolver usando el mecanismo de _data binding_, sin tener que incluir código en el presentador.
+
+=== Sobre el número de presentadores
+
+Un error común al comenzar a trabajar con el patrón MVP es considerar que solo se necesita un presentador para la interfaz de usuario.
+Sin embargo, lo lógico que un juego tenga diferentes vistas, como: menu principal, HUD, sistema de inventario o sistema de diálogos; teniendo cada una su propio presentador.
+Incluso algunos de estos elementos pueden ser lo bastante complejos como para que sea mejor descomponerlos en vistas diferentes, cada una con su presentador.
+Por ejemplo, si tenemos un menú principal con submenus para configurar el juego o para iniciar una nueva partida.
+
+[[fig-mvp-multi-presentador]]
+.Esquema del patrón MVP multi-presentador.
+include::diagrams/mvp_multi_presentador.adoc[]
+
+=== Implementación de presentadores
+
+En Unity el presentador puede ser un _GameObject_ con un componente —que, por ejemplo, podemos llamar `UIController`— que haga de intermediario entre los componentes del _gameplay_ y los controles de la interfaz de usuario.
+El *Canvas* y el resto de _GameObjects_ de la interfaz de usuario pueden ser hijos de ese `UIController`, lo que facilitar empaquetar cada uno con su vista en su propio _prefab_.
+
+.Ejemplo de jerarquía de _GameObjects_ en una interfaz de usuario en Unity. 
+include::diagrams/unit_ui_hierarchy.adoc[]
+
+TIP: En Unity se suele recomendar que la interfaz de usuario se cargue en el juego desde su propia escena de forma aditiva, para poder trabajar en ella de forma independiente.
+
+En Unreal Engine se pueden desarrollar interfaces de usuario usando Slate en {cpp} o visualmente con el editor UMG.
+Una buena forma de combinar lo mejor de ambas opciones es crear un contenedor de controles personalizado heredando de `UUserWidget` en {cpp}.
+Esa nueva clase hará de presentador, así que se implementa en ella la lógica relacionada con el acceso y transformación de los datos.
+Después se hereda de ella en _blueprint_ para crear una nueva clase donde se pueden añadir fácilmente los controles desde el editor UMG y programar en _blueprint_ la lógica visual de la interfaz.
+
+=== _Data binding_
+
+El _data binding_ es un patrón de diseño de software que simplifica el diseño de interfaces gráficas.
+Permite vincular elementos de la interfaz con una fuente datos, de tal forma que ambos se mantienen sincronizados automáticamente.
+
+Por ejemplo, en un proyecto donde tengamos decenas o cientos de objetos o de personajes, con diferentes características que el usuario puede examinar en la interfaz e incluso modificar, es de gran utilidad tener un mecanismo que conecte de forma sencilla estos objetos con la interfaz, de manera que esta se actualice automáticamente.
+En definitiva, algo así:
+
+[source,csharp]
+----
+CharacterStatsPanel.Bind(CharacterStats);
+----
+
+Por lo general, los _frameworks_ de _data binding_ usan el patrón _observer_ como mecanismo subyacente.
+La ventaja es que todo el proceso de suscripción y de actualización de los controles a partir de los datos, queda oculto detrás del `Bind()`.
+
+[[fig-data-binding]]
+.Diagrama de clases de un sencillo sistema de _data binding_.
+include::diagrams/data_binding.adoc[]
+
+En la <<fig-data-binding>> se puede ver lo que podría ser el diagrama de clases de un sistema de _data binding_.
+Todo ocurre en `CharacterPanel::Bind()` que se encarga de suscribir el objeto `CharacterPanel` a los eventos del objeto `CharacterStat` indicado, de forma que cuando lleguen estos eventos, se ejecute código que actualice el panel.
+
+Si se utiliza con el patrón de arquitectura MVP, el presentador puede ser el intermediario que localice a las entidades de los personajes y pida el _binding_, para mantener el desacople entre interfaz de usuario y lógica del juego.
+Una vez hecho, la comunicación entre la vista y las características del personaje sería directa.
+
 == _Scriptable objects_ en Unity
 
 Uno de los motivos para usar el patrón _singleton_ es porque facilita pasar datos de una escena a la siguiente.
-Por eso en las dos implementaciones de _singleton_ que vimos en el <<singleto>> se llama a `DontDestroyOnLoad()`, evitando la destrucción del objeto al cargar una nueva escena.
+Por eso en las dos implementaciones de _singleton_ que vimos en el <<_singleton>> se llama a `DontDestroyOnLoad()`, evitando la destrucción del objeto al cargar una nueva escena.
 
 Como el abuso del patrón _singleton_ es un problema, muchos desarrolladores se han esforzado en buscar alternativas que faciliten organizar la arquitectura del programa, al tiempo que se limita en lo posible su uso.
 
@@ -1360,5 +1441,11 @@ https://docs.unrealengine.com/en-US/API/Runtime/Core/Misc/FQueuedThreadPool/inde
 * [[[Dunstan2015,25]]]
 Dunstan, J. (2015, 2 de marzo). Unity Coroutine Performance. _JacksonDunstan.com_. https://www.jacksondunstan.com/articles/2981
 
-* [[[Unity-Architect-With-SO,23]]]
+* [[[Wikipedia-MVP,26]]]
+MVP. En _Wikipedia_. https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93presentador
+
+* [[[Wikipedia-MVVM,26]]]
+MVVM. En _Wikipedia_. https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel
+
+* [[[Unity-Architect-With-SO,26]]]
 Unity Technologies. (2020, enero). _Three ways to architect your game with ScriptableObjects_. Unity. https://unity.com/how-to/architect-game-code-scriptable-objects

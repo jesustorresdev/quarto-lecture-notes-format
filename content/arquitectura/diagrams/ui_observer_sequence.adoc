@@ -1,0 +1,14 @@
+[plantuml, format="svg"]
+....
+participant HealthBar order 1
+participant GameManager order 2
+participant Player order 3
+
+HealthBar -> GameManager: GetPlayer()
+return Player
+HealthBar -> Player: SubscribeToHealthChanged()
+... Algún tiempo más tarde ...
+Player -> HealthBar: HealthChanged()
+HealthBar -> Player: GetHealth()
+return Health
+....

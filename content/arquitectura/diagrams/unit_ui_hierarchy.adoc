@@ -1,0 +1,20 @@
+[plantuml, format="svg"]
+....
+salt
+{
+{T
+ + Level01
+ ++ Main Camera
+ ++ ...
+ + <b>UIController
+ ++ Canvas
+ +++ Panel01
+ ++++ Text01
+ ++++ Button01
+ ++++ ...
+ +++ Panel02
+ +++ Panel03
+ +++ ...
+}
+}
+....
