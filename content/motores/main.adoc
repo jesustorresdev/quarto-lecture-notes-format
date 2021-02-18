@@ -12,7 +12,10 @@ ifdef::backend-pdf[]
 [preamble]
 == Motores de videojuegos
 endif::[]
-NOTE: *Tiempo estimado de lectura:* {document-reading-time}
+[TIME]
+====
+*Tiempo de lectura:* {document-reading-time}
+====
 
 Durante la etapa de *preproducción* en el desarrollo de un videojuego se definen las características técnicas del proyecto.
 Entre ellas, el motor de videojuegos y las herramientas externas e internas a utilizar durante el desarrollo.

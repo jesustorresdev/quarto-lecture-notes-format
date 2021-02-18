@@ -9,3 +9,9 @@ image:
   align: center
   caption:
     align: inherit
+admonition:
+  icon:
+    time:
+      name: fa-clock
+      stroke_color: 871452
+      size: 24

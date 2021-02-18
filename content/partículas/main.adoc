@@ -12,7 +12,10 @@ ifdef::backend-pdf[]
 [preamble]
 == Sistemas de partículas
 endif::[]
-NOTE: *Tiempo estimado de lectura:* {document-reading-time}
+[TIME]
+====
+*Tiempo de lectura:* {document-reading-time}
+====
 
 En cualquier aplicación gráfica, cuando queremos mostrar objetos sólidos 2D, usamos _sprites_.
 Y si es en 3D usamos mallas.

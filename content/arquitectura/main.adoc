@@ -12,7 +12,10 @@ ifdef::backend-pdf[]
 [preamble]
 == Arquitectura de software
 endif::[]
-NOTE: *Tiempo estimado de lectura:* {document-reading-time}
+[TIME]
+====
+*Tiempo de lectura:* {document-reading-time}
+====
 
 El desarrollo de un videojuego, como el de cualquier otro programa, puede convertirse en infierno si:
 
