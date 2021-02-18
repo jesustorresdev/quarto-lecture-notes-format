@@ -202,7 +202,7 @@ Eso significa que en Unreal Engine se pueden usar espacios de nombres con el có
 En su lugar se recomienda agrupar diferentes sistemas en distintos módulos.
 ====
 
-=== _Manager_
+=== Manager
 
 Los _managers_ gestionan una colección de entidades.
 Por ejemplo, NPC, proyectiles, enemigos, cámaras, sistemas de partículas, etc.
@@ -222,7 +222,7 @@ Aunque por lo comentado pueda parecer que de cada tipo de _manager_ solo hay uno
 En la <<fig-inventory-system>> se puede observar como cada personaje que puede llevar `InventoryItem` tiene su componente `InventoryManager`.
 En general, no parece interesante conocer y gestionar de forma centralizada todos los `InventoryItem` de la escena, sino que cada personaje lo gestione en su _manager_.
 
-=== _Game Manager_
+=== Game Manager
 
 El _game manager_ es un tipo especial de manager dedicado a llevar el flujo del juego: carga de escenas y transiciones, modos de pausa y de menús, etc.
 
@@ -442,7 +442,7 @@ Por suerte, es probable que no necesitaremos inventar nada nuevo, porque hay qui
 
 Hay muchos patrones, así que nosotros nos centraremos fundamentalmente en aquellos que nos puedan ser más útiles en el desarrollo de videojuegos.
 
-=== _Singleton_
+=== Singleton
 
 Al hablar de los _managers_ hemos visto que en mucho casos solo nos hace falta una instancia de algunos de ellos.
 Es decir, puede que `InventoryManager` necesitemos uno por jugador, pero `GameManager`, `ParticleManager`, `AudioManager` o `CameraManager` seguramente sólo necesitaremos uno en cada nivel o, incluso, uno durante todo el juego.
@@ -453,7 +453,7 @@ En <<Wikipedia-Singleton>> hay algunos ejemplos de implementaciones del patrón 
 Entre ellos {cpp} y C#.
 Sin embargo, los motores de videojuegos pueden hacer algunas recomendaciones respecto a su uso.
 
-==== _Singleton_ en Unreal Engine
+==== Singleton en Unreal Engine
 
 En Unreal Engine se recomienda ignorar los _singleton_.
 En su lugar, es preferible extender alguna de las múltiples clases de actores dedicados a estados y lógica global del juego:
@@ -468,7 +468,7 @@ Mientras que en {cpp} se debe heredar de `UGameInstance`.
 
 Obviamente, hay que tener mucho cuidado estructurando el código porque *GameInstance* solo hay una en el juego, para toda la lógica y los datos que queremos meter ahí.
 
-==== _Singleton_ en Unity
+==== Singleton en Unity
 
 En Unity el problema es que la clase `MonoBehaviour` de la que deben heredar todos los componentes no nos permite impedir que se creen múltiples instancias de la clase.
 El mecanismo usado en <<Wikipedia-Singleton>> para C# —que consiste en hacer el constructor privado— no funciona con clases derivadas de `MonoBehaviour`.
@@ -660,7 +660,7 @@ Pero entonces es necesario modificar el proyecto para que los campos y eventos _
 El cómo hacerlo está perfectamente explicado en la documentación de Unity<<Unity-Domain-Reloading>>.
 ****
 
-=== _State_
+=== State
 
 El patrón _state_ se utiliza cuando se busca que el comportamiento de un objeto cambie dependiendo de un estado interno<<Wikipedia-State>>.
 Las máquinas de estados finitos —o FSM, del inglés _Finite-State Machine_— que en videojuegos son de gran utilidad, pueden implementarse con este patrón<<Wikipedia-FSM>>.
@@ -800,7 +800,7 @@ Las corrutinas —de las que hablaremos en el <<_corrutinas>>— también son un
 Si nuestro entorno de desarrollo soporta corrutinas, elegir entre usar estas o una implementación explícita de máquina de estados como la anterior, depende del caso.
 Las corrutinas no son gratis, pero hasta que se detecta un problema de rendimiento, lo mejor es escoger la solución que sea más legible y más fácil de mantener para cada problema.
 
-=== _Factory_
+=== Factory
 
 El patrón _factory_ se utiliza para construir objetos.
 Pero ¿por qué utilizar un patrón para construir objetos si todos las clases tienen un constructor?
@@ -833,7 +833,7 @@ include::diagrams/abstract_factory.adoc[]
 
 A esta variante del patrón _factory_ se la denomina _abstract factory_<<Wikipedia-Abstract-Factory>>.
 
-=== _Strategy_
+=== Strategy
 
 El patrón _strategy_ ofrece una forma de seleccionar dinámicamente algoritmos y asignarlos a un objeto en tiempo de ejecución, para que resuelva cierta tarea o tenga cierto comportamiento.
 
@@ -858,7 +858,7 @@ Sin embargo, es mucho mejor utilizar el patrón _strategy_ para implementarlos e
 Igual que comentamos antes, cada uno de estos modos podría ser una clase convencional —referenciada en el `LocomotionController`— u otro componente en la entidad del personaje.
 En este último caso, `LocomotionController` se asegurara de que sólo uno de ellos está activo en cada momento, imponiendo su modo de desplazamiento al movimiento del personaje.
 
-=== _Decorator_
+=== Decorator
 
 El patrón _strategy_ permite cambiar la implementación de un componente dinámicamente, pero ¿qué ocurre si no queremos cambiar completamente la implementación sino solo mejorarla temporalmente?
 Por ejemplo, los personajes pueden llevar distintos atuendos, entre ellos una ropa de camuflaje que hace que sea más difícil de ver.
@@ -879,7 +879,7 @@ Los decoradores heredan de `GunDecorator`, que a su vez hereda de `IGun`, por lo
 Lo que hacen los decoradores es envolver el objeto de la pistola a la que afectan para obtener una nueva pistola con propiedades modificadas.
 Como cada pistola modificada también hereda de `IGun`, se pueden incorporar varios decoradores a una misma pistola, acumulando el efecto de todos ellos.
 
-=== _Visitor_
+=== Visitor
 
 El patrón _visitor_ se usa cuando queremos realizar una acción en un objeto pero no queremos implementar la lógica en el propio objeto porque semánticamente no sería lo correcto, tal vez porque implicaría que el objeto tendría que asumir más responsabilidad de la que consideramos que le corresponde.
 Así que preferimos tener un objeto externo que «viste» el objeto y realice la acción correspondiente<<Wikipedia-Visitor>>.
@@ -899,7 +899,7 @@ include::diagrams/visitor_pattern.adoc[]
 En la <<fig-visitor-pattern>> se puede ver un ejemplo donde cada arma implementa la interfaz `IVisitor` y los personajes dañables la interfaz `IDamageable`.
 Cada arma tiene un método `ApplyDamage()` para cada tipo de personaje, de tal forma que en cada uno se implementa cómo ese tipo de arma daña a ese tipo de personaje en particular.
 
-=== _Pool_ de objetos
+=== Pool de objetos
 
 El _pool_ de objetos es probablemente uno de los patrones que más suenan en el desarrollo de videojuegos.
 Consiste en un contenedor de objetos pre-reservados en la memoria, que pueden ser extraídos cuando haga falta y vueltos a añadir en la colección cuando se ha terminado con ellos.
@@ -932,7 +932,7 @@ El otro aspecto es que seguramente sería mejor utilizar como contenedor `Stack`
 Es decir, previsible se aprovechan mejor las memorias caché al reutilizar primero los objetos usados más recientemente.
 ====
 
-=== _Observer_
+=== Observer
 
 El principal objetivo del patrón _observer_ es permitir a unos objetos observar cambios en el estado interno de otros objetos<<Wikipedia-Observer>>.
 
@@ -964,7 +964,7 @@ De lo contrario, el evento mantendrá una referencia al objeto suscripto, por lo
 Unreal Engine soporta distintos tipos de delegados en {cpp} que pueden servir para implementar el patrón _observer_<<UE-Delegates>>.
 En _blueprints_ se utilizan *Event Dispatcher*<<UE-Event-Dispatchers>>.
 
-=== _Event Bus_
+=== Event Bus
 
 Un bus de eventos o _event bus_ es un objeto que hace de concentrador central de todos los eventos del juego.
 Las clases se registran en el bus de eventos para ser informadas de los eventos que le interesan.
@@ -988,7 +988,7 @@ En general no es buena idea usar el _event bus_ para notificar sucesos a los que
 * Es más complejo que otra soluciones.
 Por ejemplo, con el patrón _observer_ el código es más pequeño y simple y usa menos abstracciones.
 
-=== _Humble Object_
+=== Humble Object
 
 Hemos comentado anterior que los componentes son complejos de testear porque implica correr los test con el motor de videojuegos ejecutándose, lo que es bastante lento.
 La idea detrás del patrón _humble object_ es poner la lógica de nuestros componentes en una clase normal, que podamos testear rápidamente sin el el motor, usando un _framework_ de testeo convencional.
@@ -1040,7 +1040,7 @@ En todo caso, es aconsejable usar interfaces en lo posible al establecer depende
 Así las clases dependen de abstracciones y no de implementaciones lo que, entre otras cosas, facilita el testeo.
 Por ejemplo, si una clase depende de tener una referencia a un personaje solo para hacerle daño, no es recomendable que reciba la entidad del personaje o un tipo de componente concreto, sino la interfaz `IDamageable` que implementan todos los componentes que pueden aplicar daño a su personaje, ya que eso es todo lo que necesitan los objetos de la clase para hacer su trabajo.
 
-=== _Singleton_
+=== Singleton
 
 Cuando la comunicación es directa pero el objeto invocado se va a utilizar frecuentemente desde múltiples componentes de la aplicación, es posible que nos interese que dicho objeto sea un _singleton_.
 Así la referencia a la instancia es muy sencilla de obtener, con solo conocer la clase.
@@ -1248,7 +1248,7 @@ Una buena forma de combinar lo mejor de ambas opciones es crear un contenedor de
 Esa nueva clase hará de presentador, así que se implementa en ella la lógica relacionada con el acceso y transformación de los datos.
 Después se hereda de ella en _blueprint_ para crear una nueva clase donde se pueden añadir fácilmente los controles desde el editor UMG y programar en _blueprint_ la lógica visual de la interfaz.
 
-=== _Data binding_
+=== Data binding
 
 El _data binding_ es un patrón de diseño de software que simplifica el diseño de interfaces gráficas.
 Permite vincular elementos de la interfaz con una fuente datos, de tal forma que ambos se mantienen sincronizados automáticamente.
@@ -1274,7 +1274,7 @@ Todo ocurre en `CharacterPanel::Bind()` que se encarga de suscribir el objeto `C
 Si se utiliza con el patrón de arquitectura MVP, el presentador puede ser el intermediario que localice a las entidades de los personajes y pida el _binding_, para mantener el desacople entre interfaz de usuario y lógica del juego.
 Una vez hecho, la comunicación entre la vista y las características del personaje sería directa.
 
-== _Scriptable objects_ en Unity
+== Scriptable objects en Unity
 
 Uno de los motivos para usar el patrón _singleton_ es porque facilita pasar datos de una escena a la siguiente.
 Por eso en las dos implementaciones de _singleton_ que vimos en el <<_singleton>> se llama a `DontDestroyOnLoad()`, evitando la destrucción del objeto al cargar una nueva escena.

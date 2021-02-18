@@ -71,7 +71,7 @@ Por eso a esta fase se la denomina con nombres como: *_blocking_*, *_greyboxing_
 
 En algunos estudios se hace pronto el *_greyboxing_*, desde fases muy tempranas de la *preproducción*. 
 
-=== _Greyboxing_
+== Greyboxing
 
 La idea del *_greyboxing_* es obtener un bosquejo aproximado del nivel, sin detalles, para centrar la atención sobre sus características principales de diseño —como distribución, escala, navegabilidad o durabilidad— probar el _gameplay_ e ir refinando el diseño del juego.
 Durante la *producción*, cuando los modelos estáticos y animados estén listos, las cajas del _greyboxing_ son reemplazadas para componer el nivel definitivo.
@@ -525,7 +525,7 @@ Como ocurre en Unity con las escenas aditivas, no estamos obligados a usar disti
 La descomposición puede ser de otro tipo, en función de como se haya planificado repartir el desarrollo.
 Así, por ejemplo, un subnivel puede tener las mallas estáticas que dan forma al entorno, otro los NPC y otro todos los sonidos; permitiendo a diferentes desarrolladores trabajar en cada uno de estos subniveles al mismo tiempo.
 
-===== _Prefabs_
+===== Prefabs
 
 En Unreal Engine no existe el concepto de _prefabs{blank}footnote:[{fn-ue-prefabs}]_ pero los actores _blueprint_ se pueden utilizar para hacer algo similar, hasta cierto punto.
 
