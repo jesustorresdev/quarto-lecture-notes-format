@@ -9,6 +9,6 @@ task :config do |t|
         '--require', 'asciidoctor-mathematical', '-a', 'mathematical-format=svg',
     ]
     CONFIG[:htmlproofer_opts] = [
-        '--url-ignore', '/github.com\/EpicGames\/UnrealEngine/',
+        '--url-ignore', '/github\.com\/EpicGames\/UnrealEngine/',
     ]
 end
