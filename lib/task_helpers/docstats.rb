@@ -5,14 +5,25 @@ module Docstats
     READING_SPEED_IN_WORDS_PER_MINUTE = 200
 
     def format_reading_time(minutes)
-        if minutes == 1
-            formatted_string = "1 minuto"
-        elsif minutes < 60
-            formatted_string = "#{minutes} minutos"
-        elsif minutes == 60
+        hours = minutes / 60
+        minutes = minutes % 60
+
+        if hours == 0
+            formatted_string = ""
+        elsif hours == 1
             formatted_string = "1 hora"
         else
-            formatted_string = "#{minutes / 60} horas y #{minutes % 60} minutos"
+            formatted_string = "#{hours} horas"
+        end
+
+        if minutes > 0
+            formatted_string += " y "
+        end
+
+        if minutes == 1
+            formatted_string += "#{minutes} minuto"
+        else
+            formatted_string += "#{minutes} minutos"
         end
 
         return formatted_string

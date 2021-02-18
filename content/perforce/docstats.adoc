@@ -1,4 +1,4 @@
 :document-characters: 21009
 :document-words: 3945
 :document-paragraphs: 54
-:document-reading-time: 20 minutos
+:document-reading-time:  y 20 minutos

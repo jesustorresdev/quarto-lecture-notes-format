@@ -1,4 +1,4 @@
-:document-characters: 73897
+:document-characters: 73896
 :document-words: 13753
 :document-paragraphs: 212
-:document-reading-time: 1 horas y 9 minutos
+:document-reading-time: 1 hora y 9 minutos
