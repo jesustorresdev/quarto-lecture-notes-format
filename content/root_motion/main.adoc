@@ -8,11 +8,11 @@ include::footnotes.adoc[]
 include::docstats.adoc[]
 :imagesdir: media
 
-[.right]
-====
-.Tiempo estimado de lectura
-{document-reading-time}
-====
+ifdef::backend-pdf[]
+[preamble]
+== Root motion
+endif::[]
+NOTE: *Tiempo estimado de lectura:* {document-reading-time}
 
 Una de las técnicas de animación de personajes por las que más se suele preguntar es el _root motion_, que básicamente consiste en que el movimiento del actor o *GameObject* del personaje esté controlada por la traslación y la rotación global del modelo según indica su animación.
 

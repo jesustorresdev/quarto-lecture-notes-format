@@ -8,11 +8,11 @@ include::footnotes.adoc[]
 include::docstats.adoc[]
 :imagesdir: media
 
-[.right]
-====
-.Tiempo estimado de lectura
-{document-reading-time}
-====
+ifdef::backend-pdf[]
+[preamble]
+== Flujo del trabajo
+endif::[]
+NOTE: *Tiempo estimado de lectura:* {document-reading-time}
 
 Como ya hemos visto en otras asignaturas, el ciclo de vida del desarrollo de un videojuego se puede dividir en distintas etapas.
 Aunque obviamente estas etapas pueden variar entre proyectos y estudios, en general el proceso siempre es muy similar:

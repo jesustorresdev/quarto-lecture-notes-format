@@ -8,11 +8,11 @@ include::footnotes.adoc[]
 include::docstats.adoc[]
 :imagesdir: media
 
-[.right]
-====
-.Tiempo estimado de lectura
-{document-reading-time}
-====
+ifdef::backend-pdf[]
+[preamble]
+== Físicas en 3D
+endif::[]
+NOTE: *Tiempo estimado de lectura:* {document-reading-time}
 
 Aunque en los videojuegos se suele hacer mucho hincapié en la calidad del _render_, en un buen motor de videojuegos hay otro componente igual de importante para dotar de realismo al mundo del juego: el motor de físicas.
 

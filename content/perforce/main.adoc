@@ -8,11 +8,11 @@ include::footnotes.adoc[]
 include::docstats.adoc[]
 :imagesdir: media
 
-[.right]
-====
-.Tiempo estimado de lectura
-{document-reading-time}
-====
+ifdef::backend-pdf[]
+[preamble]
+== Control de versiones con Perforce
+endif::[]
+NOTE: *Tiempo estimado de lectura:* {document-reading-time}
 
 {Perforce} es la compañía que desarrolla {helix-core}, un sistema de control de versiones —en inglés, _Version Control System_ o VCS— que escala muy bien para manejar proyectos y equipos realmente grandes (véase <<fig-helix-code-scalability>>).
 

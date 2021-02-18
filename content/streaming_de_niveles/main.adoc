@@ -8,11 +8,11 @@ include::footnotes.adoc[]
 include::docstats.adoc[]
 :imagesdir: media
 
-[.right]
-====
-.Tiempo estimado de lectura
-{document-reading-time}
-====
+ifdef::backend-pdf[]
+[preamble]
+== Streaming de niveles
+endif::[]
+NOTE: *Tiempo estimado de lectura:* {document-reading-time}
 
 Los motores utilizan diferentes estrategias para optimizar recursos y permitirnos explorar niveles relativamente grandes.
 Lo hacen especialmente bien en lo que respecta a optimizar el _render_ para el máximo aprovechamiento de la GPU.

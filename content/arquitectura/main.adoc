@@ -8,11 +8,11 @@ include::footnotes.adoc[]
 include::docstats.adoc[]
 :imagesdir: media
 
-[.right]
-====
-.Tiempo estimado de lectura
-{document-reading-time}
-====
+ifdef::backend-pdf[]
+[preamble]
+== Arquitectura de software
+endif::[]
+NOTE: *Tiempo estimado de lectura:* {document-reading-time}
 
 El desarrollo de un videojuego, como el de cualquier otro programa, puede convertirse en infierno si:
 
