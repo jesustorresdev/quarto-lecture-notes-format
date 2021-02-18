@@ -1242,7 +1242,7 @@ En Unity el presentador puede ser un _GameObject_ con un componente —que, por 
 El *Canvas* y el resto de _GameObjects_ de la interfaz de usuario pueden ser hijos de ese `UIController`, lo que facilitar empaquetar cada uno con su vista en su propio _prefab_.
 
 .Ejemplo de jerarquía de _GameObjects_ en una interfaz de usuario en Unity. 
-include::diagrams/unit_ui_hierarchy.adoc[]
+include::diagrams/unity_ui_hierarchy.adoc[]
 
 TIP: En Unity se suele recomendar que la interfaz de usuario se cargue en el juego desde su propia escena de forma aditiva, para poder trabajar en ella de forma independiente.
 

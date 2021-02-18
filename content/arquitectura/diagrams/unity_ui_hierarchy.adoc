@@ -1,0 +1,21 @@
+[plantuml, format="svg"]
+....
+salt
+{
+{T
+ + Level01 (Scene)
+ ++ Main Camera
+ ++ ...
+ + UI (Scene)
+ ++ <b>UIController
+ +++ Canvas01
+ ++++ Panel01
+ +++++ Text01
+ +++++ Button01
+ +++++ ...
+ ++++ Panel02
+ ++++ Panel03
+ ++++ ...
+}
+}
+....
