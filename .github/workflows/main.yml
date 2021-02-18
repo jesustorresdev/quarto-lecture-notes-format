@@ -1,6 +1,7 @@
 name: Publicar
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - '*'

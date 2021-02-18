@@ -164,7 +164,7 @@ Aunque, pocos son fácilmente aplicables al desarrollo de videojuegos, pueden se
 
 Un patrón que si puede ser interesante estudiar e intentar aplicar, porque está sonando bastante en la industria, es Entidad-Componente-Sistema —o _Entity-Component-System_ (ECS), en inglés—.
 ECS ofrece un gran desacople entre componentes —de tal forma que varios equipos pueden trabaja en cualquier sistema de forma independiente— y facilita el desarrollo orientado a datos, lo que bien aprovechado debe ofrecer mayor rendimiento.
-ECS es una de las ideas centrales de {unit-dots}[Unity DOTS], la gran apuesta de Unity para modernizar completamente el motor y las herramientas de Unity.
+ECS es una de las ideas centrales de {unity-dots}[Unity DOTS], la gran apuesta de Unity para modernizar completamente el motor y las herramientas de Unity.
 
 == Managers, Controladores y Sistemas
 
@@ -1390,34 +1390,34 @@ Unity Technologies. RuntimeInitializeLoadType. _Unity Manual_. https://docs.unit
 Unity Technologies. Domain Reloading. _Unity Manual_. https://docs.unity3d.com/Manual/DomainReloading.html
 
 * [[[Wikipedia-State,9]]]
-State (patrón de diseño). En _Wikipedia_. https://es.wikipedia.org/wiki/State_(patr%C3%B3n_de_dise%C3%B1o)
+State (patrón de diseño). En _Wikipedia_. link:pass:[https://es.wikipedia.org/wiki/State_(patrón de diseño)][]
 
 * [[[Wikipedia-FSM,10]]]
 Autómata finito. En _Wikipedia_. https://es.wikipedia.org/wiki/Aut%C3%B3mata_finito
 
 * [[[Wikipedia-Factory,11]]]
-Factory Method (patrón de diseño). En _Wikipedia_. https://es.wikipedia.org/wiki/Factory_Method_(patr%C3%B3n_de_dise%C3%B1o)
+Factory Method (patrón de diseño). En _Wikipedia_. link:pass:[https://es.wikipedia.org/wiki/Factory_Method_(patrón de diseño)][]
 
 * [[[Wikipedia-Abstract-Factory,12]]]
-Abstract Factory. En _Wikipedia_. https://es.wikipedia.org/wiki/Abstract_Factory
+Abstract Factory. En _Wikipedia_. link:https://es.wikipedia.org/wiki/Abstract_Factory[]
 
 * [[[Wikipedia-Strategy,13]]]
-Strategy (patrón de diseño). En _Wikipedia_. https://es.wikipedia.org/wiki/Strategy_(patr%C3%B3n_de_dise%C3%B1o)
+Strategy (patrón de diseño). En _Wikipedia_. link:pass:[https://es.wikipedia.org/wiki/Strategy_(patrón de diseño)][]
 
 * [[[Wikipedia-Decorator,14]]]
-Decorator (patrón de diseño). En _Wikipedia_. https://es.wikipedia.org/wiki/Decorator_(patr%C3%B3n_de_dise%C3%B1o)
+Decorator (patrón de diseño). En _Wikipedia_. link:pass:[https://es.wikipedia.org/wiki/Decorator_(patrón de diseño)][]
 
 * [[[Wikipedia-Visitor,15]]]
-Visitor (patrón de diseño). En _Wikipedia_. https://es.wikipedia.org/wiki/Visitor_(patr%C3%B3n_de_dise%C3%B1o)
+Visitor (patrón de diseño). En _Wikipedia_. link:pass:[https://es.wikipedia.org/wiki/Visitor_(patrón de diseño)][]
 
 * [[[Wikipedia-Object-Pool,16]]]
-Object pool (patrón de diseño). En _Wikipedia_. https://es.wikipedia.org/wiki/Object_pool_(patr%C3%B3n_de_dise%C3%B1o)
+Object pool (patrón de diseño). En _Wikipedia_. link:pass:[https://es.wikipedia.org/wiki/Object_pool_(patrón de diseño)][]
 
 * [[[Contreras2019,17]]]
 Conteras, V. (2019, 19 de septiembre). Patrón de diseño Object Pooling en Unity. _DEV_. https://dev.to/developervix/patron-de-diseno-object-pooling-en-unity-ecf
 
 * [[[Wikipedia-Observer,18]]]
-Observer (patrón de diseño). En _Wikipedia_. https://es.wikipedia.org/wiki/Observer_(patr%C3%B3n_de_dise%C3%B1o)
+Observer (patrón de diseño). En _Wikipedia_. link:pass:[https://es.wikipedia.org/wiki/Observer_(patrón de diseño)][]
 
 * [[[Dunstan2016,19]]]
 Dunstan, J. (2016, 25 de enero). Event Performance: C# vs. UnityEvent. _JacksonDunstan.com_. https://www.jacksondunstan.com/articles/3335
