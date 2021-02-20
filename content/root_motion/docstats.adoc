@@ -1,4 +1,24 @@
 :document-characters: 14315
 :document-words: 2849
 :document-paragraphs: 49
-:document-reading-time:  y 14 minutos
+:document-reading-time: 14 minutos
+:s01-characters: 1388
+:s01-words: 280
+:s01-paragraphs: 6
+:s01-reading-time: 1 minuto
+:s02-characters: 818
+:s02-words: 166
+:s02-paragraphs: 2
+:s02-reading-time: 1 minuto
+:s03-characters: 4724
+:s03-words: 968
+:s03-paragraphs: 14
+:s03-reading-time: 5 minutos
+:s04-characters: 2236
+:s04-words: 439
+:s04-paragraphs: 8
+:s04-reading-time: 2 minutos
+:s05-characters: 2926
+:s05-words: 594
+:s05-paragraphs: 13
+:s05-reading-time: 3 minutos
