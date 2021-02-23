@@ -1,4 +1,4 @@
-= Desarrollo de Videojuegos 3D: Flujo del trabajo
+= Desarrollo de Videojuegos 3D: Flujo de trabajo
 Jesús Torres <jmtorres@ull.es>
 include::../version.adoc[]
 Curso {academic-year}
