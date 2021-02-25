@@ -212,14 +212,19 @@ Por ejemplo, NPC, proyectiles, enemigos, cámaras, sistemas de partículas, etc.
 Para mejorar el rendimiento, pueden almacenar los objetos en un _pool_ de objetos para reusarlos rápidamente.
 
 Los _managers_ también facilitan encontrar rápidamente todos los objetos de cierto tipo, evitando usar las funciones de búsqueda del motor —como las funciones `FindXXXXXX()` en Unity— que son más lentas.
+Por ejemplo, es buena idea tener un `CameraManager` que permita conocer las cámaras existentes y obtener rápidamente una referencia a la cámara activa.
+En Unity se puede usar `camera.main` para conocer la cámara activa, pero esta propiedad usa la función `FindGameObjectsWithTag()`, lo que es más lento que tener un _manager_ con una referencia a la cámara.
+De igual forma, en juegos multijugador, es buena idea tener en la escena un `PlayerManager` a quien preguntarle por todos los jugadores conocidos, en lugar de pedirle al motor que los busque de entre todos los objetos de la escena.
 
 [TIP]
 ====
-Por ejemplo, es buena idea tener un `CameraManager` que permita conocer las cámaras existentes y obtener rápidamente una referencia a la cámara activa.
-En Unity se puede usar `camera.main` para conocer la cámara activa, pero esta propiedad usa la función `FindGameObjectsWithTag()`, lo que es más lento que tener un _manager_ con una referencia a la cámara.
+Se pueden usar _managers_ para gestionar de forma centralizada componentes que son de uso común, aunque no sean entidades.
+Por ejemplo, en videojuegos es muy frecuente el uso de temporizadores, pero algunos motores —como Unity— no traen clases y funciones específicas para gestionarlos.
+Esto puede hacer que se implemente una y otra vez la misma funcionalidad en distintos _GameObjects_, usando _timestamps_ y el método `Update()`.
+Por eso es buena idea implementar un _manager_ de temporizadores, que se encargue de la creación y manipulación de los temporizadores que necesite la aplicación, evitando repetir una y otra vez el mismo código y separando mejor las responsabilidades.
 ====
 
-De igual forma, en juegos multijugador, es buena idea tener en la escena un `PlayerManager` a quien preguntarle por todos los jugadores conocidos, en lugar de pedirle al motor que los busque de entre todos los objetos de la escena.
+// TODO: Hacer una posible implementación.
 
 Aunque por lo comentado pueda parecer que de cada tipo de _manager_ solo hay uno en cada escena, lo cierto es que no es así.
 En la <<fig-inventory-system>> se puede observar como cada personaje que puede llevar `InventoryItem` tiene su componente `InventoryManager`.
