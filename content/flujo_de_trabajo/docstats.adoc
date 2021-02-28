@@ -1,17 +1,17 @@
-:document-characters: 36400
-:document-words: 6937
+:document-characters: 36409
+:document-words: 6935
 :document-paragraphs: 112
 :document-reading-time: 35 minutos
 :s01-characters: 3477
 :s01-words: 665
 :s01-paragraphs: 9
 :s01-reading-time: 3 minutos
-:s02-characters: 9943
-:s02-words: 1940
+:s02-characters: 9948
+:s02-words: 1937
 :s02-paragraphs: 24
 :s02-reading-time: 10 minutos
-:s03-characters: 10617
-:s03-words: 2030
+:s03-characters: 10621
+:s03-words: 2031
 :s03-paragraphs: 37
 :s03-reading-time: 10 minutos
 :s04-characters: 1830

@@ -91,7 +91,7 @@ Así que debe ser modular, sencillo de modificar y sin detalles; porque durante 
 
 Antes de comenzar con el _greyboxing_ es importante estandarizar el tamaño de la rejilla espacial que se va a usar para ubicar los elementos y adherirnos a ella fielmente durante el diseño de niveles.
 Por ejemplo, fijar que la unidad de altura estándar de los muros será de 3 m. y que los segmentos de suelo serán de 3x3 m.
-Esto no significa que no puedan haber objetos en posiciones intermedias de la rejilla para dotar de mayor detalle a la escena, pero para eso se recomienda usar siempre divisiones pares de la cuadrícula estándar escogida.
+Esto no significa que no pueda haber objetos en posiciones intermedias de la rejilla para dotar de mayor detalle a la escena, pero para eso se recomienda usar siempre divisiones pares de la cuadrícula estándar escogida.
 
 Para escoger un buen sistema de rejilla hay tomar en consideración las escalas o tamaños de los objetos, personajes y edificaciones.
 Para escalar adecuadamente los elementos del nivel, se puede añadir desde el principio un modelo de «dimensiones humanas» como referencia —o cualquier otro objeto que tenga sentido según el caso— y estandarizar las medidas de distintos tipos de objetos para usarlas en todos los niveles.
@@ -100,7 +100,7 @@ TIP: En proyectos de realidad virtual se pueden utilizar como referencia los mod
 
 Otro aspecto a considerar al establecer escalas es el campo de visión y las distorsiones derivadas del punto de vista del jugador.
 En juegos en primera persona, huecos como los de puertas y ventana parecen un poco más pequeños de lo que son en realidad, dando la impresión de que no cabemos por ellos.
-Mientras que situar la cámara demasiado alto —más de 2 m.— o demasiado bajo —menos de 1.5 m.— tiende a distorsionar la perspectiva, dado que el cerebro del jugador asume que la altura de la cámara debe ser similar a la altura real de los ojos<<Schell2019>>.
+Mientras que situar la cámara demasiado alta —más de 2 m.— o demasiado bajo —menos de 1.5 m.— tiende a distorsionar la perspectiva, dado que el cerebro del jugador asume que la altura de la cámara debe ser similar a la altura real de los ojos<<Schell2019>>.
 En juegos en tercera persona, en interiores con escala real, el jugador tiene la impresión de que el espacio es demasiado pequeño.
 Por eso se tiende a crear habitaciones más amplias, con mobiliario de tamaño real —o solo un poco más grande— repartido por la habitación para llenarla<<Schell2019>>.
 
@@ -109,14 +109,14 @@ Por eso se tiende a crear habitaciones más amplias, con mobiliario de tamaño r
 También es importante tener en cuenta las mecánicas de juego y las animaciones.
 Por ejemplo ¿cuánto saltará el personaje? ¿a qué distancia? ¿qué altura tiene cuando está de pie? ¿y cuándo está agachado? ¿cuánto espacio necesita para moverse? ¿a que altura estarán los paneles e interruptores con los que va a interactuar?
 Si por ejemplo las paredes van a hacerse en unidades de 3 m., el personaje puede medir 1.5 m., los huecos para cruzar agachado 0.5 m. y los interruptores y paneles pueden estar a 1 m.
-Si los elementos del suelo se pueden ajustar en un rejilla de 1x1 m. eso determinar cuánto debe poder saltar el personaje, el ancho de los obstáculos que debe poder superar y el largo de cada tramo de escalera, entre otras cosas.
+Si los elementos del suelo se pueden ajustar en una rejilla de 1x1 m. eso determinar cuánto debe poder saltar el personaje, el ancho de los obstáculos que debe poder superar y el largo de cada tramo de escalera, entre otras cosas.
 
 Un sistema de rejilla bien diseñado simplifica el trabajo de diseño, reduce el tiempo de ensayo y error y evita que se acabe rehaciendo mucho trabajo al prevenir incoherencias.
 Sin embargo, la escalas de los objetos y la rejilla no son lo único que hace falta estandarizar antes de comenzar.
 También es conveniente fijar las reglas para colocar los orígenes en los modelos —por ejemplo, siempre abajo y a la izquierda— y el nivel de modularidad.
 
 Lo primero, facilita la sustitución de los bloques por las mallas definitivas, mientras que la modularidad depende del tipo de escenario.
-Es decir, en un juego de carreras por la ciudad es bastante razonable usar grandes bloques en el lugar dónde van a ir edificaciones —aunque al modelar estas se puedan construir combinando módulos de mallas de secciones de edificios, para reducir costes y tiempo—.
+Es decir, en un juego de carreras por la ciudad es bastante razonable usar grandes bloques en el lugar donde van a ir edificaciones —aunque al modelar estas se puedan construir combinando módulos de mallas de secciones de edificios, para reducir costes y tiempo—.
 Mientras que en un _survival horror_ que transcurra en los estrechos pasillos de una nave espacial, es razonable construir paredes, techos y pisos usando módulos individuales de tamaño fijo, que posteriormente pueden ser sustituidos directamente por las mallas definitivas.
 
 === Manos a la obra
@@ -130,7 +130,7 @@ Si por el contrario estamos en una etapa muy temprana del desarrollo y aun no te
 image::blocking.jpg[]
 
 Según avanza el prototipo, se van añadiendo personajes y elementos, se programan eventos y se prueba el diseño de niveles y el _gameplay_.
-En base a los resultados de estas pruebas, se modifican las mecánicas y los niveles y se vuelve a iterar.
+Basándonos en los resultados de estas pruebas, se modifican las mecánicas y los niveles y se vuelve a iterar.
 Con las iteraciones el equipo de diseño comenzará a reunir requisitos del _gameplay_ y características del diseño de niveles, que irán al GDD.
 
 [[video-jedi-fallen-order-prototype, {video-caption} {counter:video-number}]]
@@ -146,7 +146,7 @@ NOTE: En ocasiones, los niveles diseñados mediante _greyboxing_ se exportan par
 En algunos casos los modeladores trabajan sobre el nivel completo, mientras en otros lo hacen sobre una colección de pequeños componentes individuales con los que luego compondrán el nivel definitivo.
 
 Finalmente, cuando las mecánicas y las características del diseño de niveles estén lo suficientemente bien definidas, el proyecto pasa a la etapa de *producción*.
-Para que eso ocurra no es necesario haber prototipado todo el juego, si no algunos niveles y las mecánicas principales, en los que se ha iterado hasta refinar el diseño lo suficiente como para tener unas guías claras para la siguiente etapa.
+Para que eso ocurra no es necesario haber prototipado todo el juego, sino algunos niveles y las mecánicas principales, en los que se ha iterado hasta refinar el diseño lo suficiente como para tener unas guías claras para la siguiente etapa.
 Durante la producción el _greyboxing_ sigue siendo extremadamente útil para el diseño y prototipado del resto de niveles del juego.
 
 === Herramientas para _greyboxing_
@@ -173,7 +173,7 @@ Es interesante observar cómo crea materiales para _greyboxing_ con diferentes c
 Estos son útiles para señalar distintas zonas de juego, tipos de elementos o señalar nuestros cambios respecto a un diseño anterior.
 
 Unreal Engine tiene además un conjunto de herramientas de edición denominadas *Geometry Editing*, con el que se pueden modificar directamente las figuras en el editor.
-El mismo autor de el <<video-ue-geometry-brushes>> tiene una interesante {ue-greometry-editing-tutorials}[colección de tutoriales] sobre los modos de *Geometry Editing*: *Edit*, *Pen*, *Lathe*, *Brush Clip* y *Extrude*.
+El mismo autor del <<video-ue-geometry-brushes>> tiene una interesante {ue-greometry-editing-tutorials}[colección de tutoriales] sobre los modos de *Geometry Editing*: *Edit*, *Pen*, *Lathe*, *Brush Clip* y *Extrude*.
 El <<video-ue-geometry-editing>> es el primero, sobre el modo *Edit*.
 
 [[video-ue-geometry-editing, {video-caption} {counter:video-number}]]
@@ -190,7 +190,7 @@ En <<Sergeev2020>> se pueden ver algunos ejemplos del _greyboxing_ en Unreal Eng
 Unity trae de serie algunos objetos primitivos que se pueden usar para prototipar: cubo, plano, esfera, cápsula, cilindro y cuadrado.
 Sin embargo es recomendable aprender a usar ProBuilder<<Unity-ProBuilder>>, que se distribuye como un paquete independiente.
 
-ProBuilder está optimizado para crear formas sencillas, pero también ofrece herramientas de edición avanzadas, asignación de materiales y edición de UV, de forma similar a otros programs de modelado 3D.
+ProBuilder está optimizado para crear formas sencillas, pero también ofrece herramientas de edición avanzadas, asignación de materiales y edición de UV, de forma similar a otros programas de modelado 3D.
 La <<fig-greybox-shooty-squad>> es una muestra de lo que permite hacer.
 
 ProBuilder trae algunas formas básicas que se pueden combinar mediante operaciones booleanas, para dar lugar a objetos más complejos.
@@ -276,7 +276,7 @@ Es decir, el primer nivel se organiza por característica, mientras que en nivel
 .Ejemplo de organización de los recursos del proyecto por característica en Unity.
 include::diagrams/unity_assets_tree_by_feature.adoc[]
 
-En este caso es más probable que alguien que esté trabajando en una característica concreta tenga todo lo que necesita en un única rama de la jerarquía de recursos.
+En este caso es más probable que alguien que esté trabajando en una característica concreta tenga todo lo que necesita en una única rama de la jerarquía de recursos.
 
 Suelen contemplarse algunas excepciones a la regla.
 Por ejemplo, para agrupar tipos de elementos usados globalmente, como las carpetas `Scenes` o `Maps` para guardar los niveles en Unity y Unreal Engine, respectivamente.
@@ -301,7 +301,7 @@ include::diagrams/ue_assets_tree_by_feature.adoc[]
 La diferencia con Unity es que el código fuente del proyecto se organiza en dos carpetas fuera de `Content`:
 
 * `Source`, contiene el código fuente de los módulos del juego, cada uno en un subdirectorio diferente.
-Pueden haber módulos para extender el editor o para el _gameplay_ del juego.
+Puede contener módulos para extender el editor o para el _gameplay_ del juego.
 
 * `Plugins`, contiene los _plugins_ instalados en el proyecto, en lugar de en el motor.
 Cada _plugin_ puede contener varios módulos y recursos del juego.
@@ -353,7 +353,7 @@ Eso complica mantener una estructura organizada donde se separe qué es nuestro 
 ====
 Una práctica interesante es colocar un '_' en el primer caracter del nombre de la carpeta.
 Por ejemplo, llamándola `_GameAssets` o `_Project`.
-Así siempre aparece la primera del proyecto y, por tanto, es más fácil de localizar.
+Así siempre aparecerá la primera del proyecto y, por tanto, es más fácil de localizar.
 
 Por el mismo motivo, otra práctica que suele ser interesante —al menos para los programadores— es llamar `_Scripts` a la carpeta que contiene el código en C#.
 En la misma <<fig-unity-gameassets>> se puede ver un ejemplo. 
@@ -365,13 +365,13 @@ Por defecto Unity compila todos el código C# en `Assembly-CSharp.dll`.
 Esto significa que cada vez que se modifica alguna parte del código se tiene que compilar todo, lo que puede consumir bastante tiempo en proyectos grandes.
 
 Los *Assembly Definitions*<<Unity-Assembly-Definitions>> permiten que una carpeta y sus subcarpetas se compile en una DLL diferente.
-Esto reduce los tiempos de compilación, porque si se modifica un archivo de código sólo se compilan los archivos incluidos en la misma DLL.
+Esto reduce los tiempos de compilación, porque si se modifica un archivo de código solo se compilan los archivos incluidos en la misma DLL.
 
 El uso de _Assembly Definitions_ tiene además importantes ventajas:
 
 * Son necesarios para hacer tests del código del proyecto sin que el código de los test acabe en el producto definitivo.
 
-* Fuerza una buena práctica de programación que es que entre los componentes de software solo hayan dependencias en un solo sentido.
+* Fuerza una buena práctica de programación que es que entre los componentes de software solo haya dependencias en un solo sentido.
 Esto es debido a que un _assembly_ —una DLL— A no puede depender de un _assembly_ B que a su vez dependa de A.
 Además, gracias a los modificadores de accesibilidad `internal` y `public` se puede controlar la interfaz pública que un _assembly_ expone al resto del proyecto.
 
@@ -400,14 +400,14 @@ Obliga a que formen parte del proyecto _plugins_ y herramientas externas, compli
 
 En Unity 2019.1 apareció *Unity Package Manager*<<Unity-Package-Manager>>, que ofrece características similares a los gestores de paquetes de otros lenguajes.
 Ahora los proyectos tienen un archivo de manifiesto donde se indican las dependencias del proyecto; de tal forma que al abrirlo se instalan automáticamente en las versiones adecuadas.
-Es decir, los componentes gestionados de esta manera ya no tienen que formar parte del proyecto sino que se gestionan como dependencias.
+Es decir, los componentes gestionados de esta manera ya no tienen que formar parte del proyecto, sino que se gestionan como dependencias.
 
 Unity distribuye a través de este sistema diversos componentes adicionales.
 Sin embargo, lo que nos interesa destacar es la posibilidad de crear nuestros propios paquetes<<Unity-Create-Custom-Package>> y usarlos como dependencia de nuestros proyectos.
-Es buena idea estructurar nuestros proyectos entorno a un conjunto de componentes reutilizables —por ejemplo, entrada de usuario, controlador del personaje, sistema de inventario, interfaz de usuario, sistema de conducción, IA, carga de niveles, etc.— y desarrollar e incorporar cada uno a nuestros proyectos en paquetes separados.
+Es buena idea estructurar nuestros proyectos en torno a un conjunto de componentes reutilizables —por ejemplo, entrada de usuario, controlador del personaje, sistema de inventario, interfaz de usuario, sistema de conducción, IA, carga de niveles, etc.— y desarrollar e incorporar cada uno a nuestros proyectos en paquetes separados.
 Esto puede facilitar enormemente el mantenimiento y reutilización del código.
 
-Los paquetes de Unity propios se puede distribuir al resto del equipo mediates archivos `.zip`, directamente desde un repositorio de Git —usando su URL— o mediante un registro NPM privado.
+Los paquetes de Unity propios se puede distribuir al resto del equipo mediate archivos `.zip`, directamente desde un repositorio de Git —usando su URL— o mediante un registro NPM privado.
 
 == Jerarquía de la escena
 
@@ -471,7 +471,7 @@ Por eso se suele optar por utilizar el software de control de versiones o inclus
 
 === Directorios en el control de versiones
 
-A la hora de utilizar correctamente un VCS es importante saber qué rutas del proyecto deben incluirse en el VCS, para no perder información relevante, y cuales no debe incluirse nunca.
+A la hora de utilizar correctamente un VCS es importante saber qué rutas del proyecto deben incluirse en el VCS, para no perder información relevante, y cuáles no debe incluirse nunca.
 Obviamente, esto depende del motor de videojuegos con el que estemos trabajando, por lo que debemos consultar su documentación.
 
 Del directorio de un proyecto en Unity, solo los siguientes subdirectorios deben ser incluidos en el control de versiones:
