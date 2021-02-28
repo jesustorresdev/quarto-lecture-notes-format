@@ -406,6 +406,7 @@ Las clases *Pawn* y *Character* exponen la interfaz necesaria para que un *Contr
 Los *Controller* que «poseen» un *Pawn* o *Character* reciben muchos de los eventos que llegan a dicho *Pawn*, lo que les permite redefinir el comportamiento del actor mientras está poseído.
 
 *Pawn* también ofrece la API *Damage*, que se usa para causar distintos tipos de daño —puntual, radial u otro que definamos— en el personaje, registrando quién es el causante.
+Además, Unreal Engine ofrece el componente *ProjectileMovementComponent*, diseñado para dotar a cualquier actor del tipo de movimiento característico de un proyectil.
 
 === PlayerState y otros datos del jugador
 
