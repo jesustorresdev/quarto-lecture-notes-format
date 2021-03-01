@@ -1357,16 +1357,14 @@ Igualmente, se puede emplear el método `OnValidate()` de los componentes para a
 Todo el interés sobre el uso de _scriptable objects_ para mejorar la arquitectura de los juegos surgió a raíz de una conferencia en Unite 2016:
 
 [[video-unity-so-unite-2016, {video-caption} {counter:video-number}]]
-.{video-caption} {video-number}. 
-.Conferencia «Overthrowing the MonoBehaviour Tyranny in a Glorious Scriptable Object Revolution» en Unite 2016.
+.{video-caption} {video-number}. Conferencia «Overthrowing the MonoBehaviour Tyranny in a Glorious Scriptable Object Revolution» en Unite 2016.
 video::6vmRwLYWNRo[youtube, opts="modest", start=808, end=1662, width=854, height=480]
 
 A la que le siguió otra sobre el mismo tema el año siguiente, en Unite 2017.
 Ambas son bastante ilustrativas y muestran varios ejemplos de cómo utilizar los _scriptable objects_.
 
 [[video-unity-so-unite-2017, {video-caption} {counter:video-number}]]
-.{video-caption} {video-number}. 
-.Conferencia «Game Architecture with Scriptable Objects» en Unite Austin 2017.
+.{video-caption} {video-number}. Conferencia «Game Architecture with Scriptable Objects» en Unite Austin 2017.
 video::raQ3iHhE_Kk[youtube, opts="modest", start=808, end=1662, width=854, height=480]
 
 [bibliography]
