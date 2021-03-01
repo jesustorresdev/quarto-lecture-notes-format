@@ -128,16 +128,16 @@ NOTE: Es importante utilizar las versiones «Async» para no detener el juego mi
 
 == Limitaciones del punto flotante
 
-Tanto Unreal Engine como Unity utilizan números punto flotante de 32 bits —o de precisión simple—.
+Tanto Unreal Engine como Unity utilizan números punto flotante de 32bits —o de precisión simple—.
 
 Algunos motivos para esta decisión podrían ser:
 
-* Si hubieran optado por números de punto flotantes de 64 bits, necesitarían más memoria, se aprovecharían peor las memorias caché y el ancho de banda de la memoria, porque cada número ocuparía el doble de lo que ocupan ahora.
+* Si hubieran optado por números de punto flotantes de 64bits, necesitarían más memoria, se aprovecharían peor las memorias caché y el ancho de banda de la memoria, porque cada número ocuparía el doble de lo que ocupan ahora.
 
-* Aunque ya no es tan común, han existido arquitecturas sin soporte para números de punto flotante de 64 bits.
+* Aunque ya no es tan común, han existido arquitecturas sin soporte para números de punto flotante de 64bits.
 Esto es algo a tener en cuenta si se quiere desarrollar un motor que sea portable a diferentes arquitecturas.
 
-* Las GPU suelen ofrece peor rendimiento trabajando con punto flotante de 64 bits, lo que obliga a usar el truco de transformar las coordenadas de los vértices para que sean relativas a la posición de la cámara, de forma que puedan almacenarse en punto flotante de 32 bits durante el _render_.
+* Las GPU suelen ofrece peor rendimiento trabajando con punto flotante de 64bits, lo que obliga a usar el truco de transformar las coordenadas de los vértices para que sean relativas a la posición de la cámara, de forma que puedan almacenarse en punto flotante de 32bits durante el _render_.
 
 El problema es que la precisión de los números de punto flotante no es fija.
 Como se puede ver en la <<fig-ieee754-precision>>, a mayor sea el valor que almacenan, peor es la precisión.
@@ -146,10 +146,10 @@ Como se puede ver en la <<fig-ieee754-precision>>, a mayor sea el valor que alma
 .Precisión de los números de punto flotante.
 image::ieee754_precision.png[]
 
-Así que a 50 Km. del origen la precisión es de 1 cm. —sin importar que la unidad por defecto en Unreal Engine sea el centímetro mientras que la de Unity es el metro—.
+Así que a 50Km del origen la precisión es de 1cm —sin importar que la unidad por defecto en Unreal Engine sea el centímetro mientras que la de Unity es el metro—.
 
 Aunque no lo parezca, esto puede generar efectos indeseables, en función del tipo de juego.
-Un jugador a poco más de 2 Km. del origen podría comenzar a notar comportamientos raros en las físicas, en las animaciones o en el movimiento de los objetos, si está lo bastante cerca.
+Un jugador a poco más de 2Km del origen podría comenzar a notar comportamientos raros en las físicas, en las animaciones o en el movimiento de los objetos, si está lo bastante cerca.
 Porque aunque los cálculos señalen que algo debe ir en cierto sitio, la precisión a esa distancia hará que la ubicación se redondee al flotante posible más cercano.
 
 == Traslación del origen
@@ -162,7 +162,7 @@ image::traslación_del_origen.svg[]
 
 === En Unreal Engine
 
-Nuevamente, en Unreal Engine ya viene implementado, permitiendo crear mundos de hasta 20 Km.⨯20 Km sin problemas de precisión.
+Nuevamente, en Unreal Engine ya viene implementado, permitiendo crear mundos de hasta 20⨯20Km sin problemas de precisión.
 Tan solo hay que activar la opción _Enable World Origin Rebasing_.
 
 NOTE: Los detalles de como lo hace se pueden leer en el foro de Unreal Engine<<UE-Forums-Origin-Shifting>> y en el correspondiente _pull Request_ en GitHub<<UE-Github-PR-Origin-Shifting>>.
@@ -227,10 +227,10 @@ Eso es así porque ninguno de los dos motores aprovecha de la mejor manera posib
 Sin embargo, no hay nada que lo impida, porque realmente la unidad de medida en el motor es, más que nada, una convención.
 La unidad espacial puede ser la que nosotros queramos que sea, según el tipo de proyecto en el que estemos trabajado.
 
-Así que si sabemos que el intervalo más preciso es el [-1, 1] y tenemos pensado desarrollar un juego de mundo abierto de 100 Km.⨯100 Km. de extensión total, nada nos impide decir que nuestra unidad son 50 Km.
-Es decir, que cada cuadrado de 1⨯1 en el editor representa 50 Km.⨯50 Km en el juego, de forma que 4 cuadrados está contenido todo el espacio del nivel.
+Así que si sabemos que el intervalo más preciso es el [-1, 1] y tenemos pensado desarrollar un juego de mundo abierto de 100⨯100Km de extensión total, nada nos impide decir que nuestra unidad son 50Km
+Es decir, que cada cuadrado de 1⨯1 en el editor representa 50⨯50Km en el juego, de forma que 4 cuadrados está contenido todo el espacio del nivel.
 
-Si observamos la <<fig-ieee754-precision>> y consideramos que 1 son 50 Km., es fácil determinar que la precisión en el extremo del mundo será de 0.25 cm.; que es 4 veces mejor que la que obtendríamos trabajando con la convención estándar de ambos motores.
+Si observamos la <<fig-ieee754-precision>> y consideramos que 1 son 50Km, es fácil determinar que la precisión en el extremo del mundo será de 0.25cm; que es 4 veces mejor que la que obtendríamos trabajando con la convención estándar de ambos motores.
 
 Sin embargo, debemos considerar varios inconvenientes:
 
@@ -239,8 +239,8 @@ En Maya, por ejemplo, 1 unidad es un centímetro.
 Así que si no tenemos esto en cuenta, los modelos importados serán enormes.
 
 . Las unidades si son relevantes para el motor de físicas.
-Por ejemplo, en Unity, si la gravedad vale 9.8 quiere decir 9.8 m./s.^2^.
-Si en un proyecto la unidad es 50 Km. y no 1 m., la gravedad debería ser —si queremos que sea realista— 0,000196.
+Por ejemplo, en Unity, si la gravedad vale 9.8 quiere decir 9.8m/s^2^.
+Si en un proyecto la unidad es 50Km y no 1m, la gravedad debería ser —si queremos que sea realista— 0.000196.
 
 [stem]
 ++++

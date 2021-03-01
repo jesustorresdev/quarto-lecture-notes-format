@@ -1084,10 +1084,10 @@ El método `Update()` se llama una vez para cada fotograma y en él no podemos h
 
 Eso significa Si tuviéramos la idea de detectar un _combo_ como:
 
-_«El ataque se iniciará si se pulsa kbd:[Z] y antes de 800 ms. kbd:[X].
-Si se inicia el _combo_, no podrá haber otro antes de 5seg. »_
+_«El ataque se iniciará si se pulsa kbd:[Z] y antes de 800ms kbd:[X].
+Si se inicia el _combo_, no podrá haber otro antes de 5s »_
 
-No podríamos implementarlo de forma sencilla en `Update()` porque si detectamos la pulsación de kbd:[A] no podemos esperar 800 ms. comprobando si se pulsa kbd:[X] sin salir de `Update()`, pues durante ese tiempo el juego estaría completamente bloqueado.
+No podríamos implementarlo de forma sencilla en `Update()` porque si detectamos la pulsación de kbd:[A] no podemos esperar 800ms comprobando si se pulsa kbd:[X] sin salir de `Update()`, pues durante ese tiempo el juego estaría completamente bloqueado.
 
 La solución más común a este problema anterior es entrar en `Update()`, recordar en que fase del _combo_ estamos, comprobar si se dan las condiciones para pasar a la siguiente fase y volver a salir.
 Esto encaja perfectamente con el tipo de problemas que resuelven las máquinas de estados.

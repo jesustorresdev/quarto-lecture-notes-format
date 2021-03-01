@@ -40,8 +40,8 @@ Por ejemplo, veamos el tamaño y los tiempos —obtenidos sin ningún rigor, des
 |===
 | Proyecto        | Tamaño del proyecto | Tamaño del repositorio | Tiempo de clonado
 
-| Kernel Linux    | 1.1GiB              | 4.0GiB                 | 5:45 min.
-| Unreal Engine 4 | 1.7GiB              | 4.4GiB                 | 10:13 min.
+| Kernel Linux    | 1.1GiB              | 4.0GiB                 | 5:45min
+| Unreal Engine 4 | 1.7GiB              | 4.4GiB                 | 10:13min
 |===
 
 La diferencia entre el tamaño del proyecto y el tamaño real del repositorio se debe a que Git es un VCS descentralizado.

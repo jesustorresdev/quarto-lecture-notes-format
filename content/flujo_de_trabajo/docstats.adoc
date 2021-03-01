@@ -1,13 +1,13 @@
-:document-characters: 36409
-:document-words: 6935
+:document-characters: 36400
+:document-words: 6926
 :document-paragraphs: 112
 :document-reading-time: 35 minutos
 :s01-characters: 3477
 :s01-words: 665
 :s01-paragraphs: 9
 :s01-reading-time: 3 minutos
-:s02-characters: 9948
-:s02-words: 1937
+:s02-characters: 9939
+:s02-words: 1928
 :s02-paragraphs: 24
 :s02-reading-time: 10 minutos
 :s03-characters: 10621
