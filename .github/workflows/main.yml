@@ -21,11 +21,20 @@ jobs:
       with:
         ruby-version: 2.7
 
-    - name: Instalar dependencias
+    - name: Instalar dependencias (nativas)
       run: |
         sudo apt-get update -y -qq
-        sudo apt-get install pkg-config libxml2-dev libxslt-dev default-jre graphviz bison flex libffi-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx cmake
-        bundle config build.nokogiri --use-system-libraries
+        sudo apt-get install pkg-config libxml2-dev libxslt-dev
+        # asciidoctor-diagram
+        sudo apt-get install default-jre graphviz
+        # asciidoctor-mathematical
+        sudo apt-get install bison flex libffi-dev libxml2-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx cmake
+
+    - name: Instalar dependencias (gemas)
+      run: |
+        bundle config set build.nokogiri --use-system-libraries
+        bundle config set without epub3
+        bundle config set deployment true
         bundle install
 
     - name: Testear
@@ -37,7 +46,7 @@ jobs:
     - name: Empaquetar la documentación
       run: find output/pdf/* -type f -iname '*.pdf' | zip -j  output/pdf/desarrollo3d-pdf.zip -@
 
-    - name: Publicar
+    - name: Publicar en 'Releases'
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
