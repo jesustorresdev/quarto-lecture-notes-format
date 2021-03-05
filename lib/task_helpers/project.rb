@@ -53,7 +53,7 @@ module Project
     module_function :find_documents
 
     def make_output_dirname(source_directory, backend)
-        source_directory.sub(%r(^#{SOURCE_DIRECTORY}), File.join(OUTPUT_DIRECTORY, backend))
+        source_directory.sub(%r(^#{SOURCE_DIRECTORY}), File.join(Project::PROJECT_DIRECTORY, OUTPUT_DIRECTORY, backend))
     end
     module_function :make_output_dirname
 

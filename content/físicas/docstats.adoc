@@ -1,5 +1,5 @@
-:document-characters: 47282
-:document-words: 9021
+:document-characters: 47281
+:document-words: 9020
 :document-paragraphs: 158
 :document-reading-time: 45 minutos
 :s01-characters: 8574

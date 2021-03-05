@@ -1,5 +1,5 @@
-:document-characters: 14315
-:document-words: 2849
+:document-characters: 14314
+:document-words: 2848
 :document-paragraphs: 49
 :document-reading-time: 14 minutos
 :s01-characters: 1388

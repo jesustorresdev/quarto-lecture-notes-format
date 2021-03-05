@@ -23,6 +23,7 @@ Project::find_documents().each do |document|
             sh "asciidoctor", '--backend', 'html5',
                               '--require', './lib/time-admonition-block.rb',
                               '--attribute', "basedir=#{Project::PROJECT_DIRECTORY}",
+                              '--attribute', "outdir=#{document[:output_directories][:html]}",
                               *asciidoctor_opts,
                               '--out-file', t.name, t.prerequisites.first()
         end
@@ -40,6 +41,7 @@ Project::find_documents().each do |document|
                               '--require', 'asciidoctor-pdf',
                               '--require', './lib/time-admonition-block.rb',
                               '--attribute', "basedir=#{Project::PROJECT_DIRECTORY}",
+                              '--attribute', "outdir=#{document[:output_directories][:pdf]}",
                               *asciidoctor_opts,
                               '--out-file', t.name, t.prerequisites.first()
         end
@@ -53,6 +55,7 @@ Project::find_documents().each do |document|
                               '--require', 'asciidoctor-epub3',
                               '--require', './lib/time-admonition-block.rb',
                               '--attribute', "basedir=#{Project::PROJECT_DIRECTORY}",
+                              '--attribute', "outdir=#{document[:output_directories][:epub]}",
                               *asciidoctor_opts,
                               '--out-file', t.name, t.prerequisites.first()
         end
