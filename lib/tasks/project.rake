@@ -116,5 +116,5 @@ Project::find_documents().each do |document|
     end
 
     # Tareas de limpieza
-    CLOBBER.include(document[:output_directory])
+    CLOBBER.include(FileList[File.join(Project::OUTPUT_DIRECTORY, "*")])
 end
