@@ -162,7 +162,7 @@ image::traslación_del_origen.svg[]
 
 === En Unreal Engine
 
-Nuevamente, en Unreal Engine ya viene implementado, permitiendo crear mundos de hasta 20⨯20Km sin problemas de precisión.
+Nuevamente, en Unreal Engine ya viene implementado, permitiendo crear mundos de hasta 20{x}20Km sin problemas de precisión.
 Tan solo hay que activar la opción _Enable World Origin Rebasing_.
 
 NOTE: Los detalles de como lo hace se pueden leer en el foro de Unreal Engine<<UE-Forums-Origin-Shifting>> y en el correspondiente _pull Request_ en GitHub<<UE-Github-PR-Origin-Shifting>>.
@@ -227,8 +227,8 @@ Eso es así porque ninguno de los dos motores aprovecha de la mejor manera posib
 Sin embargo, no hay nada que lo impida, porque realmente la unidad de medida en el motor es, más que nada, una convención.
 La unidad espacial puede ser la que nosotros queramos que sea, según el tipo de proyecto en el que estemos trabajado.
 
-Así que si sabemos que el intervalo más preciso es el [-1, 1] y tenemos pensado desarrollar un juego de mundo abierto de 100⨯100Km de extensión total, nada nos impide decir que nuestra unidad son 50Km
-Es decir, que cada cuadrado de 1⨯1 en el editor representa 50⨯50Km en el juego, de forma que 4 cuadrados está contenido todo el espacio del nivel.
+Así que si sabemos que el intervalo más preciso es el [-1, 1] y tenemos pensado desarrollar un juego de mundo abierto de 100{x}100Km de extensión total, nada nos impide decir que nuestra unidad son 50Km
+Es decir, que cada cuadrado de 1{x}1 en el editor representa 50{x}50Km en el juego, de forma que 4 cuadrados está contenido todo el espacio del nivel.
 
 Si observamos la <<fig-ieee754-precision>> y consideramos que 1 son 50Km, es fácil determinar que la precisión en el extremo del mundo será de 0.25cm; que es 4 veces mejor que la que obtendríamos trabajando con la convención estándar de ambos motores.
 
