@@ -5,9 +5,9 @@ Project::find_documents().each do |document|
     namespace "#{document[:namespace_prefix]}build" do
 
         desc "Generar la versión en HTML de '#{document[:pathname]}'"
-        task :html => [ document[:output_pathname][:html], :html_media_files ]
+        task :html => [ document[:output_pathnames][:html], :html_media_files ]
 
-        file document[:output_pathname][:html] => [*document[:dependencies], :config] do |t|
+        file document[:output_pathnames][:html] => [*document[:dependencies], :config] do |t|
             asciidoctor_opts = CONFIG[:asciidoctor_opts] + CONFIG[:asciidoctor_html_opts]
             sh "asciidoctor", '--backend', 'html5',
                               '--require', './lib/time-admonition-block.rb',

@@ -4,9 +4,9 @@ Project::find_documents().each do |document|
     namespace "#{document[:namespace_prefix]}build" do
 
         desc "Generar la versión en EPUB de '#{document[:pathname]}'"
-        task :epub => [ document[:output_pathname][:epub] ]
+        task :epub => [ document[:output_pathnames][:epub] ]
 
-        file document[:output_pathname][:epub] => [*document[:dependencies], :config] do |t|
+        file document[:output_pathnames][:epub] => [*document[:dependencies], :config] do |t|
             asciidoctor_opts = CONFIG[:asciidoctor_opts] + CONFIG[:asciidoctor_epub_opts]
             sh "asciidoctor", '--backend', 'epub3',
                               '--require', 'asciidoctor-epub3',

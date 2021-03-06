@@ -4,9 +4,9 @@ Project::find_documents().each do |document|
     namespace "#{document[:namespace_prefix]}build" do
 
         desc "Generar la versión en PDF de '#{document[:pathname]}'"
-        task :pdf => [ document[:output_pathname][:pdf] ]
+        task :pdf => [ document[:output_pathnames][:pdf] ]
 
-        file document[:output_pathname][:pdf] => [*document[:dependencies], :config] do |t|
+        file document[:output_pathnames][:pdf] => [*document[:dependencies], :config] do |t|
             asciidoctor_opts = CONFIG[:asciidoctor_opts] + CONFIG[:asciidoctor_pdf_opts]
             sh "asciidoctor", '--backend', 'pdf',
                               '--require', 'asciidoctor-pdf',

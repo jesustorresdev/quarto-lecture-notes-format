@@ -15,7 +15,7 @@ Project::find_documents().each do |document|
         end
     
         desc "Ejecutar el test de variables no definidas sobre '#{document[:pathname]}'"
-        task :missing_variables => document[:output_pathname][:html] do |t|
+        task :missing_variables => document[:output_pathnames][:html] do |t|
             missing = Tests::find_missing_variables(open(t.prerequisites.first()))
             fail "Se han encontrado #{missing.size} variables no definidas:\n#{missing.join("\n")}" unless missing.empty?
         end

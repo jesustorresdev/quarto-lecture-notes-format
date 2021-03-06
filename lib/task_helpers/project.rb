@@ -42,7 +42,7 @@ module Project
                     *CONFIG_FILES
                 ],
                 :media_files => find_media_files(source_directory),
-                :output_pathname => {
+                :output_pathnames => {
                     :html => File.join(output_directories[:html], "index.html"), 
                     :pdf => File.join(output_directories[:pdf], get_output_documment_filename(namespaces, "pdf")),
                     :epub => File.join(output_directories[:epub], get_output_documment_filename(namespaces, "epub")),
