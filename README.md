@@ -20,9 +20,9 @@ sudo apt install bison flex libffi-dev libxml2-dev libgdk-pixbuf2.0-dev libcairo
 Después las gemas se pueden instalar fácilmente con *Bundle*:
 
 ~~~~
-$ bundle config set build.nokogiri --use-system-libraries
-$ bundle config set without epub3
-$ bundle install
+bundle config set build.nokogiri --use-system-libraries
+bundle config set without epub3
+bundle install
 ~~~~
 
 ## Generación de la documentación
@@ -31,7 +31,7 @@ Para automatizar la generación de la documentación se utiliza *Rake*.
 Para listar las tareas del proyecto basta con ejecutar:
 
 ~~~
-$ rake -T
+rake -T
 ~~~
 
 ## Solución de problemas
@@ -45,8 +45,8 @@ En ese caso, la ruta donde `mathematical.so` espera encontrar `liblasem.so` —i
 La solución más sencilla es desinstalar y volver a instalar nuevamente *mathematical* usando *Gem*:
 
 ~~~
-$ sudo gem uninstall mathematical
-$ sudo gem install mathematical
+sudo gem uninstall mathematical
+sudo gem install mathematical
 ~~~
 
 ## Estilos
