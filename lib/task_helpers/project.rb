@@ -26,6 +26,8 @@ module Project
                 :html => make_output_dirname(source_directory, "html"),
                 :pdf => make_output_dirname(source_directory, "pdf"),
                 :epub => make_output_dirname(source_directory, "epub"),
+                :docbook => make_output_dirname(source_directory, "docbook"),
+                :docx => make_output_dirname(source_directory, "docx"),
             }
 
             {
@@ -44,6 +46,8 @@ module Project
                     :html => File.join(output_directories[:html], "index.html"), 
                     :pdf => File.join(output_directories[:pdf], get_output_documment_filename(namespaces, "pdf")),
                     :epub => File.join(output_directories[:epub], get_output_documment_filename(namespaces, "epub")),
+                    :docbook => File.join(output_directories[:docbook], get_output_documment_filename(namespaces, "docbook")),
+                    :docx => File.join(output_directories[:docx], get_output_documment_filename(namespaces, "docx")),
                 },
                 :docstats_pathname => File.join(source_directory, DOCUMENT_STATS_FILE),
             }
