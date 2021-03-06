@@ -1,16 +1,16 @@
-:document-characters: 36400
-:document-words: 6926
+:document-characters: 36336
+:document-words: 6935
 :document-paragraphs: 112
 :document-reading-time: 35 minutos
 :s01-characters: 3477
 :s01-words: 665
 :s01-paragraphs: 9
 :s01-reading-time: 3 minutos
-:s02-characters: 9939
-:s02-words: 1928
+:s02-characters: 9940
+:s02-words: 1937
 :s02-paragraphs: 24
 :s02-reading-time: 10 minutos
-:s03-characters: 10621
+:s03-characters: 10589
 :s03-words: 2031
 :s03-paragraphs: 37
 :s03-reading-time: 10 minutos
@@ -18,7 +18,7 @@
 :s04-words: 381
 :s04-paragraphs: 9
 :s04-reading-time: 2 minutos
-:s05-characters: 7461
+:s05-characters: 7462
 :s05-words: 1439
 :s05-paragraphs: 29
 :s05-reading-time: 7 minutos

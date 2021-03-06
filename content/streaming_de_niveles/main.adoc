@@ -23,12 +23,12 @@ Lo hacen especialmente bien en lo que respecta a optimizar el _render_ para el m
 Por ejemplo, un paso estándar en las etapas de _render_ es excluir los objetos fuera del ángulo de visión de la cámara —lo que se denomina _frustum culling_—.
 Otra técnica disponible comúnmente es el _occlusion culling_, con la que durante la compilación se genera una estructura de datos que el motor puede consultar rápidamente en tiempo de ejecución, para saber qué objetos son visibles para el punto de vista actual de la cámara, siendo estos los únicos enviados al _render_.
 
-A nivel de _gameplay_ la responsabilidad cae más bien de nuestro lado.
+En cuanto al _gameplay_, la responsabilidad cae más bien de nuestro lado.
 Podemos considerar los objetos que deben estar activos en cada momento del juego y mantener desactivados el resto hasta que son necesario, evitando que el código que los controla consuma recursos inútilmente.
-Usando _triggers_ dispuestos adecuadamente en la escena, podemos hacer que lo objetos se activen cuándo sea necesario —mientras otros que ya no lo son, son desactivados—.
+Usando _triggers_ dispuestos adecuadamente en la escena, podemos hacer que los objetos se activen cuándo sea necesario —mientras otros que ya no lo son, son desactivados—.
 
 Sin embargo, pese a todo el cuidado que le pongamos, pueden llegar un momento en que el nivel que queremos desarrollar no quepa en la memoria.
-Especialmente si hablamos de consolas o plataformas móviles, donde este recursos está mucho más limitado que en PC.
+Especialmente si hablamos de consolas o plataformas móviles, donde estos recursos está mucho más limitado que en PC.
 
 == Streaming de niveles
 
@@ -36,7 +36,7 @@ Cuando el nivel o el mundo —en los juegos de mundo abierto— que queremos des
 Esto, indudablemente, condiciona el diseño del nivel.
 
 Por ejemplo, en un caso extremo está lo que ocurría en los primeros juegos de la saga Resident Evil, donde abrir cualquier puerta, escalera o ascensor reproducía una cinemática durante la que se cargaba la siguiente escena.
-Obviamente, tenía que ser así por las limitaciones del hardware del época.
+Obviamente, tenía que ser así por las limitaciones del hardware de la época.
 
 [[video-load-scene-re, {video-caption} {counter:video-number}]]
 .{video-caption} {video-number}. Vídeo de la pantalla de carga al salir de la habitación en Resident Evil HD.
@@ -49,7 +49,7 @@ Para disimular la carga de la siguiente parte del nivel, se colocan ascensores, 
 .{video-caption} {video-number}. Video de pasadizo en el _gamaplay_ de «Star Wars Jedi: Fallen Order» mostrado en el EA Play 2019.
 video::GtzLWZ0LCNs[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
-En mundos abiertos en exteriores, se puede dividir el nivel en varios pedazos, para ir cargándolos dinámicamente cuando el jugador se aproxima, al tiempo que se descargan los pedazos más alejadas que el jugador ya no puede ver.
+En mundos abiertos en exteriores, se puede dividir el nivel en varios pedazos, para ir cargándolos dinámicamente cuando el jugador se aproxima, al tiempo que se descargan los pedazos más alejados que el jugador ya no puede ver.
 Para limitar el alcance de la visión del jugador, se juega con la ubicación de las barreras visuales, como montañas o edificios.
 
 [[fig-world-chunk-loading]]
@@ -75,7 +75,7 @@ En Marvel's Spider-Man (2018), las calles de Manhattan atraviesan la ciudad de e
 Adicionalmente, el personaje se puede mover muy rápidamente por la ciudad, lo que representa un reto para cargar lo bastante rápido las porciones que puede alcanzar.
 
 En el <<video-spiderman-level-streaming>> se explica que optaron por dividir el mapa en regiones hexagonales, puesto que así solo es necesario tener cargadas 6 regiones alrededor de la actual —y no 8, como ocurre si se divide el mapa en cuadrados—.
-Más allá de esas regiones se usan impostores, para que el jugador no vea que el esto de la ciudad no está cargada.
+Más allá de esas regiones se usan impostores, para que el jugador no vea que el resto de la ciudad no está cargada.
 
 == Level streaming en Unreal Engine
 
@@ -97,7 +97,7 @@ Obviamente el motor provee funciones para cargar y descargar *Streaming Levels* 
 
 == Word Composition en Unreal Engine
 
-Unreal Engine 4 también soporta una versión de *Level Streaming* en la que no se usan volúmenes para activar la carga y descarga de los niveles, sino que esta ocurre en base a la distancia del jugador al nivel.
+Unreal Engine 4 también soporta una versión de *Level Streaming* en la que no se usan volúmenes para activar la carga y descarga de los niveles, sino que esta ocurre basándose en la distancia del jugador al nivel.
 Esto permiten dividir el mundo en varios *Streaming Levels*, distribuidos en una rejilla 2D, que se van cargando y descargando según se acerca o se aleja el jugador.
 
 .Ventana de *Word Composition* donde se observa la disposición de los distintos niveles en la escena.
@@ -156,7 +156,7 @@ Porque aunque los cálculos señalen que algo debe ir en cierto sitio, la precis
 == Traslación del origen
 
 Para resolver el problema de la limitación de la precisión de flotantes lo que se puede hacer es reubicar cerca del jugador el origen del sistema de referencia del mundo, según este se aleja.
-O, para ser mas exactos, mover todos los actores para que el jugador y lo que el jugador tiene más cerca estén próximos al origen.
+O, para ser más exactos, mover todos los actores para que el jugador y lo que el jugador tiene más cerca estén próximos al origen.
 
 .Esquema ilustrativo de la traslación del origen.
 image::traslación_del_origen.svg[]
@@ -166,7 +166,7 @@ image::traslación_del_origen.svg[]
 Nuevamente, en Unreal Engine ya viene implementado, permitiendo crear mundos de hasta 20{x}20 km sin problemas de precisión.
 Tan solo hay que activar la opción _Enable World Origin Rebasing_.
 
-NOTE: Los detalles de como lo hace se pueden leer en el foro de Unreal Engine<<UE-Forums-Origin-Shifting>> y en el correspondiente _pull Request_ en GitHub<<UE-Github-PR-Origin-Shifting>>.
+NOTE: Los detalles de como lo hace se pueden leer en el foro de Unreal Engine<<UE-Forums-Origin-Shifting>> y en el correspondiente _pull request_ en GitHub<<UE-Github-PR-Origin-Shifting>>.
 
 Sin embargo, Unreal Engine no soporta actualmente la traslación del origen en juegos multijugador en red.
 Así que los estudios que lo necesitan deben implementar su propia solución en el lado del servidor del juego.
@@ -177,8 +177,8 @@ En Unity, como es más común, tendremos que tirar de la _Asset Store_ o hacerlo
 
 . Iterar sobre todos los _GameObject_ de cada escena para desplazarlos, de tal forma que el jugador vuelva a estar cerca del origen del sistema de referencia.
 
-. Hay que tener cuidado con tener muchos _collider_ estáticos —aquellos en _GameObjects_ sin un component _Rigidbody_— por que moverlos tiene un gran impacto en el motor de físicas, ya que le obliga a recalcular ciertas estructuras de datos internas, haciendo que se pierdan _frames_ o provocando problemas con el sonido.
-El cualquier caso, para evitar problemas con el motor de físicas, el mejor sitio para mover los objetos es `FixedUpdate()`.
+. Hay que tener cuidado con tener muchos _collider_ estáticos —aquellos en _GameObjects_ sin un component _Rigidbody_— porque moverlos tiene un gran impacto en el motor de físicas, ya que le obliga a recalcular ciertas estructuras de datos internas, haciendo que se pierdan _frames_ o provocando problemas con el sonido.
+El cualquier caso para evitar problemas con el motor de físicas, el mejor sitio para mover los objetos es `FixedUpdate()`.
 
 . No se puede usar _static batching_ porque los _GameObjects_ incluidos en un _static batch_ son bloqueados por Unity, ya que son combinados con otros _GameObjects_ en una malla común.
 En caso necesario, podemos implementar nuestra propia solución de _static batching_ o combinar las mallas manualmente.
@@ -226,7 +226,7 @@ Ya hemos comentado que Unreal Engine y Unity usan como unidad el centímetro y e
 
 Eso es así porque ninguno de los dos motores aprovecha de la mejor manera posible el intervalo más preciso de los números de punto flotante, que está entre -1 y 1.
 Sin embargo, no hay nada que lo impida, porque realmente la unidad de medida en el motor es, más que nada, una convención.
-La unidad espacial puede ser la que nosotros queramos que sea, según el tipo de proyecto en el que estemos trabajado.
+La unidad espacial puede ser la que nosotros queramos que sea, según el tipo de proyecto en el que estemos trabajando.
 
 Así que si sabemos que el intervalo más preciso es el [-1, 1] y tenemos pensado desarrollar un juego de mundo abierto de 100{x}100 km de extensión total, nada nos impide decir que nuestra unidad son 50 km
 Es decir, que cada cuadrado de 1{x}1 en el editor representa 50{x}50 km en el juego, de forma que 4 cuadrados está contenido todo el espacio del nivel.

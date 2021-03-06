@@ -29,7 +29,7 @@ Por eso merece la pena que nos detengamos un momento a analizar las diferentes o
 
 == El triángulo de oro
 
-Antes de entrar en las cuestiones más técnicas es importante considerar el *triángulo de oro* y su implicaciones a la hora de escoger la tecnología de nuestro proyecto porque, en función de nuestro caso, quizás no haya nada más que considerar.
+Antes de entrar en las cuestiones más técnicas es importante considerar el *triángulo de oro* y sus implicaciones a la hora de escoger la tecnología de nuestro proyecto porque, en función de nuestro caso, quizás no haya nada más que considerar.
 
 .Triángulo de oro: Personas, procesos y tecnología.
 image::golden_triangle.svg[]
@@ -93,7 +93,7 @@ Por ejemplo:
 * Ubisoft uso Unreal Engine para las sagas Tom Clancy's Splinter Cell (2002-2013)<<Wikipedia-Splinter-Cell>> y Rainbow Six (2002-2008)<<Wikipedia-List-UnrealEngine>>, modificado para adaptarse a las necesidades de cada título.
 A partir de ahí han venido desarrollando diferentes motores adaptados a diferentes proyectos:
 
-** En 2007 publicaron Assassin's Creed, desarrollado sobre {anvil}[Anvil], un motor creado expresamente para ese título y que han venido usando en el resto de la misma franquicia y en otros juegos de acción<<Wikipedia-AnvilNext>>, como: la serie Principe de Persia (2008-2021) y posteriores, Tom Clancy's Rainbow Six Siege (2015), Ghost Recon (2017 y 2019, For Honor (2017), Hyper Scape (2020) y Immortals Fenyx Rising (2020).
+** En 2007 publicaron Assassin's Creed, desarrollado sobre {anvil}[Anvil], un motor creado expresamente para ese título y que han venido usando en el resto de la misma franquicia y en otros juegos de acción<<Wikipedia-AnvilNext>>, como: la serie Príncipe de Persia (2008-2021) y posteriores, Tom Clancy's Rainbow Six Siege (2015), Ghost Recon (2017 y 2019, For Honor (2017), Hyper Scape (2020) e Immortals Fenyx Rising (2020).
 También se ha usado en juegos deportivos como Steep (2016).
 
 ** Para la franquicia Watch Dog usan un motor diferente, llamado Disrupt y creado _ex profeso_ para estos juegos.
@@ -208,7 +208,7 @@ Y además tuvieron que desarrollar otras muchas herramientas, como un editor de 
 .{video-caption} {video-number}. Conferencia «Creating a Tools Pipeline for Horizon: Zero Dawn» en GDC 2017.
 video::KRJkBxKv1VM[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
-En <<video-creating-tools-pipeline>> podemos ver una ponencia sobre la evolución de estas herramientas, desde como eran cuando las que usaron originalmente para desarrollar Killzone Shadow Fall al editor que crearon durante la producción de Horizon: Zero Dawn (2017).
+En el <<video-creating-tools-pipeline>> podemos ver una ponencia sobre la evolución de estas herramientas, desde como eran cuando las que usaron originalmente para desarrollar Killzone Shadow Fall al editor que crearon durante la producción de Horizon: Zero Dawn (2017).
 Obviamente el objetivo es tener un futuro todo integrado en un único editor, como ocurre con los editores de los motores comerciales.
 ****
 
@@ -272,7 +272,7 @@ A veces la mejor alternativa tecnológica no es la mejor opción, según el equi
 === Calidad gráfica
 
 Si se quiere crear una obra maestra a nivel gráfico, seguramente la mejor opción sea Unreal Engine.
-Unreal Engine puede manejar más polígonos y mas efectos de partículas, permite utilizar _shaders_ más complejos y avanzados y viene de serie con mejores herramientas.
+Unreal Engine puede manejar más polígonos y más efectos de partículas, permite utilizar _shaders_ más complejos y avanzados y viene de serie con mejores herramientas.
 Sin embargo, debemos tener en cuenta que esto solo nos debe preocupar si pretendemos obtener el máximo en el apartado gráfico.
 No significa que no se puede conseguir grandes resultados visuales con Unity, ni que la elección de Unreal Engine garantice que el juego vaya a lucir mejor, sino que probablemente se pueden conseguir mejores resultados con el segundo si dispone del suficiente presupuesto como para exprimirlo al máximo.
 
@@ -309,10 +309,10 @@ Sin embargo, como veremos en el <<_estructura>>, el asunto de quien tiene mejor 
 === Estructura
 
 Unity es un motor de videojuegos que de serie trae lo básico.
-Con eso debemos entender que tiene característica como: simulación física, _render_, sonido, gestión de la entrada, animación, efectos de partículas y muchas cosas más, que podemos usar como queramos; pero que no trae otras abstracciones de mayor nivel, muy en comunes videojuego, como: _game managers_, _level managers_, controlador de personajes, controlador de IA, sistemas de salud o de daño, o ayuda a la animación de apuntado del arma. 
+Con eso debemos entender que tiene característica como: simulación física, _render_, sonido, gestión de la entrada, animación, efectos de partículas y muchas cosas más, que podemos usar como queramos; pero que no trae otras abstracciones de mayor nivel, muy en comunes en videojuegos, como: _game managers_, _level managers_, controlador de personajes, controlador de IA, sistemas de salud o de daño, o ayuda a la animación de apuntado del arma. 
 Unity Tampoco prescribe ninguna forma de crear estos componentes ni de organizarlos, por lo que da total libertad a la hora de diseñar la arquitectura del juego.
 Esto puede ser interesante si se tiene experiencia, pero es un gran inconveniente en los primeros proyectos, porque no ofrece ninguna guía de cómo organizar los componentes del juego de forma que sea escalable y mantenible.
-Es común que los equipos vayan construyendo su propio _game framework_ para Unity, creando estos componentes y desarrollándolos basándose en la experiencia adquirido a lo largo de varios proyectos.
+Es común que los equipos vayan construyendo su propio _game framework_ para Unity, creando estos componentes y desarrollándolos basándose en la experiencia adquirida a lo largo de varios proyectos.
 
 Por el contrario, Unreal Engine trae su _game framework_ con todos los elemento mencionados y prescribe una arquitectura, lo que ahorra trabajo y sirve de guía a la hora de saber donde colocar cada cosa.
 El único pero es que el _game framework_ de Unreal Engine está muy orientado al tipo de juegos que se suelen hacer con ese motor —como _shooters_ y juegos de acción-ventura en primera o tercera persona— lo quiere decir que si se pretende hacer un juego de ese tipo —o similar, como un _walking simulator_— el desarrollo con Unreal Engine es bastante cómodo.
@@ -339,10 +339,10 @@ Es decir, que no solo dependemos del equipo de desarrollo de Unity, sino tambié
 En todo caso, como ya hemos comentado, es conveniente señalar que en lo que respecta al desarrollo de videojuegos 2D y móvil, Unity ofrece por defecto un mejor conjunto herramientas.
 También permite crear aplicaciones más pequeñas y posiblemente tengan una ligera ventaja en el consumo de batería<<Nilsson2019>>.
 
-La diferencia en el tamaño no es demasiado relevante en juegos 3D con cientos de MB de contenido, ya que apenas es significativa.
-Pero si lo es en pequeños juegos 2D, donde ajustando las opciones de Unity adecuadamente se puede llegar a generar paquetes por debajo de 10MB.
+La diferencia en el tamaño no es demasiado relevante en juegos 3D con cientos de MiB de contenido, ya que apenas es significativa.
+Pero si lo es en pequeños juegos 2D, donde ajustando las opciones de Unity adecuadamente se puede llegar a generar paquetes por debajo de 10 MiB.
 En Android, eso significa que la aplicación es compatible con Google Play Instant, por lo que los usuarios pueden jugar sin instalarla.
-Mientras que los desarrollos con Unreal Engine difícilmente bajan de 30MB, y solo después de jugar bastante con los ajustes de configuración<<Nowakowski2018>><<UE-Huge-APK>>.
+Mientras que los desarrollos con Unreal Engine difícilmente bajan de 30 MiB, y solo después de jugar bastante con los ajustes de configuración<<Nowakowski2018>><<UE-Huge-APK>>.
 
 // TODO: Hacer una prueba para comprobar el límite inferior con Paper2D.
 

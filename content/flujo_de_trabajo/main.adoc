@@ -124,7 +124,7 @@ Mientras que en un _survival horror_ que transcurra en los estrechos pasillos de
 
 Es recomendable comenzar a trabajar a un nivel macro, haciendo uso de cajas de gran tamaño, con las que repartir los espacios, para posteriormente ir añadiendo algo más de detalle.
 Si está bastante claro cómo debe jugarse el nivel, entonces tendremos una idea clara de cómo organizar el espacio funcional{blank}footnote:[{fn-espacio-funcional}] del juego, lo que nos puede servir como punto de partida para construir el nivel.
-Si por el contrario estamos en una etapa muy temprana del desarrollo y aun no tenemos claro cómo es el espacio del juego, podemos comenzar explorando alguno de los patrones más comunes: lineal, rejilla, telaraña, puntos en el espacio o espacio dividido (véase <<Schell2019>> para conocer más detalles sobre estos patrones y algunos ejemplos).
+Si por el contrario estamos en una etapa muy temprana del desarrollo y aún no tenemos claro cómo es el espacio del juego, podemos comenzar explorando alguno de los patrones más comunes: lineal, rejilla, telaraña, puntos en el espacio o espacio dividido (véase <<Schell2019>> para conocer más detalles sobre estos patrones y algunos ejemplos).
 
 [[fig-greybox-shooty-squad]]
 .Greybox para Shooty Squad -- Fuente: {greybox-shoot-squad}[@BlazeDillon].
@@ -233,7 +233,7 @@ El código fuente del proyecto se guarda dentro de `dev/code/<NombreDelProjecto>
 Mientras que los recursos —incluidos los _scripts_ en Lua— se almacenan en `dev/<NombreDelProjecto>`.
 
 Como se puede observar, no se indica nada sobre cómo debemos organizar los recursos en directorios como `Content` o `Assets`.
-Podemos hacerlo como queramos pero ¿cuál es la mejor forma de hacerlo?
+Podemos hacerlo como queramos, pero ¿cuál es la mejor forma de hacerlo?
 
 Las opciones más comunes son:
 
@@ -408,7 +408,7 @@ Sin embargo, lo que nos interesa destacar es la posibilidad de crear nuestros pr
 Es buena idea estructurar nuestros proyectos en torno a un conjunto de componentes reutilizables —por ejemplo, entrada de usuario, controlador del personaje, sistema de inventario, interfaz de usuario, sistema de conducción, IA, carga de niveles, etc.— y desarrollar e incorporar cada uno a nuestros proyectos en paquetes separados.
 Esto puede facilitar enormemente el mantenimiento y reutilización del código.
 
-Los paquetes de Unity propios se puede distribuir al resto del equipo mediate archivos `.zip`, directamente desde un repositorio de Git —usando su URL— o mediante un registro NPM privado.
+Los paquetes de Unity propios se puede distribuir al resto del equipo mediante archivos `.zip`, directamente desde un repositorio de Git —usando su URL— o mediante un registro NPM privado.
 
 == Jerarquía de la escena
 
@@ -457,7 +457,7 @@ include::diagrams/unity_additive_scenes.adoc[]
 == Control de versiones
 
 Durante el desarrollo es fundamental seguir la pista a todo los cambios, asegurando que disponemos un histórico de ellos.
-Esto permite probar diferentes alternativas, con la seguridad de que podemos volver a cualquier version anterior, si decidimos que los cambios que estamos probando no funcionan.
+Esto permite probar diferentes alternativas, con la seguridad de que podemos volver a cualquier versión anterior, si decidimos que los cambios que estamos probando no funcionan.
 Para eso es fundamental contar con herramientas de control de versiones —en inglés, _Version Control System_ o VCS— como Git, {perforce}[Perforce] o {plastic-scm}[Plastic SCM].
 
 En desarrollo de videojuegos, herramientas como Plastic SCM y Perforce —que es considerado el estándar _de facto_ de la industria— tienen una ventaja importante respecto a Git en que tienen la capacidad de almacenar y versionar los recursos del juego, contenidos de arte y documentos de diseño, además del código fuente{blank}footnote:[{fn-git-lfs}].
@@ -556,7 +556,7 @@ Así, por ejemplo, un subnivel puede tener las mallas estáticas que dan forma a
 
 ===== Prefabs
 
-En Unreal Engine no existe el concepto de _prefabs{blank}footnote:[{fn-ue-prefabs}]_ pero los actores _blueprint_ se pueden utilizar para hacer algo similar, hasta cierto punto.
+En Unreal Engine no existe el concepto de _prefabs{blank}footnote:[{fn-ue-prefabs}]_, pero los actores _blueprint_ se pueden utilizar para hacer algo similar, hasta cierto punto.
 
 Basta con crear un actor _blueprint_ y —sin necesidad de añadirle código— incorporar como componentes mallas, luces, sistemas de partículas y el resto de elementos que nos interesen.
 Después las instancias del actor se ponen en los lugares del nivel que queramos.
@@ -602,39 +602,39 @@ Unity Technologies. ProGrids. https://www.procore3d.com/progrids/
 * [[[Unity-Polybrush,7]]]
 Unity Technologies. Polybrush. https://www.procore3d.com/polybrush/
 
-* [[[Allar]]]
+* [[[Allar,8]]]
 Allar, M. Gamemakin UE4 Style Guide(). En _GitHub_. https://github.com/Allar/ue4-style-guide
 
-* [[[UE-Wiki-Assets-Naming-Convention]]]
+* [[[UE-Wiki-Assets-Naming-Convention,9]]]
 Assets Naming Convention. En _Old UE4 Wiki_.
 https://nerivec.github.io/old-ue4-wiki/pages/assets-naming-convention.html
 
-* [[[Unity-Learn-Resources,9]]]
+* [[[Unity-Learn-Resources,10]]]
 Unity Technologies. The Resources folder. _Assets, Resources and AssetBundles_. https://learn.unity.com/tutorial/assets-resources-and-assetbundles#5c7f8528edbc2a002053b5a7
 
-* [[[Unity-AssetBundles,10]]]
+* [[[Unity-AssetBundles,11]]]
 Unity Technologies. AssetBundles. _Unity Manual_. https://docs.unity3d.com/Manual/AssetBundlesIntro.html
 
-* [[[Unity-Addressables,11]]]
+* [[[Unity-Addressables,12]]]
 Unity Technologies. _Unity Addressables Asset system_. https://docs.unity3d.com/Packages/com.unity.addressables@1.16/manual/index.html
 
-* [[[Unity-Assembly-Definitions,12]]]
+* [[[Unity-Assembly-Definitions,13]]]
 Unity Technologies. Assembly definitions. _Unity Manual_. https://docs.unity3d.com/Manual/ScriptCompilationAssemblyDefinitionFiles.html
 
-* [[[Unity-Package-Manager,13]]]
+* [[[Unity-Package-Manager,14]]]
 Unity Technologies. Unity's Package Manager. _Unity Manual_. https://docs.unity3d.com/Manual/Packages.html
 
-* [[[Unity-Create-Custom-Package,14]]]
+* [[[Unity-Create-Custom-Package,15]]]
 Unity Technologies. Creating custom packages. _Unity Manual_. https://docs.unity3d.com/Manual/CustomPackages.html
 
-* [[[D3D-Perforce,15]]]
+* [[[D3D-Perforce,16]]]
 Torres, J. (s.f.).  _Desarrollo de Videojuegos 3D: Control de versiones con Perforce_.
 
-* [[[Unity-YAML,16]]]
+* [[[Unity-YAML,17]]]
 Unity Technologies. Format of Text Serialized files. _Unity Manual_. https://docs.unity3d.com/Manual/FormatDescription.html
 
-* [[[UE-Level-Streaming,17]]]
+* [[[UE-Level-Streaming,18]]]
 Epic Games, Inc. Level Streaming. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/BuildingWorlds/LevelStreaming/index.html
 
-* [[[UE-Collaborate-Sublevels,18]]]
+* [[[UE-Collaborate-Sublevels,19]]]
 Epic Games, Inc. Collaborate with Sublevels. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/Basics/Levels/CollaborateWithSublevels/index.html
