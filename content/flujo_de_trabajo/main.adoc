@@ -91,7 +91,7 @@ Así que debe ser modular, sencillo de modificar y sin detalles; porque durante 
 === Rejillas y escalas
 
 Antes de comenzar con el _greyboxing_ es importante estandarizar el tamaño de la rejilla espacial que se va a usar para ubicar los elementos y adherirnos a ella fielmente durante el diseño de niveles.
-Por ejemplo, fijar que la unidad de altura estándar de los muros será de 3m y que los segmentos de suelo serán de 3x3m
+Por ejemplo, fijar que la unidad de altura estándar de los muros será de 3 m y que los segmentos de suelo serán de 3x3 m.
 Esto no significa que no pueda haber objetos en posiciones intermedias de la rejilla para dotar de mayor detalle a la escena, pero para eso se recomienda usar siempre divisiones pares de la cuadrícula estándar escogida.
 
 Para escoger un buen sistema de rejilla hay tomar en consideración las escalas o tamaños de los objetos, personajes y edificaciones.
@@ -101,7 +101,7 @@ TIP: En proyectos de realidad virtual se pueden utilizar como referencia los mod
 
 Otro aspecto a considerar al establecer escalas es el campo de visión y las distorsiones derivadas del punto de vista del jugador.
 En juegos en primera persona, huecos como los de puertas y ventana parecen un poco más pequeños de lo que son en realidad, dando la impresión de que no cabemos por ellos.
-Mientras que situar la cámara demasiado alta —más de 2m— o demasiado bajo —menos de 1.5m— tiende a distorsionar la perspectiva, dado que el cerebro del jugador asume que la altura de la cámara debe ser similar a la altura real de los ojos<<Schell2019>>.
+Mientras que situar la cámara demasiado alta —más de 2 m— o demasiado bajo —menos de 1.5 m— tiende a distorsionar la perspectiva, dado que el cerebro del jugador asume que la altura de la cámara debe ser similar a la altura real de los ojos<<Schell2019>>.
 En juegos en tercera persona, en interiores con escala real, el jugador tiene la impresión de que el espacio es demasiado pequeño.
 Por eso se tiende a crear habitaciones más amplias, con mobiliario de tamaño real —o solo un poco más grande— repartido por la habitación para llenarla<<Schell2019>>.
 
@@ -109,8 +109,8 @@ Por eso se tiende a crear habitaciones más amplias, con mobiliario de tamaño r
 
 También es importante tener en cuenta las mecánicas de juego y las animaciones.
 Por ejemplo ¿cuánto saltará el personaje? ¿a qué distancia? ¿qué altura tiene cuando está de pie? ¿y cuándo está agachado? ¿cuánto espacio necesita para moverse? ¿a que altura estarán los paneles e interruptores con los que va a interactuar?
-Si por ejemplo las paredes van a hacerse en unidades de 3m, el personaje puede medir 1.5m, los huecos para cruzar agachado 0.5m y los interruptores y paneles pueden estar a 1m
-Si los elementos del suelo se pueden ajustar en una rejilla de 1x1m eso determinar cuánto debe poder saltar el personaje, el ancho de los obstáculos que debe poder superar y el largo de cada tramo de escalera, entre otras cosas.
+Si por ejemplo las paredes van a hacerse en unidades de 3 m, el personaje puede medir 1.5 m, los huecos para cruzar agachado 0.5 m y los interruptores y paneles pueden estar a 1 m
+Si los elementos del suelo se pueden ajustar en una rejilla de 1x1 m eso determinar cuánto debe poder saltar el personaje, el ancho de los obstáculos que debe poder superar y el largo de cada tramo de escalera, entre otras cosas.
 
 Un sistema de rejilla bien diseñado simplifica el trabajo de diseño, reduce el tiempo de ensayo y error y evita que se acabe rehaciendo mucho trabajo al prevenir incoherencias.
 Sin embargo, la escalas de los objetos y la rejilla no son lo único que hace falta estandarizar antes de comenzar.
