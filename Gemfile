@@ -7,6 +7,10 @@ gem "asciidoctor"
 gem "asciidoctor-diagram"
 gem "rouge"
 
+group :docstats do
+    gem "nokogiri"
+end
+
 group :pdf do
     gem "asciidoctor-mathematical"
     gem "asciidoctor-pdf"
