@@ -9,4 +9,13 @@ Project::documents.each do |document|
         task :all => [:html, :pdf, :epub]
 
     end
+
+    if ! document[:namespace_prefix].empty?
+        namespace :build do
+
+            desc 'Generar todas las versiones de todos los documentos del proyecto'
+            task :all => "#{document[:namespace_prefix]}build:all"
+
+        end
+    end
 end
