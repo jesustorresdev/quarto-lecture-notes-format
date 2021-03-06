@@ -1,7 +1,7 @@
 require_relative '../task_helpers/docstats.rb'
 require_relative '../task_helpers/project.rb'
 
-Project::find_documents().each do |document|
+Project::documents.each do |document|
     namespace "#{document[:namespace_prefix]}build" do
       
         desc "Generar el archivo de estadística de '#{document[:pathname]}'"

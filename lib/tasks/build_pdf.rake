@@ -1,6 +1,6 @@
 require_relative '../task_helpers/project.rb'
 
-Project::find_documents().each do |document|
+Project::documents.each do |document|
     namespace "#{document[:namespace_prefix]}build" do
 
         desc "Generar la versión en PDF de '#{document[:pathname]}'"

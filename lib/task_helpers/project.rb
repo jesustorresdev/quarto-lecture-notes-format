@@ -17,6 +17,11 @@ module Project
         File.join(CONFIG_DIRECTORY, "**/*.yml"),
     ]
 
+    def documents()
+        @store ||= Project::find_documents()
+    end
+    module_function :documents
+
     def find_documents()
         FileList[File.join(SOURCE_DIRECTORY, "**/#{DOCUMENT_MAIN_FILE}")].map do |pathname|
             source_directory_regex = %r(^#{SOURCE_DIRECTORY}/?)
@@ -51,7 +56,6 @@ module Project
                 },
                 :docstats_pathname => File.join(source_directory, DOCUMENT_STATS_FILE),
             }
-
         end
     end
     module_function :find_documents
