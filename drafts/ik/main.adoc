@@ -1,7 +1,6 @@
 = Desarrollo de Videojuegos 3D: Cinemáticas inversas
 Jesús Torres <jmtorres@ull.es>
 include::../config/attributes.adoc[]
-:imagesdir: {imagesdir}/ik
 2019-2020
 
 Para animar un personaje hacen falta dos cosas: una malla y un esqueleto.

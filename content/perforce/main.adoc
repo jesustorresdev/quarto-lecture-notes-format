@@ -6,8 +6,6 @@ include::../../config/attributes.adoc[]
 include::enlaces.adoc[]
 include::footnotes.adoc[]
 include::docstats.adoc[]
-:imagesdir: media
-:imagesoutdir: {outdir}/{imagesdir}
 
 ifdef::backend-pdf[]
 [preamble]
@@ -224,13 +222,14 @@ image::perforce_helix_cheatsheet.png[]
 
 Perforce también ofrece guías para quiénes están familiarizados con Git<<Perforce-Git-Command-Mappings>><<Perforce-Top-Git-Commands>>.
 
-
-En el <<video-guía-de-inicio-rápido-de-perforce>> se explica cómo conectar a un servidor de Perforce y se repasan brevemente las acciones más básicas.
-Para conocer más del VCS de Perforce, lo recomendable es consultar el manual de P4V<<Perforce-P4V-Manual>>.
+// TODO: Guía rápida...
 
 [[video-guía-de-inicio-rápido-de-perforce, {video-caption} {counter:video-number}]]
 .{video-caption} {video-number}. Guía de inicio rápido de Perforce.
 video::zHYAbhDGBdY[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
+
+En el <<video-guía-de-inicio-rápido-de-perforce>> se explica cómo conectar a un servidor de Perforce y se repasan brevemente las acciones más básicas.
+Para conocer más del VCS de Perforce, lo recomendable es consultar el manual de P4V<<Perforce-P4V-Manual>>.
 
 == Gestión de tipos de archivo
 
@@ -249,7 +248,7 @@ Para mostrarlo vamos a ver un ejemplo de posible configuración para alojar proy
 ----
 # Perforce File Type Mapping Specifications.
 #
-#  TypeMap:     a list of filetype mappings; one per line. <!--1-->
+#  TypeMap:     a list of filetype mappings; one per line. <1>
 #               Each line has two elements:
 #
 #               Filetype: The filetype to use on 'p4 add'.
@@ -259,7 +258,7 @@ Para mostrarlo vamos a ver un ejemplo de posible configuración para alojar proy
 # See 'p4 help typemap' for more information.
 
 TypeMap:
-        binary+S2w //depot/....exe<!--5-->
+        binary+S2w //depot/....exe <5>
         binary+S2w //depot/....dll
         binary+S2w //depot/....lib
         binary+S2w //depot/....app
@@ -267,7 +266,7 @@ TypeMap:
         binary+S2w //depot/....stub
         binary+S2w //depot/....ipa
         binary //depot/....bmp
-        binary //depot/....png<!--2-->
+        binary //depot/....png <2>
         binary //depot/....tga
         binary //depot/....raw
         binary //depot/....r16
@@ -275,14 +274,14 @@ TypeMap:
         binary //depot/....fbx
         text //depot/....ini
         text //depot/....config
-        text //depot/....cpp<!--3-->
+        text //depot/....cpp <3>
         text //depot/....h
         text //depot/....c
         text //depot/....cs
         text //depot/....m
         text //depot/....mm
         text //depot/....py
-        binary+l //depot/....uasset<!--4-->
+        binary+l //depot/....uasset <4>
         binary+l //depot/....umap
         binary+l //depot/....upk
         binary+l //depot/....udk

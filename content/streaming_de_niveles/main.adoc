@@ -6,8 +6,6 @@ include::../../config/attributes.adoc[]
 include::enlaces.adoc[]
 include::footnotes.adoc[]
 include::docstats.adoc[]
-:imagesdir: media
-:imagesoutdir: {outdir}/{imagesdir}
 
 ifdef::backend-pdf[]
 [preamble]
