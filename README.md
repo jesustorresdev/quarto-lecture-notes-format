@@ -49,6 +49,10 @@ sudo gem uninstall mathematical
 sudo gem install mathematical
 ~~~
 
+### SVG: _Viewer does not support full SVG 1.1_
+
+En el estilo de los textos de los diagramas creados con [diagrams.net](http://diagrams.net) deben estar desmarcados *Word Wrap* y *Formatted Text*, para que los SVG incrustados en el PDF no se muestren con el mensaje _Viewer does not support full SVG 1.1_. 
+
 ## Estilos
 
 Para ayudar a mantener un estilo consistente a lo largo del tiempo en los diferentes artículos y secciones, se han establecido unas reglas sobre los estilos a aplicar en distintos casos:
