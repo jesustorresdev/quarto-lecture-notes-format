@@ -222,11 +222,9 @@ image::perforce_helix_cheatsheet.png[]
 
 Perforce también ofrece guías para quiénes están familiarizados con Git<<Perforce-Git-Command-Mappings>><<Perforce-Top-Git-Commands>>.
 
-// TODO: Guía rápida...
-
 [[video-guía-de-inicio-rápido-de-perforce, {video-caption} {counter:video-number}]]
 .{video-caption} {video-number}. Guía de inicio rápido de Perforce.
-video::zHYAbhDGBdY[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
+video::myyR_XuqWaw[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
 En el <<video-guía-de-inicio-rápido-de-perforce>> se explica cómo conectar a un servidor de Perforce y se repasan brevemente las acciones más básicas.
 Para conocer más del VCS de Perforce, lo recomendable es consultar el manual de P4V<<Perforce-P4V-Manual>>.
