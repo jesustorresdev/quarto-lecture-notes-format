@@ -276,16 +276,18 @@ Es decir, el primer nivel se organiza por característica, mientras que en nivel
 include::diagrams/unity_assets_tree_by_feature.adoc[]
 
 En este caso es más probable que alguien que esté trabajando en una característica concreta tenga todo lo que necesita en una única rama de la jerarquía de recursos.
+Para eso es importante considerar la organización de los equipos involucrados en el proyecto.
 
-Suelen contemplarse algunas excepciones a la regla.
-Por ejemplo, para agrupar tipos de elementos usados globalmente, como las carpetas `Scenes` o `Maps` para guardar los niveles en Unity y Unreal Engine, respectivamente.
-O con el objeto de agrupar tipos de recursos para que los distintos equipos involucrados trabajen más cómodamente.
+Por ejemplo, en proyectos grandes hay equipos de artistas ambientales que trabajan en `Environment`, mientras otros se dedican a los modelos y animaciones en `Characters` o `Weapons`, donde tienen todo lo necesario para completar sus tareas.
+También hay equipos de programadores de _gameplay_, para los que es más cómodo tener todo el código en `Blueprints` o `Scripts`, en lugar de moverse por la estructura de directorios para encontrar los _scripts_ que tienen que modificar; lo que ocurriría si estos se guardasen junto a las mallas de los objetos y personajes correspondientes.
+De igual forma, para músicos y diseñadores de sonido es preferible tener un directorio `Sounds` o `Audio` donde organizar su trabajo.
+Y otras carpetas similares pueden ser `Effects`, donde los especialistas colocan los sistemas de partículas, o `Cutscenes`, para las cinemáticas entre niveles.
 
-En Unity es común que todos los _scripts_ cuelguen de la carpeta `Scripts` y que en `Prefabs` se guarden los _prefabs_ del proyecto, para encontrarlos rápidamente durante la composición de los niveles.
-Mientras que en Unreal Engine se suele tener una carpeta `Blueprints` en la que organizar los _blueprints_ del proyecto.
-Otras posibilidades pueden ser: `Effects`, donde colocar los sistemas de partículas, `Sounds`, para los efectos de sonido, o `Cutscenes` para las cinemáticas entre niveles.
-
-Lo importante es tener una estructura adecuada al tipo de proyecto y a los equipos involucrados en su desarrollo.
+Para que los diseñadores compongan los niveles es común que exista alguna forma de agrupar componentes y guardarlos organizados en una carpeta donde los diseñadores los puedan encontrar rápidamente.
+En Unity ese papel lo hacen los _prefabs_, que se suelen almacenarse en la carpeta `Prefabs`.
+Mientras que en Unreal Engine lo más parecido son los _blueprints_, que muchas veces se guardan en `Blueprints`.
+Ambos motores prescriben una carpeta donde guardar las escenas del proyecto.
+En Unity es `Scenes` y en Unreal Engine es `Maps`.
 
 === Unreal Engine
 

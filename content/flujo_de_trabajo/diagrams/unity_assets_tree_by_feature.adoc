@@ -23,15 +23,15 @@ salt
  ++++ Materials
  ++++ Meshes
  ++++ Textures
- ++ Effects
- ++ Prefabs
- ++ Scenes
- ++ Scripts
+ ++ <b>Effects
+ ++ <b>Prefabs
+ ++ <b>Scenes
+ ++ <b>Scripts
  +++ Enemies
  ++++ Tanks
  ++++ Robots
  +++ Character
- ++ Sounds
+ ++ <b>Sounds
  ++ Tests
  ++ <b>UI
  +++ <b>HMD
