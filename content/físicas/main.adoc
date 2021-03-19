@@ -430,16 +430,18 @@ Este recurso se edita desde el {ue-physical-asset-editor}[*Physical Asset Editor
 NOTE: Podemos elegir que el movimiento de la malla esqueletal venga determinado por la animación o por la simulación física, según el caso.
 
 Mientras que los *Static Mesh* son mucho más simples.
-Unreal Engine soporta añadir directamente la geometría de colisiones desde el editor *Static Mesh*.
+Unreal Engine soporta importar la geometría de colisión desde el archivo FBX del modelo o añadirla directamente desde el editor *Static Mesh*.
 
-Esta geometría añadida es la geometría de colisión simple.
+Esta geometría es la geometría de colisión simple.
 Está formada por formas primitivas, como: cajas, esferas, cápsulas o, en el caso más general, geometrías convexas que se ajusten de forma más precisa a la malla.
 Sin embargo, al mismo tiempo, Unreal Engine genera automáticamente una geometría de colisión compleja, cuya forma se ajusta perfectamente a la malla del objeto.
 
-[NOTE]
+[TIP]
 ====
-Se le puede indicar a Unreal Engine que no genere ambas geometrías para el *Static Mesh*, si no vamos a necesitar ambas.
-En su lugar se puede configurar que use la simple como si fuera la compleja —ahorrando recursos— o que use la geometría compleja como si fuera la simple —lo que es mucho más costoso—.
+Se puede indicar a Unreal Engine que no genere ambas geometrías para el *Static Mesh*, si no las vamos a necesitar.
+Por defecto deberíamos indicar que use la geometría simple como simple y como compleja, para ahorrar recursos.
+
+También se puede indicar que use la geometría compleja como si fuera la simple —por ejemplo, para ahorrarnos crear la simple— pero eso es mucho más costoso y presenta limitaciones, tal y como veremos posteriormente
 ====
 
 .Configurar que geometría se usará como compleja o simple en un *Static Mesh*.
@@ -447,17 +449,27 @@ image::static_mesh_collision_complexity.jpg[]
 
 Esta estrategia nos da la posibilidad de elegir entre consultar la geometría simple o la compleja a la hora de detectar colisiones o hacer _ray casting_.
 
-Por ejemplo, permite que los personajes se muevan por el mundo colisionando según la geometría simple —que es menos pesada— pero que al disparar se pueda hacer un _raycast_ o lanzar un proyectil contra la geometría compleja, para así conocer el punto exacto del impacto sobre la maya del objeto, con el objeto de lanzar un sistema de partículas el punto del impacto y marcarlo con un _decal_{blank}footnote:[{fn-decal}].
-O también puede servir para colocar un _decal_ en el lugar adecuado de la malla del personaje para simular el uso de una mira láser.
+Por ejemplo, permite que los objetos se muevan por el mundo colisionando según la geometría simple —que es menos pesada— pero que al disparar se pueda hacer un _raycast_ o lanzar un proyectil contra la geometría compleja, para así conocer el punto exacto del impacto sobre 
+el objeto para lanzar un sistema de partículas, marcarlo con un _decal_{blank}footnote:[{fn-decal}] o aplicar un impuso.
 
-[NOTE]
-====
+Cuando hablamos de *Skeletal Mesh*, generalmente se mueve por el mundo detectando colisiones mediante una cápsula en el componente raíz del actor, que debe envolver a buena parte del personaje.
+Si se hacen consultas sobre la geometría compleja del componente *Skeletal Mesh*, siempre es contra su *Physics Asset*.
+Como estos se construyen mediante la unión de formas simples, no es tan precisa como la geometría compleja de un *Static Mesh*. 
+
+=== Detectar colisiones con geometría compleja
+
 Detectar colisiones en la geometría compleja es más costoso, por lo que por defecto se usa la simple.
-Sin embargo, se puede activar la propiedad *Trace Complex On Move* en la sección *Collision* de cualquier componente, para que por defecto se consulte la geometría compleja de los objetos con los que interactúa, ignorando la simple.
+Sin embargo:
 
-Ahora bien, si el objeto tiene activado *Simulate Physics* no pueden usar la geometría compleja para detectar colisiones.
-Esto es debido a que PhysX necesita almacenar la velocidad y otra información en cada vértice de la geometría, siendo algo demasiado costoso para geometrías complejas.
-====
+* Se puede indicar que un objeto use su geometría simple como compleja para detectar colisiones con ella.
+
+* También es posible activar la propiedad *Trace Complex On Move* en la sección *Collision* de cualquier componente, para que al moverse consulte la geometría compleja de los objetos con los que interactúa, ignorando la simple.
+
+En ambos casos no se puede activar *Simulate Physics*.
+Esto es debido a que PhysX necesita almacenar la velocidad y otra información en cada vértice de la geometría, siendo esto demasiado costoso para el gran número de vértices de las geometrías complejas.
+Los objetos que usan la geometría de colisión compleja —suya o de otros objetos— desde el punto de vista del motor de físicas, o son cinemáticos o son estáticos.
+
+=== Unity
 
 En Unity se puede implementar un sistema similar usando _colliders_ y capas:
 
@@ -468,9 +480,9 @@ En Unity se puede implementar un sistema similar usando _colliders_ y capas:
 . Ambos _colliders_ deben ponerse en capas diferentes.
 Una para las consultas complejas, donde colocar los _mesh colliders_, y otra para las colisiones normales, donde colorar los _colliders_ simples. 
 
-== Joints
+== Juntas
 
-Un _joint_ conecta un objeto físico con otro o a un punto del mundo, aplicando fuerzas a los objetos o restringiendo su movimiento según ciertas reglas.
+Una _junta_ conecta un objeto físico con otro o a un punto del mundo, aplicando fuerzas a los objetos o restringiendo su movimiento según ciertas reglas.
 Suelen permitir configurar efectos como su ruptura, cuando se someten a una fuerza que supera cierto umbral, o justar la resistencia de los objetos al movimiento.
 
 === Unreal Engine
@@ -524,6 +536,19 @@ Obviamente, la lista de parámetros es muy extensa, como en Unreal Engine.
 
 .Propiedades del componente *ConfigurableJoint*.
 image::configurable_joint_props.png[pdfwidth="5.11in"]
+
+=== Recomendaciones
+
+Las _juntas_ se resuelven en el motor de físicas de forma dinámica.
+Es decir, se implementan mediante mecanismos de control, aplicando fuerzas variables a los objetos con el objetivo de limitar su movimiento.
+Esto puede dar lugar a resultados inestables, si no se tiene cuidado:
+
+* Es conveniente vigilar la relación entre las masas involucradas, para que en lo posible esta relación sea próxima a 1.
+Muchos problemas de estabilidad aparecen porque las masas no se han balanceado adecuadamente.
+Por ejemplo, con masas pequeñas unidas a otras 1000 veces mayores.
+
+* Algunas _juntas_ puede ser actuadas mediante un motor o una cadena, que se pueden emplear para simular cierto comportamiento físico.
+Las simulaciones físicas con _juntas_ actuadas son más costosas, pero pueden proporcionar un control más estable de la simulación. 
 
 == Ray casting
 
