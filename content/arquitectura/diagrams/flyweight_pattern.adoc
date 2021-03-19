@@ -1,0 +1,22 @@
+[plantuml, format="svg"]
+....
+hide empty members
+
+class Voxel {
+    location: Vector3
+    voxelType: VoxelType
+}
+
+class VoxelType {
+    color: Color
+    isNavegable: bool
+    toughness: float
+}
+
+class VoxelManager {
+    voxelTypes: VoxelType[]
+}
+
+Voxel "*" -- "1" VoxelType
+VoxelType "*" -- "1" VoxelManager
+....

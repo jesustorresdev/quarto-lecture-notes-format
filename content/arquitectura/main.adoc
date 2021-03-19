@@ -471,8 +471,7 @@ En su lugar, es preferible extender alguna de las múltiples clases de actores d
 * *GameState*, donde se almacena la información global del estado del juego.
 
 * *GameInstance*, que se usa para el resto del estado y lógica global del juego que no encaje en las clases anteriores.
-La forma adecuada de usar *GameInstance* es crear un _blueprint_ heredando de la clase `GameInstance`.
-Mientras que en {cpp} se debe heredar de `UGameInstance`.
+La forma adecuada de usar *GameInstance* es heredar de `UGameInstance` —para incorporar el código de {cpp}— y luego heredar de esta clase en _blueprint_ para facilitar la configuración de propiedades.
 
 Obviamente, hay que tener mucho cuidado estructurando el código porque *GameInstance* solo hay una en el juego, para toda la lógica y los datos que queremos meter ahí.
 
@@ -942,7 +941,7 @@ Es decir, previsible se aprovechan mejor las memorias caché al reutilizar prime
 
 === Observer
 
-El principal objetivo del patrón _observer_ es permitir a unos objetos observar cambios en el estado interno de otros objetos<<Wikipedia-Observer>>.
+El principal objetivo del patrón _observer_ es permitir a unos objetos observar cambios en el estado interno de otros objetos<<Wikipedia-Observer>>, sin que los segundos tengan que saber nada de los primeros.
 
 Suele implementarse usando un mecanismo por el cual los objetos pueden definir señales o eventos a emitir cuando algo cambia.
 Otros objetos del programa pueden suscribirse en cualquier momento a cualquiera de esos eventos, indicando el método que debe ser llamado cuando el evento es emitido.
@@ -951,6 +950,10 @@ Por ejemplo, el jugador puede tener una propiedad con su nivel de salud y un eve
 A ese evento puede suscribirse la barra de salud.
 Así, cuando el nivel de salud cambia, la barra de salud es notificada.
 Esta solo tendrá que leer la propiedad del jugador con el nivel de salud y actualizar el estado de la barra de acuerdo a dicho valor.
+En contraposición, si es la barra de salud la que pregunta periódicamente por la salud del jugador, se dice que hace _polling_.
+
+Cuando los eventos ocurren esporádicamente —como cambios de salud o la muerte de un personaje— el patrón _observer_ es bastante cómodo y eficaz.
+Sin embargo, para eventos que ocurren con mucha frecuencia —por ejemplo, casi cada _frame_— el _polling_ suele ser más eficaz; especialmente porque el componente que necesita la información puede controlar la frecuencia con la que la pide según sus necesidades.
 
 ==== Eventos en Unity
 
@@ -989,7 +992,7 @@ Mientras que en el patrón _observer_ un objeto si tienen que tener referencias 
 Obviamente el mayor desacople entre componentes también puede presentar algunos inconvenientes:
 
 * Peor rendimiento y probablemente mayor consumo de memoria.
-En general no es buena idea usar el _event bus_ para notificar sucesos a los que se debe responder inmediatamente, desde métodos ejecutados cada _frame_, como: `Update()`, `Tick()` o `TickComponent`.
+En general no es buena idea usar el _event bus_ para notificar sucesos a los que se debe responder inmediatamente, desde métodos ejecutados cada _frame_, como: `Update()`, `Tick()` o `TickComponent()`.
 
 * Hace complicado tener una idea de la interrelación entre componentes y de quién atiende qué eventos.
 
@@ -1015,6 +1018,18 @@ En su lugar, la lógica del controlador se puede implementar en una clase C# nor
 Esta clase es sencilla de testear fuera del motor de videojuegos, porque no tendría ninguna dependencia de este último.
 Después se crearía el componente —el _humble object_— heredando de MonoBehaviour, cuya única función es envolver el controlador para que pueda ser usado por el motor.
 Así, cuando el motor llame al método `Update()` del _humble object_, este llamaría al método `Tick()` del controlador.
+
+=== Flyweight
+
+La idea del patrón _flyweight_ es que si el juego tiene muchos objetos similares, entonces es muy probable que podamos reducir el consumo de memoria —si nos hace falta— haciendo que los objetos compartan datos comunes.. 
+
+Por ejemplo, en un nivel construido con vóxeles o cubos pueden usarse diferentes tipos de cubos —agua, tierra, hierva, roca o madera— con diferentes propiedades para cada tipo, como: color, material, dureza o si es navegable.
+La aproximación tradicional implica que cada vóxel guarde los valores de sus propiedades, pero eso puede consumir una importante cantidad de memoria si el nivel es relativamente grande.
+La alternativa es tener un objeto _flyweight_ para cada tipo de vóxel —con las propiedades correspondientes prefijadas— y que cada cubo simplemente guarde una referencia al objeto _flyweight_ de su tipo.
+Obviamente, cada objeto vóxel seguirá teniendo que guardar datos únicos, como la posición en el espacio.
+
+.Ejemplo del patrón _flyweight_ con vóxeles.
+include::diagrams/flyweight_pattern.adoc[]
 
 == Comunicación entre objetos
 
