@@ -547,7 +547,7 @@ Esto puede dar lugar a resultados inestables, si no se tiene cuidado:
 Muchos problemas de estabilidad aparecen porque las masas no se han balanceado adecuadamente.
 Por ejemplo, con masas pequeñas unidas a otras 1000 veces mayores.
 
-* Algunas _juntas_ puede ser actuadas mediante un motor o una cadena, que se pueden emplear para simular cierto comportamiento físico.
+* Algunas _juntas_ puede ser actuadas mediante un motor o un muelle, que se pueden emplear para simular cierto comportamiento físico.
 Las simulaciones físicas con _juntas_ actuadas son más costosas, pero pueden proporcionar un control más estable de la simulación. 
 
 == Ray casting
