@@ -414,7 +414,9 @@ Por ejemplo, una superficie helada por la que es fácil deslizarse o una de hier
 
 Básicamente las propiedades físicas que se pueden simular son dos: *fricción* y el *grado de rebote*.
 En cualquier caso, hay que tener en cuenta que se trata de una simulación de la dinámica de sólidos rígidos.
-Aunque se configuren las superficies con un gran grado de rebote —por ejemplo, para simular una pelota de goma  los cuerpos no se van a deformar, como sería de esperar en una simulación realista.
+Aunque se configuren las superficies con un gran grado de rebote —por ejemplo, para simular una pelota de goma los cuerpos no se van a deformar, como sería de esperar en una simulación realista.
+
+También sirven como forma de identificar el tipo de material con el que se colisiona, para generar efectos de sonido o partículas adecuados.
 
 En Unity se aplican añadiendo el componente *PhysicalMaterial* al mismo _GameObject_ que tiene el _collider_ que queremos configurar<<Unity-Physics-Material>>.
 En Unreal Engine <<UE-Physical-Materials>> los *Physical Material* son un tipo de recurso que, una vez creado, se pueden aplicar a materiales, mallas estáticas y *Physics Assets* —que determinan las propiedades físicas de las mallas esqueletales—.
