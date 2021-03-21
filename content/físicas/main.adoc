@@ -465,9 +465,9 @@ Sin embargo:
 
 * También es posible activar la propiedad *Trace Complex On Move* en la sección *Collision* de cualquier componente, para que al moverse consulte la geometría compleja de los objetos con los que interactúa, ignorando la simple.
 
-En ambos casos no se puede activar *Simulate Physics*.
+En el primero caso no se puede activar *Simulate Physics*.
 Esto es debido a que PhysX necesita almacenar la velocidad y otra información en cada vértice de la geometría, siendo esto demasiado costoso para el gran número de vértices de las geometrías complejas.
-Los objetos que usan la geometría de colisión compleja —suya o de otros objetos— desde el punto de vista del motor de físicas, o son cinemáticos o son estáticos.
+Los objetos que usan la geometría de colisión compleja, desde el punto de vista del motor de físicas, o son cinemáticos o son estáticos.
 
 === Unity
 
