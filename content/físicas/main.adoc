@@ -482,9 +482,9 @@ En Unity se puede implementar un sistema similar usando _colliders_ y capas:
 . Ambos _colliders_ deben ponerse en capas diferentes.
 Una para las consultas complejas, donde colocar los _mesh colliders_, y otra para las colisiones normales, donde colorar los _colliders_ simples. 
 
-== Juntas
+== Uniones
 
-Una _junta_ conecta un objeto físico con otro o a un punto del mundo, aplicando fuerzas a los objetos o restringiendo su movimiento según ciertas reglas.
+Una _union_ conecta un objeto físico con otro o a un punto del mundo, aplicando fuerzas a los objetos o restringiendo su movimiento según ciertas reglas.
 Suelen permitir configurar efectos como su ruptura, cuando se someten a una fuerza que supera cierto umbral, o justar la resistencia de los objetos al movimiento.
 
 === Unreal Engine
@@ -541,7 +541,7 @@ image::configurable_joint_props.png[pdfwidth="5.11in"]
 
 === Recomendaciones
 
-Las _juntas_ se resuelven en el motor de físicas de forma dinámica.
+Las _uniones_ se resuelven en el motor de físicas de forma dinámica.
 Es decir, se implementan mediante mecanismos de control, aplicando fuerzas variables a los objetos con el objetivo de limitar su movimiento.
 Esto puede dar lugar a resultados inestables, si no se tiene cuidado:
 
@@ -549,8 +549,8 @@ Esto puede dar lugar a resultados inestables, si no se tiene cuidado:
 Muchos problemas de estabilidad aparecen porque las masas no se han balanceado adecuadamente.
 Por ejemplo, con masas pequeñas unidas a otras 1000 veces mayores.
 
-* Algunas _juntas_ puede ser actuadas mediante un motor o un muelle, que se pueden emplear para simular cierto comportamiento físico.
-Las simulaciones físicas con _juntas_ actuadas son más costosas, pero pueden proporcionar un control más estable de la simulación. 
+* Algunas _uniones_ puede ser actuadas mediante un motor o un muelle, que se pueden emplear para simular cierto comportamiento físico.
+Las simulaciones físicas con _uniones_ actuadas son más costosas, pero pueden proporcionar un control más estable de la simulación. 
 
 == Ray casting
 
