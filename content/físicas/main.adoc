@@ -741,7 +741,7 @@ Para crear un *Destructible Asset* desde el editor de Unreal Engine se debe sele
 El editor de *Destructible Assets* también permite ajustar parámetros de la configuración de la destrucción, como: la fuerza necesaria o si se generarán escombros; a través de las opciones en *Destructible Settings*<<UE-Destructible-Properties>>.
 
 Para que el actor se destruya en caso de colisión, debemos recordar que las opciones *Simulate Physics* y *Simulation Generates Hit Events* del actor deben estar activados.
-También podemos hacerlo desde el código del juego, usando los métodos de *DestructibleComponent*<<UE-Destructible-Component>>.
+También podemos hacerlo desde el código del juego, usando los métodos para aplicar fuerzas, impulsos y daño, sobrescritos por el componente *DestructibleComponent*<<UE-Destructible-Component>>.
 
 En caso de problemas es conveniente consultar la guía de problemas en el Wiki de Unreal Engine<<UE-Wiki-Destructible-Troubleshooting-Guide>>.
 
