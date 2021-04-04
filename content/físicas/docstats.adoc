@@ -1,8 +1,8 @@
-:document-characters: 48603
-:document-words: 9263
-:document-paragraphs: 160
+:document-characters: 48773
+:document-words: 9293
+:document-paragraphs: 161
 :document-reading-time: 46 minutos
-:s01-characters: 8564
+:s01-characters: 8566
 :s01-words: 1657
 :s01-paragraphs: 37
 :s01-reading-time: 8 minutos
@@ -10,43 +10,43 @@
 :s02-words: 945
 :s02-paragraphs: 17
 :s02-reading-time: 5 minutos
-:s03-characters: 4601
-:s03-words: 911
+:s03-characters: 4606
+:s03-words: 913
 :s03-paragraphs: 17
 :s03-reading-time: 5 minutos
-:s04-characters: 1179
-:s04-words: 235
+:s04-characters: 1177
+:s04-words: 234
 :s04-paragraphs: 4
 :s04-reading-time: 1 minuto
-:s05-characters: 3523
-:s05-words: 694
+:s05-characters: 3528
+:s05-words: 696
 :s05-paragraphs: 9
 :s05-reading-time: 3 minutos
-:s06-characters: 851
-:s06-words: 166
-:s06-paragraphs: 3
+:s06-characters: 969
+:s06-words: 189
+:s06-paragraphs: 4
 :s06-reading-time: 1 minuto
-:s07-characters: 3522
-:s07-words: 693
+:s07-characters: 3505
+:s07-words: 689
 :s07-paragraphs: 12
 :s07-reading-time: 3 minutos
-:s08-characters: 3428
-:s08-words: 665
+:s08-characters: 3438
+:s08-words: 664
 :s08-paragraphs: 10
 :s08-reading-time: 3 minutos
-:s09-characters: 4478
-:s09-words: 905
+:s09-characters: 4470
+:s09-words: 904
 :s09-paragraphs: 16
 :s09-reading-time: 5 minutos
-:s10-characters: 1742
-:s10-words: 352
+:s10-characters: 1745
+:s10-words: 353
 :s10-paragraphs: 8
 :s10-reading-time: 2 minutos
 :s11-characters: 2904
 :s11-words: 557
 :s11-paragraphs: 8
 :s11-reading-time: 3 minutos
-:s12-characters: 4077
-:s12-words: 796
+:s12-characters: 4130
+:s12-words: 805
 :s12-paragraphs: 17
 :s12-reading-time: 4 minutos

@@ -160,7 +160,7 @@ Por el contrario, si no seleccionamos la opción anterior, este desplazamiento s
 
 Todas estas posibilidades están perfectamente explicadas en el manual de Unity<<Unity-RootMotion>>.
 
-Como ocurren con Unreal Engine, en Unity podemos elegir sustraer la información para _root motion_ sin aplicarla finalmente al _GameObject_.
+Como ocurre con Unreal Engine, en Unity podemos elegir sustraer la información para _root motion_ sin aplicarla finalmente al _GameObject_.
 Para ello solo tenemos que asegurarnos de que la opción *Apply Root Motion* del componente *Animator* del _GameObject_ no está activada (véase la <<fig-unity-root-motion-humanoid>>).
 Esto se hace porque generalmente preferimos controlar directamente el movimiento del personaje.
 

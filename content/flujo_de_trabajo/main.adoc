@@ -62,7 +62,7 @@ Muchos de estos detalles se obtienen probando diferentes alternativas sobre los 
 
 También es posible que durante la etapa de *concepto* se desarrolle algún pequeño prototipo del juego, como forma de demostrar la viabilidad de la idea.
 Y, durante la segunda mitad de la *preproducción*, a veces es necesario hacer un *_vertical slice_*, que consiste en tomar una pequeña parte del juego y desarrollarla de forma acelerada hasta el final.
-El objeto de este prototipo es ofrecer al editor e inversores una idea de como será el juego final, dado que seguramente tengan que aprobar el presupuesto y la planificación.
+El objeto de este prototipo es ofrecer al editor e inversores una idea de cómo será el juego final, dado que seguramente tengan que aprobar el presupuesto y la planificación.
 Además permite identificar futuros problemas y ayuda en la estimación de las tareas y su tiempo, ya que permite obtener una idea de todo lo que debemos considerar durante el trabajo en la etapa de *producción*.
 
 El prototipado de niveles en *preproducción* se puede hacer de múltiples maneras, según el tipo de juego y lo que se pretenda probar.
@@ -92,7 +92,7 @@ Antes de comenzar con el _greyboxing_ es importante estandarizar el tamaño de l
 Por ejemplo, fijar que la unidad de altura estándar de los muros será de 3 m y que los segmentos de suelo serán de 3x3 m.
 Esto no significa que no pueda haber objetos en posiciones intermedias de la rejilla para dotar de mayor detalle a la escena, pero para eso se recomienda usar siempre divisiones pares de la cuadrícula estándar escogida.
 
-Para escoger un buen sistema de rejilla hay tomar en consideración las escalas o tamaños de los objetos, personajes y edificaciones.
+Para escoger un buen sistema de rejilla hay que tomar en consideración las escalas o tamaños de los objetos, personajes y edificaciones.
 Para escalar adecuadamente los elementos del nivel, se puede añadir desde el principio un modelo de «dimensiones humanas» como referencia —o cualquier otro objeto que tenga sentido según el caso— y estandarizar las medidas de distintos tipos de objetos para usarlas en todos los niveles.
 
 TIP: En proyectos de realidad virtual se pueden utilizar como referencia los modelos de los controladores que hacen de manos.
@@ -106,7 +106,7 @@ Por eso se tiende a crear habitaciones más amplias, con mobiliario de tamaño r
 // TODO: Poner algún ejemplo de la distorsión en tercera persona. Aquí o en el tema donde tratemos lo de la cámara.
 
 También es importante tener en cuenta las mecánicas de juego y las animaciones.
-Por ejemplo ¿cuánto saltará el personaje? ¿a qué distancia? ¿qué altura tiene cuando está de pie? ¿y cuándo está agachado? ¿cuánto espacio necesita para moverse? ¿a que altura estarán los paneles e interruptores con los que va a interactuar?
+Por ejemplo ¿cuánto saltará el personaje? ¿a qué distancia? ¿qué altura tiene cuando está de pie? ¿y cuándo está agachado? ¿cuánto espacio necesita para moverse? ¿a qué altura estarán los paneles e interruptores con los que va a interactuar?
 Si por ejemplo las paredes van a hacerse en unidades de 3 m, el personaje puede medir 1.5 m, los huecos para cruzar agachado 0.5 m y los interruptores y paneles pueden estar a 1 m
 Si los elementos del suelo se pueden ajustar en una rejilla de 1x1 m eso determinar cuánto debe poder saltar el personaje, el ancho de los obstáculos que debe poder superar y el largo de cada tramo de escalera, entre otras cosas.
 
@@ -115,8 +115,8 @@ Sin embargo, la escalas de los objetos y la rejilla no son lo único que hace fa
 También es conveniente fijar las reglas para colocar los orígenes en los modelos —por ejemplo, siempre abajo y a la izquierda— y el nivel de modularidad.
 
 Lo primero, facilita la sustitución de los bloques por las mallas definitivas, mientras que la modularidad depende del tipo de escenario.
-Es decir, en un juego de carreras por la ciudad es bastante razonable usar grandes bloques en el lugar donde van a ir edificaciones —aunque al modelar estas se puedan construir combinando módulos de mallas de secciones de edificios, para reducir costes y tiempo—.
-Mientras que en un _survival horror_ que transcurra en los estrechos pasillos de una nave espacial, es razonable construir paredes, techos y pisos usando módulos individuales de tamaño fijo, que posteriormente pueden ser sustituidos directamente por las mallas definitivas.
+Es decir, en un juego de carreras por la ciudad es bastante razonable usar grandes bloques en el lugar donde van a ir las edificaciones —aunque al modelar estas se puedan construir combinando módulos de mallas de secciones de edificios, para reducir costes y tiempo—.
+Mientras que en un _survival horror_ que transcurre en los estrechos pasillos de una nave espacial, es razonable construir paredes, techos y pisos usando módulos individuales de tamaño fijo, que posteriormente pueden ser sustituidos directamente por las mallas definitivas.
 
 === Manos a la obra
 
@@ -201,7 +201,7 @@ Una vez tenemos el objeto deseado, se pueden asignar colores a los vértices par
 .{video-caption} {video-number}. Greyboxing de un nivel para un FPS con ProBuilder.
 video::dYBOBgfcTgY[youtube, width=854, height=480]
 
-En la página principal de <<Unity-ProBuilder>> hay enlazados varios tutoriales dónde se explica cómo utilizar ProBuilder.
+En la página principal de <<Unity-ProBuilder>> hay enlazados varios tutoriales donde se explica cómo utilizar ProBuilder.
 Uno de ellos es <<video-probuilder-greyboxing-fps>>, que muestra cómo hacer el _greyboxing_ de un nivel para un FPS.
 
 [[video-probuilder-collision, {video-caption} {counter:video-number}]]
@@ -279,12 +279,12 @@ En este caso es más probable que alguien que esté trabajando en una caracterí
 Para eso es importante considerar la organización de los equipos involucrados en el proyecto.
 
 Por ejemplo, en proyectos grandes hay equipos de artistas ambientales que trabajan en `Environment`, mientras otros se dedican a los modelos y animaciones en `Characters` o `Weapons`, donde tienen todo lo necesario para completar sus tareas.
-También hay equipos de programadores de _gameplay_, para los que es más cómodo tener todo el código en `Blueprints` o `Scripts`, en lugar de moverse por la estructura de directorios para encontrar los _scripts_ que tienen que modificar; lo que ocurriría si estos se guardasen junto a las mallas de los objetos y personajes correspondientes.
+También hay equipos de programadores de _gameplay_, para los que es más cómodo tener todo el código en `Blueprints` o `Scripts`, en lugar de moverse por la estructura de directorios para encontrar los _scripts_ que tienen que modificar; lo que ocurriría si estos se guardan junto a las mallas de los objetos y personajes correspondientes.
 De igual forma, para músicos y diseñadores de sonido es preferible tener un directorio `Sounds` o `Audio` donde organizar su trabajo.
 Y otras carpetas similares pueden ser `Effects`, donde los especialistas colocan los sistemas de partículas, o `Cutscenes`, para las cinemáticas entre niveles.
 
 Para que los diseñadores compongan los niveles es común que exista alguna forma de agrupar componentes y guardarlos organizados en una carpeta donde los diseñadores los puedan encontrar rápidamente.
-En Unity ese papel lo hacen los _prefabs_, que se suelen almacenarse en la carpeta `Prefabs`.
+En Unity ese papel lo hacen los _prefabs_, que se suelen almacenar en la carpeta `Prefabs`.
 Mientras que en Unreal Engine lo más parecido son los _blueprints_, que muchas veces se guardan en `Blueprints`.
 Ambos motores prescriben una carpeta donde guardar las escenas del proyecto.
 En Unity es `Scenes` y en Unreal Engine es `Maps`.
@@ -310,7 +310,7 @@ Cada _plugin_ puede contener varios módulos y recursos del juego.
 Para facilitar la mantenibilidad y la reutilización del código es recomendable implementar sistemas diferentes en módulos separados.
 Y lo mismo deberíamos hacer con las extensiones del editor para nuestro juego.
 
-En el caso de que los módulos sean los bastante generales como para poder ser reutilizados en otros proyectos directamente, podríamos incluirlos en _plugins_.
+En el caso de que los módulos sean lo bastante generales como para poder ser reutilizados en otros proyectos directamente, podríamos incluirlos en _plugins_.
 Por ejemplo, si creamos un sistema de inventario para nuestro juego, podríamos necesitar dos módulos, uno para el _gameplay_ y otro para tener una extensión con la que configurar el sistema en el editor.
 Si este sistema es lo bastante general como para poder ser utilizado en otro tipo de juegos, podríamos incluir ambos en su propio plugin en el proyecto.
 
@@ -348,7 +348,7 @@ Por ejemplo, en la <<fig-unity-gameassets>> se puede observar cómo la jerarquí
 Otro nombre común es `Project` o simplemente el nombre del proyecto.
 
 El motivo es que en Unity los _plugins_ y _assets_ importados desde el _Asset Store_ se copian directamente en `Assets`, mezclándose con las carpetas con contenidos propios.
-Eso complica mantener una estructura organizada donde se separe qué es nuestro y qué un plugin o recurso importado.
+Eso complica mantener una estructura organizada donde se separe qué es nuestro y qué es un plugin o recurso importado.
 
 [TIP]
 ====
@@ -365,7 +365,7 @@ En la misma <<fig-unity-gameassets>> se puede ver un ejemplo.
 Por defecto Unity compila todos el código C# en `Assembly-CSharp.dll`.
 Esto significa que cada vez que se modifica alguna parte del código se tiene que compilar todo, lo que puede consumir bastante tiempo en proyectos grandes.
 
-Los *Assembly Definitions*<<Unity-Assembly-Definitions>> permiten que una carpeta y sus subcarpetas se compile en una DLL diferente.
+Los *Assembly Definitions*<<Unity-Assembly-Definitions>> permiten que una carpeta y sus subcarpetas se compilen en una DLL diferente.
 Esto reduce los tiempos de compilación, porque si se modifica un archivo de código solo se compilan los archivos incluidos en la misma DLL.
 
 El uso de _Assembly Definitions_ tiene además importantes ventajas:
@@ -408,7 +408,7 @@ Sin embargo, lo que nos interesa destacar es la posibilidad de crear nuestros pr
 Es buena idea estructurar nuestros proyectos en torno a un conjunto de componentes reutilizables —por ejemplo, entrada de usuario, controlador del personaje, sistema de inventario, interfaz de usuario, sistema de conducción, IA, carga de niveles, etc.— y desarrollar e incorporar cada uno a nuestros proyectos en paquetes separados.
 Esto puede facilitar enormemente el mantenimiento y reutilización del código.
 
-Los paquetes de Unity propios se puede distribuir al resto del equipo mediante archivos `.zip`, directamente desde un repositorio de Git —usando su URL— o mediante un registro NPM privado.
+Los paquetes de Unity propios se pueden distribuir al resto del equipo mediante archivos `.zip`, directamente desde un repositorio de Git —usando su URL— o mediante un registro NPM privado.
 
 == Jerarquía de la escena
 
@@ -441,7 +441,7 @@ A efectos prácticos esto se traduce en que:
 * Como los objetos estáticos de la escena —mallas, luces, terreno, etc— no se mueven, se pueden poner todos juntos en un único árbol, lo que resulta muy cómodo para organizar esos objetos en la escena.
 
 * Pero los _GameObject_ de _gameplay_ —el jugador, los enemigos, etc.— deberían estar en la raíz.
-Y los _GameObject_ creados dinámicamente nunca hacerlos hijos de quien los creó, a menos que tengan que moverse con ese objeto.
+Y los _GameObject_ creados dinámicamente nunca debe ser hijos de quién los creó, a menos que tengan que trasladarse con ese objeto.
 
 [TIP]
 ====
@@ -456,7 +456,7 @@ include::diagrams/unity_additive_scenes.adoc[]
 
 == Control de versiones
 
-Durante el desarrollo es fundamental seguir la pista a todo los cambios, asegurando que disponemos un histórico de ellos.
+Durante el desarrollo es fundamental seguir la pista a todos los cambios, asegurando que disponemos un histórico de ellos.
 Esto permite probar diferentes alternativas, con la seguridad de que podemos volver a cualquier versión anterior, si decidimos que los cambios que estamos probando no funcionan.
 Para eso es fundamental contar con herramientas de control de versiones —en inglés, _Version Control System_ o VCS— como Git, {perforce}[Perforce] o {plastic-scm}[Plastic SCM].
 
@@ -526,7 +526,7 @@ Pero claro, con esa configuración es más complicada la colaboración.
 Una solución muy común para colaborar desarrollando en Unity, tanto con Git como con Perforce o cualquier otro VCS, está en seguir las siguientes indicaciones:
 
 . Comenzar borrando de nuestra cabeza la idea de que cada nivel corresponde a una y solo una escena.
-En general un nivel del juego debería estar compuesto por varias escenas cargadas de forma aditiva.
+En general, un nivel del juego debería estar compuesto por varias escenas cargadas de forma aditiva.
 +
 NOTE: Obviamente necesitaremos desarrollar un gestor de niveles que haga la transición entre niveles, cargando y descargando las escenas correspondientes.
 
@@ -551,7 +551,7 @@ Si los subniveles se marcan como *Always Streaming*, ya no se cargan a demanda, 
 Esto permite que múltiples desarrolladores trabajen en el mismo nivel al mismo tiempo, solo que en diferentes subniveles.
 
 Como ocurre en Unity con las escenas aditivas, no estamos obligados a usar distintos niveles para distintas regiones del mundo.
-La descomposición puede ser de otro tipo, en función de como se haya planificado repartir el desarrollo.
+La descomposición puede ser de otro tipo, en función de cómo se haya planificado repartir el desarrollo.
 Así, por ejemplo, un subnivel puede tener las mallas estáticas que dan forma al entorno, otro los NPC y otro todos los sonidos; permitiendo a diferentes desarrolladores trabajar en cada uno de estos subniveles al mismo tiempo.
 
 ===== Prefabs

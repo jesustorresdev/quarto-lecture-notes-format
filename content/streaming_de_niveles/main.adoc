@@ -22,15 +22,15 @@ Por ejemplo, un paso estándar en las etapas de _render_ es excluir los objetos 
 Otra técnica disponible comúnmente es el _occlusion culling_, con la que durante la compilación se genera una estructura de datos que el motor puede consultar rápidamente en tiempo de ejecución, para saber qué objetos son visibles para el punto de vista actual de la cámara, siendo estos los únicos enviados al _render_.
 
 En cuanto al _gameplay_, la responsabilidad cae más bien de nuestro lado.
-Podemos considerar los objetos que deben estar activos en cada momento del juego y mantener desactivados el resto hasta que son necesario, evitando que el código que los controla consuma recursos inútilmente.
-Usando _triggers_ dispuestos adecuadamente en la escena, podemos hacer que los objetos se activen cuándo sea necesario —mientras otros que ya no lo son, son desactivados—.
+Podemos considerar los objetos que deben estar activos en cada momento del juego y mantener desactivados el resto hasta que son necesarios, evitando que el código que los controla consuma recursos inútilmente.
+Usando _triggers_ dispuestos adecuadamente en la escena, podemos hacer que los objetos se activen cuando sea necesario —mientras otros que ya no lo son, son desactivados—.
 
-Sin embargo, pese a todo el cuidado que le pongamos, pueden llegar un momento en que el nivel que queremos desarrollar no quepa en la memoria.
-Especialmente si hablamos de consolas o plataformas móviles, donde estos recursos está mucho más limitado que en PC.
+Sin embargo, pese a todo el cuidado que le pongamos, puede llegar un momento en que el nivel que queremos desarrollar no quepa en la memoria.
+Especialmente si hablamos de consolas o plataformas móviles, donde estos recursos están mucho más limitados que en PC.
 
 == Streaming de niveles
 
-Cuando el nivel o el mundo —en los juegos de mundo abierto— que queremos desarrollar es demasiado extenso como para cargarlo de una sola vez, estamos obligados a dividirlo en diferentes mapas o escenas, cargándolas y descargándolas bajo demanda según se desarrolla el juego.
+Cuando el nivel o el mundo —en los juegos de mundo abierto— que queremos desarrollar es demasiado extenso como para cargarlo de una sola vez, estamos obligados a dividirlo en diferentes mapas o escenas, cargándose y descargándose bajo demanda según se desarrolla el juego.
 Esto, indudablemente, condiciona el diseño del nivel.
 
 Por ejemplo, en un caso extremo está lo que ocurría en los primeros juegos de la saga Resident Evil, donde abrir cualquier puerta, escalera o ascensor reproducía una cinemática durante la que se cargaba la siguiente escena.
@@ -47,11 +47,11 @@ Para disimular la carga de la siguiente parte del nivel, se colocan ascensores, 
 .{video-caption} {video-number}. Video de pasadizo en el _gamaplay_ de «Star Wars Jedi: Fallen Order» mostrado en el EA Play 2019.
 video::GtzLWZ0LCNs[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
-En mundos abiertos en exteriores, se puede dividir el nivel en varios pedazos, para ir cargándolos dinámicamente cuando el jugador se aproxima, al tiempo que se descargan los pedazos más alejados que el jugador ya no puede ver.
+En mundos abiertos en exteriores, se puede dividir el nivel en varios pedazos, para ir cargándose dinámicamente cuando el jugador se aproxima, al tiempo que se descargan los pedazos más alejados que el jugador ya no puede ver.
 Para limitar el alcance de la visión del jugador, se juega con la ubicación de las barreras visuales, como montañas o edificios.
 
 [[fig-world-chunk-loading]]
-.Esquema de la división del mundo en subniveles cargándolas y descargándolas a demanda.
+.Esquema de la división del mundo en subniveles cargándose y descargándose a demanda.
 include::diagrams/world_chunk_loading.adoc[]
 
 En mapas extensos sin barreras visuales, donde el jugador puede ver durante gran parte del tiempo hasta el horizonte, se pueden usar *impostores* para aproximar con menor nivel de detalle las regiones no cargadas del mapa.
@@ -63,7 +63,7 @@ En el caso más extremo, el *impostor* se puede implementar como un sencillo pla
 // https://philliphamlyn.wordpress.com/2013/04/03/billboards-imposters-and-meshes/
 // https://wiki.amplify.pt/index.php?title=Unity_Products:Amplify_Impostors/Manual
 
-En cualquier caso, hay que tener en cuenta que nunca se renderizará nada más allá de la distancia máxima configurada en la cámara —a veces llamada _far clipping plane_—.
+En cualquier caso, hay que tener en cuenta que nunca se renderiza nada más allá de la distancia máxima configurada en la cámara —a veces llamada _far clipping plane_—.
 
 [[video-spiderman-level-streaming, {video-caption} {counter:video-number}]]
 .{video-caption} {video-number}. Conferencia «Marvel's Spider-Man: A Technical Postmortem» en GDC 2019.
@@ -81,7 +81,7 @@ La solución de Unreal Engine 4 para este problema se llama *Level Streaming*<<U
 
 En Level Streaming existen 3 elementos:
 
-* *Persistent Level*. Es el nivel de la escena completo.
+* *Persistent Level*. Es el nivel de la escena completa.
 Su función es gestionar los subniveles que se van a ir cargando y descargando según sea necesario.
 Puede tener actores que van a ser permanentes, como el cielo o exteriores que se ven en la distancia.
 
@@ -96,7 +96,7 @@ Obviamente el motor provee funciones para cargar y descargar *Streaming Levels* 
 == Word Composition en Unreal Engine
 
 Unreal Engine 4 también soporta una versión de *Level Streaming* en la que no se usan volúmenes para activar la carga y descarga de los niveles, sino que esta ocurre basándose en la distancia del jugador al nivel.
-Esto permiten dividir el mundo en varios *Streaming Levels*, distribuidos en una rejilla 2D, que se van cargando y descargando según se acerca o se aleja el jugador.
+Esto permite dividir el mundo en varios *Streaming Levels*, distribuidos en una rejilla 2D, que se van cargando y descargando según se acerca o se aleja el jugador.
 
 .Ventana de *Word Composition* donde se observa la disposición de los distintos niveles en la escena.
 image::world_layout.jpg[]
@@ -112,7 +112,7 @@ Esto es útil para facilitar la colaboración, al permitir que múltiples desarr
 Unreal Engine también permite mostrar representaciones de los *Streaming Levels* con menor nivel de detalle (LOD{blank}footnote:[{fn-lod}]) cuando el usuario está a mayor distancia que la distancia de carga del nivel.
 Esto permite ahorra recursos al no tener que cargar el *Streaming Level* completo hasta que el usuario no está lo bastante cerca como para ver los detalles.
 
-TIP: Aunque Unreal Engine no es un motor muy utilizado para juegos 2D, lo cierto es que posible utilizarlo mediante Paper2D.
+TIP: Aunque Unreal Engine no es un motor muy utilizado para juegos 2D, lo cierto es que es posible utilizarlo mediante Paper2D.
 En ese caso, se puede usar *Word Composition* para tener niveles muy grandes que se van cargando a demanda, como suele ser necesario en los juegos del género metroidvania.
 
 == Streaming de niveles en Unity
@@ -127,7 +127,7 @@ NOTE: Es importante utilizar las versiones «Async» para no detener el juego mi
 
 == Limitaciones del punto flotante
 
-Tanto Unreal Engine como Unity utilizan números punto flotante de 32 bits —o de precisión simple—.
+Tanto Unreal Engine como Unity utilizan números de punto flotante de 32 bits —o de precisión simple—.
 
 Algunos motivos para esta decisión podrían ser:
 
@@ -136,7 +136,7 @@ Algunos motivos para esta decisión podrían ser:
 * Aunque ya no es tan común, han existido arquitecturas sin soporte para números de punto flotante de 64 bits.
 Esto es algo a tener en cuenta si se quiere desarrollar un motor que sea portable a diferentes arquitecturas.
 
-* Las GPU suelen ofrece peor rendimiento trabajando con punto flotante de 64 bits, lo que obliga a usar el truco de transformar las coordenadas de los vértices para que sean relativas a la posición de la cámara, de forma que puedan almacenarse en punto flotante de 32 bits durante el _render_.
+* Las GPU suele ofrece peor rendimiento trabajando con punto flotante de 64 bits, lo que obliga a usar el truco de transformar las coordenadas de los vértices para que sean relativas a la posición de la cámara, de forma que puedan almacenarse en punto flotante de 32 bits durante el _render_.
 
 El problema es que la precisión de los números de punto flotante no es fija.
 Como se puede ver en la <<fig-ieee754-precision>>, a mayor sea el valor que almacenan, peor es la precisión.
@@ -164,7 +164,7 @@ image::traslación_del_origen.svg[]
 Nuevamente, en Unreal Engine ya viene implementado, permitiendo crear mundos de hasta 20{x}20 km sin problemas de precisión.
 Tan solo hay que activar la opción _Enable World Origin Rebasing_.
 
-NOTE: Los detalles de como lo hace se pueden leer en el foro de Unreal Engine<<UE-Forums-Origin-Shifting>> y en el correspondiente _pull request_ en GitHub<<UE-Github-PR-Origin-Shifting>>.
+NOTE: Los detalles de cómo lo hace se pueden leer en el foro de Unreal Engine<<UE-Forums-Origin-Shifting>> y en el correspondiente _pull request_ en GitHub<<UE-Github-PR-Origin-Shifting>>.
 
 Sin embargo, Unreal Engine no soporta actualmente la traslación del origen en juegos multijugador en red.
 Así que los estudios que lo necesitan deben implementar su propia solución en el lado del servidor del juego.
@@ -176,7 +176,7 @@ En Unity, como es más común, tendremos que tirar de la _Asset Store_ o hacerlo
 . Iterar sobre todos los _GameObject_ de cada escena para desplazarlos, de tal forma que el jugador vuelva a estar cerca del origen del sistema de referencia.
 
 . Hay que tener cuidado con tener muchos _collider_ estáticos —aquellos en _GameObjects_ sin un component _Rigidbody_— porque moverlos tiene un gran impacto en el motor de físicas, ya que le obliga a recalcular ciertas estructuras de datos internas, haciendo que se pierdan _frames_ o provocando problemas con el sonido.
-El cualquier caso para evitar problemas con el motor de físicas, el mejor sitio para mover los objetos es `FixedUpdate()`.
+En cualquier caso para evitar problemas con el motor de físicas, el mejor sitio para mover los objetos es `FixedUpdate()`.
 
 . No se puede usar _static batching_ porque los _GameObjects_ incluidos en un _static batch_ son bloqueados por Unity, ya que son combinados con otros _GameObjects_ en una malla común.
 En caso necesario, podemos implementar nuestra propia solución de _static batching_ o combinar las mallas manualmente.

@@ -1,8 +1,8 @@
-:document-characters: 8448
+:document-characters: 8450
 :document-words: 1582
 :document-paragraphs: 27
 :document-reading-time: 8 minutos
-:s01-characters: 718
+:s01-characters: 719
 :s01-words: 133
 :s01-paragraphs: 2
 :s01-reading-time: 1 minuto
@@ -10,7 +10,7 @@
 :s02-words: 244
 :s02-paragraphs: 3
 :s02-reading-time: 1 minuto
-:s03-characters: 926
+:s03-characters: 927
 :s03-words: 179
 :s03-paragraphs: 4
 :s03-reading-time: 1 minuto

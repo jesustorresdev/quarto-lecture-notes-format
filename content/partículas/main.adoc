@@ -26,12 +26,12 @@ La respuesta es: sistemas de partículas.
 Cualquier sistema de partículas tiene como mínimo dos componentes fundamentales:
 
 * Las partículas, que por lo general son pequeños cuadrángulos{blank}footnote:[{fn-cuadrangulo}] 2D con una textura que siempre están de cara a la cámara —también conocidos como _billboards_— aunque en algunas implementaciones también soportan que cada partícula sea una malla 3D.
-Estas partículas tiene propiedades como: velocidad, textura, color, tiempo de vida, tamaño, etc.
+Estas partículas tienen propiedades como: velocidad, textura, color, tiempo de vida, tamaño, etc.
 
 * El emisor, que es un objeto de la escena que desde su localización crea las partículas con las propiedades indicadas.
 Esto generalmente lo hace utilizando un _pool_ de partículas, para así poder volver a utilizar las partículas muertas de forma rápida y eficiente.
 
-Jugando con las propiedades de como se emiten y de las propias partículas, se puede conseguir todo tipo de efectos para mostrar objetos no sólidos en las escenas.
+Jugando con las propiedades de cómo se emiten y de las propias partículas, se puede conseguir todo tipo de efectos para mostrar objetos no sólidos en las escenas.
 
 image::simple_particle_system.png[]
 
@@ -41,7 +41,7 @@ Algunas propiedades comunes de cualquier sistema de partículas son:
 
 * *Duración*, *retardo* y *repetición*, que indican durante cuánto tiempo se van a emitir partículas, cuánto tardarán en comenzar a emitirse al empezar y si al terminar el ciclo de emisión volverá a comenzar desde el principio, haciendo que se emitan partículas constantemente.
 
-* *Tiempo de vida*, que indica cuanto tiempo pasará antes de que cada partícula muera.
+* *Tiempo de vida*, que indica cuánto tiempo pasará antes de que cada partícula muera.
 
 * *Velocidad*, *tamaño* y *rotación*, que es la velocidad, tamaño y rotación de cada partícula al ser emitida.
 
@@ -76,7 +76,7 @@ Sin embargo, es una funcionalidad que hay que utilizar con cuidado, evaluando an
 Porque tener de pronto miles de partículas con sus _colliders_ interactuando en la escena no es barato.
 
 Por ejemplo, supongamos que queremos tener un fuego que haga daño al jugador cuando se acerca.
-Antes de utilizar _triggers_ en las partículas para que hagan daño al jugador al tocarlo, es mucho mas práctico y eficiente añadir un único _collider_ alrededor del juego que le haga daño al jugado cuando entre, creando la ilusión de que es por las llamas del fuego.
+Antes de utilizar _triggers_ en las partículas para que hagan daño al jugador al tocarlo, es mucho más práctico y eficiente añadir un único _collider_ alrededor del juego que le haga daño al jugador cuando entre, creando la ilusión de que es por las llamas del fuego.
 
 Sin embargo, un uso bastante interesante puede ser simular lluvia.
 Gracias al uso de _triggers_, las partículas pueden saber cuándo han tocado una superficie y destruirse.

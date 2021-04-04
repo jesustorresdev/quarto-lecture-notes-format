@@ -1,9 +1,9 @@
-:document-characters: 20992
-:document-words: 3948
+:document-characters: 20991
+:document-words: 3947
 :document-paragraphs: 55
 :document-reading-time: 20 minutos
 :s01-characters: 2993
-:s01-words: 597
+:s01-words: 596
 :s01-paragraphs: 10
 :s01-reading-time: 3 minutos
 :s02-characters: 2259
@@ -14,7 +14,7 @@
 :s03-words: 124
 :s03-paragraphs: 2
 :s03-reading-time: 1 minuto
-:s04-characters: 4049
+:s04-characters: 4048
 :s04-words: 753
 :s04-paragraphs: 10
 :s04-reading-time: 4 minutos

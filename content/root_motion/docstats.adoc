@@ -1,4 +1,4 @@
-:document-characters: 14314
+:document-characters: 14313
 :document-words: 2848
 :document-paragraphs: 49
 :document-reading-time: 14 minutos
@@ -10,7 +10,7 @@
 :s02-words: 166
 :s02-paragraphs: 2
 :s02-reading-time: 1 minuto
-:s03-characters: 4724
+:s03-characters: 4723
 :s03-words: 968
 :s03-paragraphs: 14
 :s03-reading-time: 5 minutos

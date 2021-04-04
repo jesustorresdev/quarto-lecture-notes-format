@@ -1,8 +1,8 @@
-:document-characters: 16096
-:document-words: 3117
+:document-characters: 16093
+:document-words: 3119
 :document-paragraphs: 43
 :document-reading-time: 16 minutos
-:s01-characters: 2658
+:s01-characters: 2651
 :s01-words: 543
 :s01-paragraphs: 8
 :s01-reading-time: 3 minutos
@@ -10,16 +10,16 @@
 :s02-words: 143
 :s02-paragraphs: 3
 :s02-reading-time: 1 minuto
-:s03-characters: 1770
-:s03-words: 339
+:s03-characters: 1771
+:s03-words: 340
 :s03-paragraphs: 3
 :s03-reading-time: 2 minutos
 :s04-characters: 630
 :s04-words: 111
 :s04-paragraphs: 2
 :s04-reading-time: 1 minuto
-:s05-characters: 1405
-:s05-words: 305
+:s05-characters: 1406
+:s05-words: 306
 :s05-paragraphs: 5
 :s05-reading-time: 2 minutos
 :s06-characters: 4167

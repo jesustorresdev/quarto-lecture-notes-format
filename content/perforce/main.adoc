@@ -45,7 +45,7 @@ Por ejemplo, veamos el tamaño y los tiempos —obtenidos sin ningún rigor, des
 
 La diferencia entre el tamaño del proyecto y el tamaño real del repositorio se debe a que Git es un VCS descentralizado.
 Cada vez que se clona un repositorio se crea una copia completa, con todo el historial de cambios desde el principio.
-Por eso, por ejemplo, el proyecto de Unreal Engine 4 necesita 1.7 GiB pero el repositorio completo clonado ocupa 4.4 GiB.
+Por eso, por ejemplo, el proyecto de Unreal Engine 4 necesita 1.7 GiB, pero el repositorio completo clonado ocupa 4.4 GiB.
 
 [NOTE]
 ====
@@ -56,7 +56,7 @@ Aquellos estudios que licencian Unreal Engine pueden obtener acceso al código f
 ====
 
 Como se puede observar, los tiempos de clonado son relativamente largos.
-A más historial tenga el proyecto, más ocupará cada copia del repositorio y más tiempo tarda en clonarse.
+A mas historial tenga el proyecto, más ocupará cada copia del repositorio y más tiempo tarda en clonarse.
 Si esto se volviera un problema, Git permite limitar la antigüedad del historial que se clona.
 Sin embargo, como Git solo almacena las diferencias entre una revisión y la siguiente, hacen falta muchos años de desarrollo y muchas revisiones para tener que llegar a eso.
 
@@ -66,7 +66,7 @@ En ese caso, almacenar cada revisión necesita más espacio y la diferencia entr
 
 Podríamos pensar que esto no es común en proyectos de software.
 Pero si vemos la lista de clientes de Perforce nos saltarán nombres como Honda, Nvidia, Boeing o Verizon.
-Estas compañías muchas veces no solo se quiere controlar las versiones de código fuente, sino también incluir documentos de diseño, manuales, planos, etc.
+Estas compañías muchas veces no solo quieren controlar las versiones de código fuente, sino también incluir documentos de diseño, manuales, planos, etc.
 Incluso los binarios compilados más recientes, para facilitar la realización de pruebas sobre el producto.
 
 En Git esto se resuelve utilizando una extensión llamada {git-lfs}[Git LFS].
@@ -193,7 +193,7 @@ Un _workspace_ es una especificación que indica qué archivos de un _depot_ en 
 Respecto a los _workspace_ debemos tener en cuenta que:
 
 * Con la ayuda de {perforce-file-specifications}[especificadores de ruta] podemos seleccionar directorios y archivos concretos para el _workspace_.
-No es necesario descargar el _depot_ completo, como ocurren con otros VCS.
+No es necesario descargar el _depot_ completo, como ocurre con otros VCS.
 
 * Solo el contenido de los archivos en la revisión que nos interese —por lo general, la última—.
 Se puede pedir al servidor cualquier revisión, pero no se descarga todo el historial, como ocurre en Git y otros VCS distribuidos.
@@ -304,7 +304,7 @@ Sin el bloqueo, podrían ser editados al mismo tiempo desde varios editores de U
 
 <5> Los archivos con extensión `.exe` también son binarios, pero solo se almacenan en el VCS las dos últimas revisiones —el `+S2`— y el archivo siempre puede ser modificado por el cliente —el `w`—.
 
-El ejemplo de como tratar los ejecutables `.exe` es un caso interesante por varios motivos:
+El ejemplo de cómo tratar los ejecutables `.exe` es un caso interesante por varios motivos:
 
 * Por defecto Perforce crea los archivos en el _workspace_ donde estamos trabajando en modo solo lectura.
 Así nos obliga a usar *{p4v-checkout}* —o el comando `{p4-edit}`— antes de intentar modificar cualquier de ellos.
@@ -333,7 +333,7 @@ Mientras que en Unity los archivos originales forman parte del proyecto y se rei
 Merece la pena mencionar una característica avanzada de Perforce llamada _streams_.
 
 Obviamente Perforce soporta ramas, como muchos otros VCS, pero le han dado una vuelta de tuerca al concepto al desarrollar los _streams_.
-Los _streams_ son ramas que incluyen reglas que definen cómo se pueden manipular los archivos, incluyendo como se mueven los cambios en los archivos entre _streams_<<Perforce-Streams-Overview>>.
+Los _streams_ son ramas que incluyen reglas que definen cómo se pueden manipular los archivos, incluyendo cómo se mueven los cambios en los archivos entre _streams_<<Perforce-Streams-Overview>>.
 
 Vamos a resumir brevemente sus principales características:
 
