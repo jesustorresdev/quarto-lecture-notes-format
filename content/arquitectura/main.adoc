@@ -358,18 +358,18 @@ Obviamente, si añadimos características adicionales a nuestros personajes, ten
 
 Un *PlayerController* es creado por *GameMode* para cada jugador, generalmente a través del método `Login()`.
 
-Para gestionar la entrada del usuario, a los actores se les añade durante el juego un *InputComponent*, usado para relacionar eventos de entrada con métodos en componentes del actor.
+Para gestionar la entrada del usuario, los actores pueden crear durante el juego un *InputComponent*, usado para relacionar eventos de entrada con métodos del actor o de componentes del actor.
 Es en estos métodos donde implementamos las acciones que correspondan a cada evento, permitiendo que cualquier actor pueda responder a la entrada del jugador.
 Los *InputComponents* se registran en una pila de *InputComponents* gestionada por el *PlayerController*, que a su vez indica a *PlayerInput* que lea los eventos de entrada y los procese.
 Para ello, *PlayerInput* lee los eventos de entrada y los entrega a los *InputComponents* en el orden determinado por la pila.
 Los *InputComponents* puede «consumir» el evento de entrada, haciendo que sea ignorado por componentes posteriores en la pila.
-s
+
 El *PlayerController* también gestiona lo que denomina la rotación del control.
 La idea es separar la rotación del personaje en la escena —que es una propiedad del actor del personaje— y la orientación de la cámara, de la rotación del control del jugador.
-Esto sirve, por ejemplo, para poder apuntar en una dirección, mientras el personaje está orientado para desplazarse.
+Esto sirve, por ejemplo, para poder apuntar en una dirección, mientras el personaje está orientado en otra para desplazarse.
 
 Otras de las responsabilidades del *PlayerController* es crear el actor que gestiona la cámara —llamado *PlayerCameraManager*— y el HUD. 
-Las clases de ambos actores se pueden configurar en las propiedades *PlayerController*.
+Las clases de ambos actores se pueden configurar en las propiedades del *PlayerController*.
 
 [NOTE]
 ====
@@ -399,13 +399,19 @@ Se puede mover libremente en 3D, sin ser afectado por la gravedad.
 *Character* también extiende *Pawn*, pero para añadirle todo lo que necesita un personaje tradicional: una cápsula de colisión, un *SkeletalMeshComponent* —es decir, una malla que puede ser animada mediante el sistema de animación de Unreal Engine— y un *CharacterMovementComponent*, que implementa modos de movimiento típicos como: caminar, correr, saltar, volar y nadar.
 
 TIP: El código del *CharacterMovementComponent* puede ser muy ilustrativo sobre cómo hacer nuestro propio controlador de movimiento —que podemos llamar `LocomotionController` o `MovementController`— de un personaje en cualquier otro motor.
-En Unity el *CharacterController* es demasiado simple, por lo que muchas veces acaba teniendo que ser sustituido por una implementación propia o comprada en la _Asset Store_.
+En Unity el *CharacterController* es bastante simple, por lo que muchas veces acaba teniendo que ser sustituido por una implementación propia o comprada en la _Asset Store_.
 
 Las clases *Pawn* y *Character* exponen la interfaz necesaria para que un *Controller* los controle para, por ejemplo, desplazarlos por la escena.
 Los *Controller* que «poseen» un *Pawn* o *Character* reciben muchos de los eventos que llegan a dicho *Pawn*, lo que les permite redefinir el comportamiento del actor mientras está poseído.
 
 *Pawn* también ofrece la API *Damage*, que se usa para causar distintos tipos de daño —puntual, radial u otro que definamos— en el personaje, registrando quién es el causante.
 Además, Unreal Engine ofrece el componente *ProjectileMovementComponent*, diseñado para dotar a cualquier actor del tipo de movimiento característico de un proyectil.
+
+En la arquitectura descrita puede surgir la duda de si colocar el código que procesa los eventos de entrada del usuario para manejar el personaje en el *PlayerController* o en el *Pawn* del personaje del jugador.
+La ventaja del utilizar el *PlayerController* es que facilita desacoplar la entrada de las acciones y habilidades de cada personaje.
+Los *Pawn* puede exponer una interfaz común con acciones posibles, que en cada uno se pueden implementar de forma diferente y que pueden ser controladas indistintamente por el jugador, mediante un *PlayerController*, o por la IA, mediante un *AIController*.
+El *PlayerController* —que en juegos en red solo existe en el cliente del jugador— solo tiene la responsabilidad de procesar los eventos de entrada para llamar a la acción adecuada del personaje poseído.
+En cualquier caso, si un personaje necesita algún tipo de entrada especial, siempre es posible procesarla directamente en el *Pawn* de dicho personaje.
 
 === PlayerState y otros datos del jugador
 
@@ -415,11 +421,9 @@ En el caso particular de Unreal Engine, el *Pawn* poseído por un jugador devuel
 Cada *PlayerState* es un actor, básicamente porque así debe ser para que sea replicado en los diferentes clientes en juegos multijugador online.
 Esto quiere decir que es útil para guardar información del jugador que queremos que sea accesible al resto de jugadores de la partida —como la salud o la puntuación—.
 
-Para almacenar datos que el resto de jugadores no necesitan conocer —como el inventario o la cantidad de munición— se puede usar una estructura de datos referenciada desde el propio *Pawn* del personaje.
-
-NOTE: Aunque referenciar esta información desde el actor del personaje parece lo más intuitivo, en Unreal Engine hay quienes prefieren usar el *PlayerController*, ya que este objeto siempre es local.
-
-Como en el caso de *GameState*, y *PlayerState* es interesante que estos datos estén separados en un objeto diferente, aunque accesible desde el personaje, para facilitar su almacenamiento y recuperación.
+Para almacenar datos que el resto de jugadores no necesitan conocer —como el inventario o la cantidad de munición— se puede usar una estructura de datos referenciada desde el propio *Pawn* del personaje o el *PlayerController*.
+Aunque referenciar esta información desde el *Pawn* del personaje parece lo más intuitivo —ya que son posesiones o características del personaje— en Unreal Engine es común usar el *PlayerController*, ya que este objeto solo existe en el cliente del jugador.
+Como en el caso de *GameState* y *PlayerState*, puede ser interesante que estos datos estén separados en un objeto diferente, aunque accesible desde el personaje o el *PlayerController*, para facilitar su almacenamiento y recuperación.
 
 .Ejemplo general de persistencia de datos del jugador.
 include::diagrams/playerdata.adoc[]
