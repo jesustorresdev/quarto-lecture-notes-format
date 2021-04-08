@@ -310,6 +310,9 @@ Eso es exactamente lo que hace Unreal Engine con *GameMode*, *GameState* y *Play
 Separar la lógica del juego de los datos facilita poder almacenar estos últimos para salvar 
 y recuperar el estado del juego.
 
+TIP: *GameMode* implementa el comportamiento esperable de un juego multijugador competitivo.
+Si se trabaja en otro tipo de juego, es mejor heredar de *GameModeBase*, que también es la clase base de *GameMode*.
+
 No se recomienda guardar directamente en *GameState* datos específicos de cada jugador —como el nombre, el nivel de salud o la puntuación específica de cada jugador— sino solo datos generales del estado del juego.
 *GameState* gestiona una instancia de *PlayerState* para cada jugador, que es donde se deben almacenar los datos específicos de cada uno.
 El *PlayerState* de cada jugador también es accesible a través del actor del personaje, como veremos más adelante.
