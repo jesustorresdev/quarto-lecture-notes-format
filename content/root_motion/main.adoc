@@ -20,7 +20,7 @@ Una de las técnicas de animación de personajes por las que más se suele pregu
 
 Obviamente, esto quita mucho trabajo, pues el movimiento del objeto del personaje se sincroniza automáticamente con la animación.
 Por ejemplo, un personaje bípedo se moverá exactamente con la velocidad y cadencia adecuada que encaje con la velocidad y ancho de los pasos de la animación, sin que tengamos que hacer nada.
-Pero también dificulta el control del personaje por parte del jugador, porque quién dije el movimiento es la animación.
+Pero también dificulta el control del personaje por parte del jugador, porque quién dirige el movimiento es la animación.
 
 La pregunta más común es ¿cuándo se debe usar _root motion_?.
 Y la respuesta es *nunca o prácticamente nunca*.
@@ -75,7 +75,7 @@ Como se puede observar, durante la animación se mantiene anclado al origen, per
 
 Para usar _root motion_ lo que hace el motor de juego es obtener las diferencias entre estas transformaciones del hueso raíz cada instante y una postura de referencia.
 Esta postura de referencia suele ser la postura de referencia del modelo —es decir, la postura sin animación— que por lo general es una {pose-t}[pose T], que es la que tiene el modelo en la <<fig-character-skeleton>>.
-Para también puede ser la postura en el _primer fotograma de la animación_, la postura resultado de _promediar todas las posturas de la animación_ o cualquier otra postura obtenida por otras técnicas disponibles en el motor de videojuegos.
+También puede ser la postura en el _primer fotograma de la animación_, la postura resultado de _promediar todas las posturas de la animación_ o cualquier otra postura obtenida por otras técnicas disponibles en el motor de videojuegos.
 
 El objetivo es calcular cómo se está moviendo globalmente el esqueleto respecto a la posición de origen.
 El motor sustrae este movimiento global de la animación —para que la animación ocurra «en el sitio»— y lo aplica directamente al actor o *GameObject* del personaje, trasladándolo por la escena —con su cápsula, malla y otros componentes— tal y como movía globalmente la animación original.
@@ -87,7 +87,7 @@ Para usar _root motion_ solo hay que activarlo en motor de videojuegos, si tiene
 === Unreal Engine
 
 En el siguiente vídeo en Unreal Engine, se puede ver cómo al activar _Enable Root Motion_ en las opciones _Root Motion_ el personaje ya no avanza, sino que se mueve en el sitio.
-El movimiento ha sido extraído de la animación para aplicárselo después al actor del personaje en la escena.
+El movimiento ha sido extraído de la animación para aplicarlo después al actor del personaje en la escena.
 
 [[video-ue-root-motion-refpose, {video-caption} {counter:video-number}]]
 .{video-caption} {video-number}. Ejemplo con _Enable Root Motion_ usando como referencia la posición de referencia del modelo.
@@ -140,7 +140,7 @@ Si no lo hacemos:
 Esta posición y orientación global se guardan y el resto de transformaciones de la animación se calculan de forma relativa a ellas.
 
 . Proyecta la posición global y orientación global en el plano Y, sobre el suelo, para obtener el sistema de referencia del _root motion_.
-A esto lo llama _root transform_.
+Esto se llama _root transform_.
 
 . En cada fotograma de la animación se calcula como cambia _root transform_, siendo estos cambios relativos los que se trasladan al _GameObject_.
 
@@ -151,7 +151,7 @@ image::unity_root_motion_humanoid.png[pdfwidth="11.34cm"]
 En la <<fig-unity-root-motion-humanoid>>, en la vista previa del modelo en la parte inferior del panel, se puede observar cómo se señala con una flecha azul la orientación de referencia de _root transform_.
 El círculo y la flecha roja nos muestran _root transform_ en el _frame_ actual.
 
-Unity permite seleccionar qué componentes del movimiento —como rotación, movimiento en Y o movimiento en XY— se suprimen de la animación del personaje y trasladan al _root transform_ en cada _frame_ y, por tanto, al _GameObject_, y cuáles se quedan en la animación.
+Unity permite seleccionar qué componentes del movimiento —como rotación, movimiento en Y o movimiento en XY— se suprimen de la animación del personaje y se trasladan al _root transform_ en cada _frame_ y, por tanto, al _GameObject_, y cuáles se quedan en la animación.
 
 En el recuadro verde en la <<fig-unity-root-motion-humanoid>> se pueden observar estos controles.
 Por ejemplo, si se marcamos *Animation > Root Transform Position (XZ) > Bake Into Pose*, los cambios en la posición de _root transform_ en el plano XZ en cada _frame_ se quedan en la animación y no se trasladan al _GameObject_.
@@ -168,7 +168,7 @@ Esto se hace porque generalmente preferimos controlar directamente el movimiento
 
 En realidad los modelos de {mixamo}[Mixamo] que estamos usando de ejemplo no son los más adecuados ni para trabajar con _root motion_ ni sin _root motion_.
 
-Si no vamos a usar _root motion_, somos nosotros los responsables de mover adecuadamente el actor o _GameObject_ del personaje por la escena.
+Si no vamos a usar _root motion_, somos nosotros los responsables de mover adecuadamente al actor o _GameObject_ del personaje por la escena.
 Por lo tanto, no nos interesa que la animación contenga traslaciones o rotaciones globales del esqueleto.
 Es decir, debemos pedir a los animadores que todas las animaciones del personaje sean «en el sitio».
 
@@ -234,9 +234,9 @@ Otro caso es el salto con ataque del siguiente vídeo:
 .{video-caption} {video-number}. Ejemplo de ataque con salto.
 video::wgBKap4y9UQ[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
 
-donde sería muy cómodo que el objeto del personaje sincronizara su movimiento con la animación.
+donde sería muy cómodo que el objeto del personaje sincronizase su movimiento con la animación.
 Pero por los mismos motivos que hemos comentado antes, lo mejor es controlar el movimiento desde la lógica del juego.
-Es decir, hacer salta el _GameObject_ y reproducir de forma sincronizada una animación «en el sitio» adecuada. 
+Es decir, hacer saltar el _GameObject_ y reproducir de forma sincronizada una animación «en el sitio» adecuada. 
 
 En general, es a la hora de diseñar cuando se determinan este tipo de cosas.
 Por ejemplo, si hay saltos con ataque: con qué longitud y altura, cuál es la velocidad al caminar y al correr, cómo son los pasos, etc.
