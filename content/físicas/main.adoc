@@ -77,7 +77,7 @@ Estos sistemas tienen un emisor que lanza partículas con una serie de propiedad
 A cada partícula se le pueden aplicar las reglas de la simulación de la dinámica de sólido rígido, por lo que también se pueden utilizar para simular objetos de pequeño tamaño en movimiento.
 Obviamente, el número de partículas viene limitado por la capacidad del hardware para simular una gran cantidad de estos objetos al mismo tiempo.
 
-=== Ragdoll
+==== Ragdoll
 
 Es una técnica utilizada para animar el movimiento de los personajes cuando mueren.
 Trata el cuerpo del personaje como una serie de cuerpos rígidos conectados y simula lo que ocurre cuando el cuerpo del personaje colapsa al caer inanimado.
