@@ -385,7 +385,7 @@ Santamaria, R. _CUSTOM GAME ENGINES: A Small Study_. https://gist.github.com/ray
 Nilsson, R. _Battery Performance Comparison Of Unreal Engine 4 And Unity Applications running on Android_. http://bth.diva-portal.org/smash/record.jsf?pid=diva2%3A1327691&dswid=2790
 
 * [[[Nowakowski2018,9]]]
-Novakowski, D. (2018, 11 de diciembre). Reducing build size of Android game in Unreal Engine 4. _Damian Nowakowski_. https://damnow.blogspot.com/2018/12/reducing-build-size-of-android-game-in.html
+Novakowski, D. (2018, 11 de diciembre). Reducing build size of Android game in Unreal Engine 4. _Damian Nowakowski_. Archivado en https://web.archive.org/web/20210103121932/https://damnow.blogspot.com/2018/12/reducing-build-size-of-android-game-in.html
 
 * [[[UE-Huge-APK,10]]]
 Read, H. [14852-henry-read]. (2015, 24 de junio). _Mobile Game Package Size is so huge_. Unreal Engine Forums. https://forums.unrealengine.com/development-discussion/android-development/45246-mobile-game-package-size-is-so-huge
