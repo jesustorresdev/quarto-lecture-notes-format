@@ -1,0 +1,13 @@
+// Separador de miles
+:K: &#x2009;
+// Símbolo de producto
+:x: &#215;
+// Elipsis
+:dots: &#8230;
+// Mucho menos
+ifdef::backend-pdf[:ll: <<]
+ifndef::backend-pdf[:ll: &#8810;]
+// Letras griegas
+:alpha: &#945;
+:tau: &#964;
+:Delta: &#916;
