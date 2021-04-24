@@ -192,8 +192,7 @@ Sin embargo es recomendable aprender a usar ProBuilder<<Unity-ProBuilder>>, que 
 ProBuilder está optimizado para crear formas sencillas, pero también ofrece herramientas de edición avanzadas, asignación de materiales y edición de UV, de forma similar a otros programas de modelado 3D.
 La <<fig-greybox-shooty-squad>> es una muestra de lo que permite hacer.
 
-ProBuilder trae algunas formas básicas que se pueden combinar mediante operaciones booleanas, para dar lugar a objetos más complejos.
-También permite modificar los objetos directamente, mediante distintos modos de edición: *Vertex*, *Edge* y *Face*.
+ProBuilder trae algunas formas básicas que se pueden modificar mediante distintos modos de edición: *Vertex*, *Edge* y *Face*; para generar formas más complejas
 En estos modos se pueden seleccionar vértices, aristas o caras, respectivamente, para transformarlos y cambiar totalmente la forma de la geometría.
 Una vez tenemos el objeto deseado, se pueden asignar colores a los vértices para marcar zonas del diseño o aplicar materiales.
 
