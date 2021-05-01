@@ -201,7 +201,8 @@ Eso ayuda a pensar si esas dependencias son necesarias o hace falta pensar mejor
 
 En {cpp} el uso de espacios de nombres también es una buena práctica, pero el *UnrealHeaderTool* de Unreal Engine no los soporta.
 Eso significa que en Unreal Engine se pueden usar espacios de nombres con el código {cpp} puro, pero no con el código heredado de `UObject` que interactúa con el motor y el editor.
-En su lugar se recomienda agrupar diferentes sistemas en distintos módulos.
+En su lugar se pueden agrupar diferentes sistemas en distintos módulos y _plugins_.
+Unreal Engine recomienda esta vía para modularizar el código que extiende el editor y las funcionalidades del motor, pero conviene sopesarlo bien para el código de _gameplay_ porque obliga a lidiar con mayor frecuencia con las interfaces entre módulos. 
 ====
 
 === Manager
