@@ -965,8 +965,82 @@ Sin embargo, para eventos que ocurren con mucha frecuencia —por ejemplo, casi 
 
 ==== Eventos en Unity
 
-En Unity se soportan eventos, para implementar este patrón, a través de dos mecanismos: eventos de C# y *UnityEvent*.
-Por lo general los desarrolladores prefieren los primeros ya que son nativos de C#, son algo más rápidos y consumen menos memoria cuando solo hay un solo suscriptor.
+C# en Unity soporta los conceptos de delegado y evento, que son muy útiles para implementar este patrón.
+
+Un delegado es una referencia a un método<<Microsoft-Delegates>>.
+Se puede pasar como argumento a un método y guardarlo en los campos de una clase.
+Luego el código de la clase puede invocar el método en el delegado para obtener información externa a demanda o para notificar un suceso —por ejemplo, haber completado una tarea o un error—.
+
+.Ejemplo de declaración y uso de un delegado.
+[source,csharp]
+----
+public class DelegateUseSample
+{
+    // ...
+    
+    public delegate int PerformCalculation(int x, int y); <1>
+    
+    // ...
+
+    public void Compute(int x, int y, PerformCalculation callback) <2>
+    {
+        // ...
+
+        PerformCalculation performCalculation = callback; <2>
+
+        // ...
+
+        int result = performCalculation(x, y); <3>
+    }
+}
+
+// ...
+
+public int Add(int x, int y)
+{
+    return x + y;
+}
+
+// ...
+
+var sample = new DelegateUseSample();
+sample.Compute(10, 20, Add); <2>
+----
+<1> Declaración del delegado `PerformCalculation`.
+`PerformCalculation` ahora es un tipo que se puede usar para declarar variables y campos en los que se puede guardar una referencia a un método que tenga exactamente los mismos argumentos de entrada y de salida.
+
+<2> Los métodos pueden recibir la referencia y guardarla en una variable local o en un campo de la clase.
+En el ejemplo se guarda el delegado en el argumento `callback` en la variable local `performCalculation`.
+
+<3> Cuando es necesario, se llama al método referenciado.
+
+C# y Unity también soportan eventos.
+Cada evento es un objeto que contiene una lista de delegados con referencias a métodos de otros objetos que se han suscrito a dicho evento<<Microsoft-Events>>.
+Un objeto se puede suscribir y desuscribir en cualquier momento de un evento.
+Cuando el objeto que tiene el evento quiere notificar un suceso, lo que hace es emitir el evento.
+Puesto que los eventos pueden invocar a múltiples suscriptores, no se permite que tengan un valor de retorno.
+
+.Ejemplo de declaración de un evento en C#.
+[source,csharp]
+----
+public class EventUseSample
+{
+    // ...
+    
+    public delegate void OnCompleteDelegate(int result); <1>
+    
+    public event OnCompleteDelegate OnComplete; <2>
+
+    // ...
+}
+----
+<1> Primero se declara el delegado `OnCompleteDelegate` que admite el evento.
+Como hemos comentado, el delegado no puede tener valor de retorno.
+
+<2> Después se declara el evento `OnComplete` usando el delegado `OnCompleteDelegate`.
+
+En Unity se soportan dos mecanismos: eventos de C# y *UnityEvent*.
+Por lo general los desarrolladores prefieren los primeros, ya que son nativos de C#, son algo más rápidos y consumen menos memoria cuando solo hay un suscriptor.
 Sin embargo, *UnityEvent* tiene algunas ventajas importantes<<Dunstan2016>>:
 
 * Los objetos *UnityEvent* se pueden serializar, por lo que se pueden configurar desde el editor.
@@ -976,12 +1050,37 @@ Por eso son ideales cuando queremos que los diseñadores puedan configurarlos.
 Esto quiere decir que no es buena idea usarlo con listas grandes de suscriptores, especialmente si previsiblemente se van a suscribir y desuscribir frecuentemente en cada _frame_.
 
 * Si se usan eventos de C#, es importante recordar que los objetos deben desuscribirse al destruirse, en el método `OnDestroy()`.
-De lo contrario, el evento mantendrá una referencia al objeto suscripto, por lo que la memoria no será liberada por el _recolector de basura_ de Unity.
+De lo contrario, el evento mantendrá una referencia al objeto suscripto, por lo que la memoria no será liberada por el recolector de basura de Unity.
 
 ==== Eventos en Unreal Engine
 
-Unreal Engine soporta distintos tipos de delegados en {cpp} que pueden servir para implementar el patrón _observer_<<UE-Delegates>>.
-En _blueprints_ se utilizan *Event Dispatcher*<<UE-Event-Dispatchers>>.
+El concepto de puntero a función de C y {cpp} es más primitivo pero similar al de delegado en C#.
+Aun así, Unreal Engine ha desarrollado soluciones prácticamente equivalentes a las que hemos comentado para C#.
+
+* *Delegado* simple<<UE-Delegates>>.
+Son tipos de objetos que pueden guardar una referencia a una función, método o función lambda.
+Se pueden usar en clases y _structs_ que no sean `UCLASS`, se pueden copiar, pasar por valor como argumento de funciones y, si guardan una referencia a un método de un `UObject`, lo hace como una referencia débil al objeto.
+Es decir, que el delegado sabe si el objeto ha sido destruido antes de usar la referencia, pero esta no cuenta para evitar su reciclado por parte del recolector de basura.
+
+* *Delegado _multi-cast_*<<UE-Multicast-Delegates>>.
+Tiene las mismas características que los *delegados simples*, pero puede guardar múltiples referencias a distintas funciones y métodos al mismo tiempo, lo que permite usarlos para notificar un evento a múltiples objetos.
+Como ocurre con los eventos de C#, no pueden tener valor de retorno.
+
+* *Evento*<<UE-Events>>.
+Tiene las mismas características que los *delegados _multi-cast_*, pero solo la clase que declara el evento puede emitirlo.
+Es decir, que una clase puede exponer el evento con seguridad en su interfaz pública, sabiendo que cualquier otro objeto puede suscribirse, pero solo ella podrá emitirlo. 
+
+* *Delegado dinámico*<<UE-Dynamic-Delegates>>.
+Internamente guarda la referencia a los métodos registrados sin usar punteros, sino mediante el identificador del objeto y el nombre de la función.
+Eso significa que cuando se invoca el delegado, tiene que consultar al sistema de reflexión de Unreal Engine la dirección en la memoria de los métodos registrados para llamarlos.
+Por lo tanto, son más lentos que otros tipos de delegado y necesita que los métodos registrados hayan sido marcados como `UFUNCTION()`, pero tienen la ventaja que pueden ser serializados para ser almacenados y configurados en el editor.
+También permiten indicar el método que queremos suscribir simplemente usando una cadena con su nombre.
++
+Los delegados dinámicos existen tanto en versión simple como _multi-cast_
+
+En _blueprints_ se utilizan eventos y *Event Dispatcher*<<UE-Event-Dispatchers>>.
+Los métodos marcados en {cpp} como `BlueprintNativeEvent` o `BlueprintImplementableEvent` se exponen en _blueprint_ como eventos.
+Mientras que los *delegados dinámicos _multi-cast_* se exponen como *Event Dispatchers*.
 
 === Event Bus
 
@@ -1448,33 +1547,50 @@ Conteras, V. (2019, 19 de septiembre). Patrón de diseño Object Pooling en Unit
 * [[[Wikipedia-Observer,18]]]
 Observer (patrón de diseño). En _Wikipedia_. link:pass:[https://es.wikipedia.org/wiki/Observer_(patrón de diseño)][]
 
-* [[[Dunstan2016,19]]]
+* [[[Microsoft-Delegates,19]]]
+Microsoft Corporation. Utilizar delegados (Guía de programación de C#). _Guía de C#_.
+https://docs.microsoft.com/es-es/dotnet/csharp/programming-guide/delegates/using-delegates
+
+* [[[Microsoft-Events,20]]]
+Microsoft Corporation. Procedimiento Suscribir y cancelar la suscripción a eventos (Guía de programación de C#). _Guía de C#_.
+https://docs.microsoft.com/es-es/dotnet/csharp/programming-guide/events/how-to-subscribe-to-and-unsubscribe-from-events
+
+* [[[Dunstan2016,21]]]
 Dunstan, J. (2016, 25 de enero). Event Performance: C# vs. UnityEvent. _JacksonDunstan.com_. https://www.jacksondunstan.com/articles/3335
 
-* [[[UE-Delegates,20]]]
+* [[[UE-Delegates,22]]]
 Epic Games, Inc. Delegates. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/index.html
 
-* [[[UE-Event-Dispatchers,21]]]
-Epic Games, Inc. Event Dispatchers. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/ProgrammingAndScripting/Blueprints/UserGuide/EventDispatcher/index.html
+* [[[UE-Multicast-Delegates,23]]]
+Epic Games, Inc. Multi-cast Delegates. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/index.html
 
-* [[[Wikipedia-Corrutina,22]]]
+* [[[UE-Events,24]]]
+Epic Games, Inc. Events. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/Events/index.html
+
+* [[[UE-Dynamic-Delegates,25]]]
+Epic Games, Inc. Events. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/Events/index.html
+
+* [[[UE-Event-Dispatchers,26]]]
+Epic Games, Inc. Dynamic Delegates. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/Dynamic/index.html
+
+* [[[Wikipedia-Corrutina,27]]]
 Corrutina. En _Wikipedia_. https://es.wikipedia.org/wiki/Corrutina
 
-* [[[Unity-Job-System,23]]]
+* [[[Unity-Job-System,28]]]
 Unity Technologies. Jobs System. _Unity Manual_. https://docs.unity3d.com/Manual/JobSystem.html
 
-* [[[UE-FQueuedThreadPool,24]]]
+* [[[UE-FQueuedThreadPool,29]]]
 Epic Games, Inc. FQueuedThreadPool. _Unreal Engine 4 Documentation_. 
 https://docs.unrealengine.com/en-US/API/Runtime/Core/Misc/FQueuedThreadPool/index.html
 
-* [[[Dunstan2015,25]]]
+* [[[Dunstan2015,30]]]
 Dunstan, J. (2015, 2 de marzo). Unity Coroutine Performance. _JacksonDunstan.com_. https://www.jacksondunstan.com/articles/2981
 
-* [[[Wikipedia-MVP,26]]]
+* [[[Wikipedia-MVP,31]]]
 MVP. En _Wikipedia_. https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93presentador
 
-* [[[Wikipedia-MVVM,26]]]
+* [[[Wikipedia-MVVM,32]]]
 MVVM. En _Wikipedia_. https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel
 
-* [[[Unity-Architect-With-SO,26]]]
+* [[[Unity-Architect-With-SO,33]]]
 Unity Technologies. (2020, enero). _Three ways to architect your game with ScriptableObjects_. Unity. https://unity.com/how-to/architect-game-code-scriptable-objects
