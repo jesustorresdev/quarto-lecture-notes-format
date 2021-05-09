@@ -809,7 +809,62 @@ Sus campos guardan el estado origen y destino de la transición y una función q
 . Llamar al método `Tick()` del estado actual.
 
 Es fácil encontrar en Internet implementaciones de máquinas de estados, algunas mucho más completas, con características adicionales.
-Para problemas realmente complejos, probablemente necesitaríamos una máquina de estados jerárquica, donde cada estado puede tener a su vez su propia máquina de estados.
+
+==== Máquina de estados dirigida por eventos
+
+En la máquina de estados del ejemplo anterior ocurre una transición si se cumplen ciertas condiciones que se comprueban periódicamente.
+Por ejemplo, en la máquina de estados de un NPC, si en un _frame_ se detecta un jugador cerca, se puede hacer que cambie al estado donde se le comienza a perseguir.
+Mientras que en la máquina de estados de locomoción, si la velocidad del personaje supera cierto umbral, se puede hacer que pase del estado `Walking` a `Running`.
+
+Sin embargo, a veces es más cómodo tener una implementación que permita que las transiciones también se disparen mediante eventos.
+Por ejemplo, si el motor que estamos utilizando gestiona la entrada del jugador mediante eventos, interesa que estos eventos se puedan usar para disparar directamente transiciones entre estados.
+Es decir, si tenemos una máquina de estados para las acciones del personaje, que esta pueda pasar del estado `Idle` al estado `Firing` cuando llega el evento generado cuando el jugador pulsa el botón de disparo.
+También es interesante para trabajar con interfaces de usuario, ya que suelen desarrollarse usando el paradigma de la programación orientada a eventos.
+Es decir, que acciones como pulsar un botón, seleccionar una opción de menú o arrastrar y soltar, lo que hacen es generar eventos que tenemos que procesar.
+Por lo que resulta muy cómodo poder usarlos directamente para disparar transiciones en nuestras máquinas de estados.
+
+Las máquinas de estados donde las transiciones se disparan por eventos o mensajes se denominan *máquinas de estados dirigidas por eventos*.
+
+==== Máquina de estados jerárquica
+
+Para problemas realmente complejos probablemente necesitemos una *máquina de estados jerárquica*.
+
+Existen dos formas de máquina de estados jerárquicas que, lamentablemente, a veces se confunden porque es común usar para ambas la misma denominación.
+
+Cuando tenemos estados que tienen un comportamiento común, se puede usar el mecanismo de herencia de la programación orientada a objetos para implementarlo en una clase base y extenderlo o sobrescribirlo parcialmente en las clases de los estados derivados.
+
+La otra alternativa es tener una máquina de estados donde cada estado puede tener a su vez su propia máquina de estados.
+Los primeros se llaman *superestados* mientras los segundos son los *subestados*. 
+Como los subestados, a su vez, pueden tener sus propias máquinas de estados, a veces se las llama *máquinas de estado anidadas*.
+Otra denominación común es *máquinas de estado basadas en pila*, ya que muchas veces se implementan usando una pila para recordar los subestados / superestados en el momento actual en cada nivel. 
+
+Las *máquinas de estado anidadas* son útiles para casos como cuando tenemos una máquina para controlar las diferentes acciones posibles de nuestro personaje, algunas de esas acciones son ataques y esos ataques admiten ciertos _combos_.
+En este ejemplo la máquina de estados de acciones estaría en el primer nivel, con un superestado para cada acción y las transiciones posibles entre ellos.
+Algunos de esos superestados —como los ataques con combo— tendrán su propia máquina de estados con subestados para cada una de las etapas de dichas acciones y sus transiciones.
+
+==== Estados paralelos
+
+Aunque las máquinas de estados jerárquicas son una herramienta muy potente, en casos realmente complejos puede incrementarse increíblemente el número de estados, complicando su mantenimiento.
+
+Por ejemplo, si implementamos la inteligencia artificial de nuestros NPC mediante una máquina de estados, tendremos estados para: no hacer nada, buscar al jugador, perseguirlo, atacar, entre otros.
+Cada uno de estos estados puede tener su máquina de estados para gestionar diferentes formas de desplazamiento: parado, caminando, agachado, sigilo, corriendo, saltando, etc.
+Al mismo tiempo, en cada uno se pueden ejecutar diferentes acciones: no hacer nada, atacar a distancia, ataque cuerpo a cuerpo, cubrirse, defenderse, buscar; cada una de las cuales puede necesitar varias etapas o estados para completarse.
+
+Entonces es cuando puede ser buena idea dividir comportamientos tan complejos en diferentes subsistemas, como si nuestro personaje tuviera cerebros distintos especializados en tipos de tareas concretas.
+En cada uno de estos cerebros podemos usar una máquina de estados independiente —o cualquier otra técnica— para definir su comportamiento.
+
+En el ejemplo anterior, por ejemplo, la inteligencia artificial puede determinar la siguiente acción del personaje mediante una máquina de estados —o un _behavior tree_ o cualquier otra técnica de IA similar— pero para las transiciones entre estados de desplazamiento del personaje y acciones, se pueden utilizar máquinas de estados independientes.
+Incluso se pueden utilizar máquinas de estado independientes para gestionar los subestados de acciones especialmente complejas.
+El objetivo es que cada cerebro sea más sencillo de diseñar y entender.
+
+Obviamente, para que el comportamiento sea realista, las distintas máquinas de estado no pueden funcionar de forma completamente independiente.
+Es necesario que se sincronicen en las transiciones, para lo que hace falta una región con variables compartidas donde las máquinas de estados puedan informar de sus acciones y consultar los estados de otras máquinas para determinar qué transiciones son posibles en cada momento.
+Así, por ejemplo, se puede establecer qué acciones del personaje y formas de desplazamiento son compatibles con los distintos estados de la IA, permite limitar qué acciones están disponibles en cada forma de desplazamiento del personaje o cuáles de estas formas se pueden iniciar en mitad de cada acción, entre muchos otros usos posibles.
+
+El resultado se puede ver como una gran máquina de estado donde varios subestados pueden estar activos al mismo tiempo.
+Otros nombres son *autómata paralelo* o *máquina de estados concurrentes*.
+
+==== Corrutinas
 
 Las corrutinas —de las que hablaremos en el <<_corrutinas>>— también son una forma implícita de implementar máquinas de estados.
 Si nuestro entorno de desarrollo soporta corrutinas, elegir entre usar estas o una implementación explícita de máquina de estados como la anterior, depende del caso.
