@@ -407,6 +407,9 @@ Sin embargo, lo que nos interesa destacar es la posibilidad de crear nuestros pr
 Es buena idea estructurar nuestros proyectos en torno a un conjunto de componentes reutilizables —por ejemplo, entrada de usuario, controlador del personaje, sistema de inventario, interfaz de usuario, sistema de conducción, IA, carga de niveles, etc.— y desarrollar e incorporar cada uno a nuestros proyectos en paquetes separados.
 Esto puede facilitar enormemente el mantenimiento y reutilización del código.
 
+TIP: El uso de paquetes puede resultar tremendamente útil para desarrollar y mantener dos versiones del mismo juego con distintos _renders_ —como URP para la versión móvil y HDRP para la versión de PC y consolas—.
+En este caso, cada versión tiene su propio proyecto Unity con los paquetes y la configuración del _render_ y otros componentes específicos de la versión, al tiempo que buena parte del código del juego se comparte entre versiones a través del uso de paquetes propios de Unity.
+
 Los paquetes de Unity propios se pueden distribuir al resto del equipo mediante archivos `.zip`, directamente desde un repositorio de Git —usando su URL— o mediante un registro NPM privado.
 
 == Jerarquía de la escena
