@@ -177,8 +177,11 @@ Por eso una de las grandes ventajas de los motores comerciales como Unreal Engin
 .Captura de pantalla del editor de Frostbite -- Fuente: {frosted-screenshot}[@EA_DICE]
 image::frosted.jpg[]
 
-Los estudios que desarrollan sus propios motores pueden tener un equipo dedicado al desarrollo de herramientas y optar por crear sus propios editores.
-Sin embargo, tener un buen editor —como los de los motores comerciales— puede ser incluso más costoso de desarrollar el motor, así que es algo que los estudios con menos recursos van haciendo a lo largo de varios títulos. 
+Los estudios que desarrollan sus propios motores pueden tener un equipo dedicado al desarrollo de herramientas, pero en muchos casos se basan en archivos de texto —en formatos como JSON o XML— o en bases de datos.
+Esto quiere decir que los artistas y diseñadores deben aprender a hacer su trabajo en iteraciones que consisten en: modificar los archivos, ejecutar las herramientas, probar el resultado y, si este no es satisfactorio, volver a repetir.
+Obviamente, esta forma de trabajar es mucho más lenta que cuando se dispone de un editor adecuado; lo que explica, en parte, los mayores tiempos de desarrollo, los retrasos y el famoso _crunch_ en las producciones AAA.
+
+Sin embargo, tener un buen editor —como los de los motores comerciales— puede ser incluso más costoso de desarrollar que el motor, así que es algo que, en todo caso, los estudios van haciendo a lo largo de múltiples títulos y varios años.
 
 Algo bastante común es utilizar aplicaciones gráficas 3D como Maya, 3ds Max o Houdini, personalizándolas mediante extensiones para utilizarlas como editores de nivel, para visualizar los resultados con el _render_ del motor y para exportar los recursos en los formatos que el motor utiliza.
 

@@ -211,9 +211,10 @@ Los _managers_ gestionan una colección de entidades.
 Por ejemplo, NPC, proyectiles, enemigos, cámaras, sistemas de partículas, etc.
 Para mejorar el rendimiento, pueden almacenar los objetos en un _pool_ de objetos para reusarlos rápidamente.
 
-Los _managers_ también facilitan encontrar rápidamente todos los objetos de cierto tipo, evitando usar las funciones de búsqueda del motor —como las funciones `FindXXXXXX()` en Unity— que son más lentas.
+Los _managers_ también facilitan encontrar rápidamente todos los objetos de cierto tipo u objetos de uso común, evitando usar las funciones de búsqueda del motor —como las funciones `FindXXXXXX()` en Unity— que son más lentas.
 Por ejemplo, es buena idea tener un `CameraManager` que permita conocer las cámaras existentes y obtener rápidamente una referencia a la cámara activa.
 En Unity se puede usar `camera.main` para conocer la cámara activa, pero esta propiedad usa la función `FindGameObjectsWithTag()`, lo que es más lento que tener un _manager_ con una referencia a la cámara.
+
 De igual forma, en juegos multijugador, es buena idea tener en la escena un `PlayerManager` a quien preguntarle por todos los jugadores conocidos, en lugar de pedirle al motor que los busque de entre todos los objetos de la escena.
 
 [TIP]
@@ -226,16 +227,19 @@ Por eso es buena idea implementar un _manager_ de temporizadores, que se encargu
 
 // TODO: Hacer una posible implementación.
 
-Aunque por lo comentado pueda parecer que de cada tipo de _manager_ solo hay uno en cada escena, lo cierto es que no es así.
+Los _managers_ suelen relacionarse mucho con el patrón _singleton_ (véase el <<_singleton>>) ya que ofrece una forma de asegurar que solo existe una instancia de una clase y que se puede obtener acceso a esta desde cualquier punto del código.
+Sin embargo, no todo los _managers_ tienen que ser únicos y accesibles desde cualquier lugar.
 En la <<fig-inventory-system>> se puede observar como cada personaje que puede llevar `InventoryItem` tiene su componente `InventoryManager`.
-En general, no parece interesante conocer y gestionar de forma centralizada todos los `InventoryItem` de la escena, sino que cada personaje lo gestione en su _manager_.
+En general, no parece interesante conocer y gestionar de forma centralizada todos los `InventoryItem` de la escena, sino que cada personaje lo gestione en un _manager_ privado.
 
 === Game Manager
 
-El _game manager_ es un tipo especial de manager dedicado a llevar el flujo del juego: carga de escenas y transiciones, modos de pausa y de menús, etc.
-
+El _game manager_ es un tipo especial de manager dedicado a llevar el flujo del juego: carga de escenas y transiciones, modos de menús y pausa, etc. 
 En los juegos pequeños puede ser responsable de centralizar otros aspectos del estado del juego, como: puntuaciones, vidas, aparición de enemigos y jugadores, etc.
 Pero en juegos grandes es mejor separar esas responsabilidades en otros componentes.
+
+Puede usarse para guardar referencias a otros componentes a los que se necesita acceder globalmente —como otros _managers_— evitando tener que buscar entre todas las entidades del juego cada vez que los necesitamos.
+Como mencionamos anteriormente, las funciones tipo `FindXXXXXX()` que sirven para buscar entre todas las entidades del juegos, suelen ser bastante lentas.
 
 === Controlador
 
@@ -825,6 +829,9 @@ Por lo que resulta muy cómodo poder usarlos directamente para disparar transici
 
 Las máquinas de estados donde las transiciones se disparan por eventos o mensajes se denominan *máquinas de estados dirigidas por eventos*.
 
+// TODO: Incluir diagramas: Por ejemplo de Core Techniques and Algorithms in Game Programming
+// http://www.yaldex.com/game-programming/0131020099_ch06lev1sec3.html
+
 ==== Máquina de estados jerárquica
 
 Para problemas realmente complejos probablemente necesitemos una *máquina de estados jerárquica*.
@@ -1001,6 +1008,8 @@ En ese caso, sería ideal que la clase fuera genérica para facilitar la reutili
 El otro aspecto es que seguramente sería mejor utilizar como contenedor `Stack` en lugar de `Queue`, ya que ofrece mejor {localidad-referencia}[localidad de referencia].
 Es decir, previsible se aprovechan mejor las memorias caché al reutilizar primero los objetos usados más recientemente.
 ====
+
+// TODO: Ideas del object pool en Unreal Engine.
 
 === Observer
 
@@ -1230,7 +1239,7 @@ Por ejemplo, si una clase depende de tener una referencia a un personaje solo pa
 Cuando la comunicación es directa pero el objeto invocado se va a utilizar frecuentemente desde múltiples componentes de la aplicación, es posible que nos interese que dicho objeto sea un _singleton_.
 Así la referencia a la instancia es muy sencilla de obtener, con solo conocer la clase.
 
-Sin embargo, es importante recordar que los problemas de los _singleton_ son similares a los de las variables globales, por lo que es mejor limitar su uso.
+Sin embargo, es importante recordar que los problemas de los _singleton_ son similares a los de las variables globales, por lo que no debemos olvidar los criterios indicados en el <<_singleton_>> antes de lanzarnos a usarlos a discreción.
 
 === Eventos
 
@@ -1517,18 +1526,23 @@ Los _scriptable objects_ pueden hacernos la vida más fácil a la hora de organi
 Como hemos visto, se pueden usar para guardar variables —como la salud del jugador o el estado del juego— que van a ser utilizados en múltiples componentes de la escena.
 Pero también sirven para implementar bases de datos, listas de elementos o crear _enums_ que los diseñadores puedan editar sin tener conocimientos de programación.
 
-En <<Unity-Architect-With-SO>> también se sugiere usarlos para crear un bus de eventos del juego o incluso para implementar _managers_ y sistemas completos, evitando así el uso del patrón _singleton_.
+En <<Unity-Architect-With-SO>> también se sugiere usarlos para crear un bus de eventos del juego o incluso para implementar _managers_ y sistemas completos, evitando el uso del patrón _singleton_.
 
 Lo interesante es que de esta forma no hay que pelearse con tener objetos que pervivan a la carga de una escena.
 Todas las escenas son independientes.
 Cuando termina una se carga la siguiente, sin más.
-Las escenas toman la información de los _scriptable objects_ y estos mantienen los valores modificados durante la ejecución, siempre que en las escenas haya al menos un componente con una referencia al _scriptable object_.
+Las escenas toman la información de los _scriptable objects_ y estos mantienen los valores modificados durante la ejecución del juego, siempre que en las escenas haya al menos un componente con una referencia al _scriptable object_.
 
-El «inconveniente» es que los componentes, en lugar de acceder a un _singleton_ directamente desde el código, deben tener una referencia pública a cada _manager_ al que necesitan acceder.
+El «inconveniente» es que los componentes, en lugar de acceder a un _singleton_ directamente desde el código, deben tener un campo serializable con una referencia a cada _manager_ al que necesitan acceder implementado como _scriptable object_.
 Por ejemplo, todos los componentes que necesiten acceder al `AudioManager` tendrán que tener un campo `AudioManager` accesible desde el editor, para desde él indicar el recurso _scritable object_ con el `AudioManager` que se quiere que use.
 
 Aunque esto puede parecer tedioso, lo cierto es que el uso de _prefabs_ con valores preconfigurados por defecto, ayuda a que este trabajo no tenga que repetirse muchas veces.
-Igualmente, se puede emplear el método `OnValidate()` de los componentes para asignar automáticamente valores por defecto a este tipo de campos.
+Otra solución es emplear el método `OnValidate()` de los componentes para asignar automáticamente valores por defecto a este tipo de campos.
+
+// Hablar de singleton en scriptable objects.
+// Y siempre podemos tener un singleton scriptable object..
+
+=== Más información y ejemplos
 
 Todo el interés sobre el uso de _scriptable objects_ para mejorar la arquitectura de los juegos surgió a raíz de una conferencia en Unite 2016:
 
