@@ -1239,7 +1239,7 @@ Por ejemplo, si una clase depende de tener una referencia a un personaje solo pa
 Cuando la comunicación es directa pero el objeto invocado se va a utilizar frecuentemente desde múltiples componentes de la aplicación, es posible que nos interese que dicho objeto sea un _singleton_.
 Así la referencia a la instancia es muy sencilla de obtener, con solo conocer la clase.
 
-Sin embargo, es importante recordar que los problemas de los _singleton_ son similares a los de las variables globales, por lo que no debemos olvidar los criterios indicados en el <<_singleton_>> antes de lanzarnos a usarlos a discreción.
+Sin embargo, es importante recordar que los problemas de los _singleton_ son similares a los de las variables globales, por lo que no debemos olvidar los criterios indicados en el <<_singleton>> antes de lanzarnos a usarlos a discreción.
 
 === Eventos
 

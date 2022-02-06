@@ -1,4 +1,5 @@
 :doctype: article
+:nofooter:
 include::symbols.adoc[]
 // Configuración del idioma.
 :lang: es
@@ -9,6 +10,8 @@ include::locale/attributes.adoc[]
 // Activar las referencias de texto completo con: etiqueta, número y título.
 :sectnums:
 :xrefstyle: short
+// Activar el enlace permanente en los encabezados
+:sectanchors:
 // Usar Font Awesome para los iconos.
 :icons: font
 // Activar el coloreado de sintaxis.
@@ -21,5 +24,6 @@ include::locale/attributes.adoc[]
 :toc: left
 // Configuración del backend HTML5
 ifdef::backend-html5[include::html5/attributes.adoc[]]
+ifdef::backend-multipage_html5[include::html5/attributes.adoc[]]
 // Configuración del backend PDF
 ifdef::backend-pdf[include::pdf/attributes.adoc[]]

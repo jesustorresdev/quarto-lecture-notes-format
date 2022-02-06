@@ -7,14 +7,25 @@ Project::documents.each do |document|
         desc "Generar la versión en HTML de '#{document[:pathname]}'"
         task :html => [ document[:output_pathnames][:html], :html_media_files ]
 
-        file document[:output_pathnames][:html] => [*document[:dependencies], :config] do |t|
-            asciidoctor_opts = CONFIG[:asciidoctor_opts] + CONFIG[:asciidoctor_html_opts]
-            sh "asciidoctor", '--backend', 'html5',
+        file document[:output_pathnames][:html] => [*document[:dependencies], :config] do |t, args|
+            asciidoctor_args = CONFIG[:asciidoctor_args] + CONFIG[:asciidoctor_html_args]
+            if Utils::EnvVar.new('HTML_COMMENTS_ENABLED').to_boolean
+                asciidoctor_args += ['--attribute', 'comments_enabled=true']
+            end
+
+            backend_args = Utils::EnvVar.new('HTML_MULTIPAGE').to_boolean ? [
+                    '--backend', 'multipage_html5',
+                    '--require', 'asciidoctor-multipage'
+                ] : [
+                    '--backend', 'html5'
+                ]
+            
+            sh "asciidoctor", *backend_args,
                               '--require', './lib/time-admonition-block.rb',
                               '--attribute', "basedir=#{Project::PROJECT_DIRECTORY}",
                               '--attribute', "outdir=#{document[:output_directories][:html]}",
-                              *asciidoctor_opts,
-                              '--out-file', t.name, t.prerequisites.first()
+                              *asciidoctor_args,
+                              '--destination-dir', document[:output_directories][:html], t.prerequisites.first()
         end
 
         task :html_media_files do |t|
