@@ -1,3 +1,4 @@
-:fn-espacio-funcional: pass:n[En <<Schell2019>> se define el _espacio funcional_ como aquel donde tienen lugar el juego, una vez se han eliminado todos los elementos superficiales.]
+:fn-flow: Un nivel con buen control del _flow_ dirije al jugador hacia el objetivo, evitando parones y momentos de confusión no intencionados en el juego.
+:fn-espacio-jugable: pass:n[En <<Schell2019>> se define el _espacio funcional_ como aquel donde tienen lugar el juego, una vez se han eliminado todos los elementos superficiales.]
 :fn-git-lfs: pass:n[En Git se pueden conseguir características similares utilizando {git-lfs}[Git LFS].]
 :fn-ue-prefabs: pass:n[Unreal Engine no soporta _prefabs_ de serie, pero en el _marketplace_ existen diferentes soluciones que sí los implementan.]
