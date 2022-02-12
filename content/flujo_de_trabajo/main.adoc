@@ -292,7 +292,7 @@ Sergeev, A. (2020, 16 de noviembre). A Look at Blockouts in Star Wars Jedi: Fall
 * [[[Mesh-Tool,5]]]
 Nate, M. Mesh Tool. https://www.unrealengine.com/marketplace/en-US/product/mesh-tool
 
-* [[Blockout-Tools-Plugin,6]]]
+* [[[Blockout-Tools-Plugin,6]]]
 Karpukhin, D. Blockout Tools Plugin. https://www.unrealengine.com/marketplace/en-US/product/blockout-tools-plugin
 
 * [[[Unity-ProBuilder,7]]]
