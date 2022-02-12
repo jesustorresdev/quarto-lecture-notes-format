@@ -8,4 +8,3 @@
 :mathew-wadstein: https://twitter.com/mathewwadstein
 
 :ue-greometry-editing-tutorials: https://youtube.com/playlist?list=PL9J8qtfVcvqFeFiiLLS815bZc6bJPmVDY
-:ue-blockout: https://www.unrealengine.com/marketplace/en-US/product/blockout-tools-plugin

@@ -61,26 +61,54 @@ Y, durante la segunda mitad de la *preproducción*, a veces es necesario hacer u
 El objeto de este prototipo es ofrecer al editor e inversores una idea de cómo será el juego final, dado que seguramente tengan que aprobar el presupuesto y la planificación.
 Además, permite identificar futuros problemas y ayuda en la estimación de las tareas y su tiempo, ya que permite obtener una idea de todo lo que debemos considerar durante el trabajo en la etapa de *producción*.
 
-El prototipado de niveles en *preproducción* se puede hacer de múltiples maneras, según el tipo de juego y lo que se pretenda probar.
+El prototipado de niveles en se puede hacer de múltiples maneras, según el tipo de juego y lo que se pretenda probar.
 Puede ser usando herramientas analógicas, como lápiz y papel o legos, o con herramientas digitales, como Photoshop, Sketchup, Maya o el propio motor de videojuegos; o una combinación de varias de estas herramientas en distintas iteraciones sobre el prototipo.
 Sea como fuere, en algún momento el nivel se prototipa usando un conjunto mínimo de recursos, empleando cajas y modelos de _stock_ o de proyectos previos, y pocas o ninguna textura.
 Por eso a esta fase se la denomina con nombres como: *_blocking_*, *_greyboxing_*, *_whiteboxing_* o *_blockout_*.
 
-En algunos estudios se hace pronto el *_greyboxing_*, desde fases muy tempranas de la *preproducción*. 
+En algunos estudios el *_greyboxing_* se hace pronto, desde fases muy tempranas de la *preproducción*, para probar y establecer las mecánicas y las características del diseño de niveles.
+Cuando estas están lo suficientemente bien definidas, el proyecto pasa a la etapa de *producción*.
+Para que eso ocurra no es necesario haber prototipado todo el juego, sino algunos niveles y las mecánicas principales, en los que se ha iterado hasta refinar el diseño lo suficiente como para tener unas guías claras para la siguiente etapa.
+
+Durante la producción, el *_greyboxing_* sigue siendo extremadamente útil para el diseño y prototipado del resto de niveles del juego, solo que los diseñadores pueden explorar y probar el nivel con un _gameplay_ más próximo a como serán en el producto final.
+
+== Después del prototipado
+
+Una vez el *_greyboxing_* de un nivel se da por terminado y el _gameplay_ funciona, se compone el nivel con las mallas estáticas definitivas.
+Posteriormente, se ilumina el nivel, para lo cual los artistas usan para guiarse imágenes de referencia de cómo se quiere que sea la iluminación.
+
+Para la iluminación del nivel:
+
+. El primer paso es darle al nivel el ambiente adecuado.
+Se suele empezar por fuentes de luz primarias, como el sol o la luna y la iluminación ambiental —como el _SkyLight_ en Unreal Engine—.
+En interiores se pueden usar focos muy brillantes, que iluminen la mayor parte del área.
+
+. Después se añaden fuentes secundarias, como: focos, lámparas, pantallas, fuegos, antorchas, velas, etc.
+Primero aquellas destinadas a ayudar a la navegación por el entorno, por lo que se iluminan entradas y salidas.
+Es interesante tener una jerarquía.
+Las salidas más importantes deberían destacar más.
+
+. A continuación se iluminan elementos relacionados con el _gameplay_: puzles, sugerencias de áreas a explorar, puntos de aproximación de los enemigos o posibles estrategias.
+
+. Finalmente se hace el ajuste fino de toda la iluminación.
+
+En esta fase también se suelen incorporar los efectos de posprocesos, dado que afectan y se ven afectados por la iluminación.
+
+Por último, se itera puliendo los detalles del nivel; añadiendo: sonidos, sistemas de partículas y reflexiones; y se optimiza su funcionamiento en las distintas plataformas.
 
 == Greyboxing
 
 La idea del *_greyboxing_* es obtener un bosquejo aproximado —sin detalles ni texturas, usando figuras geométricas básicas— de la distribución del nivel para centrar la atención sobre características principales como: tamaño, escala, proporciones, composición y espacio jugable.
-Hacer el *_greyboxing_* en el propio motor de videojuegos abre la puerta a ir desarrollando y probando el código de _gameplay_ al mismo tiempo e iterar probando el diseño, refinando así aspectos como: navegabilidad, durabilidad, ritmo{blank}footnote:[{fn-pacing}] y fluir{blank}footnote:[{fn-flow}] del juego.
+Hacer el *_greyboxing_* en el propio motor de videojuegos abre la puerta a ir desarrollando y probando el código de _gameplay_ al mismo tiempo e iterar probando el diseño, refinando así aspectos como: navegabilidad, durabilidad, ritmo{blank}footnote:[{fn-pacing}] del nivel y fluir{blank}footnote:[{fn-flow}] del juego.
 
 .Blocking en Maya a partir de un diseño en papel -- Fuente: {blocking-in-maya}[World of Level Design].
 image::blocking_in_maya.jpg[]
 
 Durante la *producción*, cuando los modelos estáticos y animados estén listos, las cajas del *_greyboxing_* son reemplazadas para componer el nivel definitivo.
 
-En una primera etapa, se pueden crear planos en papel de las diferentes plantas del nivel, considerando las restricciones establecidas por los equipos de diseño y desarrollo.
+En una primera etapa, es aconsejable crear planos en papel de las diferentes plantas del nivel, considerando las restricciones establecidas por los equipos de diseño y desarrollo.
 Posteriormente, estos planos se trasladan al *_greyboxing_* del nivel, usando figuras geométricas básicas, sin detalles, con texturas de desarrollo y solo empleando una iluminación muy básica.
-Algunos diseñadores prefieren comenzar a trabajar en un nivel empezando directamente por el *_greyboxing_* en 3D.
+Algunos diseñadores con experiencia prefieren comenzar a trabajar en un nivel empezando directamente por el *_greyboxing_* en 3D.
 
 Es importante recordar que el *_greyboxing_* es un prototipo del diseño, por lo que cambiarán según se prueba y avanza el desarrollo del juego.
 Así que debe ser modular, sencillo de modificar y sin detalles; porque durante las iteraciones del diseño muchos aspectos serán desechados o cambiados.
@@ -93,7 +121,7 @@ Algunos incluso comparten algunas de las iteraciones, para mostrar la evolución
 Para ver los trabajos, basta con buscar el _hashtag_ https://twitter.com/search?q=%23Blocktober&src=typed_query[#Blocktober] en Twitter.
 ====
 
-En muchos casos se hace *_greyboxing_* de niveles muy básicos, solo para servir de _sandbox_ donde probar mecánicas y sistemas.
+En muchos casos se hace *_greyboxing_* de niveles muy básicos, solo para servir de _sandbox_ donde probar mecánicas, sistemas y reglas de diseño.
 Estos niveles no se siguen desarrollando, una vez han servido para su cometido, ni se incorporan al juego terminado.
 
 === Rejillas y escalas
@@ -116,7 +144,7 @@ Por eso se tiende a crear habitaciones más amplias, con mobiliario de tamaño r
 // TODO: Poner algún ejemplo de la distorsión en tercera persona. Aquí o en el tema donde tratemos lo de la cámara.
 
 También es importante tener en cuenta las mecánicas de juego y las animaciones.
-Por ejemplo ¿cuánto saltará el personaje?, ¿a qué distancia?, ¿qué altura tiene cuando está de pie?, ¿y cuándo está agachado?, ¿cuánto espacio necesita para moverse?, ¿a qué altura estarán los paneles e interruptores con los que va a interactuar?
+Por ejemplo ¿a qué velocidad se moverá el personaje?, ¿cuánto saltará el personaje?, ¿a qué distancia?, ¿qué altura tiene cuando está de pie?, ¿y cuándo está agachado?, ¿cuánto espacio necesita para moverse?, ¿a qué altura estarán los paneles e interruptores con los que va a interactuar?
 Si por ejemplo las paredes van a hacerse en unidades de 3 m, el personaje puede medir 1.5 m, los huecos para cruzar agachado 0.5 m y los interruptores y paneles pueden estar a 1 m
 Si los elementos del suelo se pueden ajustar en una rejilla de 1x1 m eso determinar cuánto debe poder saltar el personaje, el ancho de los obstáculos que debe poder superar y el largo de cada tramo de escalera, entre otras cosas.
 
@@ -149,9 +177,9 @@ Si por el contrario estamos en una etapa muy temprana del desarrollo y aún no t
 image::blocking.jpg[]
 
 Según avanza el prototipo, se van añadiendo personajes, animaciones y otros elementos.
-Se programan eventos y se prueba el diseño de niveles, el ritmo del juego y el _gameplay_.
+Se programan eventos y se prueba el diseño de niveles, las distancias y tiempos entre puntos importantes, el ritmo del juego y el _gameplay_.
 Basándonos en los resultados de estas pruebas, se modifican las mecánicas y los niveles y se vuelve a iterar.
-Con las iteraciones el equipo de diseño comenzará a reunir requisitos del _gameplay_ y características del diseño de niveles, que irán al GDD.
+Si aún estamos en *preproducción*, reuniendo requisitos del _gameplay_ y características del diseño de niveles, estos se recogerán para incluirlos en el GDD.
 
 [[video-jedi-fallen-order-prototype, {video-caption} {counter:video-number}]]
 .{video-caption} {video-number}. Prototipo de combate en Star Wars Jedi: Fallen Order -- Fuente: {making-of-jedi-fallen-order}[The Making of STAR WARS Jedi: Fallen Order].
@@ -164,22 +192,6 @@ Incluso puede ser buena idea hacer algunas capturas del nivel desde distintos á
 
 NOTE: En ocasiones, los niveles diseñados mediante _greyboxing_ se exportan para que los modeladores los usen en sus programas como referencia.
 En algunos casos los modeladores trabajan sobre el nivel completo, mientras en otros lo hacen sobre una colección de pequeños componentes individuales con los que luego compondrán el nivel definitivo.
-
-Finalmente, cuando las mecánicas y las características del diseño de niveles estén lo suficientemente bien definidas, el proyecto pasa a la etapa de *producción*.
-Para que eso ocurra no es necesario haber prototipado todo el juego, sino algunos niveles y las mecánicas principales, en los que se ha iterado hasta refinar el diseño lo suficiente como para tener unas guías claras para la siguiente etapa.
-
-Durante la producción, el _greyboxing_ sigue siendo extremadamente útil para el diseño y prototipado del resto de niveles del juego, solo que los diseñadores pueden explorar el nivel desde el primer momento usando personajes, controles y cámaras más próximos a como serán en el producto final.
-
-=== Y despues...
-
-Una vez el _greyboxing_ de un nivel se da por terminado y el _gameplay_ funciona, se compone el nivel con las mallas estáticas definitivas.
-Posteriormente, se ilumina el nivel, para lo cual los artistas usan para guiarse imágenes de referencia de cómo se quiere que sea la iluminación.
-
-Para la iluminación del nivel se suele empezar por fuentes de luz primarias, como el sol o la luna y la iluminación ambiental —como el _SkyLight_ en Unreal Engine—.
-Después se añaden fuentes secundarias, como: focos, lámparas, pantallas, fuegos, antorchas, velas, etc.
-Además, también se suelen incorporan en esta fase los efectos de posprocesos, dado que afectan y se ven afectados por la iluminación.
-
-Finalmente se itera puliendo los detalles del nivel, añadiendo sonidos, sistemas de partículas y reflexiones, y se optimiza su funcionamiento en las distintas plataformas.
 
 === Herramientas para _greyboxing_
 
@@ -220,7 +232,7 @@ video::tvhnDT31EeA[youtube, width=854, height=480]
 En <<Sergeev2020>> se pueden ver algunos ejemplos del _greyboxing_ en Unreal Engine y el resultado final en Star Wars Jedi: Fallen Order (2019).
 
 Además de las herramientas del editor de Unreal Engine, en el {ue-marketplace}[marketplace] hay algunos complementos interesantes para prototipar.
-Uno que merece la pena destacar es {ue-blockout}[Blockout Tools Plugin].
+Dos que merece la pena destacar son Mesh Tool<<Mesh-Tool>> y Blockout Tools Plugin<<Blockout-Tools-Plugin>>.
 
 [[video-ue-blockout-tools-plugin, {video-caption} {counter:video-number}]]
 .{video-caption} {video-number}. Blockout Tools Plugin for UE4.
@@ -257,6 +269,11 @@ ProBuilder es más cómodo y rápido de usar si se emplea junto a ProGrids<<Unit
 
 NOTE: Las ventajas de usar ProGrids se notan menos a partir de Unity 2019.4, ya que el editor ha incorporado algunas de las características de ProGrids.
 
+Además de ProBuilder, en la Asset Store podemos encontrar herramientas algo más sencillas y orientadas al _greyboxing_.
+Las más conocidas son SabreCSG<<SabreCSG>> y RealtimeCSG<<RealtimeCSG>>.
+Como su nombre indica, ambas utilizan la técnica _Constructive Solid Geometry_ (CSG).
+Esta técnica permiten realizar operaciones de adición y substracción sobre figuras básicas para crear figuras más complejas, igual que como funcionan las *Geometry Brushes* de Unreal Engine.
+
 [bibliography]
 == Referencias
 
@@ -272,11 +289,23 @@ Epic Games, Inc. Geometric Brush Actors. _Unreal Engine 4 Documentation_. https:
 * [[[Sergeev2020,4]]]
 Sergeev, A. (2020, 16 de noviembre). A Look at Blockouts in Star Wars Jedi: Fallen Order. _80LV_. https://80.lv/articles/a-look-at-blockouts-in-star-wars-jedi-fallen-order/
 
-* [[[Unity-ProBuilder,5]]]
+* [[[Mesh-Tool,5]]]
+Nate, M. Mesh Tool. https://www.unrealengine.com/marketplace/en-US/product/mesh-tool
+
+* [[Blockout-Tools-Plugin,6]]]
+Karpukhin, D. Blockout Tools Plugin. https://www.unrealengine.com/marketplace/en-US/product/blockout-tools-plugin
+
+* [[[Unity-ProBuilder,7]]]
 Unity Technologies. ProBuilder. https://www.procore3d.com/probuilder/
 
-* [[[Unity-ProGrids,6]]]
+* [[[Unity-ProGrids,8]]]
 Unity Technologies. ProGrids. https://www.procore3d.com/progrids/
 
-* [[[Unity-Polybrush,7]]]
+* [[[Unity-Polybrush,9]]]
 Unity Technologies. Polybrush. https://www.procore3d.com/polybrush/
+
+* [[[SabreCSG,10]]]
+Sabresaurus Ltd. SabreCSG Level Design Tools. https://assetstore.unity.com/packages/tools/modeling/sabrecsg-level-design-tools-47418
+
+* [[RealtimeCSG,11]]]
+Prenominal. Realtime CSG. https://assetstore.unity.com/packages/tools/modeling/realtime-csg-69542

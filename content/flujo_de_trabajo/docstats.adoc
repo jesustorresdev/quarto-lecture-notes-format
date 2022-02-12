@@ -1,12 +1,16 @@
-:document-characters: 17867
-:document-words: 3427
-:document-paragraphs: 49
-:document-reading-time: 17 minutos
-:s01-characters: 3630
-:s01-words: 694
-:s01-paragraphs: 9
-:s01-reading-time: 3 minutos
-:s02-characters: 13033
-:s02-words: 2524
-:s02-paragraphs: 37
-:s02-reading-time: 13 minutos
+:document-characters: 19299
+:document-words: 3659
+:document-paragraphs: 50
+:document-reading-time: 18 minutos
+:s01-characters: 4181
+:s01-words: 804
+:s01-paragraphs: 10
+:s01-reading-time: 4 minutos
+:s02-characters: 1196
+:s02-words: 226
+:s02-paragraphs: 4
+:s02-reading-time: 1 minuto
+:s03-characters: 12278
+:s03-words: 2364
+:s03-paragraphs: 33
+:s03-reading-time: 12 minutos
