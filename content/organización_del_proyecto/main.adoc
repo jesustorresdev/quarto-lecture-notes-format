@@ -1,4 +1,4 @@
-= Desarrollo de Videojuegos 3D: Consejos para la organización el proyecto
+= Desarrollo de Videojuegos 3D: Consejos sobre organización el proyecto y colaboración
 Jesús Torres <jmtorres@ull.es>
 include::../version.adoc[]
 Curso {academic-year}
@@ -221,10 +221,15 @@ Es decir, los componentes gestionados de esta manera ya no tienen que formar par
 Unity distribuye a través de este sistema diversos componentes adicionales.
 Sin embargo, lo que nos interesa destacar es la posibilidad de crear nuestros propios paquetes<<Unity-Create-Custom-Package>> y usarlos como dependencia de nuestros proyectos.
 Es buena idea estructurar nuestros proyectos en torno a un conjunto de componentes reutilizables —por ejemplo, entrada de usuario, controlador del personaje, sistema de inventario, interfaz de usuario, sistema de conducción, IA, carga de niveles, etc.— y desarrollar e incorporar cada uno a nuestros proyectos en paquetes separados.
-Esto puede facilitar enormemente el mantenimiento y reutilización del código.
+Esto puede facilitar enormemente el mantenimiento y reutilización del código porque:
 
-TIP: El uso de paquetes puede resultar tremendamente útil para desarrollar y mantener dos versiones del mismo juego con distintos _renders_ —como URP para la versión móvil y HDRP para la versión de PC y consolas—.
-En este caso, cada versión tiene su propio proyecto Unity con los paquetes y la configuración del _render_ y otros componentes específicos de dicha versión, al tiempo que buena parte del código del juego se comparte entre versiones a través del uso de paquetes propios de Unity.
+* Permite tener una carpeta `Assets` con menos contenidos y, por tanto, que sea más fácil de organizar.
+* Facilita el control de versiones, ya que *Unity Package Manager* permite elegir las versiones que queremos usar de nuestros propios paquetes en el proyecto y maneja por nosotros las dependencias que estos tengan.
+* Facilita reutilizar sistemas y componentes entre diferentes proyectos.
+
+TIP: El uso de paquetes puede resultar tremendamente útil para desarrollar y mantener dos versiones del mismo juego con distintos _renders_ —como, por ejemplo, URP para la versión móvil y HDRP para la versión de PC y consolas—.
+En este caso, cada versión tiene su propio proyecto Unity con la configuración del _render_, componentes específicos y dependencias a los paquetes comunes.
+Así buena parte del código del juego se comparte entre versiones a través del uso de paquetes propios de Unity.
 
 Los paquetes de Unity propios se pueden distribuir al resto del equipo mediante archivos `.zip`, directamente desde un repositorio de Git —usando su URL— o mediante un registro NPM privado.
 
@@ -309,6 +314,8 @@ Mientras que en un proyecto de Unreal Engine se deben incluir:
 
 En ambos casos se puede incluir el directorio donde se compila el proyecto, si queremos que los binarios estén disponibles para todo el equipo en el control de versiones —por ejemplo, para que el departamento de garantía de calidad pueda acceder a ellos rápidamente, sin tener que compilar—.
 
+Además, en Unreal Engine se puede incluir el directorio `Developers`, si por la forma en la que se colabora resulta útil que los contenidos privados que algunos desarrolladores copian en ella puedan ser vistos por todos (véase el <<_carpeta_developers>>).
+
 El resto de archivos son temporales y se generan al abrir el proyecto o compilarlo, por lo que no se deben incluir en el VCS.
 
 [NOTE]
@@ -357,7 +364,8 @@ De esta forma varios desarrolladores pueden modificar diferentes aspectos de un 
 
 ==== Unreal Engine
 
-En Unreal Engine la estrategia para colaborar es muy similar.
+En Unreal Engine la estrategia para colaborar es similar.
+Además el editor ofrece algunas funcionales adicionales.
 
 ===== Subniveles
 
@@ -394,6 +402,40 @@ Así que ese actor que no podemos incluir como componente en el _prefab_ sería 
 
 En general no se recomienda usar actores hijos.
 En lo posible, es mejor utilizar componentes.
+
+===== Carpeta _Developers_
+
+Dentro del directorio del proyecto puede existir una carpeta llamada `Developers`.
+Esta carpeta puede verse en el *Content Browser* activando la opción *Show Developers Content* y debe contener un directorio con nuestro nombre de usuario.
+El propósito de esta carpeta es que la usemos para guardar _assets_ personales que resultan útiles para nuestro trabajo y aspectos del juego en los que estamos trabajando, pero que aún no queremos compartir con el resto de desarrolladores.
+
+Si por algún motivo queremos compartir estas carpetas personales con el resto del equipo, solo tenemos que incluir `Developers` en el control de versiones.
+Si además, al buscar en el *Content Browser* queremos que en los resultados aparezcan contenidos de las carpetas de otros desarrolladores, tenemos que activar *Show Other Developers* en *Filters > Other Filters > Other Developers*.
+
+===== Colecciones
+
+Las colecciones son una forma de organizar grupos de _assets_ y se pueden compartir entre desarrolladores.
+Por ejemplo, se puede crear una colección con mallas para usar en interiores con estilo de edificación abandonada o para localizar rápidamente los tipos de enemigos del juego.
+
+NOTE: Las colecciones no guardan los _assets_, si no referencias a ellos en el proyecto.
+
+Para ver y gestionar las colecciones solo tenemos que pulsar en el botón en el *Content Browser*.
+
+.Botón para mostrar el panel *Collections*.
+image::collections_toggle.jpg[pdfwidth="3.77in"]
+
+Existen 3 tipos de colecciones:
+
+* **Locales**, que se guardan en el directorio `Saved\Collections`.
+Este directorio no se incluye en el control de versiones, por lo que estas colecciones solo están disponibles cuando se trabaja en el mismo equipo usando el mismo directorio de proyecto.
+
+* **Privadas**, que se guardan en el directorio `Developers` del usuario.
+Permite que cada desarrollador tenga colecciones propias y que pueda acceder a ellas desde diferentes equipos, gracias a incluir la carpeta `Developers` en el control de versiones.
+Solo se pueden crear este tipo de colecciones si tenemos activado el control de versiones.
+
+* **Compartidas**, que se guardan en el directorio `Content\Collections`.
+Son las colecciones compartidas entre los desarrolladores del proyecto.
+Solo se pueden crear este tipo de colecciones si tenemos activado el control de versiones.
 
 [bibliography]
 == Referencias
