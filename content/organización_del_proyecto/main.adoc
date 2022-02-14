@@ -314,7 +314,7 @@ Mientras que en un proyecto de Unreal Engine se deben incluir:
 
 En ambos casos se puede incluir el directorio donde se compila el proyecto, si queremos que los binarios estén disponibles para todo el equipo en el control de versiones —por ejemplo, para que el departamento de garantía de calidad pueda acceder a ellos rápidamente, sin tener que compilar—.
 
-Además, en Unreal Engine se puede incluir el directorio `Developers`, si por la forma en la que se colabora resulta útil que los contenidos privados que algunos desarrolladores copian en ella puedan ser vistos por todos (véase el <<_carpeta_developers>>).
+Además, en Unreal Engine se debe valorar si incluir o excluir el directorio `Content/Developers`, si por la forma en la que se colabora resulta útil que los contenidos privados que algunos desarrolladores copian en ella puedan ser vistos por todos (véase el <<_carpeta_developers>>).
 
 El resto de archivos son temporales y se generan al abrir el proyecto o compilarlo, por lo que no se deben incluir en el VCS.
 
@@ -405,7 +405,7 @@ En lo posible, es mejor utilizar componentes.
 
 ===== Carpeta _Developers_
 
-Dentro del directorio del proyecto puede existir una carpeta llamada `Developers`.
+Dentro del directorio `Content` del proyecto puede existir una carpeta llamada `Developers`.
 Esta carpeta puede verse en el *Content Browser* activando la opción *Show Developers Content* y debe contener un directorio con nuestro nombre de usuario.
 El propósito de esta carpeta es que la usemos para guardar _assets_ personales que resultan útiles para nuestro trabajo y aspectos del juego en los que estamos trabajando, pero que aún no queremos compartir con el resto de desarrolladores.
 
