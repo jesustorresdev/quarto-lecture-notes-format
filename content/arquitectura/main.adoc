@@ -669,6 +669,7 @@ public class Bootstrapper
 
 El parámetro `RuntimeInitializeLoadType.BeforeSceneLoad` de `RuntimeInitializeOnLoadMethod()` indica el momento de la carga en el que debe ejecutarse el método<<Unity-RuntimeInitializeLoadType>>.
 
+[#domain_reloading]
 .Domain Reloading
 ****
 Al ejecutar el juego en el editor, Unity resetea el estado de los _scripts_.
@@ -1009,7 +1010,42 @@ El otro aspecto es que seguramente sería mejor utilizar como contenedor `Stack`
 Es decir, previsible se aprovechan mejor las memorias caché al reutilizar primero los objetos usados más recientemente.
 ====
 
-// TODO: Ideas del object pool en Unreal Engine.
+==== UnityEngine.Pool
+
+En Unity el objetivo de utilizar _pools_ de objetos es limitar el trabajo que tiene que hacer el recolector de basura.
+Es muy sencillo ver si está siendo eficaz mirando en el _profiler_ de Unity que el valor de los _GC.Alloc_ sea bajo.
+
+Desde la versión 2021, Unity trae sus propias implementaciones de _pool_ de objetos —que el motor también utiliza internamente—.
+En concreto, en el espacio de nombres `UnityEngine.Pool` se definen:
+
+* `ObjectPool<T>`, que gestiona objetos de tipo `T` en un contenedor `Stack``.
+
+* `LinledObjectPool<T>`, que gestiona objetos de tipo `T` en un contenedor basado en una lista enlazada.
+Así solo consume memoria por la cantidad de objetos realmente almacenados, pero a cambio, necesita más memoria por objeto almacenado que en un `ObjectPool<T>` y también necesita algo más de CPU para la gestión de los objetos.
+
+* `ListPool<T>`, `DictionaryPool<T0,T1>`, `HashSetPool<T>` y `CollectionPool<T0,T1>`, que son _pools_ de contenedores.
+Es decir, que los objetos guardados y recuperados de estos _pools_ son en sí mismos contenedores, con los tipos indicados.
+Además, estas clases son estáticas, por lo que estos _pools_ son globales —accesibles desde cualquier lugar del código— sin tener que definir la variable del objeto _pool_.
+
+* `GenericPool<T0>` y `UnsafeGenericPool<T0>`, que son _pool_ estáticos, para guardar cualquier tipo de objeto sin tener que declarar los objetos _pool_.
+
+Con los _pool_ estáticos hay que tener mucho cuidado, si se pretende desactivar el <<domain_reloading>> para iniciar el juego en el editor en menos tiempo, con el objeto de iterar más rápido durante el desarrollo.
+En ese caso, si el código no limpia manualmente estos _pool_ manualmente durante el inicio, los elementos persistirán entre ejecuciones en el editor.
+
+==== Unreal Engine Class Default Object
+
+Uno de los motivos del rendimiento de Unreal Engine es el amplio uso de _pools_ de objetos.
+Por lo que, antes de hacer uso de una implementación propia, es conveniente comprobar primero que realmente tenemos un problema de rendimiento causado por la creación y destrucción de objetos.
+
+En Unreal Engine toda clase UClass tiene una copia maestra de objeto de dicha clase específica, inicializado con los valores por defecto para las propiedades de la clase.
+A esta copia se la denomina _Class Default Object_ o CDO.
+
+Cuando se crea un UObject, Unreal Engine obtiene la memoria necesaria e inicializa el objeto copiando directamente el CDO en ella, evitando así ejecutar el código del constructor de la clase cada vez que se necesita una nueva instancia.
+Los CDO son creados cuando el motor se inicia, que es cuando se crean los objetos UClass que representan a cada clase.
+En ese momento crea una instancia llamando al constructor de cada clase y se guarda dicha copia como CDO.
+Esta es la razón por la que no se deben acceder a otros objetos o ejecutar código de _gameplay_ en los constructores, dado que estos son ejecutados en una etapa muy temprana de la inicialización del motor, cuando la mayor parte de los objetos no existen.
+
+El código que generalmente pondríamos en un constructor, pero que depende de otros objetos debe llamarse desde eventos como `BeginPlay()`, que se invocan en etapas posteriores de la ejecución.
 
 === Observer
 
