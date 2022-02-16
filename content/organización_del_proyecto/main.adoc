@@ -33,7 +33,7 @@ Eso incluye tanto el arte como el código de nuestros _scripts_ en C#, extension
 * En Unreal Engine el código fuente de módulos y _plugins_ se almacena en `Source` y `Plugins`, respectivamente, directorios separados.
 El resto de recursos del juego —incluidos los _blueprints_— se guardan en la carpeta `Content`.
 
-* En Lumberyard los proyectos se ubican en el directorio `dev` dentro del árbol de directorios del motor.
+* En Open 3D Engine los proyectos se ubican en el directorio `dev` dentro del árbol de directorios del motor.
 El código fuente del proyecto se guarda dentro de `dev/code/<NombreDelProjecto>`.
 Mientras que los recursos —incluidos los _scripts_ en Lua— se almacenan en `dev/<NombreDelProjecto>`.
 
