@@ -130,7 +130,7 @@ El uso de un motor propio presenta algunas ventajas importantes:
 Por eso la falta de control es una de las críticas fundamentales que se hace a los motores de fuentes cerradas, como Unity.
 +
 Entrar en el espacio de los AAA tradicionalmente ha sido muy complicado, si no se ofrece el código fuente del motor para su modificación en caso de que sea necesario.
-Seguramente por eso algunos de los componentes nuevos que se están incorporando a Unity son paquetes en C#, lo que facilita ver cómo funcionan y modificarlos, y han ido incorporando la posibilidad de modificar mediante _scritps_ el comportamiento de algunos componentes internos, como ocurre con el _Scriptable Render Pipeline_ (SRP).
+Seguramente por eso algunos de los componentes nuevos que se están incorporando a Unity son paquetes en C#, lo que facilita ver cómo funcionan y modificarlos, y han ido incorporando la posibilidad de modificar mediante _scripts_ el comportamiento de algunos componentes internos, como ocurre con el _Scriptable Render Pipeline_ (SRP).
 No solo se trata de poder añadir nuevas funcionalidades donde es mejor, sino también que para poder ofrecer un producto bien pulido, es necesario poder corregir errores sin depender de los ciclos del desarrollo de la empresa que desarrolla el motor.
 +
 En este sentido, los motores que ofrecen el código fuente tienen ventaja, pero aun así modificar un motor no es algo trivial.
@@ -213,6 +213,22 @@ En el <<video-creating-tools-pipeline>> podemos ver una ponencia sobre la evoluc
 Obviamente el objetivo es tener un futuro todo integrado en un único editor, como ocurre con los editores de los motores comerciales.
 ****
 
+Aunque la necesidad de herramientas de desarrollo a medida es más evidente cuando se utiliza un motor propio, los estudios que usan motores comerciales también pueden beneficiarse de ellas para agilizar ciertas tareas, ahorrando así horas de trabajo a los diseñadores.
+Es por esto que los estudios con tamaño medio o grande que usan motores comerciales, también suelen tener un equipo dedicado al desarrollo de herramientas propias.
+Incluso existen empresas especializadas en analizar el flujo de trabajo del estudio, identificar tareas repetitivas y cuellos de botella y desarrollar herramientas a medida para sortearlos.
+
+Por ejemplo, la exportación de contenidos creados en Blender y su importación en Unreal Engine no es todo lo directa que podría ser.
+Tiene sus trucos.
+Hay múltiples cosas a tener en cuenta, que se pueden olvidar fácilmente en el día a día, obligándonos a rehacer parte del trabajo.
+Actualmente existe *Blender for Unreal Engine* —un _plugin_ gratuito que hace el proceso mucho más sencillo— pero no debería extrañarnos que antes a un estudio que usara Blender y Unreal Engine le valiera la pena invertir recursos en una herramienta que facilitara la exportación e importación entre ambos programas.
+
+Otros usos bastante comunes son la generación procedural de contenidos, _rigging_ automático, simulaciones o la reconciliación de datos.
+En simuladores o juego estilo RPG —con árboles de habilidad complejos, armas, armaduras, ataques y diferentes tipos de mejoras— es frecuente que los diseñadores trabajen en hojas de cálculo, simulando en ellas distintos aspectos del _gameplay_ y ajustándolo.
+Luego estas hojas se importan en el motor de videojuegos y se prueba el _gameplay_.
+Se itera cambiando los valores y probando, pero al mismo tiempo es necesario mantener actualizadas las hojas de cálculo para que los diseñadores puedan seguir trabajando.
+Con mucha frecuencia ambas fuentes de información —los datos cargados en el motor y los de las hojas de cálculo— acaban divergiendo, lo que obliga a dedicar tiempo a examinar los datos y volver a sincronizarlos.
+Es entonces cuando resulta interesante tener una herramienta a medida que facilite en lo posible este trabajo.
+
 == Motores de videojuegos 3D
 
 Si consideramos los motores comerciales, los motores libres, en repositorios como GitHub, y los motores desarrollados por los propios estudios, la lista de opciones es inmensa [[[Wikipedia-List-Game-Engines]]].
@@ -235,10 +251,10 @@ Trae un editor sencillo similar al de Unity y en cierta forma la manera de traba
 Las principales diferencias son que el _gameplay_ se puede programar en multitud de lenguajes —incluido uno propio llamado GDScript— y que está más orientado a juegos 2D que a 3D.
 De hecho, las herramientas para hacer juegos 3D son bastante limitadas.
 
-* {lumberyard}[*Lumberyard*]. Amazon licenció CryEngine a CryTek para tener su propio motor de videojuegos: Amazon Lumberyard.
+* {o3de}[*Open 3D Engine*]. Amazon licenció CryEngine a CryTek para tener su propio motor de videojuegos: Amazon Lumberyard.
+El motor era gratuito y se distribuía con el código fuente y un editor, pero en julio de 2021 Amazon lo liberó con licencia Apache 2.0 bajo el nombre de Open 3D Engine.
 Pese a estar basado en CryEngine, buena parte del motor ha sido reescrita y modernizada y se han incluido componentes nuevos para facilitar su integración con Twitch y con AWS.
 Esto hace que sea una opción muy interesante para crear juegos multijugador, donde el servidor vaya a ejecutarse en los servidores de Amazon.
-El motor es gratuito y se distribuye con el código fuente y un editor.
 
 * {unigine}[*Unigine*]. Es un motor cuya principal característica es soportar entornos realmente grandes, de escala planetaria.
 No se ha utilizado muchos juegos, pero si tiene un hueco importante el desarrollo de simuladores y de experiencias de realidad virtual.
@@ -284,7 +300,7 @@ NOTE: Unreal Engine viene con una configuración por defecto con la que en un pr
 Fundamentalmente se debe a la configuración por defecto de posprocesado, que en Unity hay que añadir y ajustar a mano para obtener un aspecto similar.
 
 En móviles —o en la web— donde la potencia gráfica es una fracción de la disponible en otras plataformas, no se notan tanto estas diferencias y se valoran más otras características.
-En general, Unity ofrece mejor soporte 2D y mejores herramientas para desarrollar en estas plataformas.
+Generalmente, Unity ofrece mejor soporte 2D y mejores herramientas para desarrollar en estas plataformas.
 
 === Curva de aprendizaje
 
