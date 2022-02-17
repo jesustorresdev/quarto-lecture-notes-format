@@ -190,8 +190,9 @@ Ambos tipos de componentes trabajan de forma coordinada para implementar un _sis
 
 === Sistemas
 
-Un sistema es una combinación de componentes de software que trabajan juntos para implementar cierta funcionalidad.
-En un videojuego suelen haber múltiples sistemas: inventario, locomoción, salvado, meteorología, conducción, _spawn_{blank}footnote:[{fn-spawn-system}], interfaz de usuario, etc.
+Un sistema es una combinación de componentes de software que trabajan juntos para implementar cierta mecánica o funcionalidad.
+Cada sistema debe ser capaz de operar independiente de otros sistemas y solo puede interactuar con ellos a través de interfaces definidas explícitamente.
+En un videojuego suele haber múltiples sistemas: inventario, locomoción, salvado, meteorología, conducción, _spawn_{blank}footnote:[{fn-spawn-system}], interfaz de usuario, etc.
 
 [TIP]
 ====
@@ -204,6 +205,12 @@ Eso significa que en Unreal Engine se pueden usar espacios de nombres con el có
 En su lugar se pueden agrupar diferentes sistemas en distintos módulos y _plugins_.
 Unreal Engine recomienda esta vía para modularizar el código que extiende el editor y las funcionalidades del motor, pero conviene sopesarlo bien para el código de _gameplay_ porque obliga a lidiar con mayor frecuencia con las interfaces entre módulos. 
 ====
+
+Por ejemplo, un sistema de inventario necesitará de un _manager_ para gestionar la colección de elementos en el inventario de cada jugador.
+Cada elemento inventariable necesitará un componente que lo designe como inventariable, que permita acceder a su información en el inventario y que sepa incluirlo en un inventario.
+Mientras que cada personaje necesitará un componente para buscar y gestionar los elementos de su inventario.
+No hace falta que el código del sistema de inventario sepa como guardarlo al salvar la partida.
+Es el sistema de salvado el que debe usar la interfaz pública del _manager_ de inventario para preservar su contenido.
 
 === Manager
 
