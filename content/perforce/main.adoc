@@ -359,14 +359,18 @@ O crear una rama donde solo se puede trabajar en el código del motor para actua
 Merece la pena ver el webinar en <<Perforce-Streams-Best-Practices>> para entender mejor cómo se pueden aprovechar las características de los _streams_.
 En el webinar, el estudio Sumo Digital explica cómo los usan ellos en sus proyectos con Unreal Engine.
 
-== Perforce en un estudio _indie_
+== Trabajando offline
 
-Aunque Perforce es una herramienta ideal para proyectos grandes, hay que reconocer que algunas de sus características pueden ser interesantes para cualquier estudio _indie_.
+Puesto que Perforce es un VCS centralizado, se da por supuesto que trabajamos conectados permanentemente al servidor para mantener sincronizado el estado de los archivos.
+Esto no es un problema si trabajamos desde una oficia con el resto del equipo, pero presenta algunos inconvenientes para trabajar remotamente o con nuestro portátil desde cualquier ubicación.
+Por eso Perforce soporta tanto mecanismos para trabajar _offline_ como para usarlo de forma distribuida.
 
-Perforce es gratuito para hasta 5 usuarios.
-Los estudios _indie_ pueden pedir también acceso gratuito para hasta 5 usuarios al software de gestión de proyectos Handsoft y precio especial para más de 5 usuarios a través del Perforce Indie Studio Pack<<Perforce-Indie-Studio-Pack>>.
+Si por cualquier razón queremos trabajar sin conexión con el servidor Perforce, podemos darnos permisos de escritura en los archivos y editarlos libremente.
+Cuando queramos incorporar los cambios al servidor, solo tenemos que abrir el cliente P4V y en el _workspace_ hacer clic con el botón derecho del ratón en la carpeta que contiene los archivos y elegir la opción *Reconcile Offline Work*.
+P4V comparará el _workspace_ con el _depot_ y nos mostrará los archivos nuevos y modificados, para que indiquemos qué queremos incorporar<<Perforce-Reconcile>>.
 
-La instalación del cliente de Perforce incluye un servidor personal que se puede utilizar tanto para trabajar de forma aislada en proyectos personales, como para trabajar en proyectos colaborativos de forma distribuida; de manera similar a como se trabaja con Git.
+La otra alternativa es trabajar de forma distribuida, de manera similar a como se trabaja con Git.
+La instalación del cliente de Perforce incluye un servidor personal que se puede utilizar tanto para trabajar de forma aislada en proyectos personales, como para trabajar en proyectos colaborativos de forma distribuida.
 Todos los detalles de esta forma de trabajar se explican con detalle en <<Perforce-DVCS>>.
 
 .Relación entre servidores Perforce con versionado distribuido -- Fuente: Using Helix Core Server for Distributed Versioning<<Perforce-DVCS>>.
@@ -378,18 +382,18 @@ En este caso:
 +
 Esto crea un _remote mapping_ en el servidor personal.
 Los _remote mappings_ definen cómo se mapean las rutas en dicho servidor con las del servidor compartido.
-Se pueden crear reglas complejas para solo mapear un subconjunto de los archivos, en lugar de descargar todos, como ocurre en Git.
+Se pueden crear reglas complejas para solo mapear un subconjunto de los archivos, en lugar de descargar todos —como ocurre en Git—.
 
 . En el servidor personal se trabaja con normalidad, usando *{p4v-checkout}* antes de modificar los archivos y *{p4v-submit}* para guardar una nueva revisión con los cambios.
 
 . Una vez se ha terminado de trabajar en los archivos, se envían los cambios al servidor compartido usando *{p4v-push}*.
 
-. Se puede usar *{p4v-fetch}* periódicamente para traer al servidor personal las actualizaciones realizadas por otros colaboradores en el servidor compartido.
+. Se debe usar *{p4v-fetch}* periódicamente para traer al servidor personal las actualizaciones realizadas por otros colaboradores en el servidor compartido.
 
 [NOTE]
 ====
-Actualmente, ni Unity ni Unreal Engine soportan trabajar con el servidor personal.
-Esto es debido a que no «escucha» en la red, sino que cada comando del cliente lanza un programa que manipula directamente el sistema de archivos local.
+Uno de los inconvenientes de trabajar de forma distribuida es que ni Unity ni Unreal Engine soportan trabajar con el servidor personal.
+Esto es debido a que este servidor no «escucha» en la red, sino que cada comando del cliente lanza un programa que manipula directamente el sistema de archivos local.
 
 Para utilizar el modo DVCS con estos motores, o instalamos y usamos localmente un servidor de Perforce P4S completo o hacemos accesible nuestro servidor personal, a través de `localhost`, ejecutando el siguiente comando:
 
@@ -397,8 +401,16 @@ Para utilizar el modo DVCS con estos motores, o instalamos y usamos localmente u
 ----
 > "C:\Program Files\Perforce\DVCS\p4d" -r "X:\Ruta hasta\.p4root\en el servidor personal" -p 1666
 ----
-
 ====
+
+== Perforce en un estudio _indie_
+
+Aunque Perforce es una herramienta ideal para proyectos grandes, hay que reconocer que algunas de sus características pueden ser interesantes para cualquier estudio _indie_.
+
+Perforce es gratuito para hasta 5 usuarios.
+Los estudios _indie_ pueden pedir también acceso gratuito para hasta 5 usuarios al software de gestión de proyectos Handsoft y precio especial para más de 5 usuarios a través del Perforce Indie Studio Pack<<Perforce-Indie-Studio-Pack>>.
+
+
 
 [bibliography]
 == Referencias
@@ -430,8 +442,11 @@ Perforce Software, Inc. _Streams Overview_. https://www.perforce.com/video-tutor
 * [[[Perforce-Streams-Best-Practices,9]]] 
 Perforce Software, Inc. _Best Practices for Game Development Using Streams_. https://www.perforce.com/webinars/vcs/best-practices-game-development-using-streams
 
-* [[[Perforce-Indie-Studio-Pack,10]]]
+* [[[Perforce-Reconcile,10]]]
+Perforce Software, Inc. Reconciling offline work. _P4V User Guide_. https://www.perforce.com/manuals/p4v/Content/P4V/using.offline.html
+
+* [[[Perforce-Indie-Studio-Pack,11]]]
 Perforce Software, Inc. _Perforce Indie Studio Pack_. https://www.perforce.com/indie-studio-pack
 
-* [[[Perforce-DVCS,11]]]
+* [[[Perforce-DVCS,12]]]
 Perforce Software, Inc. _Using Helix Core Server for Distributed Versioning_. https://www.perforce.com/manuals/dvcs/Content/DVCS/Home-dvcs.html
