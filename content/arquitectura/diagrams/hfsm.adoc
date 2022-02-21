@@ -1,0 +1,39 @@
+[plantuml, format="svg"]
+----
+hide empty description
+[*] -> Idle
+Idle -> Investigate
+Idle --> Attack
+Investigate -> Idle
+Attack --> Investigate
+Investigate --> Attack
+
+state "Idle (Patrol)" as Idle {
+  [*] --> GoToA
+  GoToA -> GoToB
+  GoToB --> GoToC
+  GoToC --> GoToA
+  
+  state "Go to waypoint A" as GoToA 
+  state "Go to waypoint B" as GoToB
+  state "Go to waypoint C" as GoToC
+}
+
+state Investigate {
+  [*] --> GoTo
+  GoTo -> LookAround
+  LookAround --> GoBack
+  
+  state "Go to seek\nwaypoint" as GoTo 
+  state "Look around" as LookAround
+  state "Go to last\nwaypoint" as GoBack 
+}
+
+state Attack {
+  [*] --> Hide
+  Hide -> Shoot
+  Shoot -> Hide
+  Shoot --> Reload
+  Reload --> Shoot
+}
+----

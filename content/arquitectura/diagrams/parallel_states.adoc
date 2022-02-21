@@ -1,0 +1,28 @@
+[plantuml, format="svg"]
+----
+hide empty description
+[*] -> Idle
+Idle -> Investigate
+Idle --> Attack
+Investigate -> Idle
+Attack --> Investigate
+Investigate --> Attack
+
+state Attack {
+  [*] --> SeekWaypoint
+  SeekWaypoint -> ChaseEnemy : "¿Ve al jugador?"
+  ChaseEnemy -> SeekWaypoint : "¿No ve al jugador?"
+  ChaseEnemy -> StandStill : "¿A distancia de tiro?"
+  StandStill -> ChaseEnemy : "¿Demasiado lejos?"
+
+  state "Seek Waypoint" as SeekWaypoint
+  state "Chase Enemy" as ChaseEnemy
+  state "Stand Still" as StandStill
+  --
+  [*] --> AttackIdle
+  AttackIdle -> Shoot
+  Shoot -> AttackIdle
+  Shoot -> Reload
+  Reload -> Shoot
+}
+----

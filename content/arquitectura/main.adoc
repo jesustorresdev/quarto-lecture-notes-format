@@ -709,12 +709,28 @@ Pause -> Menu : "Go to Menu" Clicked
 
 Las máquinas de estados finitos son muy utilizadas para implementar la inteligencia artificial de los NPC, pero también tienen muchos otros uso en un videojuego:
 
-* En los sistemas de animación que incorporan los motores de videojuegos, para seleccionar la animación que debe reproducirse en cada momento.
+* En el _game manager_ para gestionar el modo en el que se encuentra el juego en cada momento: intro, menú principal, jugando, pausa, etc.
+En la <<fig-game-state-machine>> se puede observar un esquema típico de lo que podrían ser los estados de cualquier juego.
+
+* En los sistemas de animación que incorporan los motores de videojuegos —como Mecanim en Unity o los Animation Blueprint en Unreal— para seleccionar la animación que debe reproducirse en cada momento según el estado del personaje
 
 * En los controladores de los personajes, para gestionar el estado del personaje: modo de desplazamiento, estados durante el combate, estado de alerta, _combos_, etc.
 
-* En el _game manager_ para gestionar el modo en el que se encuentra el juego en cada momento: intro, menú principal, jugando, pausa, etc.
-En la <<fig-game-state-machine>> se puede observar un esquema típico de lo que podrían ser los estados de cualquier juego.
+El uso de eventos (véase <<_observer>>) junto con el patrón _state_ en el controlador del personaje facilita desacoplar la lógica que gestiona el comportamiento del personaje de otros sistemas, permitiendo añadir nuevas funcionalidades fácilmente.
+
+[[fig-character-state-machine]]
+.Esquema de arquiectura de componentes del personaje.
+include::diagrams/character_architecture.adoc[]
+
+En la <<fig-character-state-machine>> se puede observar un ejemplo de esta arquitectura.
+El comportamiento de cada personaje viene de terminado por su estado.
+Obviamente, los NPC no necesitan un `InputComponent`, pero en el personaje de un jugador el cambio de estado en parte está determinado por la llegada de los eventos de entrada del jugador a los que el `CharacterController` está suscrito en el `InputComponent`.
+
+El resto de componentes —como el que gestiona el HUD, los sonidos o las animaciones del personaje— se suscriben a los eventos del `CharacterController` para conocer el estado del personaje.
+El `CharacterController` emite eventos cuando el estado activo cambia, sin necesidad de conocer qué componentes están suscritos.
+Cada uno de los componentes invoca las acciones que corresponden —por ejemplo, el `AnimationController` selecciona la siguiente animación— cuando el estado del personaje cambia.
+
+==== Implementación en C#
 
 El siguiente código ejemplifica una implementación bastante sencilla de máquina de estados:
 
@@ -830,15 +846,13 @@ Mientras que en la máquina de estados de locomoción, si la velocidad del perso
 
 Sin embargo, a veces es más cómodo tener una implementación que permita que las transiciones también se disparen mediante eventos.
 Por ejemplo, si el motor que estamos utilizando gestiona la entrada del jugador mediante eventos, interesa que estos eventos se puedan usar para disparar directamente transiciones entre estados.
-Es decir, si tenemos una máquina de estados para las acciones del personaje, que esta pueda pasar del estado `Idle` al estado `Firing` cuando llega el evento generado cuando el jugador pulsa el botón de disparo.
-También es interesante para trabajar con interfaces de usuario, ya que suelen desarrollarse usando el paradigma de la programación orientada a eventos.
+Es decir, si tenemos una máquina de estados para las acciones del personaje, que esta pueda pasar del estado `Idle` al estado `Firing` cuando llega el evento generado en el momento en que el jugador pulsa el botón de disparo.
+
+También es interesante utilizar este tipo de máquinas de estados para trabajar con interfaces de usuario, ya que suelen desarrollarse usando el paradigma de la programación orientada a eventos.
 Es decir, que acciones como pulsar un botón, seleccionar una opción de menú o arrastrar y soltar, lo que hacen es generar eventos que tenemos que procesar.
 Por lo que resulta muy cómodo poder usarlos directamente para disparar transiciones en nuestras máquinas de estados.
 
 Las máquinas de estados donde las transiciones se disparan por eventos o mensajes se denominan *máquinas de estados dirigidas por eventos*.
-
-// TODO: Incluir diagramas: Por ejemplo de Core Techniques and Algorithms in Game Programming
-// http://www.yaldex.com/game-programming/0131020099_ch06lev1sec3.html
 
 ==== Máquina de estados jerárquica
 
@@ -852,6 +866,9 @@ La otra alternativa es tener una máquina de estados donde cada estado puede ten
 Los primeros se llaman *superestados* mientras los segundos son los *subestados*. 
 Como los subestados, a su vez, pueden tener sus propias máquinas de estados, a veces se las llama *máquinas de estado anidadas*.
 Otra denominación común es *máquinas de estado basadas en pila*, ya que muchas veces se implementan usando una pila para recordar los subestados / superestados en el momento actual en cada nivel. 
+
+.Ejemplo de máquina de estados jerárquica.
+include::diagrams/hfsm.adoc[]
 
 Las *máquinas de estado anidadas* son útiles para casos como cuando tenemos una máquina para controlar las diferentes acciones posibles de nuestro personaje, algunas de esas acciones son ataques y esos ataques admiten ciertos _combos_.
 En este ejemplo la máquina de estados de acciones estaría en el primer nivel, con un superestado para cada acción y las transiciones posibles entre ellos.
@@ -871,6 +888,9 @@ En cada uno de estos cerebros podemos usar una máquina de estados independiente
 En el ejemplo anterior, por ejemplo, la inteligencia artificial puede determinar la siguiente acción del personaje mediante una máquina de estados —o un _behavior tree_ o cualquier otra técnica de IA similar— pero para las transiciones entre estados de desplazamiento del personaje y acciones, se pueden utilizar máquinas de estados independientes.
 Incluso se pueden utilizar máquinas de estado independientes para gestionar los subestados de acciones especialmente complejas.
 El objetivo es que cada cerebro sea más sencillo de diseñar y entender.
+
+.Ejemplo de estados paralelos.
+include::diagrams/parallel_states.adoc[]
 
 Obviamente, para que el comportamiento sea realista, las distintas máquinas de estado no pueden funcionar de forma completamente independiente.
 Es necesario que se sincronicen en las transiciones, para lo que hace falta una región con variables compartidas donde las máquinas de estados puedan informar de sus acciones y consultar los estados de otras máquinas para determinar qué transiciones son posibles en cada momento.

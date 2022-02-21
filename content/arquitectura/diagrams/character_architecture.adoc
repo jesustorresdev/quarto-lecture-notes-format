@@ -1,0 +1,30 @@
+[plantuml, format="svg"]
+....
+component AnimationContorller [
+  AnimationContorller
+  
+  (Gestión de estados
+    de la animación)
+]
+
+component CharacterController [
+  CharacterController
+  (Gestión de estados)
+]
+
+[CharacterController] .right.> [InputComponent] : Escuchar eventos
+[AnimationContorller] ..> [CharacterController] : Escuchar eventos
+[MovementController] ..> [CharacterController] : Escuchar eventos
+[AudioContorller] ..> [CharacterController] : Escuchar eventos
+[HUDContorller] ..> [CharacterController] : Escuchar eventos
+
+package "Estados" {
+  component Walking [
+    Walking
+    (Activo)
+  ]
+  
+  [CharacterController] -- [Walking]
+  [Climbing]
+}
+....
