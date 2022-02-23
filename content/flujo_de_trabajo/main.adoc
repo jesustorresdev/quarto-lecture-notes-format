@@ -80,15 +80,16 @@ Posteriormente, se ilumina el nivel, para lo cual los artistas usan para guiarse
 Para la iluminación del nivel:
 
 . El primer paso es darle al nivel el ambiente adecuado.
-Se suele empezar por fuentes de luz primarias, como el sol o la luna y la iluminación ambiental —como el _SkyLight_ en Unreal Engine—.
-En interiores se pueden usar focos muy brillantes, que iluminen la mayor parte del área.
+Se suele empezar por fuentes de luz primarias, como el sol o la luna —con una fuente direccional— y la iluminación ambiental —como el _SkyLight_ en Unreal Engine—.
+En interiores se pueden usar focos, luces puntuales y rectangulares.
 
-. Después se añaden fuentes secundarias, como: focos, lámparas, pantallas, fuegos, antorchas, velas, etc.
-Primero aquellas destinadas a ayudar a la navegación por el entorno, por lo que se iluminan entradas y salidas.
-Es interesante tener una jerarquía.
+. Después se añaden fuentes para destacar detalles o simular ciertos efectos, como: focos, pantallas, fuegos, antorchas, velas, etc.
+
+. A continuación se incorpora la iluminación funcional, es decir, aquella que va dirigida a modular el _gameplay_.
+Se pueden iluminar puzles, áreas a explorar, puntos de entrada de los enemigos o dar pistas sobre posibles estrategias.
+También se pueden iluminar salidas e incluso dar alguna indicación sobre la ruta, especialmente en niveles complejos.
+En este sentido es interesante tener una jerarquía.
 Las salidas más importantes deberían destacar más.
-
-. A continuación se iluminan elementos relacionados con el _gameplay_: puzles, sugerencias de áreas a explorar, puntos de aproximación de los enemigos o posibles estrategias.
 
 . Finalmente se hace el ajuste fino de toda la iluminación.
 
