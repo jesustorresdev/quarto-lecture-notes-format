@@ -300,38 +300,51 @@ Algunos ofrecen por encima un _framework_ con componentes de uso frecuente en el
 
 Unreal Engine trae un _gameplay framework_ muy orientado al tipo de juegos que hace Epic Game —videojuegos de acción competitivos en primera o tercera persona— que incluye algunos de los componentes que hemos comentado hasta el momento<<UE-Game-Framework>>.
 A continuación veremos qué componentes son y cómo se relacionan con lo que conocemos.
-Esto nos puede ofrecer ideas que podemos trasladar a otros otros motores, como Unity, donde debemos implementar nuestro propio _gameplay framework_ atendiendo al tipo de juegos que queramos hacer.
+Esto nos puede ofrecer ideas que podemos trasladar a otros motores, como Unity, donde debemos implementar nuestro propio _gameplay framework_ atendiendo al tipo de juegos que queramos hacer.
 
-=== GameMode y GameState
+=== GameInstance, GameMode y GameState
 
-En el _gameplay framework_ de Unreal Engine el trabajo del _game manager_ se divide entre estas dos clases:
+En el _gameplay framework_ de Unreal Engine el papel del _game manager_ se divide entre estas tres clases:
+
+* *GameInstance*.
+Aloja código y datos que deban persistir entre la carga de niveles, porque tanto *GameMode* como *GameState* se destruyen y recrean al cargar un nuevo nivel.
 
 * *GameMode*.
-Contiene el código con las reglas del juego, como por ejemplo: el control del flujo del juego, las transiciones entre niveles, el número de jugadores, las condiciones para ganar, las reglas para hacer aparecer o reaparecer a los jugadores, cuándo se puede pausar el juego y qué ocurre cuando se pide, etc.
+Contiene el código con las reglas específicas del nivel, como por ejemplo: el número de jugadores, las condiciones para ganar, las reglas para hacer aparecer o reaparecer a los jugadores, cuándo se puede pausar la partida y qué ocurre cuando se pide, la transición a otros niveles, etc.
 
 * *GameState*.
-Almacena los datos que describen el estado del juego: puntuaciones, lista de jugadores, objetivos cumplidos, etc.
+Almacena los datos que describen el estado de la partida: puntuaciones, lista de jugadores, objetivos cumplidos, etc.
 
-El motivo para separar ambas aspectos del _game manager_ en clases diferentes es que facilitar el guardado del estado del juego —por ejemplo, al salvar la partida— y la sincronización en juegos multijugador online:
+El motivo para separar varias responsabilidades del _game manager_ entre *GameMode* y *GameState* es que facilita el guardado del estado del juego —por ejemplo, al salvar la partida— y la sincronización en juegos multijugador online:
 
-* Si estamos haciendo un juego multijugador online, la lógica del juego debe ejecutarse únicamente en el servidor para evitar las trampas.
+* Si estamos haciendo un juego multijugador online, la lógica con las reglas de la partida debe ejecutarse únicamente en el servidor para evitar las trampas.
 Los datos del juego confiables también deben almacenarse en el servidor, pero al mismo tiempo es necesario mantener una copia sincronizada en cada cliente.
-Eso es exactamente lo que hace Unreal Engine con *GameMode*, *GameState* y *PlayerState*.
++
+Eso es exactamente lo que hace Unreal Engine. 
+*GameMode*, solo existe y se ejecuta en el servidor, mientras que *GameState* y *PlayerState* contienen datos que se replican en los clientes.
 
 * Incluso si el juego no es en red, lo más normal es tener algún mecanismo de salvado de la partida.
-Separar la lógica del juego de los datos facilita poder almacenar estos últimos para salvar 
-y recuperar el estado del juego.
+En general, separar la lógica de los datos facilita poder almacenar estos últimos para salvar y recuperar el estado del juego.
 
-TIP: *GameMode* implementa el comportamiento esperable de un juego multijugador competitivo.
+TIP: La clase *GameMode* implementa el comportamiento esperable de un juego multijugador competitivo.
 Si se trabaja en otro tipo de juego, es mejor heredar de *GameModeBase*, que también es la clase base de *GameMode*.
 
 No se recomienda guardar directamente en *GameState* datos específicos de cada jugador —como el nombre, el nivel de salud o la puntuación específica de cada jugador— sino solo datos generales del estado del juego.
 *GameState* gestiona una instancia de *PlayerState* para cada jugador, que es donde se deben almacenar los datos específicos de cada uno.
 El *PlayerState* de cada jugador también es accesible a través del actor del personaje, como veremos más adelante.
 
+Por otro lado, la separación entre *GameMode* y *GameInstance* permite tener diferentes clases *GameMode* con distintas reglas para cada nivel.
+Incluso si en todos los niveles se usa la misma clase *GameMode*, en Unreal Engine es común es emplear un nivel solo para el menú del juego, de forma que el código correspondiente puede estar en su propio *GameMode*, separado de la lógica de los niveles jugables.
+
+En este sentido, los *GameMode* hacen de _level manager_.
+Mientras que *GameInstance* sirve para preservar información entre partidas, como el número de victorias de cada equipo —por ejemplo, para enfrentamiento del tipo «el mejor de X partidas»— los inventarios, las habilidades o la configuración de los personajes.
+
+En juegos multijugador online hay un *GameInstance* independiente en el servidor y en cada cliente.
+Como no se sincroniza la información entre ellos, puede ser necesario copiar parte de la información de *GameInstance* a *GameState* o *PlayerState* —según corresponda— al cargar un nuevo nivel para que esté disponible en los clientes.
+
 ==== GameMode como configurador del juego
 
-En *GameMode* podemos añadir propiedades para configurar diferentes características globales del juego.
+En *GameMode* podemos añadir propiedades para configurar diferentes características globales del nivel.
 Entre la propiedades que trae *GameMode* por defecto están las clases que se van instanciar para implementar diferentes aspectos del juego relacionados con el _gameplay framework_: *GameState*, *PlayerController*, *PlayerState*, *HUD* o *DefaultPawn*.
 Así, por ejemplo, se puede cambiar en el *GameMode* las propiedades:
 
@@ -371,7 +384,8 @@ Obviamente, si añadimos características adicionales a nuestros personajes, ten
 
 ==== PlayerController
 
-Un *PlayerController* es creado por *GameMode* para cada jugador, generalmente a través del método `Login()`.
+Un *PlayerController* es creado por *GameMode* para cada jugador —generalmente a través del método `Login()`— y se destruye al cargar un nuevo nivel.
+La información en el actor del personaje se pierde cuando dicho actor es destruido al morir, por lo que el *PlayerController* es un buen lugar para guardar la información del personaje o el jugador que deba conservarse cuando el personaje muere.
 
 Para gestionar la entrada del usuario, los actores pueden crear durante el juego un *InputComponent*, usado para relacionar eventos de entrada con métodos del actor o de componentes del actor.
 Es en estos métodos donde implementamos las acciones que correspondan a cada evento, permitiendo que cualquier actor pueda responder a la entrada del jugador.
@@ -388,16 +402,17 @@ Las clases de ambos actores se pueden configurar en las propiedades del *PlayerC
 
 [NOTE]
 ====
-La clase HUD del _gameplay framework_, a la que se hace referencia en las propiedades del *GameMode* y en el *PlayerController*, es realmente un concepto antiguo.
-
+La clase HUD del _gameplay framework_, a la que se hace referencia en las propiedades del *GameMode* y en el *PlayerController*, realmente corresponde con un concepto antiguo.
 Sigue existiendo porque es un actor que da acceso a un lienzo {ue-ucanvas}[*UCanvas*] con el que se puede dibujar directamente en la pantalla.
-Hay quien lo usa para para dibujar su propia interfaz de usuario o para mostrar información de depuración con métodos como `DrawText()`.
+Hay quien lo usa para dibujar su propia interfaz de usuario o para mostrar información de depuración con métodos como `DrawText()`.
+
 En la actualidad, es mucho mejor crear _widgets_ con UMG y mostrarlos usando `AddToViewport()` en el método `BeginPlay()` del *PlayerController*.
+El código de estas interfaces de usuario —en C++ o _Widget Blueprint_— debería recoger los datos de las otras clases del juego y mostrarlos, en lugar de hacer que sean dichas clases las que manden la información a los _widgets_ (véase <<_modelo_vista_presentación>>)
 ====
 
-Conectar cámara y HUD con el *PlayerController* es muy útil en los juegos multijugador dónde se juega con la pantalla partida.
+Conectar cámara y HUD con el *PlayerController* es muy útil en los juegos multijugador dónde se juega con la pantalla partida, ya que así cada jugador tiene su cámara y su HUD.
 El equivalente en Unity sería, por ejemplo, que el componente *PlayerController* coordinará a otros dos componentes del mismo _GameObject_ del personaje del jugador: `CameraController` e `UIController`.
-Estos pueden ser configurados con el _prefab_ de la cámara y de la interfaz de usuario, respectivamente, y hacerse responsables de instanciarlos, configurarlos —porque, por ejemplo, el _canvas_ de la interfaz debe saber en qué cámara le corresponde mostrarse— y gestionarlos durante el juego.
+Estos pueden ser configurados con el _prefab_ de la cámara y de la interfaz de usuario, respectivamente, y se harían responsables de instanciarlos, configurarlos —porque, por ejemplo, el _canvas_ de la interfaz debe saber en qué cámara le corresponde mostrarse— y gestionarlos durante el juego.
 
 === Pawn y Character
 
@@ -422,30 +437,48 @@ Los *Controller* que «poseen» un *Pawn* o *Character* reciben muchos de los ev
 *Pawn* también ofrece la API *Damage*, que se usa para causar distintos tipos de daño —puntual, radial u otro que definamos— en el personaje, registrando quién es el causante.
 Además, Unreal Engine ofrece el componente *ProjectileMovementComponent*, diseñado para dotar a cualquier actor del tipo de movimiento característico de un proyectil, y el componente *RotatingMovementComponent*, para implementar rotaciones contínuas a velocidad constante.
 
+NOTE: 
+
 En la arquitectura descrita puede surgir la duda de si colocar el código que procesa los eventos de entrada del usuario para manejar el personaje en el *PlayerController* o en el *Pawn* del personaje del jugador.
 La ventaja del utilizar el *PlayerController* es que facilita desacoplar la entrada de las acciones y habilidades de cada personaje.
 Los *Pawn* pueden exponer una interfaz común con acciones posibles, que en cada uno se pueden implementar de forma diferente y que pueden ser controladas indistintamente por el jugador, mediante un *PlayerController*, o por la IA, mediante un *AIController*.
 El *PlayerController* —que en juegos en red solo existe en el cliente del jugador— solo tiene la responsabilidad de procesar los eventos de entrada para llamar a la acción adecuada del personaje poseído.
-En cualquier caso, si un personaje necesita algún tipo de entrada especial, siempre es posible procesarla directamente en el *Pawn* de dicho personaje.
+En cualquier caso, si un personaje necesita algún tipo de comportamiento especial, siempre es posible procesarla directamente en el *Pawn* de dicho personaje.
 
 === PlayerState y otros datos del jugador
 
-En Unreal Engine —así como en Unity y en otros motores— el lugar recomendado para almacenar datos específicos del jugador es el actor / entidad / objeto del personaje del jugador.
-En el caso particular de Unreal Engine, el *Pawn* poseído por un jugador devuelve una instancia del *PlayerState* del jugador a través del método `GetPlayerState()`.
+En general, el lugar recomendado para almacenar datos específicos del jugador es el actor / entidad / objeto del personaje del jugador.
+Sin embargo, como comentamos al hablar de la pareja *GameMode* / *GameState*, puede facilitar las cosas en los juegos en red o para implementar el guardado de la partida, que algunos datos están encapsulados en un objeto independdiente.
+
+.Ejemplo general de persistencia de datos del jugador.
+include::diagrams/playerdata.adoc[]
+
+En el caso particular de Unreal Engine, cada *PlayerController* tiene un *PlayerState*.
+El *Pawn* poseído por el *PlayerController*  de un jugador devuelve la instancia del *PlayerState* a través del método `GetPlayerState()`.
 
 Cada *PlayerState* es un actor, básicamente porque así debe ser para que sea replicado en los diferentes clientes en juegos multijugador online.
 Esto quiere decir que es útil para guardar información del jugador que queremos que sea accesible al resto de jugadores de la partida —como la salud o la puntuación—.
 
 Para almacenar datos que el resto de jugadores no necesitan conocer —como el inventario o la cantidad de munición— se puede usar una estructura de datos referenciada desde el propio *Pawn* del personaje o el *PlayerController*.
-Aunque referenciar esta información desde el *Pawn* del personaje parece lo más intuitivo —ya que son posesiones o características del personaje— en Unreal Engine es común usar el *PlayerController*, ya que este objeto solo existe en el cliente del jugador.
-Como en el caso de *GameState* y *PlayerState*, puede ser interesante que estos datos estén separados en un objeto diferente, aunque accesible desde el personaje o el *PlayerController*, para facilitar su almacenamiento y recuperación.
+Aunque referenciar esta información desde el *Pawn* del personaje parece lo más intuitivo —ya que son posesiones o características del personaje— en juegos multijugador online es común usar el *PlayerController*, ya que este objeto solo existe en el cliente del jugador.
 
-.Ejemplo general de persistencia de datos del jugador.
-include::diagrams/playerdata.adoc[]
+Teniendo en cuenta lo comentado:
+
+* ¿Dónde deberíamos guardar la salud del personaje?
+Si el juego es multijugador online, en *PlayerState*, para que el servidor pueda gestionar esta información al tiempo que está disponible para los clientes.
+Mientras que un juego de un solo jugador, serían igual de válidos *PlayerState*, *PlayerController* y el propio *Pawn*.
+La ventaja de usar este último es que realmente es un tipo de dato que interesa que se reinicie cada vez que reaparece el personaje, lo que ocurre automáticamente si se guarda en el *Pawn*.
+
+* ¿Y un inventario?
+Nuevamente, en un juego multijugador online se utilizaría *PlayerState*.
+Sin embargo, haría falta mantener una copia en el *GameInstance* del servidor para preservar el inventario entre niveles, en caso necesario.
+En un juego de un solo jugador se podría usar el *PlayerController*, para que el inventario no se perdiera al morir el personaje.
+Aun así, haría falta cargarlo y guardarlo en *GameInstance* cada vez que se carga y descarga un nivel, para no perderlo al pasar de uno a otro.
 
 === Level Blueprint
 
 Aunque no está relacionado con el _gameplay framework_, merece la pena señalar que cada nivel en Unreal Engine tiene un *Level Blueprint* donde escribir código global del nivel.
+Generalmente, se utiliza para el código de _gameplay_ que facilita la coordinación de los actores en el nivel.
 
 En otros motores esto se asemeja a tener un _level manager_.
 Por ejemplo, en Unity es bastante común tener en cada escena un _GameObject_ con un componente *LevelManager* con el código y propiedades globales del nivel.
@@ -486,13 +519,18 @@ En Unreal Engine se recomienda ignorar los _singleton_.
 En su lugar, es preferible extender alguna de las múltiples clases de actores dedicados a estados y lógica global del juego:
 
 * *GameMode*, donde se establecen las reglas del juego.
+Por ejemplo, el código que comprueba cuándo se ha ganado o cuándo se ha perdido, si se puede poner en pausa la partida y qué hacer cuándo el jugador lo solicita, o dónde deben hacer aparecer personajes y enemigos.
+Este actor se crea y se destruye con el nivel.
 
 * *GameState*, donde se almacena la información global del estado del juego.
+Se puede ignorar este actor y usar *GameMode* o *GameInstance* para guardar esta información, si el juego no es multijugador online, ya que el principal motivo para utilizarlo es compartir datos entre el servidor y todos los clientes.
+También se crea y se destruye con el nivel.
 
 * *GameInstance*, que se usa para el resto del estado y lógica global del juego que no encaje en las clases anteriores.
-La forma adecuada de usar *GameInstance* es heredar de `UGameInstance` —para incorporar el código de {cpp}— y luego heredar de esta clase en _blueprint_ para facilitar la configuración de propiedades.
+Es ideal para alojar código y datos que deba conservarse entre niveles —como el inventario del jugador— porque el *GameInstance* se crea al abrir la aplicación y no se destruye hasta cerrarla.
 
-Obviamente, hay que tener mucho cuidado estructurando el código porque *GameInstance* solo hay una en el juego, para toda la lógica y los datos que queremos meter ahí.
+La forma adecuada de usar *GameInstance* es heredar de `UGameInstance` —para incorporar el código de {cpp}— y luego heredar de esta clase en _blueprint_ para facilitar la configuración de propiedades.
+Obviamente, hay que tener mucho cuidado estructurando el código porque *GameInstance* solo hay una en el juego durante toda la vida de la aplicación, para toda la lógica y los datos que queremos poner ahí.
 
 ==== Singleton en Unity
 
