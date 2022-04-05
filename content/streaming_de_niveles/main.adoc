@@ -168,6 +168,12 @@ NOTE: Los detalles de cómo lo hace se pueden leer en el foro de Unreal Engine<<
 
 Sin embargo, Unreal Engine no soporta actualmente la traslación del origen en juegos multijugador en red.
 Así que los estudios que lo necesitan deben implementar su propia solución en el lado del servidor del juego.
+Algunas opciones son:
+
+. Implementar un servidor de juego con tecnología propia con toda la lógica del _gameplay_ —probablemente usando flotantes de 64 bits— que se comunique on el Unreal Engine de los clientes para recibir la entrada del jugador, el _render_ y otras cuestiones cosméticas.
+
+. Ejecutar múltiples servidores de Unreal Engine con diferentes porciones del mundo y desarrollar una capa entre los clientes y servidores para enrutar los clientes al servidor adecuado según la zona donde el cliente haya trasladado su origen.
+Así los clientes pueden usar traslación del origen, mientras el nivel en el servidor se reparte entre múltiples instancias del juego.
 
 === En Unity
 
