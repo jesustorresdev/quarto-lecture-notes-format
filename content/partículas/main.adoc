@@ -170,7 +170,7 @@ Unity Technologies. Particle System C# Job System integration. _Unity Manual_. h
 Unity Technologies. Visual Effect Graph. _Unity Manual_. https://docs.unity3d.com/Manual/VFXGraph.html
 
 * [[[UE4-Cascade,5]]]
-Epic Games, Inc. Cascade Particle Systems. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/RenderingAndGraphics/ParticleSystems/index.html
+Epic Games, Inc. Cascade Particle Systems. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/4.27/en-US/RenderingAndGraphics/ParticleSystems/index.html
 
 * [[[UE4-GPUSprites,6]]]
-Epic Games, Inc. GPUSprites Type Data. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/RenderingAndGraphics/ParticleSystems/Reference/TypeData/GPUSprites/index.html
+Epic Games, Inc. GPUSprites Type Data. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/4.27/en-US/RenderingAndGraphics/ParticleSystems/Reference/TypeData/GPUSprites/index.html
