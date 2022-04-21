@@ -1,7 +1,7 @@
-:document-characters: 20991
-:document-words: 3947
-:document-paragraphs: 55
-:document-reading-time: 20 minutos
+:document-characters: 22081
+:document-words: 4145
+:document-paragraphs: 57
+:document-reading-time: 21 minutos
 :s01-characters: 2993
 :s01-words: 596
 :s01-paragraphs: 10
@@ -26,7 +26,11 @@
 :s06-words: 322
 :s06-paragraphs: 5
 :s06-reading-time: 2 minutos
-:s07-characters: 1963
-:s07-words: 368
+:s07-characters: 2546
+:s07-words: 476
 :s07-paragraphs: 7
 :s07-reading-time: 2 minutos
+:s08-characters: 360
+:s08-words: 66
+:s08-paragraphs: 2
+:s08-reading-time: 0 minutos

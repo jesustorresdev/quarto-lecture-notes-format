@@ -1,20 +1,20 @@
-:document-characters: 27185
-:document-words: 5231
-:document-paragraphs: 61
-:document-reading-time: 26 minutos
+:document-characters: 29610
+:document-words: 5693
+:document-paragraphs: 65
+:document-reading-time: 28 minutos
 :s01-characters: 1607
 :s01-words: 314
 :s01-paragraphs: 5
 :s01-reading-time: 2 minutos
-:s02-characters: 13068
-:s02-words: 2468
-:s02-paragraphs: 27
-:s02-reading-time: 12 minutos
-:s03-characters: 3376
-:s03-words: 659
+:s02-characters: 15355
+:s02-words: 2901
+:s02-paragraphs: 31
+:s02-reading-time: 15 minutos
+:s03-characters: 3457
+:s03-words: 681
 :s03-paragraphs: 5
 :s03-reading-time: 3 minutos
-:s04-characters: 7436
-:s04-words: 1503
+:s04-characters: 7439
+:s04-words: 1502
 :s04-paragraphs: 21
 :s04-reading-time: 8 minutos

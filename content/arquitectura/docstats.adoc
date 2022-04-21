@@ -1,40 +1,40 @@
-:document-characters: 75986
-:document-words: 14142
-:document-paragraphs: 215
-:document-reading-time: 1 hora y 11 minutos
-:s01-characters: 4813
-:s01-words: 918
+:document-characters: 95398
+:document-words: 17763
+:document-paragraphs: 255
+:document-reading-time: 1 hora y 29 minutos
+:s01-characters: 4811
+:s01-words: 917
 :s01-paragraphs: 14
 :s01-reading-time: 5 minutos
-:s02-characters: 4526
+:s02-characters: 4527
 :s02-words: 871
 :s02-paragraphs: 14
 :s02-reading-time: 4 minutos
-:s03-characters: 6876
-:s03-words: 1249
-:s03-paragraphs: 22
-:s03-reading-time: 6 minutos
-:s04-characters: 10826
-:s04-words: 1992
-:s04-paragraphs: 30
-:s04-reading-time: 10 minutos
-:s05-characters: 25463
-:s05-words: 4698
-:s05-paragraphs: 69
-:s05-reading-time: 23 minutos
-:s06-characters: 3741
-:s06-words: 713
+:s03-characters: 8279
+:s03-words: 1508
+:s03-paragraphs: 24
+:s03-reading-time: 8 minutos
+:s04-characters: 14603
+:s04-words: 2718
+:s04-paragraphs: 38
+:s04-reading-time: 14 minutos
+:s05-characters: 38591
+:s05-words: 7189
+:s05-paragraphs: 99
+:s05-reading-time: 36 minutos
+:s06-characters: 3810
+:s06-words: 726
 :s06-paragraphs: 14
 :s06-reading-time: 4 minutos
-:s07-characters: 4704
-:s07-words: 926
+:s07-characters: 4707
+:s07-words: 927
 :s07-paragraphs: 15
 :s07-reading-time: 5 minutos
-:s08-characters: 6778
-:s08-words: 1339
+:s08-characters: 6783
+:s08-words: 1341
 :s08-paragraphs: 18
 :s08-reading-time: 7 minutos
-:s09-characters: 4325
-:s09-words: 809
+:s09-characters: 4400
+:s09-words: 823
 :s09-paragraphs: 16
 :s09-reading-time: 4 minutos

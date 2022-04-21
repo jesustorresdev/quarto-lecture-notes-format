@@ -1,5 +1,5 @@
-:document-characters: 16093
-:document-words: 3119
+:document-characters: 16857
+:document-words: 3244
 :document-paragraphs: 43
 :document-reading-time: 16 minutos
 :s01-characters: 2651
@@ -22,10 +22,10 @@
 :s05-words: 306
 :s05-paragraphs: 5
 :s05-reading-time: 2 minutos
-:s06-characters: 4167
-:s06-words: 829
+:s06-characters: 4728
+:s06-words: 933
 :s06-paragraphs: 13
-:s06-reading-time: 4 minutos
+:s06-reading-time: 5 minutos
 :s07-characters: 1443
 :s07-words: 325
 :s07-paragraphs: 5
