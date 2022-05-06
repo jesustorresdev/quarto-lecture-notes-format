@@ -113,7 +113,7 @@ Como en ese fotograma es más parecido a los del resto de la animación —con u
 Claro que los pies parece que se meten ligeramente en el suelo, pero si viéramos el resultado en la escena, con la cámara en tercera persona sobre la cabeza, veríamos que no se nota.
 
 Como comentaremos en el <<_importancia_de_tener_un_modelo_adecuado>>, aunque no queramos utilizar la técnica del _root motion_, si el modelo trae rotaciones y traslaciones globales del esqueleto —como es el caso de las animaciones de Mixamo— y no vamos a substraerlo con otra herramienta; tendremos igualmente que sustraer el _root motion_ en el editor del motor, tal y como hemos explicado, para que las animaciones sean «en el sitio».
-Lo único es que le indicaremos al motor que no aplique al actor del personaje el _root motion_ sustraído .
+Lo único es que le indicaremos al motor que no aplique al actor del personaje el _root motion_ sustraído.
 Para eso solo tenemos que cambiar *Root Motion Mode* a *Ignore Root Motion* en el *Animation Blueprint*, tal y como se observa en la <<fig-ue-ignore-root-motion>>.
 
 [[fig-ue-ignore-root-motion]]
@@ -154,7 +154,7 @@ El círculo y la flecha roja nos muestran _root transform_ en el _frame_ actual.
 Unity permite seleccionar qué componentes del movimiento —como rotación, movimiento en Y o movimiento en XY— se suprimen de la animación del personaje y se trasladan al _root transform_ en cada _frame_ y, por tanto, al _GameObject_, y cuáles se quedan en la animación.
 
 En el recuadro verde en la <<fig-unity-root-motion-humanoid>> se pueden observar estos controles.
-Por ejemplo, si se marcamos *Animation > Root Transform Position (XZ) > Bake Into Pose*, los cambios en la posición de _root transform_ en el plano XZ en cada _frame_ se quedan en la animación y no se trasladan al _GameObject_.
+Por ejemplo, si marcamos *Animation > Root Transform Position (XZ) > Bake Into Pose*, los cambios en la posición de _root transform_ en el plano XZ en cada _frame_ se quedan en la animación y no se trasladan al _GameObject_.
 Como resultado, la malla se sale de la cápsula del personaje en el _GameObject_ al caminar.
 Por el contrario, si no seleccionamos la opción anterior, este desplazamiento se substrae de la animación y se traslada al _GameObject_, haciendo que todo se mueva como indicaba la animación original. 
 
@@ -225,7 +225,7 @@ Por eso el control suele hacerse al revés, permitiendo que el estado del juego 
 Y, después, se determina las animaciones que deben reproducirse (véase la <<fig-control-estándar-del-personaje>>).
 
 Es cierto que en ciertos casos el _root motion_ es muy cómodo.
-Por ejemplo, cuando el paso es irregular —como ocurre con los zombies— mover el _GameObject_ desde el código entraña mas dificultad que seguir la animación.
+Por ejemplo, cuando el paso es irregular —como ocurre con los zombis— mover el _GameObject_ desde el código entraña más dificultad que seguir la animación.
 Pero para eso se pueden utilizar curvas con esa velocidad irregular, ajustadas para coincidir con los pasos del personaje en la animación.
 
 Otro caso es el salto con ataque del siguiente vídeo:
