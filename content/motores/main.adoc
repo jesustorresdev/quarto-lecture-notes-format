@@ -66,14 +66,17 @@ Gracias a la popularidad de algunos de estos juegos, otros estudios comenzaron a
 
 El éxito de esta estrategia llevó a que comenzara a usarse en desarrollos posteriores, separando desde el principio el motor de los contenidos y mecánicas del juego.
 Fue lo que hizo id Software y Epic Games a finales de los 90.
-La estrategia era interesante incluso para los grandes estudios, que no tenían licenciar su tecnología como una parte fundamental de su modelo de negocio, porque facilita el desarrollo y mantenimiento de distintos productos sobre una base común.
+La estrategia era interesante incluso para los grandes estudios —aunque no necesitaban licenciar su tecnología como una parte fundamental de su modelo de negocio— porque facilita el desarrollo y mantenimiento de distintos productos sobre una base común.
 Así que la idea llegó para quedarse.
 
 .La primera versión de UnrealEd, desarrollada en Visual Basic -- Fuente: {first-unrealed}[Gamasutra].
 image::unrealed.png[]
 
+Si comparamos esos primeros motores con los actuales, veríamos que más que motores de videojuegos eran motores gráficos.
+Es decir, que prácticamente solo implementaban los componentes relacionados con el _render_; dejando fuera sistemas de animación, partículas, IA o simulación física, que hoy en día sí incluyen muchos motores de videojuegos.
+
 Los estudios —como Epic Games, id Software, Bioware, CryTek— hacían los motores para sus propios juegos, aunque después los licenciaran a otros estudios.
-Sin embargo, los motores de videojuegos se volvieron cada vez más costosos de hacer, por lo que comenzaron a aparecer empresas especializadas exclusivamente en crear motores —como {gamebryo}[Gamebryo], {unigine}[Unigine] o Unity— y a ser más común el desarrollar videojuegos con motores licenciados a otras compañías.
+Sin embargo, los motores de videojuegos se volvieron cada vez más costosos de hacer al incluir cada vez más funcionalidades, por lo que comenzaron a aparecer empresas especializadas exclusivamente en crear motores —como {gamebryo}[Gamebryo], {unigine}[Unigine] o Unity— y a ser más común el desarrollar videojuegos con motores licenciados a otras compañías.
 
 TIP: Al desarrollar un motor de videojuegos es preferible hacerlo a la par que el desarrollo de un juego.
 Después se pueden reusar sus componentes en proyectos posteriores y seguir evolucionándolo según las necesidades.
