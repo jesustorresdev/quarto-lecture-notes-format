@@ -4,6 +4,11 @@ project:
     - content/test/test.qmd
 
 subtitle: Desarrollo de Videojuegos 3D 20XX/20XY
+author:   
+  - name: Jesús Torres
+    email: jmtorres@ull.es
+    affiliations:
+      - Universidad de La Laguna
 
 lang: es
 abstract-title: Resumen
