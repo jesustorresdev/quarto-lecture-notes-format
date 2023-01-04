@@ -1,7 +1,4 @@
-.idea/
-*.iml
-output/
-.bundle
-vendor/bundle/
+/.quarto/
+/_output/
 .vscode/
 *~

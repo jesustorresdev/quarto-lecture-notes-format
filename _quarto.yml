@@ -1,0 +1,18 @@
+project:
+  output-dir: _output
+  render:
+    - content/test/test.qmd
+
+subtitle: Desarrollo de Videojuegos 3D 20XX/20XY
+
+lang: es
+abstract-title: Resumen
+toc-title: Contenidos
+toc: true
+number-sections: true
+
+format:
+  pdf:
+    documentclass: scrartcl
+    classoption: numbers=endperiod
+    papersize: a4

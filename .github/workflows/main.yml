@@ -8,50 +8,30 @@ on:
 
 jobs:
   build-and-publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
 
     - name: Obtener el proyecto
       uses: actions/checkout@v2
       with:
-          persist-credentials: false
-
-    - name: Configurar Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7
-
-    - name: Instalar dependencias (nativas)
-      run: |
-        sudo apt-get update -y -qq
-        sudo apt-get install pkg-config libxml2-dev libxslt-dev
-        # asciidoctor-diagram
-        sudo apt-get install default-jre graphviz
-        # asciidoctor-mathematical
-        sudo apt-get install bison flex libffi-dev libxml2-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx cmake
-
-    - name: Instalar dependencias (gemas)
-      run: |
-        bundle config set --local path vendor/bundle
-        bundle config set --local build.nokogiri --use-system-libraries
-        bundle config set --local without epub3
-        bundle config set --local deployment true
-        bundle install
+        persist-credentials: false
 
     - name: Generar la documentación
-      run: bundle exec rake build:pdf
+      uses: devcontainers/ci@v0.2
+      with:
+        runCmd: quarto render --to pdf
 
     - name: Empaquetar la documentación
-      run: find output/pdf/* -type f -iname '*.pdf' | zip -j  output/pdf/desarrollo3d-pdf.zip -@
+      run: find _output/ -type f -iname '*.pdf' | zip -j  _output/desarrollo3d.zip -@
 
     - name: Publicar en 'Releases'
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: output/pdf/{*/*.pdf,*.zip}
         tag: ${{ github.ref }}
+        file: _output/{**/*.pdf,desarrollo3d.zip}
         file_glob: true
-        release_name: "Curso 20XX-20XY"
         body: "Apuntes de Desarrollo de Videojuegos 3D del curso 20XX-20XY."
-        overwrite: true
+        release_name: "Curso 20XX-20XY"
         prerelease: true
+        overwrite: true
