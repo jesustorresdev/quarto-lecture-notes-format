@@ -2,6 +2,12 @@
 title: "Test"
 ---
 
-## Quarto
+{{< pagebreak >}}
+
+::: {.callout-caution appearance="simple"}
+El **tiempo de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
+# Quarto
 
 Quarto {{< fa brands github >}} enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
