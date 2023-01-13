@@ -2,13 +2,16 @@ project:
   output-dir: _output
   render:
     - content/test/test.qmd
+    - content/flujo_de_trabajo/flujo_de_trabajo.qmd
+    - content/perforce/perforce.qmd
 
 subtitle: Desarrollo de Videojuegos 3D (20XX/20XY)
 author:   
   - name: Jesús Torres
     email: jmtorres@ull.es
-    affiliations:
-      - Universidad de La Laguna
+    url: https://jesustorres.es/
+    affiliation: Universidad de La Laguna
+    affiliation-url: https://www.ull.es/
 
 abstract: |
   ::: {.callout-caution appearance="simple"}
@@ -20,6 +23,10 @@ abstract-title: Resumen
 toc-title: Contenidos
 toc: true
 number-sections: true
+
+suppress-bibliography: false
+bibliography: references/references.bib
+csl: references/chicago-fullnote-bibliography-short-title-subsequent.csl
 
 filters:
   - reading-time

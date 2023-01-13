@@ -1,0 +1,19 @@
+git:
+  lfs: "[Git LFS](https://git-lfs.github.com/)"
+perforce:
+  site: "[Perforce](http://www.perforce.com)"
+  helixcore: "[Helix Core](https://www.perforce.com/products/helix-core)"
+  helix4git: "[Helix 4 Git](https://www.perforce.com/products/helix-4-git)"
+  filespecs: "[especificadores de ruta](https://www.perforce.com/manuals/v18.1/cmdref/Content/CmdRef/filespecs.html)"
+  checkout: "[Check Out](https://www.perforce.com/manuals/p4v/Content/P4V/dvcs.clone.html)"
+  submit: "[Submit](https://www.perforce.com/manuals/p4v/Content/P4V/files.submit.html#Submit_changelists)"
+  push: "[Push](https://www.perforce.com/manuals/p4v/Content/P4V/dvcs.fetch_push.html?Highlight=Push)"
+  fetch: "[Fetch](https://www.perforce.com/manuals/p4v/Content/P4V/dvcs.fetch_push.html?Highlight=Fetch)"  
+rider:
+  perforce: "[Rider](https://www.jetbrains.com/help/rider/Using_Perforce_Integration.html)"
+unity:
+  perforce: "[Unity](https://docs.unity3d.com/Manual/perForceIntegration.html)"
+unreal:
+  perforce: "[Unreal](https://docs.unrealengine.com/en-US/using-perforce-as-source-control-for-unreal-engine/)"
+vscode:
+  perforce: "[Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=slevesque.perforce)"
