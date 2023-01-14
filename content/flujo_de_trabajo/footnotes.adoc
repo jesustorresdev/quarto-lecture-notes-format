@@ -1,3 +1,0 @@
-:fn-pacing: El ritmo o _pacing_ de un nivel es el orden general y la cadencia de las actividades y eventos del nivel.
-:fn-flow: Un nivel con buen control del _flow_ dirije al jugador hacia el objetivo, evitando parones y momentos de confusión no intencionados en el juego.
-:fn-espacio-jugable: pass:n[En <<Schell2019>> se define el _espacio funcional_ como aquel donde tienen lugar el juego, una vez se han eliminado todos los elementos superficiales.]

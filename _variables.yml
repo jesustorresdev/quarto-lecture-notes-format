@@ -11,9 +11,12 @@ perforce:
   fetch: "[Fetch](https://www.perforce.com/manuals/p4v/Content/P4V/dvcs.fetch_push.html?Highlight=Fetch)"  
 rider:
   perforce: "[Rider](https://www.jetbrains.com/help/rider/Using_Perforce_Integration.html)"
+twitter:
+  blocktober: "[#Blocktober](https://twitter.com/search?q=%23Blocktober&src=typed_query)"
 unity:
   perforce: "[Unity](https://docs.unity3d.com/Manual/perForceIntegration.html)"
 unreal:
   perforce: "[Unreal](https://docs.unrealengine.com/en-US/using-perforce-as-source-control-for-unreal-engine/)"
+  marketplace: "[Unreal Marketplace](https://unrealengine.com/marketplace/)"
 vscode:
   perforce: "[Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=slevesque.perforce)"
