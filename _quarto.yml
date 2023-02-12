@@ -15,7 +15,7 @@ author:
 
 abstract: |
   ::: {.callout-caution appearance="simple"}
-  El **tiempo de lectura** es de {{< meta reading-time.formatted >}}.
+  El **tiempo de lectura** es {{< meta reading-time.formatted >}}.
   :::
 
 lang: es

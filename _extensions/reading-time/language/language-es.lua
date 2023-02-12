@@ -1,6 +1,6 @@
 return {
-    less_than_a_minute = "menos de un minuto",
-    about = "aproximadamente",
+    less_than_a_minute = "de menos de un minuto",
+    about = "aproximadamente de",
     one_hour = "una hora",
     other_hour = "%d horas",
     one_minute = "un minuto",
