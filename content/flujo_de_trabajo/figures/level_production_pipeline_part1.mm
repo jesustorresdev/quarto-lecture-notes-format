@@ -1,0 +1,38 @@
+%%{init: {'themeVariables': { 'fontSize': '8px'}}}%%
+graph TD
+    GameDesign([<strong>Diseño del juego</strong><br><small>Historia, mecánicas, objetivos e interacción</small>])
+
+    subgraph Concept[" "]
+        GameDesign --> ConceptArt(<strong>Arte conceptual</strong><br><small>Personajes, vehículos y entornos</small>)
+        GameDesign --> Prototype("<strong>Prototipado del nivel</strong>")
+    end
+
+    ConceptArt --> SkeletalMeshModeling
+    ConceptArt --> StaticMeshModeling
+    Prototype --> GreyBoxing
+
+    subgraph Modeling["<strong>Modelado</strong>"]
+        SkeletalMeshModeling("<strong>Modelado de mallas<br>con animación esqueletal</strong><br><small>Personajes y otros modelos animados</small>")
+        SkeletalMeshModeling --> SkeletalMeshTexturing("<strong>Texturizado</strong>")
+        SkeletalMeshModeling --> Rigging("<strong>Rigging y<br>animación</strong>")
+
+        StaticMeshModeling("<strong>Modelado de<br>nmallas estáticas</strong><br><small>Props y edificaciones</small>")
+        StaticMeshModeling --> StaticMeshTexturing("<strong>Texturizado</strong>")
+    end
+
+    subgraph GameEngine["<strong>Motor de videojuegos</strong>"]
+        SkeletalMeshTexturing --> EditSkeletalMeshMaterials("<strong>Edición de materiales</strong><br><small>Preparar los materiales</small>")
+        EditSkeletalMeshMaterials --> EditAnimation
+        Rigging --> EditAnimation("<strong>Edición de animación</strong><br><small>Preparar aninaciones y mallas para colocarlas</small>")
+        EditAnimation --> LevelComposition(("<strong>Composición<br>del nivel</strong>"))
+
+        StaticMeshTexturing --> EditStaticMeshMaterials
+        EditStaticMeshMaterials("<strong>Edición de materiales</strong><br><small>Preparar los materiales</small>") --> EditStaticMeshes
+        EditStaticMeshes("<strong>Edición de mallas estáticas</strong><br><small>Preparar las mallas para colocarlas</small>") --> LevelComposition
+
+        GreyBoxing("<strong>Greyboxing</strong><br><small>Distribución general del nivel,<br>posición de objetos y personajes<br>y programación de eventos</small>") --> LevelComposition(["<strong>Composición<br>del nivel</strong>"]) 
+    end
+
+    style GameDesign fill:#90EE90,stroke:green
+    style Concept fill:none,stroke:none
+    style LevelComposition fill:#FFD580,stroke:orange
