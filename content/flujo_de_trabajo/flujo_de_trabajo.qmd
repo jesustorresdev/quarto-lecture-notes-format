@@ -263,7 +263,7 @@ En diseño de niveles el *flow* es cómo se siente el jugador al moverse por el 
 Es decir, ¿el recorrido se siente complejo o sencillo?, ¿parece peligroso o seguro?, ¿qué tipos de movimientos se le piden al jugador?, ¿hay muchos obstáculos, curvas o es en línea recta?, ¿el desplazamiento se siente rápido o lento?, etc.
 
 ::: {.callout-note}
-En diseñó de videojuegos, también se usa el término *flow* para referirse a cómo el juego hace que el jugador se sienta inmerso y concentrado en el juego.
+En diseño de videojuegos, también se usa el término *flow* para referirse a cómo el juego hace que el jugador se sienta inmerso y concentrado en el juego.
 Es un estado mental en el que el jugador se siente completamente absorto en el juego y olvida el mundo exterior.
 El *flow* se logra cuando el desafío está equilibrado con las habilidades del jugador y el nivel dirige al jugador hacia el objetivo, evitando parones y momentos de confusión no intencionados en el juego.
 :::
@@ -273,7 +273,7 @@ Así que debe ser modular, sencillo de modificar y sin detalles; porque durante 
 
 ## Reglas de diseño
 
-Como comentamos en el @sec-prototyping, durante la preproducción se hacen prototipos de niveles muy básicos, solo para servir de *sandbox* donde probar mecánicas, sistemas y **reglas de diseño**.
+Como comentamos en la @sec-prototyping, durante la preproducción se hacen prototipos de niveles muy básicos, solo para servir de *sandbox* donde probar mecánicas, sistemas y **reglas de diseño**.
 El prototipado de los niveles del juego se hace sobre la base de las reglas de diseño que se han establecido en la fase de preproducción.
 
 Estas reglas debe incluir aspectos como el tamaño de las puertas o la anchura de los pasillos y de los espacios por los que pueda navegar el personaje ---de forma que si hay menos espacio, generalmente se bloquea completamente el paso---.
@@ -296,7 +296,7 @@ Por ejemplo, que un jugador pueda quedar atrapado en una zona del nivel, que hay
 En este sentido, las reglas de diseño evitan los problemas de accesibilidad, ya ayudan a que el juego sea jugable para una gran variedad de jugadores, con un rango de habilidades muy amplio.
 
 Las reglas de diseño también facilitan ofrecer una experiencia de juego consistente.
-Gracias a eso los jugadores son capaces identificar las reglas y aprenden como funciona el juego y como deben superar los distintos retos.
+Gracias a eso los jugadores son capaces identificar las reglas y aprenden cómo funciona el juego y cómo deben superar los distintos retos.
 
 ### Diseño en cuadrícula
 
@@ -313,7 +313,7 @@ Esta técnica es común en juegos de estrategia, RPG y juegos de plataformas.
 
 ### Diseño modular
 
-El **diseñó modular** estás relacionado con el diseño de arte, aunque acaba afectando a las reglas de diseño del juego de forma similar a como ocurre con el **diseño en cuadrícula**.
+El **diseño modular** estás relacionado con el diseño de arte, aunque acaba afectando a las reglas de diseño del juego de forma similar a como ocurre con el **diseño en cuadrícula**.
 
 El **diseño modular**[@Perry2002ModularLevelDesign;@Burgess2013ModularLevelDesign] es una técnica muy común que consiste en la creación de diferentes entornos a partir de la reutilización y combinación de distintas maneras de un conjunto de elementos de nivel individuales, como se muestra en la @fig-modular-design-burgess.
 Esta técnica surge de la necesidad de crear ambientes con gran nivel de detalle visual sin tener que modelar y texturizar cada esquina del entorno, puesto que eso tendría un coste importante en tiempo y dinero.
