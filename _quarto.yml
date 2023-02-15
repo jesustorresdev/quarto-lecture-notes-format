@@ -1,7 +1,6 @@
 project:
   output-dir: _output
   render:
-    - content/test/test.qmd
     - content/flujo_de_trabajo/flujo_de_trabajo.qmd
     - content/extras/perforce/perforce.qmd
 
