@@ -1,0 +1,21 @@
+%%{init: {"flowchart" : {"curve" : "linear"}}}%%
+graph TB
+  Content([Content]) --> Blueprints([Blueprints])
+  Content --> Characters([Characters])
+  Content --> Environment([Environment])
+  Content --> Maps([Maps])
+  Content --> MaterialLibrary([MaterialLibrary])
+  Content --> UI([UI])
+  Content --> Sounds([Sounds])
+  Content --> Weapons([Weapons])
+
+  Blueprints --> CharactersBlueprints([Characters])
+  Blueprints --> ControllersBlueprints([Controllers])
+  Blueprints --> PickupsBlueprints([Pickups])
+  Blueprints --> WeaponsBlueprints([Weapons])
+
+  Environment --> Level01([Level 01])
+  Environment --> Level02([Level 02])
+
+  UI --> HUD([HUD])
+  UI --> Menus([Menus])

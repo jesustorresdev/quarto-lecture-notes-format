@@ -1,0 +1,24 @@
+%%{init: {"flowchart" : {"curve" : "linear"}}}%%
+graph TB
+  Level01([Level01]) --> MainCamera([Main Camera])
+  Level01 --> Level01Environment([Environment])
+  Level01 --> Player([Player])
+
+  Quest01([Quest01]) --> Quest01Environment([Environment])
+  Quest01 --> Enemy01([Enemy01])
+  Quest01 --> Enemy02([Enemy02])
+  Quest01 --> Quest01Vehicles01([Vehicles01])
+  Quest01 --> Quest01Vehicles02([Vehicles02])
+
+  Level01Environment --> Level01Buildings([Buildings])
+  Level01Environment --> Level01Lights([Lights])
+  Level01Environment --> Level01Roads([Roads])
+  Level01Environment --> Level01Props([Props])
+
+  Quest01Environment --> Quest01Props([Props])
+
+  UI([UI]) --> HUD([HUD])
+
+  style Level01 fill:#FFD580,stroke:orange
+  style Quest01 fill:#FFD580,stroke:orange
+  style UI fill:#FFD580,stroke:orange

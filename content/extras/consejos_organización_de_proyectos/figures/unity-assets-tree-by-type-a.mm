@@ -1,0 +1,11 @@
+%%{init: {"flowchart" : {"curve" : "linear"}}}%%
+graph TB
+  Assets([Assets]) --> Materials([Materials])
+  Assets --> Meshes([Meshes])
+  Assets --> Textures([Textures])
+  Assets --> Audio([Audio])
+  Assets --> Editor([Editor])
+  Assets --> Prefabs([Prefabs])
+  Assets --> Scenes([Scenes])
+  Assets --> Scripts([Scripts])
+  Assets --> Tests([Tests])
