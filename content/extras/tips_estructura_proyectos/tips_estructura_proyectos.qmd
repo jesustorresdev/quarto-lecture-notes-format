@@ -1,5 +1,5 @@
 ---
-title: "Consejos sobre la organización de proyectos y la colaboración"
+title: "Consejos sobre la organización de los proyectos"
 ---
 
 {{< pagebreak >}}
@@ -435,7 +435,7 @@ En desarrollo de videojuegos, herramientas como Plastic SCM y Perforce ---que es
 [^1]: En Git se pueden conseguir características similares utilizando {{< var git.lfs >}}.
 
 En los estudios más grandes se suele utilizar un gestor de recursos digitales ---en inglés, *Digital Asset Manager* o DAM--- para gestionar específicamente los recursos artísticos.
-El ejemplo más común es {{< shotgrid >}}, pero Perforce también tiene el suyo, llamado {{< var perforce.helixdam >}}.
+El ejemplo más común es {{< var shotgrid >}}, pero Perforce también tiene el suyo, llamado {{< var perforce.helixdam >}}.
 Gracias a las facilidades que ofrece un DAM, el director creativo y los *lead artiss* puede ofrecer feedback en el estilo que se busca y pedir cambios y mejoras, al tiempo que se mantiene un registro de todas las pruebas que se hacen a nivel artístico.
 
 En los estudios más pequeños no suele compensar el coste extra de un DAM.

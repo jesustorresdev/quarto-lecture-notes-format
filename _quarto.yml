@@ -2,7 +2,7 @@ project:
   output-dir: _output
   render:
     - content/flujo_de_trabajo/flujo_de_trabajo.qmd
-    - content/extras/consejos_organización_de_proyectos/consejos_organización_de_proyectos.qmd
+    - content/extras/tips_estructura_proyectos/tips_estructura_proyectos.qmd
     - content/extras/perforce/perforce.qmd
 
 subtitle: Desarrollo de Videojuegos 3D (20XX/20XY)
