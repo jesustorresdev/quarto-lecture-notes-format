@@ -374,11 +374,11 @@ Obviamente, ambas están relacionadas, pero se suele comenzar por el tamaño del
 En la @tbl-common-player-sizes se puede ver el tamaño típico de la cápsula de colisión de un personaje para varios motores de videojuegos.
 Esta cápsula suele ser más grande que la malla del personaje porque así es más fácil evitar que el personaje se atasque o atraviese otros objetos al moverse y para tener margen para que las animaciones no saquen la malla fuera de la cápsula.
 
-| Motor           | Cápsula de colisión         | Altura de la cámara |
-|-----------------|-----------------------------|---------------------|
-| Unity           | $1.0⨯1.8$ m. o $1.0⨯2.0$ m. | 1.5 m. -- 1.7 m.   |
-| Unreal Engine   | $60⨯176$ cm.[^5]            | 152 cm.             | 
-| Humano promedio | $50⨯175$ cm.                | 170 cm.             |
+| **Motor**           | **Cápsula de colisión**     | **Altura de la cámara** |
+|---------------------|-----------------------------|-------------------------|
+| **Unity**           | $1.0⨯1.8$ m. o $1.0⨯2.0$ m. | 1.5 m. -- 1.7 m.        |
+| **Unreal Engine**   | $60⨯176$ cm.[^5]            | 152 cm.                 | 
+| **Humano promedio** | $50⨯175$ cm.                | 170 cm.                 |
 
 : Medidas de personaje más comunes en distintos motores de videojuegos. {#tbl-common-player-sizes}
 
@@ -388,11 +388,16 @@ Por defecto, la altura de la cámara es de 64 cm. respecto al centro de dicha c�
 El resto de las medidas se van estableciendo a partir de las anteriores, según el tipo de arquitectura que se pretende imitar.
 Por ejemplo, estas son algunas dimensiones y recomendaciones típicas cuando se crean entornos con arquitectura moderna[@LDBBasicMetrics]:
 
-| Motor           | Paredes interiores (grueso $⨯$ alto) | Ancho mínimo de pasillos | Puertas       | Escalones (huella $⨯$ contrahuella)  |
-|-----------------|--------------------------------------|--------------------------|----------------|-------------------------------------|
-| Unity           | $0.1⨯3.0$ m.                         | 2.0 m.                   | $1.25⨯2.5$ m. | $0.15⨯0.1$ m. (34°)                 |
-| Unreal Engine   | $20⨯300$ cm.                         | 150 cm.                  | $110⨯220$ cm. | $25⨯15$ cm. (31°)                   |
-| Estándar real   | $10⨯250$ cm.                         | 120 cm.                  | $90⨯215$ cm.  | $28⨯18$ cm. (33°)                   |
++-------------------------+-------------------------+-------------------+---------------------+-------------------------+
+| **Motor**               | **Paredes interiores**\ | **Ancho mínimo**\ | **Puertas**         | **Escalones**\          |
+|                         | (gr. $⨯$ al.)           | **de pasillos**   |                     | (h. $⨯$ ch.)            |
++=========================+=========================+===================+=====================+=========================+
+| **Unity**               | $0.1⨯3.0$ m.            | 2.0 m.            | $1.25⨯2.5$ m.       | $15⨯10$ cm. (34°)       |
++-------------------------+-------------------------+-------------------+---------------------+-------------------------+
+| **Unreal Engine**       | $20⨯300$ cm.            | 150 cm.           | $110⨯220$ cm.       | $25⨯15$ cm. (31°)       |
++-------------------------+-------------------------+-------------------+---------------------+-------------------------+
+| **Estándar real**       | $10⨯250$ cm.            | 120 cm.           | $90⨯215$ cm.        | $28⨯18$ cm. (33°)       |
++-------------------------+-------------------------+-------------------+---------------------+-------------------------+
 
 : Medidas de arquitectura moderna más comunes en distintos motores de videojuegos. {#tbl-common-architecture-sizes}
 
@@ -444,6 +449,10 @@ Posteriormente, estos planos se trasladan al *greyboxing* en 3D ---por ejemplo, 
 Respecto a la elección de la herramienta para el *greyboxing*, hacerlo en el propio motor de videojuegos tiene varias ventajas importantes, ya que permite comprobar la jugabilidad del nivel en tiempo real e iterar rápidamente.
 Sin embargo, para que esto sea posible, uno de los factores determinantes es la disponibilidad de herramientas adecuadas para los diseñadores de niveles.
 Los motores comerciales ---como Unreal Engine o Unity--- ofrecen editores muy completos, que facilitan esta tarea, pero los estudios que trabajan con motores propios, pueden carecer de un editor de niveles adecuado, por lo que los diseñadores pueden verse obligados a recurrir a herramientas genéricas de modelado 3D, como Maya o Blender.
+
+Antes de comenzar el *greyboxing* es recomendable organizar una colección de imágenes de referencia relacionadas con el tipo de espacios que vamos a crear.
+Estas imágenes pueden provenir del arte conceptual creado por los artistas y de búsquedas en galerías de imágenes de Internet.
+Obviamente, no se hace con el objetivo de poner atención a detalles relacionados con la creación de los modelos definitivos, sino para obtener referencias del diseño estructura o arquitectónico de los espacios.
 
 Al comenzar el *greyboxing* es recomendable empezar a nivel macro, haciendo uso de bloques de gran tamaño para definir las grandes áreas jugables y conectarlas.
 Luego se va iterando para ir añadiendo algo más de detalle, empezando por los elementos más destacables del nivel.
