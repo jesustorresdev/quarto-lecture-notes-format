@@ -1,0 +1,34 @@
+sequenceDiagram
+    %% box Object
+        participant Trigger as Object Trigger
+        participant InputComponent as Object InputComponent
+        participant Gameplay as Object Gameplay Code
+    %% end
+
+    participant Character
+    participant Engine
+
+    activate Trigger
+
+    Trigger ->> Gameplay: OnComponentBeginOverlap(Actor)
+    activate Gameplay
+    alt if Actor is Player Character
+        Gameplay ->> Engine: EnableInput(Character.GetPlayerController())
+        activate InputComponent
+    end
+    deactivate Gameplay
+
+    InputComponent ->> Gameplay: Use
+    activate Gameplay
+    Gameplay ->> Character: Use(Object)
+    deactivate Gameplay
+
+    Trigger ->> Gameplay: OnComponentEndOverlap(Actor)
+    activate Gameplay
+    alt if Actor is Player Character
+        Gameplay ->> Engine: DisableInput(Character.GetPlayerController())
+    end
+    deactivate InputComponent
+    deactivate Gameplay
+
+    deactivate Trigger
