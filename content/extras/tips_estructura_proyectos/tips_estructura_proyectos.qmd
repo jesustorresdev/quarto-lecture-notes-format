@@ -7,7 +7,7 @@ title: "Consejos sobre la organización de los proyectos"
 En los siguientes apartados veremos algunas recomendaciones para organizar el proyecto y facilitar la colaboración entre los diferentes equipos involucrados.
 
 A fin de cuentas, poner algo de orden en un proyecto es importante para asegurar su sostenibilidad.
-Facilita que cada miembro del equipo sepa dónde buscar o añadir aquello que necesite para hacer su trabajo.
+Facilita que cada miembro del equipo sepa donde buscar o añadir aquello que necesite para hacer su trabajo.
 Por eso vamos a ver algunas buenas prácticas comunes.
 
 # Organización de los recursos {#sec-organización-de-los-recursos}
@@ -22,8 +22,8 @@ Eso incluye tanto el arte como el código de nuestros *scripts* en C#, extension
 El resto de recursos del juego ---incluidos los *blueprints*--- se guardan en la carpeta `Content`.
 
 * En **Open 3D Engine** los proyectos se ubican en el directorio `dev` dentro del árbol de directorios del motor.
-El código fuente del proyecto se guarda dentro de `dev/code/<NombreDelProjecto>`.
-Mientras que los recursos ---incluidos los *scripts* en Lua--- se almacenan en `dev/<NombreDelProjecto>`.
+El código fuente del proyecto se guarda dentro de `dev/code/<NombreDelProyecto>`.
+Mientras que los recursos ---incluidos los *scripts* en Lua--- se almacenan en `dev/<NombreDelProyecto>`.
 
 Como se puede observar, no se indica nada sobre cómo debemos organizar los recursos en directorios como `Content` o `Assets`.
 Podemos hacerlo como queramos, pero ¿cuál es la mejor forma de hacerlo?
@@ -150,11 +150,11 @@ El motivo es que en Unity los *plugins* y *assets* importados desde el *Asset St
 Eso complica mantener una estructura organizada donde se separe qué es nuestro y qué es un plugin o recurso importado.
 
 ::: {.callout-note}
-Los paquetes gestionados con el **{{< var unity.packagemanager >>}}** tienen la ventaja de que no se instalan en `Assets`, por lo que no meten contenidos en el proyecto.
-Sin enmbargo, los paquetes adquiridos en la web de *Asset Store* se descargan e instalan mediante el **Unity Package Manager** ---a partir de Unity 2020.x--- pero se siguen importando en `Assets`, por lo que deberíamos seguir teniendo.
+Los paquetes gestionados con el **{{< var unity.packagemanager >}}** tienen la ventaja de que no se instalan en `Assets`, por lo que no meten contenidos en el proyecto.
+Sin embargo, los paquetes adquiridos en la web de *Asset Store* se descargan e instalan mediante el **Unity Package Manager** ---a partir de Unity 2020.x--- pero se siguen importando en `Assets`, por lo que debemos seguir teniendo cuidado.
 :::
 
-Una práctica interesante es colocar un `_' en el primer caracter del nombre de la carpeta.
+Una práctica interesante es colocar un `'_'` en el primer caracter del nombre de la carpeta.
 Por ejemplo, llamándola `_GameAssets` o `_Project`.
 Así siempre aparecerá la primera del proyecto y, por tanto, es más fácil de localizar.
 
@@ -196,8 +196,8 @@ Esta carpeta se usa para archivos que queremos que estén disponibles directamen
 En realidad, el uso de la carpeta `Resources` puede presentar algunos problemas por lo que se recomienda no usarla[@UnityResourcesFolder].
 Excepto, tal vez, para un conjunto mínimo de componentes que necesite el arranque del juego.
 
-En lugar `Resources`, es preferible utilizar **AssetBundles**[@UnityAssetBundles], que son una forma de empaquetar recursos para cagarlos y descargarlos durante la ejecución, de forma selectiva.
-Gracias al **Addressables Assets System**[@UnityAddressables] se puede asignar a la cada **AssetBundle** una dirección única que durante la ejecución sirve para localizarlos y cargarlos en la aplicación, independientemente de dónde estén ubicados
+En lugar de `Resources`, es preferible utilizar **AssetBundles**[@UnityAssetBundles], que son una forma de empaquetar recursos para cagarlos y descargarlos durante la ejecución, de forma selectiva.
+Gracias al **Addressables Assets System**[@UnityAddressables] se puede asignar a cada **AssetBundle** una dirección única que durante la ejecución sirve para localizarlos y cargarlos en la aplicación, independientemente de dónde estén ubicados
 
 El **Addressables Assets System** permite localizar **AssetBundles** tanto del almacenamiento local como de algún servicio de almacenamiento online, lo que permite implementar fácilmente actualizaciones o la instalación de ampliaciones del juego.
 
@@ -299,8 +299,14 @@ Respecto al código fuente en C++, la diferencia con Unity es que el código no 
 En todo proyecto de Unreal Engine con código en C++ hay al menos un módulo para dicho código ---denominado el **módulo primario**--- que puede tener como dependencia otros módulos que, a su vez, pueden tener dependencia en más módulos.
 Además, se pueden crear **módulos de editor** para extender las funcionalidades del editor.
 
-Por norma general los sistemas de un juego se desarrollan en C++.
-La interfaz pública y la configuración de esos sistemas se hace accesible a los diseñadores, para que los usen como crean, utilizando clases de *blueprint* que hereden de las clases de los sistemas en C++.
+### Relación entre clases de *blueprint* y C++
+
+Aunque en muchos cursos y tutoriales todo se desarrolla en *blueprint* para que sea más accesible, no es así como se suelen desarrollar.
+
+Por norma general los actores y componentes de los sistemas del juego se desarrollan en C++, por lo que son responsabilidad del equipo de programadores.
+
+Estás clases generalmente exponen una interfaz pública de métodos, propiedades y eventos accesible desde *blueprint*.
+En el editor se hereda de ellas para crear clases *blueprint*, lo que facilita a los diseñadores poder configurar, ajustar el comportamiento, posicionar y conectar actores directamente en editor.
 
 ### Módulos de C++
 
@@ -533,9 +539,9 @@ Como cada subnivel se almacena en su propio archivo, diferentes desarrolladores 
 
 El soporte de subniveles es parte de una característica denominada **Level Streaming**[@UnrealLevelStreaming] que se utiliza para optimizar recursos, al permitirnos dividir el mundo en varias partes ---los subniveles--- y recorrerlo teniendo cargadas solamente las partes que necesitamos en cada momento.
 
-En el **Level Streaming**, al cargar un nivel, lo que se carga es el **Persistent Level**, que contiene información sobre los subniveles y los actores que deben permanecer cargados en todo momento.
-Luego podemos decidir cuando cargar los subniveles que que nos interesen según, por ejemplo, de la posición del jugador en el mapa.
-Sin embargo, si algún subnivel se marca como **Always Streaming**, ya no se carga a demanda, sino junto al **Persistent Level**.
+En el **Level Streaming**, al cargar un nivel lo que se carga es el **Persistent Level**, que contiene información sobre los subniveles y los actores que deben permanecer cargados en todo momento.
+Luego podemos decidir cuándo cargar los subniveles en función, por ejemplo, de la posición del jugador en el mapa.
+Sin embargo, si algún subnivel se marca como **Always Streaming**, ya no se cargará a demanda, sino junto al **Persistent Level**.
 
 El uso de subniveles en modo **Always Streaming** es la primera pieza del método para poder usarlos de forma colaborativa[@UnrealCollaborateWithSublevels].
 La segunda es que, como ocurre en Unity con las escenas aditivas, no estamos obligados a usar los subniveles solamente para dividir el espacio del mapa.
@@ -593,27 +599,27 @@ Si además, al buscar en el **Content Browser** queremos que en los resultados a
 
 #### Colecciones
 
-Las colecciones son una forma de organizar grupos de *assets* y también se pueden compartir entre desarrolladores.
-Por ejemplo, se puede crear una colección con mallas con estilo de edificación abandonada para usar en interiores o una colección para localizar rápidamente los tipos de enemigos del juego.
+Las **colecciones** son una forma de organizar grupos de *assets* y también se pueden compartir entre desarrolladores.
+Por ejemplo, se puede crear una **colección** con mallas con estilo de edificación abandonada para usar en interiores o una **colección** para localizar rápidamente los tipos de enemigos del juego.
 
-Realmente, las colecciones no guardan los *assets*, si que son una colección de referencias a dichos *assets* en el proyecto.
+Realmente, las **colecciones** no guardan los *assets*, si no referencias a dichos *assets* en el proyecto.
 
-Como se indica en la @fig-collections-toggle, para ver y gestionar las colecciones solo tenemos que usar el desplegable en la parte baja del **Content Browser**.
+Como se indica en la @fig-collections-toggle, para ver y gestionar las **colecciones** solo tenemos que usar el desplegable en la parte baja del **Content Browser**.
 
 ![Desplegable del panel **Collections**.](figures/collections_toggle.png){#fig-collections-toggle}
 
-Existen 3 tipos de colecciones:
+Existen 3 tipos de **colecciones**:
 
 * **Locales**, que se guardan en el directorio `Saved\Collections`.
-Este directorio no se incluye en el control de versiones, por lo que estas colecciones solo están disponibles cuando se trabaja en el mismo equipo usando el mismo directorio de proyecto.
+Este directorio no se incluye en el control de versiones, por lo que estas **colecciones** solo están disponibles cuando se trabaja en el mismo equipo usando el mismo directorio de proyecto.
 
 * **Privadas**, que se guardan en el directorio `Developers` del usuario.
-Permite que cada desarrollador tenga colecciones propias y que pueda acceder a ellas desde diferentes equipos, gracias a incluir la carpeta `Developers` en el control de versiones.
-Solo se pueden crear este tipo de colecciones si tenemos activado el control de versiones.
+Permite que cada desarrollador tenga **colecciones** propias y que pueda acceder a ellas desde diferentes equipos, gracias a incluir la carpeta `Developers` en el control de versiones.
+Solo se pueden crear este tipo de **colecciones** si tenemos activado el control de versiones.
 
 * **Compartidas**, que se guardan en el directorio `Content\Collections`.
-Son las colecciones compartidas entre los desarrolladores del proyecto.
-Solo se pueden crear este tipo de colecciones si tenemos activado el control de versiones.
+Son las **colecciones** compartidas entre los desarrolladores del proyecto.
+Solo se pueden crear este tipo de **colecciones** si tenemos activado el control de versiones.
 
 # Referencias
 
