@@ -21,13 +21,10 @@ Perforce tiene algunas guías y vídeos[@PerforceGameDevProcess] sobre cómo uti
 Git es actualmente el VCS por excelencia y, obviamente, se puede utilizar sin problemas en proyectos bastante grandes.
 Por ejemplo, veamos el tamaño y los tiempos ---obtenidos sin ningún rigor, desde mi propia casa--- para algunos proyectos conocidos:
 
-+-----------------+---------------------+------------------------+-------------------+
-| Proyecto        | Tamaño del proyecto | Tamaño del repositorio | Tiempo de clonado |
-+=================+=====================+========================+===================+
-| Kernel Linux    | 1.1 GiB             | 4.0 GiB                | 5:45 min          |
-+-----------------+---------------------+------------------------+-------------------+
-| Unreal Engine 4 | 1.7 GiB             | 4.4 GiB                | 10:13 min         |
-+-----------------+---------------------+------------------------+-------------------+
+| **Proyecto**          | **Tamaño del proyecto** | **Tamaño del repositorio** | **Tiempo de clonado** |
+|-----------------------|-------------------------|----------------------------|-----------------------|
+| **Kernel Linux**      | 1.1 GiB                 | 4.0 GiB                    | 5:45 min              |
+| **Unreal Engine 4**   | 1.7 GiB                 | 4.4 GiB                    | 10:13 min             |
 
 : Tiempos y tamaños de los repositorios Git de algunos proyectos conocidos.
 
@@ -134,17 +131,12 @@ En un mismo servidor puede haber varios repositorios, llamados *depots*.
 El administrador del servidor tiene control total sobre los permisos de cada usuario en cada *depot*.
 Incluso puede establecer permisos según la ruta de archivos y directorios, usando {{< var perforce.filespecs >}} con comodines.
 
-+------------------------+--------------------------------------------------------------------------------------+
-| Expresión              | Descripción                                                                          |
-+========================+======================================================================================+
+| **Expresión**          | **Descripción**                                                                      |
+|------------------------|--------------------------------------------------------------------------------------|
 | `//project/…​`          | Todos los archivos en el *depot* `project`.                                          |
-+------------------------+--------------------------------------------------------------------------------------+
 | `//project/…​/help`     | Todos los archivos llamados `help` en cualquier subdirectorio del *depot* `project`. |
-+------------------------+--------------------------------------------------------------------------------------+
 | `//…​`                  | Todos los archivos en cualquier *depot*.                                             |
-+------------------------+--------------------------------------------------------------------------------------+
 | `//…​/J*`               | Todos los archivos que empiezan por `J` en cualquier *depot*.                        |
-+------------------------+--------------------------------------------------------------------------------------+
 
 : Ejemplos de especificadores de ruta en Perforce.
 
@@ -156,23 +148,15 @@ Por eso, al instalar el servidor es importante configurarlo adecuadamente, toman
 
 Perforce tiene una lista bastante extensa de clientes:
 
-+-------------------------------------------------------------+---------------------------------------------------------------------+
-| Nombre                                                      | Descripción                                                         |
-+=============================================================+=====================================================================+
+| **Nombre**                                                  | **Descripción**                                                     |
+|-------------------------------------------------------------|---------------------------------------------------------------------|
 | Helix Admin Tool (P4Admin)                                  | Herramienta de escritorio para la administración del servidor.      |
-+-------------------------------------------------------------+---------------------------------------------------------------------+
 | Helix Command-Line Client (P4)                              | Cliente de línea de comandos. Se utiliza ejecutando `p4 <comando>`. |
-+-------------------------------------------------------------+---------------------------------------------------------------------+
 | Helix Visual Client (P4V)                                   | Cliente de escritorio.                                              |
-+-------------------------------------------------------------+---------------------------------------------------------------------+
 | Helix Plugin for Visual Studio (P4VS)                       | Plugin para Visual Studio.                                          |
-+-------------------------------------------------------------+---------------------------------------------------------------------+
 | Helix Plugin for File Explorer (P4EXP)                      | Plugin para el explorador de Windows.                               |
-+-------------------------------------------------------------+---------------------------------------------------------------------+
 | Helix Plugin for Eclipse (P4Eclipse)                        | Plugin para Eclipse.                                                |
-+-------------------------------------------------------------+---------------------------------------------------------------------+
 | Helix Plugin for Graphical Tools (P4GT)                     | Plugins para Photoshop, 3ds Max y Maya.                             |
-+-------------------------------------------------------------+---------------------------------------------------------------------+
 
 : Lista de clientes de Perforce
 
