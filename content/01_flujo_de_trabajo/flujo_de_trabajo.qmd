@@ -824,7 +824,7 @@ La segunda acción reemplaza una malla estática por la **Tool** que se usó par
 
 Estas acciones facilitan mucho iterar rápidamente en el diseño del nivel, al permitir volver a poner la **Tool** en el lugar donde se va a usar la malla para modificarla, y luego volver a reemplazarla por la malla estática actualizada.
 
-# Referencias
+# Referencias {.unnumbered}
 
 ::: {#refs}
 :::

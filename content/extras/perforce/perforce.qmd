@@ -375,7 +375,7 @@ Aunque Perforce es una herramienta ideal para proyectos grandes, hay que reconoc
 Perforce es gratuito para hasta 5 usuarios.
 Los estudios *indie* pueden pedir también acceso gratuito para hasta 5 usuarios al software de gestión de proyectos Handsoft y precio especial para más de 5 usuarios a través del Perforce Indie Studio Pack[@PerforceIndieStudioPack].
 
-# Referencias
+# Referencias {.unnumbered}
 
 ::: {#refs}
 :::

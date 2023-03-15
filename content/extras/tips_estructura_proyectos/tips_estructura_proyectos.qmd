@@ -621,7 +621,7 @@ Solo se pueden crear este tipo de **colecciones** si tenemos activado el control
 Son las **colecciones** compartidas entre los desarrolladores del proyecto.
 Solo se pueden crear este tipo de **colecciones** si tenemos activado el control de versiones.
 
-# Referencias
+# Referencias {.unnumbered}
 
 ::: {#refs}
 ::: 
