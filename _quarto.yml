@@ -4,7 +4,6 @@ project:
     - content/01_flujo_de_trabajo/flujo_de_trabajo.qmd
     - content/02_introducción_gameplay/colisiones_triggers_armas.qmd
     - content/02_introducción_gameplay/entrada_interacción.qmd
-    - content/03_cámaras/cámaras.qmd
     - content/extras/perforce/perforce.qmd
     - content/extras/tips_estructura_proyectos/tips_estructura_proyectos.qmd
 
