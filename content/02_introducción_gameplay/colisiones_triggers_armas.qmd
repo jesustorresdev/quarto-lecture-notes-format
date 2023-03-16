@@ -538,4 +538,13 @@ En resumen, las comprobaciones mediante **raycasts** sirven al controlador para 
 ::: {#refs}
 :::
 
-{{< include anexos.qmd >}}
+# Anexos {.unnumbered}
+
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+## Jerarquía de clases de Unreal Engine
+```{mermaid}
+%%| file: figures/ue-class-hierarchy-part1.mm
+%%| fig-width: 15cm
+%%| fig-env: sidewaysfigure
+```

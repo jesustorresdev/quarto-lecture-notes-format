@@ -22,12 +22,8 @@ classDiagram
     UPawnMovementComponent <|-- UCharacterMovementComponent
 
     USceneComponent <|-- UPrimitiveComponent
-    UPrimitiveComponent <|-- UShapeComponent
     UPrimitiveComponent <|-- UStaticMeshComponent
-    UShapeComponent <|-- UBoxComponent
-    UShapeComponent <|-- USphereComponent
-    UShapeComponent <|-- UCapsuleComponent
-
+    
     UObject <|-- UPlayerInput
     UPlayerInput <|-- UEnhancedPlayerInput
     

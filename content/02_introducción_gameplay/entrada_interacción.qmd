@@ -227,20 +227,18 @@ Sin duda, el **PlayerController** es un buen sitio para gestionar acciones como 
 También es buen lugar para gestionar la entrada relacionada con el movimiento del personaje y de la cámara, en parte porque guarda la *rotación de control*, en parte porque estas clases traen todo lo necesario para que el controlador teledirija el movimiento del personaje.
 Pero, es posible, que en un juego con un único personaje, otras acciones como disparar, realizar ataques cuerpo a cuerpo o coger objetos, resulte algo más sencillo sí gestionamos la entrada en el propio personaje ---aunque puede que en componentes diferentes, para separar responsabilidades---.
 
-## Movimiento del personaje
+## Entrada de control del personaje
 
-El movimiento final de un personaje, puede no estar relacionado solo con el control
-En un mismo frame puede llegar que el jugador quiere que correr hacia adelante y, un poco después, que quiere que salte.
-¿Cómo se combinan ambas ordenes en el movimiento final del personaje?
+Al utilizar eventos para leer la entrada del jugador, pueden llegar en un mismo frame varios relacionados con el control del personaje.
+Por ejemplo, que el jugador quiere avanzar en cierta dirección, hacerlo corriendo y saltar.
+E incluso, pueden llegar información desde varios dispositivos de control: teclado, ratón o un *gamepad*.
 
-Un poco más tarde, el personaje estará en el aire, con el impuso del salto, pero también hay que sumar el efecto de la gravedad.
-Además, el jugador puede seguir indicando, mediante su control, que el personaje debe moverse en cierta dirección.
-Nuevamente, tenemos que ver cómo combinamos todas estas órdenes.
+Todos estos eventos deben integrarse para calcular cómo debe moverse el personaje en el frame.
 
-Por otro lado, no solo el controlador puede afectar al movimiento de un personaje.
-Si el personaje está sobre una plataforma o un ascensor, es necesario sumar a la entrada del jugador el movimiento de la superficie sobre la que se encuentra.
+Incluso es posible que otros componentes quieran afectar al control del personaje.
+Por ejemplo, si el personaje está sobre una plataforma que se mueve, una forma de implementarla es sumar el movimiento de la superficie, sobre la que se encuentra el personaje, a la entrada del jugador.
 
-Para que no se pisen los distintos factores, con origen diverso, que intentan condicionar la posición del personaje, lo usual es que:
+Una manera de integrar distintas fuentes de control del personaje es que:
 
 * El personaje ofrezca una interfaz para acumular vectores de movimiento durante el frame actual.
 Esta interfaz es la que deben usar los distintos componentes que quieren actuar sobre el movimiento del personaje
@@ -248,6 +246,10 @@ Esta interfaz es la que deben usar los distintos componentes que quieren actuar 
 * En cada *tick* se coge el vector acumulado de movimiento y el personaje es trasladado de una sola vez comprobando las colisiones.
 
 Por ejemplo, la clase **Pawn** de Unreal Engine ---que es la clase base de los actores que un **PlayerController** puede poseer---- tiene una variable interna de tipo vector, llamada `ControlInputVector`, y un método `AddMovementInput` con que el podemos sumar vectores de movimiento a `ControlInputVector`.
+
+En la @fig-movement-input se puede observar como se usa un evento de entrada para leer el control de movimiento para luego llamar a `AddMovementInput` con sus valores.
+
+![Uso de la entrada para el control de movimiento con el **Pawn** del jugador.](figures/movement-input.png){#fig-movement-input}
 
 La clase **Pawn** no hace nada con este vector, pero la idea es que en cada *tick* se lea el valor acumulado, usando el método `ConsumeMovementInputVector`, y este valor se use para mover el personaje, como se muestra en la @fig-character-movement-sequence.
 Al usar `ConsumeMovementInputVector`, el valor de `ControlInputVector` se pone a $(0, 0, 0)$, preparado para el siguiente frame.
@@ -259,9 +261,12 @@ Al usar `ConsumeMovementInputVector`, el valor de `ControlInputVector` se pone a
 %%| fig-width: 15cm
 ```
 
-La clase **Character** hereda de **Pawn** y añade funcionalidad de forma similar.
+La clase **Character** está diseñada para cuando necesitamos un personaje humanoide, que puede caminar, nadar o, incluso, volar, como el que se usa en muchos juegos de acción en primera o tercera persona.
+
+**Character** hereda de **Pawn** y añade funcionalidad de forma similar.
 Por ejemplo, tiene un método `Jump` que realmente guarda en la variable interna `bPressedJump` que el jugador ha pulsado la acción de saltar.
 Es en cada *tick* dónde se lee esta variable, así como `ControlInputVector`, para determinar el vector de movimiento realmente del actor del personaje.
+Por ejemplo, si `bPressedJump` es `true`, se suma al `ControlInputVector` un vector con el impulso del salto en Z.
 
 ::: {.callout-tip}
 Esta forma de resolver el problema puede parecer un tanto extraña, pero es muy común.
@@ -294,49 +299,166 @@ En la @fig-character-movement-sequence se puede ver un diagrama de secuencia par
 Como se interpreten los valores indicados a `AddMovementInput` y sumados en `ControlInputVector` va a depender del tipo de control de movimiento que queramos.
 
 Se puede indicar directamente el desplazamiento deseado ---control de primer orden--- pero también puede ser la velocidad ---control de segundo orden--- o la aceleración ---control de tercer orden--- del personaje.
-Cuando se quiere realismo se suele optar, por lo general, por usar la aceleración, puesto que modificar bruscamente la velocidad o la posición del personaje, puede dar lugar a comportamientos extraños.
 
-En Unreal Engine el **CharacterMovementComponent** espera que la entrada sea un vector con la dirección y sentido en la que acelerar al personaje
+Considerar la entrada del jugador directamente como el desplazamiento deseado, hace que la velocidad del personaje dependa de los FPS del juego, que pueden ser diferentes en cada sistema.
+Por eso, la entrada del jugador se suele interpretar como un velocidad o como aceleración.
+Cuando se quiere realismo, por lo general, se usa la aceleración, puesto que modificar bruscamente la velocidad o la posición del personaje, puede sentirse extraño.
+
+En cualquier de los dos casos, el componente encargado del movimiento del personaje tendrá que convertir esta entrada en el desplazamiento relativo del personaje para moverlo.
+Obviamente, esto va a depender de las características del personaje.
+Por ejemplo, si es un vehículo, de que tipo y si se desea una experiencia más realista o más arcade, o si es una persona y el modo en el que se desplaza.
+
+En Unreal Engine, el **CharacterMovementComponent** está diseñado para encargarse del movimiento de personajes humanoides.
+Espera que la entrada sea un vector con la dirección y sentido en la que acelerar al personaje
 La magnitud del vector se recorta a 1.0 y luego se multiplica por la aceleración máxima configurada en las propiedades del componente:
 
 ```
-Acceleration = MaxAcceleration * Clamp(ControlInputVector, 1.0f);
+Acceleration = MaxAcceleration * ClampSize(ControlInputVector, MaxSize=1.0f)
 ```
 
 Si tenemos que desarrollar nuestro propio **MovementComponent**, tenemos que decidir cómo interpretar `ControlInputVector` y cómo tratar, si fuera necesario, las diferencias entre los valores que pueden llegar según el dispositivo de control utilizado por el jugador.
-Por ejemplo, tanto con teclado como con *gamepad*, los vectores devueltos por la **Input Action** correspondiente contiene valores entre 1 y -1, pero nada impide que se use como entrada un ratón u otro dispositivo que devuelva valores mayores.
+Por ejemplo, tanto con teclado como con *gamepad*, los vectores devueltos por la **Input Action** correspondiente contiene valores entre 1.0 y -1.0, pero el ratón u otros dispositivos puede devolver valores en un rango mayor.
 
-## Control de cámara
+## Rotación de control y control de cámara
 
-El control de cámara por medio de la *rotación de control* que gestiona el **PlayerController** funciona de forma similar al control de movimiento.
+`ControlInputVector` almacena la dirección y la velocidad o aceleración en la que el jugador quiere que se mueva el personaje, pero a veces puede interesar leer otra dirección desde los controles del jugador.
+Por ejemplo, para controlar la dirección de la cámara o para rotar el personaje del jugador de forma independiente a la dirección de movimiento.
+Esto últimos es interesante con los NPC, ya que a veces la IA necesita poder controlar hacía dónde tiene que mirar un personaje, sin moverlo del sitio.
+
+Para ambas cosas se puede usar la *rotación de control*, que gestiona el **PlayerController** y funciona de forma similar al control de movimiento.
 
 El **PlayerController** ofrece funciones como `SetControlRotation` y `GetControlRotation` para leer y establecer la *rotación de control*.
 También permite acumular ángulo de rotación, en cualquier de los 3 ángulos de Euler ---vér la [@fig-ue-euler-angles]--- mediante las funciones `AddPitchInput`, `AddYawInput` y `AddRollInput`.
 Los valores indicados a estas funciones son multiplicados por las propiedades `InputPitchScale`, `InputYawScale` y `InputRollScale` del **PlayerController**, antes de ser acumulados.
 
+![Ángulos de Euler en Unreal Engine.](figures/euler_angles.png){#fig-ue-euler-angles}
+
 Las funciones `AddPitchInput`, `AddYawInput` y `AddRollInput` son ideales para usarlas con los eventos de entrada.
 Por ejemplo, que cuanto más acciona el *stick* a la derecha, más ángulo de *yaw* se acumule en la *rotación de control* .
 
-![Ángulos de Euler en Unreal Engine.](figures/euler_angles.png){#fig-ue-euler-angles}
+Además, la clase **Pawn** también tiene tres funciones por conveniencia: `AddControllerYawInput`, `AddControllerPitchInput` y `AddControllerRollInput`, que realmente llaman a las anteriores en el **PlayerController**.
+En la @fig-camera-input se puede observar un ejemplo de cómo se usan estas funciones.
 
-La clase **Pawn** también tiene tres funciones de conveniencia: `AddControllerYawInput`, `AddControllerPitchInput` y `AddControllerRollInput`, que realmente llaman a las anteriores en el **PlayerController**
+![Uso de la entrada para el control de la cámara con la *rotación de control*.](figures/camera-input.png){#fig-camera-input}
 
-Como en el caso del movimiento del personaje, en cada *tick* se puede leer la *rotación de control* y usarla para ajustar la dirección en la que mira la cámara.
+Igualmente, tiene la función `GetViewRotation`, que sirve para leer directamente la *rotación de control* del **PlayerController** desde el **Pawn**.
 
+### Rotación de la cámara
+
+La ventaja de que el **PlayerController** tenga una interfaz bien definida para gestionar la *rotación de control*, es que muchos componentes vienen preparados para leerla y usarla.
+
+Un ejemplo son los componentes **Camera** y **SpringArm** ---este último se usa para hacer que la cámara siga al jugador en los juegos en tercera persona---.
+Ambos tienen la propiedad **Use Pawn Control Rotation**, que al activarla permite que en cada *tick* se oriente el componente en la dirección de la *rotación de control*.
+
+En los juegos en primer persona, **Use Pawn Control Rotation** se activa en el componente **Camera**.
+Mientras que en los juegos en tercera persona, **Use Pawn Control Rotation** se activa en el componente **SprintArm**.
+
+#### Limitación de la rotación
+
+En ambos casos, seguramente sea necesario establecer límites a la direcciones que puede tener la cámara en el mundo.
+Por lo general, no suele ser necesario limitar el *yaw* de la cámara ---para que el jugador pueda mirar en cualquier dirección en horizontal--- pero si suele interesar limitar el *pitch*, para que la cámara no se incline demasiado hacia arriba o hacia abajo.
+
+Estos límites se pueden forzar en distintos lugares:
+
+* En el código que actualiza la *rotación de control* con la entrada del jugador.
+
+* Sobrescribiendo `AActor::CalcCamera()` (en C++) en el personaje o en un componente del actor, que puede ser heredando de componentes como **Camera** o **SpringArm** o en otro componente creado específicamente con este fin.
+Esta puede ser muy buena opción si se pretende limitar la rotación relativa de la cámara respecto a su componente padre o al actor que la contiene.
+
+* En el **PlayerCameraManager**, que es quién tiene la responsabilidad final de establecer el punto de vista del jugador.
+Este actor ofrece varios lugares para ajustar las propiedades de la cámara:
+
+ * **PlayerCameraManager** ofrece por defecto la posibilidad de limitar la orientación global de la cámara en el mundo.
+ Solo tenemos que indicar los límites que nos interesan usando las propiedades **View Pitch Min**, **View Pitch Max**, **View Yaw Min**, **View Yaw Max**, **View Roll Min** y **View Roll Max** de **PlayerCameraManager**.
+
+ * Sobrescribir **BlueprintUpdateCamera** (en *blueprints*), `UpdateViewTarget` o `UpdateViewTargetInternal` (en C++) en la clase **PlayerCameraManager**.
+
+ * Desarrollar un **CameraModifier** que limite la rotación y activarlo.
+ Los **CameraModifier** permiten modificar las propiedades finales de la cámara, una vez han sido calculadas por el **PlayerCameraManager**.
+ Se usan, por ejemplo, para hacer que la cámara vibre o ajustar el FOV o la profundidad de campo en ciertas condiciones del juego, porque se pueden activar o desactivar a demanda.
+
+### Rotación del personaje
+
+La *rotación de control* también puede usarse para rotar el personaje.
+Obviamente, emplearlo de esta manera va a depender del tipo de control que se desea para el movimiento del personaje.
+
+Cuando el jugador maneja algún tipo de vehículo, no se suele usar el *rotación de control* para controlar la dirección del vehículo.
+Los vehículos suelen tener algunas reglas respecto al funcionamiento de la dirección, de forma que no suelen poder cambiar de dirección libremente.
+Por tanto, lo ideal suele ser que el **MovementComponent** implemente estas reglas, calculando y aplicando tanto el desplazamiento como el cambio de dirección, en función de la dirección de movimiento indicada por el jugador.
+
+Cuando el jugador maneja un personaje humanoide, también existen unas reglas respecto a los cambios de dirección.
+Sin embargo, en muchos juegos de acción se prima el ritmo de juego y la sensación de control del jugador, sobre el realismo.
+
+Como hemos comentado, en los juegos de acción en tercera persona la *rotación de control* se suele usar para el control de la cámara.
+El actor del personaje suele moverse casi instantáneamente en la dirección que indica el jugador, aunque no esté mirando en dicha dirección.
+Mientras que la dirección del actor también suele cambiar rápidamente, hasta apuntar en la dirección del movimiento del actor.
+
+Para que esto no resulte demasiado extraño, se usan animaciones del personaje que encaje con cada situación.
+Por ejemplo, si el personaje lleva un tiempo corriendo hacia adelante, habrán aproximadamente 0° entre la dirección de movimiento y la dirección del actor, por lo que se reproduce una animación donde el personaje correr hacia adelante.
+Si en un instante dado el jugador decir moverse a la derecha, el actor seguirá el movimiento casi instantáneamente y la rotación del actor comenzara a adaptarte a ese cambio.
+En los primeros frames la diferencia entre la dirección de movimiento y la del actor será de 90°, por lo que la animación reproducida tendrá que ser de pasos laterales que, poco a poco, se convertirá en la de correr hacia adelante, según van aproximándose ambas direcciones.
+
+En los proyectos donde se prima la fidelidad de la animación, al cambio de movimiento se le añade cierta inercia y la rotación del actor se hace algo más lenta. 
+Así es más realista y encaja mejor con las animaciones evitando, por ejemplo, que los pies del personaje deslicen por el suelo.
+Sin embargo, es resultado es un personaje con un control más pesado, que no es adecuado en muchos juegos de acción.
+
+En Unreal Engine el **CharacterMovementComponent** funciona de la manera descrita.
+Tiene una serie de propiedades que permite configurar como de rápido se adapta el actor a las indicaciones del jugador y, además, se puede hacer cargo de la rotación del personaje en la dirección del movimiento.
+
+Finalmente, en los juegos en primera persona si es común usar la *rotación de control* para poder mirar y orientar el personaje sin moverlo del sitio.
+Generalmente, el *pitch* de la *rotación de control* se sincroniza con el *pitch* de la cámara ---imitando que movemos la cabeza de arriba a abajo--- pero el *yaw* se sincroniza con el *yaw* del personaje, para rotarlo horizontalmente en el sitio.
+
+Nuevamente, Unreal Engine ya viene preparado para esto.
+Las clase **Pawn** tiene 3 propiedades: **Use Controller Rotation Pitch**, **Use Controller Rotation Yaw** y **Use Controller Rotation Roll**, que ángulos de la *rotación de control* queremos que se apliquen a la rotación del **Pawn** en cada *tick*.
+
+### Entrada a la rotación de control
+
+Como en el caso del movimiento del personaje, debemos elegir como interpretamos la entrada del jugador.
+Sin embargo, la *rotación de control* guarda una dirección, por lo es necesario convertir la entrada de forma que se puede incorporar a la rotación de control.
+
+En muchos juegos se usa el ratón como entrada de la *rotación de control*.
+Los valores leídos mediante el **Input System** informan del desplazamiento lineal del ratón desde el frame anterior.
+Estos desplazamientos se pueden interpretar directamente como cambios de ángulo, de manera que al acumularlos en la *rotación de control*, como se observa en la @fig-camera-input, se varía su orientación.
+
+Cuando se pretende usar el teclado o un *stick* de un *gamepad* como entrada de la *rotación de control*, la cosa cambia porque la entrada se lee como vectores de dirección con rango entre 1.0 y -1.0.
+Si los acumulamos directamente, el jugador que el notará que el cambio será mas o menos rápido en función de los FPS a los que se ejecute el juego.
+
+Por eso, con el teclado y los *gamepads* la entrada del jugador se suele interpretar como una velocidad angular normalizada, de forma que la entrada a 0.0 indique velocidad 0.0 y la entrada a 1.0 indique velocidad angular máxima.
+Por tanto, para obtener el ángulo que finalmente se debe acumular en la *rotación de control*, debe multiplicarse por la velocidad angular máxima que nos interese y por el tiempo desde el frame anterior ---para convertir la velocidad angular en un ángulo---:
+
+```
+DeltaYaw = MaxYawSpeed * MouseXAxisInput * DeltaTime
+```
+
+Al usar velocidades angulares que se escalan con `DeltaTime` en cada frame, se consigue independencia respeto a los FPS con los que se ejecuta el juego, de forma que la experiencia es la misma en todos los sistemas.
+
+En el antiguo **Input System**, esta diferencia a la hora de tratar la entrada leída de teclado y *gamepad* respecto al ratón, hacían que hubiera que ponerlas en **Input Axis** distintas, para poder operar con ellas de forma diferente.
+Con el nuevo **Input System**, se pueden configurar modificadores específicos para hacer estos ajustes, en las entradas de teclado y *gamepad* en el **Input Mapping Context**.
+De esta forma, ratón, teclado y el *gamepad* pueden usar la misma **Input Action**, ofreciendo valores que podemos acumular directamente en la *rotación de control*, independientemente de su origen.
+
+En la @fig-camera-input-stick-imc-config se puede observar un ejemplo de esta configuración para el *stick* derecho de un *gamepad*.
+
+![Entrada de *stick* tratada como velocidad angular para el control de la cámara.](figures/camera-input-stick-imc-config.png){#fig-camera-input-stick-imc-config}
 
 <!---
-
-### Tipo de control
-
-// TODO: Control según tipo de control: stick, mouse o teclado.
-
-Esto encaja muy bien con los valores leídos de los controles del jugador, puesto que tanto si se usa el teclado como si es el *stick* de un *gamepad*, los vectores devueltos por la **Input Action** correspondiente contienen valores entre 1 y -1.
-Escalando el vector por la aceleración máxima, el jugador tiene capacidad para controlar la aceleración que imprime entre 0 y la máxima.
 
 # Puertas y ascensores
 
 
 # Controlador del personaje (estático)
+
+Es decir, si la entrada se interpreta como la velocidad deseada para el personaje ---control de segundo orden---:
+
+```
+Offset = ControlInput * DeltaTime
+```
+
+Mientras que si se interpreta como aceleración ---control de tercer orden--- necesitaremos el tiempo transcurrido desde el frame anterior y la velocidad calculada en el frame anterior:
+
+```
+NewVelocity = PreviousVelocity + ControlInput * DeltaTime
+Offset = NewVelocity * DeltaTime
+```
 
 
 # Diseño dirigido por datos
@@ -354,4 +476,13 @@ Escalando el vector por la aceleración máxima, el jugador tiene capacidad para
 ::: {#refs}
 :::
 
-{{< include anexos.qmd >}}
+# Anexos {.unnumbered}
+
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+## Jerarquía de clases de Unreal Engine
+```{mermaid}
+%%| file: figures/ue-class-hierarchy-part2.mm
+%%| fig-width: 15cm
+%%| fig-env: sidewaysfigure
+```
