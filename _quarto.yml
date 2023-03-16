@@ -34,14 +34,9 @@ filters:
   - reading-time
   - quarto
 
-environments: [landscape]
-
 format:
   pdf:
     # keep-tex: true
     documentclass: scrartcl
     classoption: numbers=endperiod
     papersize: a4
-    include-in-header: 
-      text: |
-        \usepackage{rotating}

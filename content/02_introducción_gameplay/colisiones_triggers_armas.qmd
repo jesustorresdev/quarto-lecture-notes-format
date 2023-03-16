@@ -142,7 +142,7 @@ Ahora bien, si también se usase para detectar los ataques enemigos, como el imp
 Al jugador le podría parecer que el impacto ocurre antes de tiempo o, incluso, que ocurre un impacto cuando es evidente que el proyectil no iba a tocar la malla.
 
 Por eso, lo que se hace es colocar otras **colisiones** de manera mucho más ajustada a la malla del tanque y se configuran los proyectiles para que ignoren la esfera exterior, de forma que solo impacten en las **colisiones** del interior.
-Como veremos más adelante, a estas **colisiones** se las denomina ***hitboxes*** ---.
+Como veremos más adelante, a estas **colisiones** se las denomina ***hitboxes***.
 
 ::: {.callout-note}
 En Unity el concepto se implementa mediante capas.
@@ -539,12 +539,15 @@ En resumen, las comprobaciones mediante **raycasts** sirven al controlador para 
 :::
 
 # Anexos {.unnumbered}
-
 \renewcommand{\thesubsection}{\Alph{subsection}}
 
 ## Jerarquía de clases de Unreal Engine
+
+Esta es la jerarquía de las clases de Unreal Engine vistas en este documento.
+
 ```{mermaid}
+%%| label: fig-ue-class-hierarchy
 %%| file: figures/ue-class-hierarchy-part1.mm
 %%| fig-width: 15cm
-%%| fig-env: sidewaysfigure
+%%| fig-cap: Jerarquía de clases de Unreal Engine
 ```

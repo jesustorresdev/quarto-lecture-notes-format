@@ -476,13 +476,19 @@ Offset = NewVelocity * DeltaTime
 ::: {#refs}
 :::
 
+{{< pagebreak >}}
+
 # Anexos {.unnumbered}
 
 \renewcommand{\thesubsection}{\Alph{subsection}}
 
 ## Jerarquía de clases de Unreal Engine
+
+Esta es la jerarquía de las clases de Unreal Engine vistas en este documento.
+
 ```{mermaid}
+%%| label: fig-ue-class-hierarchy
 %%| file: figures/ue-class-hierarchy-part2.mm
 %%| fig-width: 15cm
-%%| fig-env: sidewaysfigure
+%%| fig-cap: Jerarquía de clases de Unreal Engine
 ```
