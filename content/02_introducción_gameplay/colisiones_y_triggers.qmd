@@ -1,5 +1,5 @@
 ---
-title: "Programación de *gameplay* (I): Colisiones, *Triggers* y Armas"
+title: "Programación de *gameplay* (I): Colisiones y *Triggers*"
 ---
 
 {{< pagebreak >}}
@@ -65,7 +65,7 @@ Puede verse activando **View Mode / Player Collision** en el editor de Unreal En
 
 # Mallas de colisión
 
-Las **mallas de colisión** o **colisiones** son formas geométricas que rodean a los elementos del juego y se utilizan para determinar cuándo estos se tocan o intersecan.
+Las **mallas de colisión** o **colisiones** son formas geométricas que rodean a los elementos del juego y se utilizan para determinar cuándo estos se tocan o superponen.
 Desde el punto de vista de la lógica del *gameplay*, no importa qué ocurre con las mallas renderizadas, sino las interacciones entre las **mallas de colisión**.
 
 Si lo llevamos extremo, el desarrollo del *gameplay* de videojuegos actuales no es tan diferente de como sería el de juegos clásicos como Pong[@WikipediaPong] y similares.
@@ -279,7 +279,7 @@ Cualquier juego está lleno de ***triggers***, porque buena parte de la lógica 
 
 ## Crear *triggers* {#sec-make-triggers}
 
-Los ***triggers*** son **mallas de colisión** configuradas para no bloquear las colisiones pero si para notificar cuando se intersecan con otra.
+Los ***triggers*** son **mallas de colisión** configuradas para no bloquear las colisiones pero si para notificar cuando se superponen con otra.
 
 En Unity, para convertir un *collider* en un ***trigger*** solo tenemos que activar su propiedad **Is Trigger**.
 Sin embargo, en Unreal Engine se utilizan los canales de colisión.
@@ -318,7 +318,7 @@ Prácticamente, todos los ejemplos comentados anteriormente se implementan ponie
 Unreal Engine, Unity y otros motores disponen de eventos para notificar la intersección con ***triggers***.
 
 En la @fig-event-overlap se pueden ver algunos de estos nodos de eventos en *blueprints*.
-Los nodos **EventActorBeginOverlap** y **EventActorEndOverlap** sirven para manejar los eventos **OnActorBeginOverlap** y **OnActorEndOverlap** en el *blueprint* del actor, que se disparan cuando otro objeto comienza y termina de intersecar al componente raíz del actor, respectivamente.
+Los nodos **EventActorBeginOverlap** y **EventActorEndOverlap** sirven para manejar los eventos **OnActorBeginOverlap** y **OnActorEndOverlap** en el *blueprint* del actor, que se disparan cuando otro objeto comienza y termina de superponerse al componente raíz del actor, respectivamente.
 Mientras que los nodos **OnComponentBeginOverlap** y **OnComponentEndOverlap** son para manejar el evento de ***trigger*** de un componente --en la figura, el componente **Capsule**--- del actor.
 
 ![Eventos de *trigger* en *blueprint*.](figures/event-overlap.png){#fig-event-overlap}
@@ -358,9 +358,23 @@ Todos los objetos visibles suelen configurarse para bloquear el **canal de traza
 Al mismo tiempo, se puede tener otro **canal de traza** para los objetos que pueden bloquear proyectiles ---y puede que recibir daño--- de forma que las ventanas, las puertas, las paredes delgadas o la vegetación sean ignoradas en ese canal.
 El resultado es que así el *gameplay* puede detectar objetos a través de los objetos mencionados anteriormente, lo que permitiría que el jugador disparara a través de ellos.
 
+También se pueden hacer consultas usando perfiles de colisión.
+Estos perfiles son los mismos que se configuran en cada componente en las propiedades de **Collisions / Collision Presets** y que se pueden crear, según las necesidades del proyecto, en **Project Settings...**.
+
+La consulta por perfil se hace empleado funciones como **LineTraceByProfile** (`UWorld:: LineTraceSingleByProfile()` en C++), que también se puede observar en la @fig-line-trace.
+En este caso, el ***raycast*** devuelve el primer objeto que lo bloquea, considerando la configuración del perfil sobre los tipos de objetos que deben ser ignorados o con los que puede superponerse o bloquear.
+
+## *Tests*
+
+Las funciones de ***raycast*** devuelven información sobre el impacto de la traza en el objeto, mediante la estructura `HitResult`.
+Si no necesitamos esta información, sino que sólo interesa saber si hay un objeto bloqueado la traza, podemos usar una versión de estas funciones marcada con la palabra `Test`.
+Por ejemplo, `UWorld::LineTraceTestForObject()` o `UWorld::LineTraceTestByChanneL()`.
+
+Estas funciones de ***raycast*** solo están disponibles en C++.
+
 ## Consultas múltiples
 
-Cuando se hace un ***raycast** se puede elegir obtener el primer objeto encontrado o se puede devolver todo lo que la traza encuentra en su camino.
+Cuando se hace un ***raycast*** se puede elegir obtener el primer objeto encontrado o se puede devolver todo lo que la traza encuentra en su camino.
 Lo primero se hace usando funciones como **LineTraceForObject** o **LineTraceByChannel** y lo segundo usando **MultiTraceForObject** (`UWorld::LineTraceMultiForObject()` en C++) o **MultiTraceByChannel** (`UWorld::LineTraceMultiByChannel()` en C++)
 
 En el caso de las consultas sobre múltiples objetos, existe una importante diferencia entre hacerlo por un **canal de tipo de objeto** o **de traza**.
@@ -386,15 +400,27 @@ Mientras que la @tbl-shape-trace-functions contiene la lista de funciones para e
 | Sencillo | Objeto   | LineTraceForObject      | `LineTraceSingleForObject()` |
 |          +----------+-------------------------+------------------------------+
 |          | Traza    | LineTraceByChannel      | `LineTraceSingleByChannel()` |
+|          +----------+-------------------------+------------------------------+
+|          | Perfil   | LineTraceByProfile      | `LineTraceSingleByProfile()` |
 +----------+----------+-------------------------+------------------------------+
 |                                                                              |
 +----------+----------+-------------------------+------------------------------+
 | Multiple | Objeto   | MultiTraceForObject     | `LineTraceMultiForObject()`  |
 |          +----------+-------------------------+------------------------------+
-|          | Traza    | LineTraceByChannel      | `LineTraceMultiByChannel()`  |
+|          | Traza    | MultiTraceByChannel     | `LineTraceMultiByChannel()`  |
+|          +----------+-------------------------+------------------------------+
+|          | Perfil   | MultiTraceByProfile     | `LineTraceMultiByProfile()`  |
++----------+----------+-------------------------+------------------------------+
+|                                                                              |
++----------+----------+-------------------------+------------------------------+
+| Test     | Objeto   | N/A                     | `LineTraceTestForObject()`   |
+|          +----------+-------------------------+------------------------------+
+|          | Traza    | N/A                     | `LineTraceTestByChannel()`   |
+|          +----------+-------------------------+------------------------------+
+|          | Perfil   | N/A                     | `LineTraceTestByProfile()`   |
 +----------+----------+-------------------------+------------------------------+
 
-: Funciones de ***raycast*** para trazado de líneas en Unreal Engine. {#tbl-line-trace-functions}
+: Funciones de *raycast* para trazado de líneas en Unreal Engine. {#tbl-line-trace-functions}
 
 +----------+----------+-----------------------------+------------------------------+
 |          | **Capa** | ***Blueprints***            | **C++** (`UWorld::*`)        |
@@ -408,6 +434,12 @@ Mientras que la @tbl-shape-trace-functions contiene la lista de funciones para e
 |          | Traza    | BoxTraceByChannel\          | `SweepSingleByChannel()`     |
 |          |          | SphereTraceByChannel\       |                              |
 |          |          | CapsuleTraceByChannel       |                              |
+|          +----------+-----------------------------+------------------------------+
+|          |                                                                       |
+|          +----------+-----------------------------+------------------------------+
+|          | Perfil   | BoxTraceByProfile\          | `SweepSingleByProfile()`     |
+|          |          | SphereTraceByProfile\       |                              |
+|          |          | CapsuleTraceByProfile       |                              |
 +----------+----------+-----------------------------+------------------------------+
 |                                                                                  |
 +----------+----------+-----------------------------+------------------------------+
@@ -420,9 +452,144 @@ Mientras que la @tbl-shape-trace-functions contiene la lista de funciones para e
 |          | Traza    | MultiBoxTraceByChannel\     | `SweepMultiByChannel()`      |
 |          |          | MultiSphereTraceByChannel\  |                              |
 |          |          | MultiCapsuleTraceByChannel  |                              |
+|          +----------+-----------------------------+------------------------------+
+|          |                                                                       |
+|          +----------+-----------------------------+------------------------------+
+|          | Perfil   | MultiBoxTraceByProfile\     | `SweepMultiByProfile()`      |
+|          |          | MultiSphereTraceByProfile\  |                              |
+|          |          | MultiCapsuleTraceByProfile  |                              |
++----------+----------+-----------------------------+------------------------------+
+|                                                                                  |
++----------+----------+-----------------------------+------------------------------+
+| Test     | Objeto   | N/A                         |  `SweepTestForObject()`      |
+|          |          |                             |                              |
+|          |          |                             |                              |
+|          +----------+-----------------------------+------------------------------+
+|          |                                                                       |
+|          +----------+-----------------------------+------------------------------+
+|          | Traza    | N/A                         | `SweepTestByChannel()`       |
+|          |          |                             |                              |
+|          |          |                             |                              |
+|          +----------+-----------------------------+------------------------------+
+|          |                                                                       |
+|          +----------+-----------------------------+------------------------------+
+|          | Perfil   | N/A                         | `SweepTestByProfile()`       |
+|          |          |                             |                              |
+|          |          |                             |                              |
 +----------+----------+-----------------------------+------------------------------+
 
-: Funciones de ***raycast*** para barrido con formas en Unreal Engine. {#tbl-shape-trace-functions}
+: Funciones de *raycast* para barrido con formas en Unreal Engine. {#tbl-shape-trace-functions}
+
+También existe un grupo de funciones con los prefijos `ComponentOverlap` y `ComponentSweep` que permiten hacer consultas usando la malla de colisión de un componente dado.
+Por ejemplo, la colisión simple configurada en un **StaticMesh**.
+
+## Consultas de superposición
+
+En Unreal Engine, no solo se pueden lanzar trazas o formas, desde un punto a otro, para buscar objetos.
+También podemos localizarlos dentro de un área concreta, con una forma y tamaño especificado.
+
+En la @tbl-overlap-functions se muestran algunas de estas funciones.
+
++----------+----------+--------------------------------+-------------------------------------------+
+|          | **Capa** | ***Blueprints***               | **C++** (`UWorld::*`)                     |
++==========+==========+================================+===========================================+
+| Multiple | Objeto   | BoxOverlapActors\              | `OverlapMultiByObjectType()`              |
+|          |          | SphereOverlapActors\           |                                           |
+|          |          | CapsuleOverlapActors\          |                                           |
+|          |          | BoxOverlapComponents\          |                                           |
+|          |          | SphereOverlapComponents\       |                                           |
+|          |          | CapsuleOverlapComponents       |                                           |
+|          +----------+--------------------------------+-------------------------------------------+
+|          |                                                                                       |
+|          +----------+--------------------------------+-------------------------------------------+
+|          | Traza    | N/A                            | `OverlapMultiByChannel()`                 |
+|          |          |                                |                                           |
+|          |          |                                |                                           |
+|          +----------+--------------------------------+-------------------------------------------+
+|          |                                                                                       |
+|          +----------+--------------------------------+-------------------------------------------+
+|          | Perfil   |                                | `OverlapMultiByProfile()`                 |
+|          |          |                                |                                           |
+|          |          |                                |                                           |
++----------+----------+--------------------------------+-------------------------------------------+
+|                                                                                                  |
++----------+----------+--------------------------------+-------------------------------------------+
+| Test     | Objeto   | N/A                            | `OverlapAnyTestByObjectType()`            |
+|          |          |                                |                                           |
+|          +----------+--------------------------------+-------------------------------------------+
+|          |                                                                                       |
+|          +----------+--------------------------------+-------------------------------------------+
+|          | Traza    | N/A                            | `OverlapAnyTestByChannel()`\              |
+|          |          |                                | `OverlapBlockingTestByChannel()`          |
+|          +----------+--------------------------------+-------------------------------------------+
+|          |                                                                                       |
+|          +----------+--------------------------------+-------------------------------------------+
+|          | Perfil   | N/A                            | `OverlapAnyTestByProfile()`               |
+|          |          |                                | `OverlapBlockingTestByProfile()`          |
++----------+----------+--------------------------------+-------------------------------------------+
+
+: Funciones de consulta de superposición de objetos en un área. {#tbl-overlap-functions}
+
+Las funciones con el prefijo `OverlapAny`, devuelven objetos en el área indicada con los que la consulta haga `Overlap` o `Blocking`.
+Mientras que las funciones con el prefijo `OverlapBlocking`, solo devuelven los objetos con los que la consulta haga `Blocking`.
+
+## Consultas asíncronas
+
+<!--- Sobre el tema:
+https://medium.com/@bryan.corell/using-async-collision-traces-in-unreal-engine-4-2cc312c825f5
+-->
+
+Como los procesadores modernos son multinúcleo, los motores de videojuegos modernos son multihilo para aprovechar el paralelismo de las CPU.
+Por ejemplo, un hilo puedo dedicarse al render, otro al código de *gameplay* y otro al código de red.
+
+Por defecto, las funciones de *tick* de nuestros componentes se llaman desde el hilo de *gameplay*, de forma que estamos seguros de que dos funciones de *tick* nunca se están ejecutando en paralelo.
+Por tanto, si el código de *gameplay* realiza varios ***raycasts***, el tiempo que lleve resolverlos reduce el tiempo disponible para otras partes del código de *gameplay*.
+
+Como estas consultas pueden tener cierto coste, a veces interesa ejecutarlas en un hilo diferente, liberando al hilo de *gameplay* de esa tarea y permitiendo que, potencialmente, los ***raycasts*** se puedan resolver en paralelo en otro núcleo del procesador.
+De esta forma, el código de *gamplay* solicitaría el ***raycasts*** pero luego seguiría ejecutando otras acciones.
+Tiempo después, llegaría el resultado al el código de *gamplay* y este lo usaría como corresponda.
+
+Este tipo de consultas se denominan **consultas asíncronas**, porque no se resuelven en el momento.
+Mientras que las que hemos visto hasta ahora se denominan **consultas síncronas**, porque se hacen y resuelven en el momento en el que se piden.
+
+Por su coste, los equipos de desarrollo suelen establecer reglas muy estrictas para restringir al mínimo indispensable las **consultas síncronas**.
+Este tipo de consultas pueden ser indispensables para el control del personaje, de forma que se pueda mover en el mismo frame en el que se recibe la entrada del jugador.
+Sin embargo, para otras características, como la IA, las armas o la interacción con los objetos de la escena, es preferible usar las **consultas asíncronas**, desde el punto de vista del rendimiento del juego.
+
+Unreal Engine incluye varias funciones para realizar **consultas asíncronas**, aunque solo están disponibles en C++.
+En la @tbl-async-raycast se puede ver una listado de todas ellas.
+
++---------------+----------+--------------------------------+
+|               | **Capa** | **C++** (`UWorld::*`)          |
++===============+==========+================================+
+| Sencillo      | Objeto   | `AsyncLineTraceByObjectType()` |
+|               +----------+--------------------------------+
+|               | Traza    | `AsyncLineTraceByChannel()`    |
+|               +----------+--------------------------------+
+|               | Perfil   | `AsyncLineTraceByProfile()`    |
++---------------+----------+--------------------------------+
+|                                                           |
++---------------+----------+--------------------------------+
+| Superposición | Objeto   | `AsyncOverlapByObjectType()`   |
+|               +----------+--------------------------------+
+|               | Traza    | `AsyncOverlapByChannel()`      |
+|               +----------+--------------------------------+
+|               | Perfil   | `AsyncOverlapByProfile()`      |
++---------------+----------+--------------------------------+
+|                                                           |
++---------------+----------+--------------------------------+
+| Forma         | Objeto   | `AsyncSweepByObjectType()`     |
+|               +----------+--------------------------------+
+|               | Traza    | `AsyncSweepByChannel()`        |
+|               +----------+--------------------------------+
+|               | Perfil   | `AsyncSweepByProfile()`        |
++---------------+----------+--------------------------------+
+
+: Funciones de *raycasts* asíncronas de Unreal Engine. {#tbl-async-raycast}
+
+La premisa básica es que si hacemos una **consulta asíncrona** en un frame, el resultado estará disponible en el frame siguiente, antes de que se llame a cualquier función de *tick*.
+El resultado lo podemos obtener consultado directamente el `FTraceHandle` que devuelven estas funciones, o dejando que Unreal Engine llame de vuelta a una función especifica de nuestro código de *gameplay*.
+Pera esto último, tendremos que indicar dicha función a través de un parámetro de las funciones de ***raycast*** que espera un *delegado*.
 
 # Colisiones simples y complejas
 
@@ -520,18 +687,6 @@ O si debe adoptar una postura más adecuada para alguien que tiene que mantener 
 ![Captura de «Assassin's Creed Odyssey» (2018).](figures/assassins-creed.jpg){#fig-assassins-creed}
 
 En resumen, las comprobaciones mediante **raycasts** sirven al controlador para determinar el modo en el que debe moverse el personaje y las animaciones que deben encadenarse.
-
-<!---
-
-# Armas
-
-# *Hitboxes*
-
-**hutboxes**
-
-# Damage API
-
----->
 
 # Referencias {.unnumbered}
 

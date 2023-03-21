@@ -440,37 +440,6 @@ En la @fig-camera-input-stick-imc-config se puede observar un ejemplo de esta co
 
 ![Entrada de *stick* tratada como velocidad angular para el control de la cámara.](figures/camera-input-stick-imc-config.png){#fig-camera-input-stick-imc-config}
 
-<!---
-
-# Puertas y ascensores
-
-
-# Controlador del personaje (estático)
-
-Es decir, si la entrada se interpreta como la velocidad deseada para el personaje ---control de segundo orden---:
-
-```
-Offset = ControlInput * DeltaTime
-```
-
-Mientras que si se interpreta como aceleración ---control de tercer orden--- necesitaremos el tiempo transcurrido desde el frame anterior y la velocidad calculada en el frame anterior:
-
-```
-NewVelocity = PreviousVelocity + ControlInput * DeltaTime
-Offset = NewVelocity * DeltaTime
-```
-
-
-# Diseño dirigido por datos
-
-# Programación dirigida por eventos
-
-
-# Timers
-
-# Damage API
---->
-
 # Referencias {.unnumbered}
 
 ::: {#refs}
