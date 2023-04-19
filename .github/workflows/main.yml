@@ -12,12 +12,12 @@ jobs:
     steps:
 
     - name: Obtener el proyecto
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         persist-credentials: false
 
     - name: Generar la documentación
-      uses: devcontainers/ci@v0.2
+      uses: devcontainers/ci@v0.3
       with:
         runCmd: quarto render --to pdf
 
