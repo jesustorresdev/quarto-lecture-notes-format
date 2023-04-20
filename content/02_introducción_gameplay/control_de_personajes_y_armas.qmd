@@ -276,7 +276,7 @@ En este sentido, es necesario considerar el uso de *pools* de objetos para reusa
 
   <!--- TODO: Imagen ---> 
 
-  * Con el objeto de evitar fallar en la detección de posibles obstáculos, puede ser necesario considerar algunas de las técnicas comentadas en el [Detección continua de colisiones](#_detección_continua_de_colisiones), como añadir a los proyectiles una cola invisible, hacer un *raycast* o traslación con *barrido* con la forma del proyectil en cada paso de simulación.
+  * Con el objeto de evitar fallar en la detección de posibles obstáculos, puede ser necesario considerar algunas de las técnicas de detección continua de colisiones[@TorresD3DFisicas], como añadir a los proyectiles una cola invisible, hacer un *raycast* o traslación con *barrido* con la forma del proyectil en cada paso de simulación.
 
 * El uso de proyectiles suponen un reto adicional en los juegos multijugador en red, porque implica tener decenas de objetos cuyo movimiento debe sincronizarse entre todos los clientes, para evitar crear inconsistencias en la experiencia de los distintos jugadores.
 
