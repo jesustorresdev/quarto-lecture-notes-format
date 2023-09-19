@@ -1,5 +1,5 @@
 ---
-title: "Consejos sobre la organización de los proyectos"
+title: "Notas sobre la organización de los proyectos"
 ---
 
 {{< pagebreak >}}
