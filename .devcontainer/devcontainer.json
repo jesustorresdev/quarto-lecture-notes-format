@@ -3,7 +3,7 @@
 {
 	"name": "mudv-desarrollo3d-apuntes",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
+	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
 	"features": {
 		"ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {
 			"installChromium": true,
