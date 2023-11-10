@@ -27,7 +27,9 @@
 			"extensions": [
 				"sumneko.lua",
 				"valentjn.vscode-ltex",
-				"zfscgy.bibtex-helper"
+				"zfscgy.bibtex-helper",
+				"github.vscode-github-actions",
+				"GitHub.vscode-pull-request-github"
 			]
 		}
 	}
