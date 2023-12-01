@@ -7,6 +7,7 @@ project:
     - content/02_introducción_gameplay/control_de_personajes_y_armas.qmd
     - content/extras/perforce/perforce.qmd
     - content/extras/estructura_proyectos/estructura_proyectos.qmd
+    - content/extras/unreal_gameplay_framework/unreal_gameplay_framework.qmd
 
 subtitle: Desarrollo de Videojuegos 3D (20XX/20XY)
 author:   
