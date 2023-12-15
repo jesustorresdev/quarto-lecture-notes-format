@@ -1,0 +1,21 @@
+Actor:
+  internal-name: AActor
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/AActor/index.html
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/index.html
+  members:
+    GetActorLocation:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/AActor/GetActorLocation/index.html
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/GetActorLocation/index.html
+Pawn:
+  internal-name: APawn
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/index.html
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/index.html

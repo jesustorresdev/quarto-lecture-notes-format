@@ -37,6 +37,7 @@ csl: references/chicago-fullnote-bibliography-short-title-subsequent.csl
 filters:
   - reading-time
   - quarto
+  - api-reference
 
 format:
   pdf:
@@ -44,3 +45,6 @@ format:
     documentclass: scrartcl
     classoption: numbers=endperiod
     papersize: a4
+
+api-reference: 
+  path: references/api.yml
