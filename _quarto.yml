@@ -27,6 +27,8 @@ abstract-title: Resumen
 toc-title: Contenidos
 toc: true
 number-sections: true
+crossref:
+  title-delim: period
 
 suppress-bibliography: false
 bibliography: references/references.bib
