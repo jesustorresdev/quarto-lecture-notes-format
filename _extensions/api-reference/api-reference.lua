@@ -5,7 +5,7 @@ local CROSSREF_SEP = "-"
 
 local ENTITY_TYPES = {
   class = "class",
-  method = "method"
+  func = "function",
 }
 
 local KNOWN_LANGUAGES = {
@@ -40,9 +40,21 @@ local function readYamlFile(filename)
   end
   local content = "---\n" .. file:read("*a") .. "\n---\n"
   file:close()
-  local metadata = pandoc.read(content, "markdown").meta
+  local metadata = pandoc.read(content, "markdown-raw_html").meta
   -- quarto.log.output(metadata)
   return metadata
+end
+
+local function refsSorting(left, right) 
+  if left.order and right.order then
+    return left.order < right.order
+  elseif left.order then
+    return true
+  elseif right.order then
+    return false
+  else
+    return left.name < right.name
+  end
 end
 
 local function intializeReference(item, parent)
@@ -50,8 +62,9 @@ local function intializeReference(item, parent)
   entry.id = item.id
   entry.used = false
   entry.type = item.type and stringify(item.type)
-    or parent and ENTITY_TYPES.method or ENTITY_TYPES.class
-  entry.name = item.name and stringify(item.name) or entry.id
+    or parent and ENTITY_TYPES.func or ENTITY_TYPES.class
+  entry.name = item.name and stringify(item.name)
+    or entry.type == ENTITY_TYPES.func and item.id .. "()" or item.id
   entry.refname = table.concat({
     parent and parent.refname or CROSSREF_PREFIX,
     entry.id
@@ -72,6 +85,7 @@ local function intializeReference(item, parent)
       end
 
       ref.url = stringify(refItem.url)
+      ref.order = refItem.order and stringify(refItem.order)
       if refItem.lang then
         local lang = LANG_MAPPING[stringify(refItem.lang):lower()].id
         if lang then ref.lang = lang end
@@ -82,7 +96,7 @@ local function intializeReference(item, parent)
       table.insert(entry.refs, ref)
       ::continue::
     end
-    table.sort(entry.refs, function(left, right) return left.name < right.name end)
+    table.sort(entry.refs, refsSorting)
   end
 
   return entry

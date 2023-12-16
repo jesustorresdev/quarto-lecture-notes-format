@@ -6,29 +6,29 @@ local fontawesome = require "fontawesome"
 local faArrow = fontawesome.fontAwesome("arrow-circle-right", nil, "small")
 local faCube = fontawesome.fontAwesome("cube", nil, "small")
 
-local stringify = pandoc.utils.stringify
-local Attr = pandoc.Attr
 local BulletList = pandoc.BulletList
 local DefinitionList = pandoc.DefinitionList
 local Code = pandoc.Code
+local Div = pandoc.Div
 local Emph = pandoc.Emph
 local Link = pandoc.Link
+local RawInline = pandoc.RawInline
 local Space = pandoc.Space
 local Span = pandoc.Span
 local Str = pandoc.Str
 
 local TYPE_MAPPING = {
   ["class"] = "clase",
-  ["method"] = "método",
+  ["func"] = "función",
+  ["method"] = "método"
 }
 
-local function processEntry(entry)
-  local name = entry.type == apiref.ENTITY_TYPES.method and entry.name .. "()" or entry.name
+local function processEntry(entry, parent)
   local term = Span({
-    entry.type == apiref.ENTITY_TYPES.method and faArrow or faCube,
+    entry.type == apiref.ENTITY_TYPES.func and faArrow or faCube,
     Space(),
-    pandoc.Str(name)
-  }, Attr(entry.refname))
+    pandoc.Str(entry.name)
+  }, {id=entry.refname, sortBy=entry.name})
   local descriptionParagraph = {}
   local refsList = {}
 
@@ -41,12 +41,16 @@ local function processEntry(entry)
   end
 
   -- type marker
-  table.insert(descriptionParagraph, Emph("«" .. TYPE_MAPPING[entry.type] .. "»"))
+  if entry.type == apiref.ENTITY_TYPES.class then
+    table.insert(descriptionParagraph, Emph("«" .. TYPE_MAPPING.class .. "»"))
+  elseif parent and parent.type == apiref.ENTITY_TYPES.class then
+    table.insert(descriptionParagraph, Emph("«" .. TYPE_MAPPING.method .. "»"))
+  else
+    table.insert(descriptionParagraph, Emph("«" .. TYPE_MAPPING.func .. "»"))
+  end
 
   if entry.type == apiref.ENTITY_TYPES.class and entry.extends then
-    table.insert(descriptionParagraph, Space())
-    table.insert(descriptionParagraph, Str(":"))
-    table.insert(descriptionParagraph, Space())
+    table.insert(descriptionParagraph, RawInline("latex", "~:~"))
     table.insert(descriptionParagraph, Emph(entry.extends))
   end
 
@@ -75,23 +79,36 @@ local function Block(el)
       for _, member in pairs(entry.members) do
         if not member.used then goto continueMember end
 
-        local memberDefinition = processEntry(member)
+        local memberDefinition = processEntry(member, entry)
         table.insert(membersList, {memberDefinition.term, memberDefinition.description})
         ::continueMember::
       end
-      table.sort(membersList, function(left, right) return stringify(left[1].text) < stringify(right[1].text) end)
-      table.insert(definition.description, DefinitionList(membersList))
+
+      if membersList then
+        table.sort(membersList, function(left, right)
+          return left[1].attr.attributes.sortBy < right[1].attr.attributes.sortBy end)
+        table.insert(definition.description, DefinitionList(membersList))
+      end
     end
 
     table.insert(definitions, {
       definition.term,
       pandoc.Blocks(definition.description)
     })
-    table.sort(definitions, function(left, right) return stringify(left[1]) < stringify(right[1]) end)
-  ::continue::
+    ::continue::
   end
 
-  return DefinitionList(definitions)
+  if definitions then
+    table.sort(definitions, function(left, right)
+      return left[1].attr.attributes.sortBy < right[1].attr.attributes.sortBy end)
+    return Div({
+      RawInline("latex", "\\begin{flushleft}"),
+      DefinitionList(definitions),
+      RawInline("latex", "\\end{flushleft}")
+    }) 
+  else
+    return pandoc.Null()
+  end
 end
 
 return {

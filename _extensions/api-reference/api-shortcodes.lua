@@ -49,7 +49,7 @@ local function apiShortcode(args, kwargs, meta)
   local parent = found.parent
 
   if not entry then
-      return Strong(args[1] .. "?")
+      return Strong("api-ref " .. crossref .. "?")
   end
 
   entry.used = true
@@ -57,12 +57,10 @@ local function apiShortcode(args, kwargs, meta)
       parent.used = true
   end
   
-  local name = entry.type == apiref.ENTITY_TYPES.method and entry.name .. "()" or entry.name
-  reftext = isFull and parent.name .. "::" .. name or name 
-
+  reftext = isFull and parent.name .. "::" .. entry.name or entry.name 
   return Plain({
-    entry.type == apiref.ENTITY_TYPES.method and Code(reftext) or Strong(reftext),
-      Superscript(Link(faLink, "#" .. entry.refname))
+    entry.type == apiref.ENTITY_TYPES.func and Code(reftext) or Strong(reftext),
+    Superscript(Link(faLink, "#" .. entry.refname))
   })
 end
 
