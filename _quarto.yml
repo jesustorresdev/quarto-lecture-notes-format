@@ -45,6 +45,19 @@ format:
     documentclass: scrartcl
     classoption: numbers=endperiod
     papersize: a4
+    include-before-body: 
+      text: |
+        %% Enable hyphenation for tt fonts
+        \DeclareFontFamily{\encodingdefault}{\ttdefault}{\hyphenchar\font=`\-}
+        \hyphenation{In-terp-To-Mo-ve-ment-Com-po-nent}
+        \hyphenation{Add-Con-tro-ller-Yaw-In-put}
+        \hyphenation{Pla-yer-Ca-me-ra-Ma-na-ger}
+        \hyphenation{Set-Com-po-nent-Tick-E-na-bled}
+        \hyphenation{Cha-os-Whee-led-Ve-hi-cle-Mo-ve-ment-Com-po-nent}
+        \hyphenation{Cha-os-Ve-hi-cle-Mo-ve-ment-Com-po-nent}
+        \hyphenation{Up-da-te-Vi-ew-Tar-get-In-ter-nal}
+        \hyphenation{Blu-e-print-Up-da-te-Ca-me-ra}
+        \hyphenation{In-ter-nal-Ta-ke-Ra-di-al-Da-ma-ge}
 
 api-reference: 
   path: references/api.yml

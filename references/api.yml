@@ -1,21 +1,671 @@
 Actor:
   internal-name: AActor
+  extends: UObject
   refs:
     - lang: Blueprint
-      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/AActor/index.html
+      url: https://docs.unrealengine.com/en-US/BlueprintAPI/Actor/index.html
     - lang: C++
-      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/index.html
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/
   members:
+    CalcCamera:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/CalcCamera/index.html
+    SetActorEnableCollision:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Collision/SetActorEnableCollision/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/SetActorEnableCollision/index.html
+    SetActorHiddenInGame:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Rendering/SetActorHiddenInGame/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/SetActorHiddenInGame/index.html
+    SetActorTickEnabled:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Actor/Tick/SetActorTickEnabled/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/SetActorTickEnabled/index.html
+    RegisterActorTickFunctions:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/RegisterActorTickFunctions/index.html
+    TakeDamage:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/TakeDamage/index.html
+    FellOutOfWorld:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/FellOutOfWorld/index.html
+    InternalTakePointDamage:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/InternalTakePointDamage/index.html
+    InternalTakeRadialDamage:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/InternalTakeRadialDamage/index.html
+    ReceivePointDamage:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/ReceivePointDamage/index.html
+    ReceiveRadialDamage:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/ReceiveRadialDamage/index.html
+    ReceiveAnyDamage:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/ReceiveAnyDamage/index.html
+    OnTakePointDamage:
+      type: event
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/OnTakePointDamage/index.html
+    OnTakeRadialDamage:
+      type: event
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/OnTakeRadialDamage/index.html
+    OnTakeAnyDamage:
+      type: event
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/OnTakeAnyDamage/index.html
+    EnableInput:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Input/EnableInput/
+        - lang: C++
+          url: https://docs.unrealengine.com/5.3/en-US/API/Runtime/Engine/GameFramework/AActor/EnableInput/
+    DisableInput:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Input/DisableInput/
+        - lang: C++
+          url: https://docs.unrealengine.com/5.3/en-US/API/Runtime/Engine/GameFramework/AActor/DisableInput/
     GetActorLocation:
       refs:
         - lang: Blueprint
-          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/AActor/GetActorLocation/index.html
+          url: https://docs.unrealengine.com/4.26/en-US/BlueprintAPI/Utilities/Transformation/GetActorLocation/
         - lang: C++
-          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/GetActorLocation/index.html
-Pawn:
-  internal-name: APawn
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/AActor/GetActorLocation/index.html
+    AddTickPrerequisiteActor:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/AddTickPrerequisiteActor/index.html
+    AddTickPrerequisiteComponent:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/AddTickPrerequisiteComponent/index.html
+    RemoveTickPrerequisiteActor:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/RemoveTickPrerequisiteActor/index.html
+    RemoveTickPrerequisiteComponent:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/RemoveTickPrerequisiteComponent/index.html
+
+ActorComponent:
+  internal-name: UActorComponent
+  extends: UObject
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UActorComponent/index.html
+  members:
+    SetComponentTickEnabled:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Components/Tick/SetComponentTickEnabled/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UActorComponent/SetComponentTickEnabled/index.html
+    RegisterComponentTickFunctions:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UActorComponent/RegisterComponentTickFunctions/index.html
+    AddTickPrerequisiteActor:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UActorComponent/AddTickPrerequisiteActor/index.html
+    AddTickPrerequisiteComponent:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UActorComponent/AddTickPrerequisiteComponent/index.html
+    RemoveTickPrerequisiteActor:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UActorComponent/RemoveTickPrerequisiteActor/index.html
+    RemoveTickPrerequisiteComponent:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UActorComponent/RemoveTickPrerequisiteComponent/index.html
+
+PainCausingVolume:
+  internal-name: APainCausingVolume
+  extends: Actor
   refs:
     - lang: Blueprint
-      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/index.html
+      url: https://docs.unrealengine.com/en-US/en-US/pain-causing-volume-actor-in-unreal-engine/
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APainCausingVolume/index.html
+
+GameInstance:
+  internal-name: UGameInstance
+  extends: UObject
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/UGameInstance/index.html
+
+GameMode:
+  internal-name: AGameMode
+  extends: GameModeBase
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AGameMode/index.html
+  members:
+    SetPause:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AGameModeBase/SetPause/
+    ClearPause:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AGameModeBase/ClearPause/
+    AllowPausing:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AGameModeBase/AllowPausing/
+
+GameState:
+  internal-name: AGameState
+  extends: GameStateBase
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AGameState/index.html
+
+Pawn:
+  internal-name: APawn
+  extends: Actor
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/index.html
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/index.html
+  members:
+    GetPlayerState:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/GetPlayerState/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/GetPlayerState/index.html
+    GetActorEyesViewPoint:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Actor/GetActorEyesViewPoint/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/GetActorEyesViewPoint/index.html
+    AddControllerYawInput:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/Input/AddControllerYawInput/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/AddControllerYawInput/index.html
+    AddControllerPitchInput:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/Input/AddControllerPitchInput/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/AddControllerPitchInput/index.html
+    AddControllerRollInput:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/Input/AddControllerRollInput/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/AddControllerRollInput/index.html
+    AddMovementInput:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/Input/AddMovementInput/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/AddMovementInput/index.html
+    GetViewRotation:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/GetViewRotation/index.html
+    PossessedBy:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/PossessedBy/index.html
+    UnPossessed:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APawn/UnPossessed/index.html
+
+Character:
+  internal-name: ACharacter
+  extends: Pawn
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/BlueprintAPI/Character/index.html
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/ACharacter/index.html
+
+WheeledVehiclePawn:
+  internal-name: AWheeledVehiclePawn
+  extends: Pawn
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Plugins/ChaosVehicles/AWheeledVehiclePawn/
+
+Controller:
+  internal-name: AController
+  extends: Actor
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AController/index.html
+  members:
+    GetPlayerViewPoint:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/GetPlayerViewPoint/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AController/GetPlayerViewPoint/index.html
+    GetViewTarget:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/GetViewTarget/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AController/GetViewTarget/index.html
+    GetControlRotation:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/GetControlRotation/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AController/GetControlRotation/index.html
+    SetControlRotation:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/SetControlRotation/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AController/SetControlRotation/index.html
+    OnPossess:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AController/OnPossess/index.html
+    OnUnPossess:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AController/OnUnPossess/index.html
+    Possess:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/Possess/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AController/Possess/index.html
+    UnPossess:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/UnPossess/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AController/UnPossess/index.html
+
+PlayerController:
+  internal-name: APlayerController
+  extends: Controller
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APlayerController/index.html
+  members:
+    SetPause:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APlayerController/SetPause/index.html
+    GetPlayerViewPoint:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/GetPlayerViewPoint/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APlayerController/GetPlayerViewPoint/index.html
+    SetViewTarget:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APlayerController/SetViewTarget/index.html
+    SetViewTargetWithBlend:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/Player/SetViewTargetwithBlend/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APlayerController/SetViewTargetWithBlend/index.html
+    AddPitchInput:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/Player/AddPitchInput/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APlayerController/AddPitchInput/index.html
+    AddYawInput:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/Player/AddYawInput/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APlayerController/AddYawInput/index.html
+    AddRollInput:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/Player/AddRollInput/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APlayerController/AddRollInput/index.html
+
+AIController:
+  internal-name: AAIController
+  extends: Controller
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/index.html
+
+PlayerState:
+  internal-name: APlayerState
+  extends: Actor
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APlayerState/index.html
+
+PlayerCameraManager:
+  internal-name: APlayerCameraManager
+  extends: Actor
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/APlayerCameraManager/
+  members:
+    SetManualCameraFade:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/CameraFades/SetManualCameraFade/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/APlayerCameraManager/SetManualCameraFade/index.html
+    StartCameraFade:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/CameraFades/StartCameraFade/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/APlayerCameraManager/StartCameraFade/index.html
+    StopCameraFade:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/CameraFades/StopCameraFade/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/APlayerCameraManager/StopCameraFade/index.html
+
+MovementComponent:
+  internal-name: UMovementComponent
+  extends: ActorComponent
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/BlueprintAPI/Components/Movement/SetUpdatedComponent/
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UMovementComponent/index.html
+  members:
+    SetUpdatedComponent:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UMovementComponent/SetUpdatedComponent/index.html
+
+NavMovementComponent:
+  internal-name: UNavMovementComponent
+  extends: MovementComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/5.3/en-US/API/Runtime/Engine/GameFramework/UNavMovementComponent/
+
+PawnMovementComponent:
+  internal-name: UPawnMovementComponent
+  extends: NavMovementComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UPawnMovementComponent/index.html
+  members:
+    AddInputVector:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/Components/PawnMovement/AddInputVector/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UPawnMovementComponent/AddInputVector/index.html
+
+CharacterMovementComponent:
+  internal-name: UCharacterMovementComponent
+  extends: PawnMovementComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UCharacterMovementComponent/index.html
+
+FloatingPawnMovement:
+  internal-name: UFloatingPawnMovement
+  extends: PawnMovementComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UFloatingPawnMovement/index.html
+
+ProjectileMovementComponent:
+  internal-name: UProjectileMovementComponent
+  extends: MovementComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UProjectileMovementComponent/index.html
+
+RotatingMovementComponent:
+  internal-name: URotatingMovementComponent
+  extends: MovementComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/URotatingMovementComponent/index.html
+
+InterpToMovementComponent:
+  internal-name: UInterpToMovementComponent
+  extends: MovementComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/5.3/en-US/API/Runtime/Engine/Components/UInterpToMovementComponent/
+
+ChaosVehicleMovementComponent:
+  internal-name: UChaosVehicleMovementComponent
+  extends: PawnMovementComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Plugins/ChaosVehicles/UChaosVehicleMovementComponent/
+
+ChaosWheeledVehicleMovementComponent:
+  internal-name: ChaosWheeledVehicleMovementComponent
+  extends: ChaosVehicleMovementComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Plugins/ChaosVehicles/UChaosWheeledVehicleMovementComp-/
+
+CameraModifier:
+  internal-name: UCameraModifier
+  extends: UObject
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/BlueprintAPI/CameraModifier/
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/UCameraModifier/index.html
+  members:
+    ModifyCamera:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/UCameraModifier/ModifyCamera/index.html
+    ModifyPostProcess:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/UCameraModifier/ModifyPostProcess/index.html
+
+UCameraModifier_CameraShake:
+  extends: UCameraModifier
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/UCameraModifier_CameraShake/index.html
+
+UCameraAnimationCameraModifier:
+  extends: UCameraModifier
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Plugins/GameplayCameras/UCameraAnimationCameraModifier/
+
+CameraShakeBase:
+  internal-name: UCameraShakeBase
+  extends: UObject
+  refs:
+    - name: Camera Shakes
+      url: https://docs.unrealengine.com/en-US/camera-shakes-in-unreal-engine/
+      order: 1
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/UCameraShakeBase/index.html
+
+CameraActor:
+  internal-name: ACameraActor
+  extends: Actor
+  refs:
+    - name: Camera Actor
+      url: https://docs.unrealengine.com/en-US/camera-actors-in-unreal-engine/
+      order: 1
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/ACameraActor/index.html
+
+Rotator:
+  internal-name: FRotator
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/4.27/en-US/API/Runtime/Core/Math/FRotator/
+
+InputComponent:
+  internal-name: UInputComponent
+  extends: ActorComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UInputComponent/index.html
+
+FDamageEvent:
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FDamageEvent/index.html
+
+FPointDamageEvent:
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FPointDamageEvent/index.html
+
+FRadialDamageEvent:
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FRadialDamageEvent/index.html
+
+UGameplayStatics:
+  extends: UObject
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/
+  members:
+    SetGamePaused:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/SetGamePaused/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/SetGamePaused/index.html
+    ApplyDamage:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/Damage/ApplyDamage/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/ApplyDamage/index.html
+    ApplyPointDamage:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/Damage/ApplyPointDamage/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/ApplyPointDamage/index.html
+    ApplyRadialDamage:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/Damage/ApplyRadialDamage/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/ApplyRadialDamage/index.html
+    ApplyRadialDamageWithFalloff:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com//en-US/BlueprintAPI/Game/Damage/ApplyRadialDamagewithFalloff/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/ApplyRadialDamageWithFalloff/index.html
+    CreatePlayer:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/CreateLocalPlayer/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/CreatePlayer/index.html
+    GetGameInstance:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetGameInstance/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/GetGameInstance/index.html
+
+UWorld:
+  extends: UObject
+  refs:
+    - name: Spawning and Destroying an Actor
+      url: https://docs.unrealengine.com/en-US/ProgrammingAndScripting/SpawnAndDestroyActors/
+      order: 1
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/UWorld/
+  members:
+    SpawnActor:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/UWorld/SpawnActor/index.html
+    GetGameInstance:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/UWorld/GetGameInstance/index.html
+
+FActorSpawnParameters:
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FActorSpawnParameters/index.html
+
+FTickFunction:
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FTickFunction/
+  members:
+    RegisterTickFunction:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FTickFunction/RegisterTickFunction/index.html
+    ExecuteTick:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FTickFunction/ExecuteTick/index.html
+    SetTickFunctionEnable:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FTickFunction/SetTickFunctionEnable/index.html
+    AddPrerequisite:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FTickFunction/AddPrerequisite/index.html
+    RemovePrerequisite:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FTickFunction/RemovePrerequisite/index.html
+
+NewObject:
+  name: NewObject<T>()
+  type: function
+  refs:
+    - name: UObject Instance Creation
+      url: https://docs.unrealengine.com/en-US/creating-objects-in-unreal-engine/
+      order: 1
+    - lang: C++
+      url: https://docs.unrealengine.com/5.1/en-US/API/Runtime/CoreUObject/UObject/NewObject/

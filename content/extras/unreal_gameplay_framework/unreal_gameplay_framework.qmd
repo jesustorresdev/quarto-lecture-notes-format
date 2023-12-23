@@ -1,20 +1,23 @@
 ---
 title: "Unreal Engine Gameplay Framework"
+subtitle: "Guía del *gameplay framework* y de otros componentes de Unreal Engine"
 ---
 
 {{< pagebreak >}}
 
+# Introducción {.unnumbered}
+
 Los motores de videojuegos ofrecen componentes y servicios comunes que puede necesitar cualquier aplicación multimedia interactiva: *render*, iluminación, lectura de la entrada y creación de interfaces de usuario, simulación física, efectos visuales, sistemas de animación, gestión de recursos, carga y almacenamiento de datos, etc.
 Sin embargo, desde el punto del vista del desarrollo, esto no es suficiente para hacer un videojuego.
 
-Sobre los componentes y sistemas proporcionados por el motor se suele desarrollar una arquitectura software adecuada para el tipo de juego que se quiere desarrollar, denominada *gameplay framework*.
+Sobre los componentes y sistemas proporcionados por el motor se suele implementar una arquitectura software adecuada para el tipo de juego que se quiere desarrollar, a veces denominada *gameplay framework*.
 El objetivo de estos componentes es facilitar la implementación de las mecánicas del juego, de forma que el código sea fácil de mantener y extender. 
 Además, se suelen desarrollar a lo largo de diferentes proyectos de un mismo estudio, de forma que se van mejorando y adaptando a las necesidades de cada uno, y ayuda a reducir el tiempo de desarrollo.
 
 Por lo general, los motores de videojuegos generalistas no ofrecen un *gameplay framework* predefinido, sino que cada estudio desarrolla el suyo propio, adaptado a sus necesidades y al tipo de juegos que desarrolla.
-Sin embargo, el motor Unreal Engine sí ofrece un *gameplay framework*[@UnrealGameplayFramework], muy orientado al tipo de juegos que hace Epic Games ---es decir, videojuegos de acción competitivos en primera o tercera persona---.
+Sin embargo, el motor Unreal Engine sí ofrece un *gameplay framework*[@UnrealGameplayFramework], aunque muy orientado al tipo de juegos que hace Epic Games --es decir, videojuegos de acción competitivos en primera o tercera persona--.
 
-A continuación veremos qué nos ofrece este *gameplay framework*, puesto que se trata de un buen ejemplo de cómo organizar el código de un videojuego y nos puede ofrecer ideas que podemos trasladar a otros motores ---como Unity o Godot--- o a otro tipo de juegos.
+A continuación veremos qué nos ofrece este *gameplay framework*, puesto que se trata de un buen ejemplo de cómo organizar el código de un videojuego y nos puede ofrecer ideas que podemos trasladar a otros motores --como Unity o Godot-- o a otro tipo de juegos.
 
 # Antes del Gameplay Framework
 
@@ -22,53 +25,53 @@ Antes de hablar del *gameplay framework* de Unreal Engine, vamos a discutir los 
 
 ## *UObject*
 
-Un **UObject** es la clase base de todos los objetos de Unreal Engine y dota a los objetos de características similares a las que tienen los objetos en muchos lenguajes gestionados ---como C# o Java---.
+Un **UObject** es la clase base de todos los objetos de Unreal Engine y dota a los objetos de características similares a las que tienen los objetos en muchos lenguajes gestionados --como C# o Java--.
 Por ejemplo, gestión automática de memoria, mediante el uso de un recolector de basura, serialización o reflexión.
 
-## *World* (`UWorld`)
+## *UWorld*
 
-Un **World** es el objeto de Unreal Engine que representa el mundo del juego y contiene todos los objetos que existen en él.
-Por tanto, por lo general, solo hay existe una instancia de **World** al mismo tiempo, excepto cuando tiene lugar una transición fluida entre nivel, en cuyo caso existen dos instancias de **World** simultáneamente: la del nivel que se está descargando y la del que se está cargando.
+Un {{< api UWorld >}} es la clase del objeto de Unreal Engine que representa el mundo del juego y contiene todos los objetos que existen en él.
+Por tanto, por lo general, solo hay existe una instancia de **UWorld** al mismo tiempo, excepto cuando tiene lugar una transición fluida entre nivel, en cuyo caso existen dos instancias de **UWorld** simultáneamente: la del nivel que se está descargando y la del que se está cargando.
 
-La clase **World**, por ejemplo, contiene los métodos para instanciar objetos en el nivel y para consultar la geometría del nivel mediante *raycasts* y barrido de formas.
+La clase **UWorld**, por ejemplo, contiene los métodos para instanciar objetos en el nivel y para consultar la geometría del nivel mediante *raycasts* y barridos de formas[Ver @TorresD3DGameplay01].
 
-## *Actor* y *ActorComponent* (`AActor` y `UActorComponent`)
+## *Actor* y *ActorComponent*
 
-Un **Actor** es un objeto que existe en el mundo del juego y, por tanto, que puede ser instanciado en un **World**.
-Las características y funcionalidades de un **Actor** se implementan mediante composición, añadiéndole uno o varios **ActorComponent**.
+Un {{< api Actor >}} es un objeto que existe en el mundo del juego y, por tanto, que puede ser instanciado en un **UWorld**.
+Las características y funcionalidades de un **Actor** se implementan mediante composición, añadiéndole uno o varios {{< api ActorComponent >}}.
 
 Unreal Engine proporciona múltiples **ActorComponent**, para implementar diferentes funcionalidades comunes en los juegos.
-Algunos **ActorComponent** tienen representación en el nivel ---como mallas, colisiones o partículas--- mientras que otros implementan conceptos abstractos ---como el movimiento del actor, el control de cámara o la entrada del usuario---.
+Algunos **ActorComponent** tienen representación en el nivel --como mallas, colisiones o partículas-- mientras que otros implementan conceptos abstractos --como el movimiento del actor, el control de cámara o la entrada del usuario--.
 
 :::{.callout-note}
 Aunque la norma sea que son los objetos **Actor** los que se colocan en el mundo, realmente es posible instanciar **ActorComponent** directamente en el nivel.
-Usar `NewObject<MyActorComponent>()` con `nullptr` como **Actor** padre, hace que se cree un **ActorComponent** independiente, que no está asociado a ningún **Actor**.
+Se puede usar {{< api NewObject >}} para instanciar cualquier tipo de **UObject**, sin indicar que pertence a un **Actor** en el argumento `Outer` de la función.
 Estos componentes no son guardados ni replicados y no reciben eventos como `BeginPlay()` o `TickComponent()`.
-Algunos **ActorComponent** a veces se usan de esta manera, como **AudioComponent** cuando se crea desde `UGameplayStatics::SpawnSoundAtLocation()`.
+Algunos **ActorComponent** a veces se usan de esta manera, como **AudioComponent** cuando se crea con `SpawnSoundAtLocation()`.
 :::
 
-## *GameInstance* (`UGameInstance`)
+## *GameInstance*
 
-Un **GameInstance** es el principal objeto *manager* de un juego en Unreal Engine. 
+Un {{< api GameInstance >}} es el principal objeto *manager* de un juego en Unreal Engine. 
 Se instancia al inicio del juego y se destruye al finalizar, por lo que suele usarse para alojar código y datos globales, que deban persistir entre la carga de niveles, como: los inventarios y las habilidades de los personales o la configuración del juego.
 
-Para personalizarlo se hereda de la clase **GameInstance**, se le añaden las propiedades y el código necesario y, finalmente, se indica la nueva clase heredada en **Project Settings... / Project - Maps & Modes / Game Instance Class**.
+Para personalizarlo se hereda de la clase **GameInstance**, se le añaden las propiedades y el código necesario y, finalmente, se indica la nueva clase heredada en **Project Settings... / Project - Maps & Modes / Game Instance Class**, como se ilustra en la @fig-gameinstance.
 
-![Cambiar la **GameInstance** del proyecto.](figures/setup_gameinstance.png)
+![Configurar la clase **GameInstance** del proyecto.](figures/setup-gameinstance.png){#fig-gameinstance}
 
 En proyectos grandes, para respertar el *principio de responsabilidad única*[@WikipediaSRP] y evitar que la clase **GameInstance** se convierta en un *objeto todopoderoso*[@WikipediaGodObject], se suele dividir la funcionalidad en diferentes clases heredadas de **UObject**, que se instancian y referencian en propiedades del **GameInstance**.
-De esta forma, son fácilmente localizables para el resto de componentes del juego a través del objeto **GameInstance**, que se puede obtener mediante la función `Get Game Instance` en Blueprint o el método `UWorld::GetGameInstance()` en C++.
+De esta forma, son fácilmente localizables para el resto de componentes del juego a través del objeto **GameInstance**, que se puede obtener mediante la función {{< api short UGameplayStatics::GetGameInstance >}}.
 
-Sin embargo, desde Unreal Engine 4.22, se recomienda usar *subsistemas* para implementar funcionalidades globales del juego, que antes se implementaban en **GameInstance** (ver la @sec-subsystems).
+Sin embargo, desde Unreal Engine 4.22, se recomienda usar *subsistemas* para implementar funcionalidades globales del juego, que antes se implementaban en **GameInstance**[Más sobre *subsistemas* en @TorresD3DUnrealCpp].
 
 ## *UEngine*
 
-El objeto del motor, encargado de gestionar los componentes principales del sistema.
-Entre otras cosas, se encarga de gestionar el **World** y de crear y destruir los **GameInstance**, así como notificarles los *tick*.
+Es la clase del objeto del motor, encargado de gestionar los componentes principales del sistema.
+Entre otras cosas, se encarga de gestionar el **UWorld** y de crear y destruir los **GameInstance**, así como notificarles los *tick*.
 
 En C++ se obtiene acceso global a este objeto mediante la variable estática `GEngine`.
 
-## *GameViewportClient* y *LocalPlayer* (`UGameViewportClient` y `ULocalPlayer`)
+## *GameViewportClient* y *LocalPlayer*
 
 La clase **GameViewportClient** es la interfaz del motor a la ventana de juego y a los sistemas de gráficos, audio y entrada de la plataforma dónde se ejecuta el motor.
 
@@ -88,35 +91,35 @@ Al lanzar el ejecutable de un juego desarrollado con Unreal Engine desde la inte
 
 1. Se ejecuta el código de inicialización del motor, que crea el objeto **UEngine** y llama al método `UEngine::Init()`.
 
-2. `UEngine::Init()` inicializa el **GameInstance** y llama al método `UGameInstance::Init()`
+2. `UEngine::Init()` inicializa el **GameInstance** y llama al método `Init()` de **GameInstance**.
 
-3. Se llama a `UEngine::Start()` que llama a `UGameInstance::StatGameInstance()`, que crea el **World** inicial.
+3. Se llama a `UEngine::Start()` que llama a `UGameInstance::StatGameInstance()`, que crea el **UWorld** inicial.
 
 4. *Inicializaciones relacionadas con el gameplay framework que veremos más adelante*.
 
-5. **UEngine** hace *tick* al **GameInstance** y al **World** para animar el juego.
+5. **UEngine** hace *tick* al **GameInstance** y al **UWorld** para animar el juego.
 
 # Gameplay Framework
 
 Con los componentes básicos comentados hasta el momento se puede implementar un juego, pero no es lo más sencillo.
 Por eso Unreal Engine incluye *gameplay framework*, prescribiendo ciertas decisiones sobre la arquitectura software y facilitando la implementación de los juegos.
 
-## *GameMode* y *GameState* (`AGameMode`)
+## *GameMode* y *GameState*
 
 **GameInstance** es un buen lugar para guardar datos globales del juego, pero no es el lugar adecuado para implementar lógica específica del nivel.
 Para ello, Unreal Engine ofrece las clases **GameMode** y **GameState**, que son instanciados por el objeto **Word** al cargar un nivel y se destruyen al cargar otro.
 
-### *GameMode* (`AGameMode`)
+### *GameMode* {#sec-gamemode}
 
-**GameMode** es un actor pensando para contener el código con las reglas específicas del nivel, como por ejemplo: el número de jugadores, las condiciones para ganar, las reglas para hacer aparecer o reaparecer a los jugadores, cuándo se puede pausar la partida y qué ocurre cuando se pide, la transición a otros niveles, etc.
+{{< api GameMode >}} es un actor pensando para contener el código con las reglas específicas del nivel, como por ejemplo: el número de jugadores, las condiciones para ganar, las reglas para hacer aparecer o reaparecer a los jugadores, cuándo se puede pausar la partida y qué ocurre cuando se pide, la transición a otros niveles, etc.
 
 :::{.callout-note}
-Es el primer actor que recibe la llamda `BeginPlay()` tras cargar el nivel.
+El actor **GameMode** es el primer actor que recibe el evento `BeginPlay()` tras cargar el nivel.
 :::
 
-La clase **GameMode** por defecto se indica en las propiedades del proyecto, en **Project Settings... / Project - Maps & Modes / Game Mode Override**, pero se puede cambiar en cada nivel, en la propiedad **World Settings / Game Mode Override**.
+La clase **GameMode** por defecto del proyecto se indica en las propiedades del proyecto, en **Project Settings... / Project - Maps & Modes / Game Mode Override**, pero se puede cambiar en cada nivel, en la propiedad **World Settings / Game Mode Override**, como se muestra en la @fig-world-override-game-mode.
 
-// TODO: Se indican en la conf del nivel. Imagen
+![Configurar la clase **GameMode** del nivel.](figures/world-settings-override-game-mode.png){#fig-world-override-game-mode}
 
 Por tanto, es posible y recomendable tener diferentes clases **GameMode** para cada nivel si hay diferentes modos de juego, en lugar de una única clase para todo el juego.
 Probablemente, heredando de una clase base común para todos los niveles, que implemente la funcionalidad común a todos ellos.
@@ -125,21 +128,28 @@ Por ejemplo, si el juego tiene un modo historia y un modo multijugador, se puede
 Igualmente, es común tener un nivel solo para el menú principal del juego, con su propia clase **GameMode**.
 
 :::{.callout-tip}
-La clase `AGameMode` que se incluye en Unreal Engine implementa el comportamiento esperable de un juego multijugador competitivo.
-Si se trabaja en otro tipo de juego, es mejor comenzar heredando de `GameModeBase`, que también es la clase base de `GameMode`.
+La clase **GameMode** que se incluye en Unreal Engine implementa el comportamiento esperable de un juego multijugador competitivo.
+Si se trabaja en otro tipo de juego, es mejor comenzar heredando de **GameModeBase**, que también es la clase base de **GameMode**.
 :::
 
-// TODO Ejemplo de GameModeBase y de herencia para varios casos.
-
-Igual que en el caso del **GameInstance**, para evitar que la clase **GameMode** se convierta en un *objeto todopoderoso*[@WikipediaGodObject], se suele dividir la funcionalidad en diferentes clases.
+Igual que en el caso del **GameInstance**, para evitar que la clase **GameMode** se convierta en un *objeto todopoderoso*, se suele dividir la funcionalidad en diferentes clases.
 Como **GameMode** es un actor, se pueden añadir **ActorComponent** para implementar diferentes aspectos del juego.
-Si no estamos interesados en los eventos de ciclo de vida de los actores y componentes ---como `BeginPlay()` o `TickComponent()`--- también se pueden usar clases **UObject**, referenciadas desde propiedades del **GameMode**.
+Si no estamos interesados en los eventos de ciclo de vida de los actores y componentes --como `BeginPlay()` o `TickComponent()`-- también se pueden usar clases **UObject**, referenciadas desde propiedades del **GameMode**.
 
-Además, desde Unreal Engine 4.24, también se puende implementar *subsistemas* que comparten su tiempo de vida con un objeto **World**, por lo que también son interesantes para implementar funcionalidades especificas de un nivel.
+Además, desde Unreal Engine 4.24, también se puende implementar *subsistemas* que comparten su tiempo de vida con un objeto **UWorld**, por lo que también son interesantes para implementar funcionalidades especificas de un nivel.
 
-### *GameState* (`AGameState`)
+En la @fig-gamemode-inheritance se puede ver un ejemplo de jerarquía de herencia de **GameMode**.
 
-Es un actor pensado para almacenar los datos que describen el estado de la partida, como: puntuaciones, lista de jugadores, objetivos cumplidos, etc.
+```{mermaid}
+%%| label: fig-gamemode-inheritance
+%%| fig-cap: "Ejemplo de posible jerarquía de herencia de **GameMode**."
+%%| file: figures/gamemode-inheritance.mm
+%%| fig-width: 15cm
+```
+
+### *GameState*
+
+{{< api GameState >}} es un actor pensado para almacenar los datos que describen el estado de la partida, como: puntuaciones, lista de jugadores, objetivos cumplidos, etc.
 
 Sea cual sea el motor de videojuegos, separar el códido del juego del estado de la partida facilita la implementación de diferentes funcionalidades:
 
@@ -148,16 +158,16 @@ En un juego multijugador online, la lógica con las reglas de la partida debe ej
 Los datos del juego también deben almacenarse en el servidor, pero al mismo tiempo es necesario mantener una copia sincronizada en cada cliente.
 
 * Mecanismo de salvado de la partida.
-En general, separar la lógica de los datos facilita poder almacenar estos últimos para salvar y recuperar el estado del juego (véase la @sec-savegame).
+En general, separar la lógica de los datos facilita poder almacenar estos últimos para salvar y recuperar el estado del juego (ver la @sec-savegame).
 
 Lo primero es exactamente para lo que Unreal Engine usa **GameState**.
-El actor **GameMode** solo existe y se ejecuta en el servidor, mientras que **GameState** y **PlayerState** ---del que hablaremos más adelante--- contienen datos que se replican automáticamente en los clientes.
+El actor **GameMode** solo existe y se ejecuta en el servidor, mientras que **GameState** y **PlayerState** --del que hablaremos más adelante-- contienen datos que se replican automáticamente en los clientes.
 
 :::{.callout-note}
 Tanto **GameState** como **PlayerState** son actores porque, básicamente, es un requisito para que estos objetos sean replicados en los diferentes clientes en juegos multijugador online.
 :::
 
-No se recomienda guardar directamente en **GameState** datos específicos de cada jugador ---como el nombre, el nivel de salud o la puntuación específica de cada jugador--- sino solo datos generales del estado del juego.
+No se recomienda guardar directamente en **GameState** datos específicos de cada jugador --como el nombre, el nivel de salud o la puntuación específica de cada jugador-- sino solo datos generales del estado del juego.
 Como veremos más adelante, **GameState** gestiona una instancia de **PlayerState** para cada jugador, que es donde se deben almacenar los datos específicos de cada uno.
 El **PlayerState** de cada jugador también es accesible a través de su controlador del personaje.
 
@@ -166,21 +176,25 @@ El **PlayerState** de cada jugador también es accesible a través de su control
 La separación entre **GameMode** y **GameInstance** permite tener diferentes clases **GameMode** con distintas reglas para cada nivel.
 Incluso si en todos los niveles se usa la misma clase **GameMode**, es común emplear un nivel solo para el menú principal del juego, de forma que la lógica del menú puede estar en su propio **GameMode**, separado de la lógica de los niveles jugables.
 
-En este sentido, los **GameMode** hacen de *game / level manager*[^gamemanager].
-Mientras que **GameInstance** sirve para preservar información entre partidas, como el número de victorias de cada equipo ---por ejemplo, para enfrentamientos del tipo «el mejor de X partidas»--- los inventarios, las habilidades o la configuración del juego y de los personajes.
+En este sentido, los **GameMode** hacen de *game / level manager*.
+Mientras que **GameInstance** sirve para preservar información entre partidas, como el número de victorias de cada equipo --por ejemplo, para enfrentamientos del tipo «el mejor de X partidas»-- los inventarios, las habilidades o la configuración del juego y de los personajes.
 
-En juegos multijugador online hay un **GameInstance** independiente en el servidor y en cada cliente.
-Como no se sincroniza la información entre ellos ---puesto que el **GameInstance** no es un actor sino un **UObject**--- puede ser necesario copiar en el servidor parte de la información de **GameInstance** a **GameState** o **PlayerState** ---según corresponda--- al cargar un nuevo nivel para que esté disponible en los clientes.
-
-[^gamemanager]: El *game manager* es un tipo especial de *manager* dedicado a llevar el flujo del juego: carga de escenas y transiciones, activación de modos de menús y pausa, etc.
+:::{.callout-note}
+El *game manager* es un tipo especial de *manager* dedicado a llevar el flujo del juego: carga de escenas y transiciones, activación de modos de menús y pausa, etc.
 Puede usarse para guardar referencias a otros componentes a los que se necesita acceder globalmente, evitando tener que buscar entre todas las entidades del juego cada vez que los necesitamos.
 En juegos relativamente grandes, el *game manager* se usa para implementar aspectos globales del juego, mientras que para la lógica específica de un nivel, cada nivel suele tener su *level manager*.
+:::
+
+En juegos multijugador online hay un **GameInstance** independiente en el servidor y en cada cliente.
+Como no se sincroniza la información entre ellos --puesto que el **GameInstance** no es un actor sino un **UObject**-- puede ser necesario copiar en el servidor parte de la información de **GameInstance** a **GameState** o **PlayerState** --según corresponda-- al cargar un nuevo nivel para que esté disponible en los clientes.
 
 ### *GameMode* como configurador de la partida
 
-**GameMode** incluye de serie propiedades a través de las que podemos configurar diferentes características del nivel, como por ejemplo: el nombre por defecto de los jugadores o si el nivel es pausable (ver @sec-pause).
+**GameMode** incluye de serie propiedades a través de las que podemos configurar diferentes características del nivel, como por ejemplo: el nombre por defecto de los jugadores o si el nivel es pausable (ver la @sec-pause).
 
-Entre la propiedades que trae **GameMode** por defecto, están otras clases de actores del *gameplay framework* que se van a instanciar para implementar diferentes aspectos del juego:
+Como se puede observar en la @fig-gamemode-properties, entre la propiedades que trae **GameMode** por defecto están otras clases de actores del *gameplay framework* que se van a instanciar para implementar diferentes aspectos del juego:
+
+![Propiedades de la clase **GameMode**.](figures/gamemode-properties.png){#fig-gamemode-properties}
 
 * **Game State Class**, clase del actor que almacena el estado de la partida.
 Es instanciada por el **GameMode** al cargarse el nivel.
@@ -199,8 +213,6 @@ Es instanciada por el **PlayerController** durante su inicialización.
 * **HUD Class**, para configurar la clase de la interfaz del juego.
 Esta propiedad no suele usarse actualmente, dado que las interfaces de usuario suele implementarse mediante *widgets* UMG (*Unreal Motion Graphics*).
 
-// TODO: Captura de las propiedades del GameMode.
-
 Obviamente, nada impide que añadamos otras propiedades específicas de cada nivel.
 
 ## Controladores
@@ -208,13 +220,13 @@ Obviamente, nada impide que añadamos otras propiedades específicas de cada niv
 En Unreal Engine Gameplay Framework, se llama **Controller** al actor responsable de controlar al actor del personaje.
 Es decir, el personaje y su controlador son actores diferentes, mientras que en Unity es común que el controlador sea un componente del *GameObject* del personaje.
 
-El *gameplay framework* incluye dos clases que heredan de **Controller**:
+El *gameplay framework* incluye dos clases que heredan de {{< api Controller >}}:
 
-* **PlayerController** (`APlayerController`).
+* {{< api PlayerController >}}.
 Actor que controla el personaje según las órdenes del jugador.
 Es decir, que es el responsable del leer la entrada del jugador y cambia el estado del personaje en base a ella.
 
-* **AIController** (`AAIController`).
+* {{< api AIController >}}.
 Actor que implementa el control de un personaje cuando proviene de una IA.
 Es decir, este controlado resulta útil para implementar *personajes no jugadores* (PNJ).
 
@@ -228,69 +240,93 @@ Mientras que en otros juego el jugador suele controlar a un personaje humano, pe
 
 ### Posesión de actores
 
-Para que un actor que pueda ser poseído por un **Controller** debe heredar de la clase de actor **Pawn** (`APawn`), que ofrece una interfaz mínima común para ser controlado.
+Para que un actor que pueda ser poseído por un **Controller** debe heredar de la clase de actor {{< api Pawn >}}, que ofrece una interfaz mínima común para ser controlado.
 
-Para poseerlo se usa el método `Possess()` del **Controller**, indicando el **Pawn** que se quiere controlar.
-Mientras que para desposeerlo se usa el método `UnPossess()`.
+Para poseerlo se usa el método {{< api Possess >}} del {{< api Controller >}}, indicando el **Pawn** que se quiere controlar.
+Mientras que para desposeerlo se usa el método {{< api UnPossess >}}.
 
-// TODO: Imágenes de los nodos.
+![Nodos de los **Controller** para poseer y desposeer un **Pawn**.](figures/possess-nodes.png)
 
 Si un **Controller** posee a un **Pawn** que ya estaba siendo controlado por otro **Controller**, este último deja de controlarlo y pasa a ser controlado por el nuevo **Controller**.
 Igualmente, si un **Controller** ya posee a un **Pawn** y se le indica que posea a otro, deja de controlar al primero y pasa a controlar al segundo.
 
 En todos los casos tanto el **Controller** como el **Pawn** son notificados.
-El **Controller** recibe los eventos `OnPossess()` o `UnPossess()` y el **Pawn** recibe los eventos `Possessed()` / `PossessedBy()` o `UnPossessed()`.
+El {{< api Controller >}} recibe los eventos {{< api OnPossess >}} o {{< api OnUnPossess >}} y el {{< api Pawn >}} recibe los eventos Possessed() / {{< api PossessedBy >}} o {{< api UnPossessed >}}.
 
-// TODO: Imágenes de los nodos.
+![Nodos de evento de posesión de **Controller**.](figures/controller-possess-events.png)
+
+![Nodos de evento de posesión de **Pawn**.](figures/pawn-possess-events.png)
 
 Estos eventos son últiles.
 Por ejemplo, si un personaje está poseido por un **AIController** y el jugador lo posee, el **AIController** dejará de controlar al personaje.
 Si más tarde el jugador posee aun personaje diferente, el **AIController** no volverá a controlar al primer personaje, automáticamente.
 Por tanto, se puede usar los eventos indicados para hacer que el **AIController** vuelva a controlar al primer personaje cuando el jugador deje de controlarlo.
 
-Además de usar los métodos `Possess()` y `UnPossess()`, los **Pawn** se puede configurar para que sean poseídos automáticamente por un **Controller** cuando son instanciados y comienza su ejecución en el nivel:
+Además de usar los métodos `Possess()` y `UnPossess()`, los **Pawn** se puede configurar para que sean poseídos automáticamente por un **Controller** cuando son instanciados y comienza su ejecución en el nivel, como se puede ver en la @fig-pawn-auto-possess:
 
 * Si un **Pawn** se configura con la propiedad **Auto Possess Player**, es poseido automática por el **PlayerController** del jugador indicado, al ser instanciado.
 
 * Si un **Pawn** se configura con la propiedad **Auto Possess AI**, es poseido automática por el **AIController** indicado.
 
+![Configuración **Auto Possess** de la clase **Pawn**.](figures/pawn-auto-possess.png){#fig-pawn-auto-possess}
+
 ### Control de actores
 
 Una vez el **Controller** posee un **Pawn** puede controlarlo a través de sus métodos, pero debemos tener en cuenta que por defecto las opciones se limitan a mover y rotar el actor.
 
-Para que el **Controller** pueda indicar acciones adicionales al **Pawn** ---como atacar, salta, escalar o defenderse--- es necesario implemnentar una interfaz que exponga dichas acciones en el **Pawn** y que el **Controller** pueda llamar. 
+Para que el **Controller** pueda indicar acciones adicionales al **Pawn** --como atacar, salta, escalar o defenderse-- es necesario implemnentar una interfaz que exponga dichas acciones en el **Pawn** y que el **Controller** pueda llamar. 
 
-// TODO: Esquema ilustrativo de la interfaz.
-// Con métodos propios y de Unreal
+Por ejemplo, en la @fig-pawn-control se ilustra un posible caso dónde nuestro **MyPlayerController** --que hereda de **PlayerController** para añadirle funcionalidades adicionales, como la lectura de las acciones del jugador-- posee al actor para el personaje del jugador **MyPlayerPawn**
+
+```{mermaid}
+%%| label: fig-pawn-control
+%%| fig-cap: "Ejemplo de interfaz para el control del **Pawn** del jugador."
+%%| file: figures/pawn-control.mm
+%%| fig-width: 15cm
+```
+
+Este **Pawn** es teledirigido por el controlador.
+Puede dirigir su movimiento usando el método {{< api AddMovementInput >}} (ver la @fig-pawn-addmovementinput) de la clase **Pawn** o indicar otras acciones utilizando la implementación en **MyPlayerPawn** de la interfaz **MyPlayerPawnInterface** que contiene acciones del personaje especificas para este juego.
+
+![Función `AddMovementInput()` de **Pawn**.](figures/pawn-addmovementinput.png){#fig-pawn-addmovementinput}
 
 #### Movimiento del actor
 
 Un **Controller** puede mover un **Pawn** directamente llamando a métodos como `SetActorLocation()` o `AddActorWorldOffset()`, que tienen todos los actores.
 
-Sin embargo, lo más habitual es que el **Controller** indique al **Pawn** que se mueva en una dirección, para lo que puede usar al método `AddMovementInput()` de **Pawn**.
+Sin embargo, lo más habitual es que el **Controller** indique al **Pawn** que se mueva en una dirección, para lo que puede usar al método {{< api AddMovementInput >}} de **Pawn**.
+
+En la @fig-pawn-movement-input se puede observar como se lee la acción de entrada *Move*, para luego llamar a `AddMovementInput` con sus valores para actualizar el movimiento del **Pawn**.
+En este ejemplo la lectura de la acción se hace desde el propio **Pawn**, no desde el **Controller**.
+
+![Uso de la entrada para el movimiento desde el **Pawn**.](figures/pawn-movement-input.png){#fig-pawn-movement-input}
 
 La clase **Pawn** acumula las direcciones indicadas a través `AddMovementInput()` en una variable interna de tipo vector, llamada `ControlInputVector`.
 
-Por defecto, la clase **Pawn** no hace nada con este vector, pero la idea es que en cada *tick* se lea el valor acumulado en `ControlInputVector`, usando el método `ConsumeMovementInputVector`, y este valor se use para mover el personaje.
-Al usar `ConsumeMovementInputVector`, el valor de `ControlInputVector` se pone a $(0, 0, 0)$, preparado para el siguiente frame.
+Por defecto, la clase **Pawn** no hace nada con este vector, pero la idea es que en cada *tick* se lea el valor acumulado en `ControlInputVector`, usando el método `ConsumeMovementInputVector()`, y este valor se use para mover el personaje.
+Al usar `ConsumeMovementInputVector()`, el valor de `ControlInputVector` se pone a $(0, 0, 0)$, preparado para el siguiente frame.
 
-// TODO: Diagrama de la gestión correcta del movimiento
+Lo ideal no es implementar la lógica de movimiento directamente en el método `Tick()` del **Pawn**, sino en un componente {{< api MovementComponent >}} que luego se añade al actor **Pawn**.
+Es en el método `TickComponent()` de este componente de movimiento del actor, donde se llama a `ConsumeMovementInputVector()` y se usa el valor devuelto para mover el **Pawn**, de la forma que corresponda, como se ilustra en el diagrama de secuencia de la @fig-controller-pawn-movement-sequence.
 
-Lo ideal no es implementar la lógica de movimiento directamente en el método `Tick()` del **Pawn**, sino en un componente **MovementComponent** que luego se añade al actor **Pawn**.
-Es en el método `TickComponent()` de este componente de movimiento del actor, donde se llama a `ConsumeMovementInputVector()` y se usa el valor devuelto para mover el **Pawn**, de la forma que corresponda.
+```{mermaid}
+%%| label: fig-controller-pawn-movement-sequence
+%%| fig-cap: "Ejemplo de control de movimiento de un **Pawn**."
+%%| file: figures/pawn-movement-sequence.mm
+%%| fig-width: 15cm
+```
 
-Por ejemplo, todo actor **Character** (`ACharacter`) ---que es una clase derivada de **Pawn**--- tiene por defecto un **CharacterMovementComponent** que se hace cargo del movimiento del personaje.
-Este componente deriva de **PawnMovementComponent** que, a su vez, deriva de **MovementComponent**.
+Por ejemplo, todo actor {{< api Character >}} --que es una clase derivada de **Pawn**-- tiene por defecto un {{< api CharacterMovementComponent >}} que se hace cargo del movimiento del personaje.
+Este componente deriva de {{< api PawnMovementComponent >}} que, a su vez, deriva de **MovementComponent**.
 
-Realmente, si un actor **Pawn** detecta que se le ha añadido un **PawnMovementComponent**, su método `AddMovementInput` ---que es llamado por el **Controller**--- no acumula el vector de movimiento en `ControlInputVector` directamente, sino que se lo entrega al **PawnMovementComponent**, através del método `AddInputVector()`.
+Realmente, si un actor **Pawn** detecta que se le ha añadido un **PawnMovementComponent**, su método `AddMovementInput` --que es llamado por el **Controller**-- no acumula el vector de movimiento en `ControlInputVector` directamente, sino que se lo entrega al **PawnMovementComponent**, através del método {{< api AddInputVector >}}.
 
 Entonces, el componente puede decidir qué hacer con el vector de movimiento.
 Por defecto, se lo devuelve al **Pawn** sin cambios, para que lo acumule en `ControlInputVector`, pero siempre podemos sobrescribir la función `AddInputVector` para cambiar este comportamiento.
 
 Luego, en cada *tick*, el **MovementComponent** consume el valor acumulado en `ControlInputVector` mediante `ConsumeMovementInputVector()` y desplaza al actor como corresponda.
 
-// TODO Diagrama de la gestión correcta del movimiento con un MovementComponent
-<!-- En la @fig-controller-character-movement-sequence se puede ver un diagrama de secuencia para los actores de la clase **Character**.
+En la @fig-controller-character-movement-sequence se puede ver un diagrama de secuencia para los actores de la clase **Character**.
 
 ```{mermaid}
 %%| label: fig-controller-character-movement-sequence
@@ -298,14 +334,13 @@ Luego, en cada *tick*, el **MovementComponent** consume el valor acumulado en `C
 %%| file: figures/character-movement-sequence.mm
 %%| fig-width: 15cm
 ```
--->
 
-Unreal Engine proporciona diferentes **MovementComponent** para implementar diferentes tipos de movimiento, como por ejemplo: **FloatingPawnMovement**, **ProjectileMovementComponent**, **RotatingMovementComponent**, **InterpToMovementComponent** o **CharacterMovementComponent** (ver @sec-movement-components).
+Unreal Engine proporciona diferentes **MovementComponent** para implementar diferentes tipos de movimiento, como por ejemplo: {{< api FloatingPawnMovement >}}, {{< api ProjectileMovementComponent >}}, {{< api RotatingMovementComponent >}}, {{< api InterpToMovementComponent >}} o {{< api CharacterMovementComponent >}} (ver la @sec-movement-components).
 
 De estos, solo **FloatingPawnMovement** y **CharacterMovementComponent** heredan de **PawnMovementComponent**, por lo que interactuan con el actor **Pawn** de la forma comentada.
 El resto sirve para mover cualquier actor de otras maneras.
 
-Obviamente, siempre podemos crear nuestros propios **MovementComponent** para implementar tipo de movimiento que necesitemos, tanto para **Pawn** ---preferentemente heredando de **PawnMovementComponent**--- como para cualquier otro tipo de actor.
+Obviamente, siempre podemos crear nuestros propios **MovementComponent** para implementar tipo de movimiento que necesitemos, tanto para **Pawn** --preferentemente heredando de **PawnMovementComponent**-- como para cualquier otro tipo de actor.
 
 #### Rotación de control
 
@@ -314,38 +349,66 @@ En `ControlInputVector` el **Pawn** se almacena la dirección en la que el **Con
 Por ejemplo, en algunos juegos un personaje se puede mover en una dirección diferente a aquella en la que mira la cámara del jugador o en la que apunta.
 Esto es especialmente interesante con los NPC, ya que a veces la IA necesita poder controlar hacía dónde tiene que mirar un personaje, sin moverlo del sitio.
 
-Para ello, el **Controller** tiene una variable interna de tipo **Rotator**, llamada `ControlRotation`, que se puede leer y establecer mediante los métodos `GetControlRotation()` y `SetControlRotation()`.
+Para ello, el **Controller** tiene una variable interna de tipo {{< api Rotator >}}, llamada `ControlRotation`, que se puede leer y establecer mediante los métodos {{< api GetControlRotation >}} y {{< api SetControlRotation >}}.
 
-La clase **PlayerController** derivada de **Controller** añade los métodos `AddPitchInput()`, `AddYawInput()` y `AddRollInput()` para acumular fácilmente ángulos de rotación en `ControlRotation`, en cualquiera de los 3 ángulos de Euler ---vér la @fig-ue-euler-angles---.
-Los valores indicados al invocar estas funciones son multiplicados por las propiedades `InputPitchScale`, `InputYawScale` y `InputRollScale` del **PlayerController**, antes de ser acumulados.
+La clase {{< api PlayerController >}} derivada de **Controller** añade los métodos {{< api AddPitchInput >}} , {{< api AddYawInput >}} y {{< api AddRollInput >}} para acumular fácilmente ángulos de rotación en `ControlRotation`, en cualquiera de los 3 ángulos de Euler (ver la @fig-ue-euler-angles).
 
 ![Ángulos de Euler en Unreal Engine.](figures/euler_angles.png){#fig-ue-euler-angles}
+
+Los valores indicados al invocar estas funciones son multiplicados por las propiedades **Input Pitch Scale**, **Input Yaw Scale** y **Input Roll Scale** del **PlayerController**, antes de ser acumulados.
+Como en el caso del movimiento, los valores se acumulan en la variable interna `RotationInput`, para luego procesarla y actualizar `ControlRotation` convenientemente en el método `Tick()`.
 
 Las funciones `AddPitchInput()`, `AddYawInput()` y `AddRollInput()` son ideales para usarlas con los eventos de la entrada del jugador.
 Por ejemplo, que cuanto más acciona el jugador el *stick* a la derecha, más ángulo de *yaw* se acumule en la *rotación de control* .
 
-Además, la clase **Pawn** también incluye tres funciones por conveniencia: `AddControllerYawInput()`, `AddControllerPitchInput()` y `AddControllerRollInput()`, que realmente llaman a las anteriores en el **PlayerController**.
-En la @fig-camera-input se puede observar un ejemplo de cómo se usan estas funciones.
+Además, la clase **Pawn** también incluye tres funciones por conveniencia: {{< api AddControllerYawInput >}}, {{< api AddControllerPitchInput >}} y {{< api AddControllerRollInput >}}, que realmente llaman a las anteriores en el **PlayerController**.
 
-Igualmente, la clase **Pawn** tiene la función `GetViewRotation()`, que sirve para leer directamente la *rotación de control* del **Controller** desde el **Pawn**.
+En la @fig-pawn-control-rotation-input se puede observar un ejemplo dónde se recibe la acción de entrada *Look* en el **Pawn** y se usan estas funciones para cambiar la *rotación de control* en el **Controller**.
 
-La ventaja de que el **Controller** almacene la *rotación de control* en una variable interna, es que su valor se mantiene incluso cuando el **Controller** cambia de **Pawn**.
-Además, gracias a que **Controller** y **Pawn** tiene una interfaz bien definida para gestionar la *rotación de control*, tanto la clase **Pawm** como muchos componentes pensandos para ser utilizados en un **Pawn** ---como **CameraComponent** o **SpringArmComponent**--- vienen preparados para leer el *rotación de control* y usarlo.
+![Uso de la entrada para actualiza *rotación de control* desde el **Pawn**.](figures/pawn-control-rotation-input.png){#fig-pawn-control-rotation-input}
 
-// TODO: Ejemplo de como de las propiedades del Pawn para sincronizar en cada frame su rotación con la del la rotación de control y lo mismo para el componente de la cámara.
+Igualmente, la clase **Pawn** tiene la función {{< api GetViewRotation >}}, que sirve para leer directamente la *rotación de control* del **Controller** desde el **Pawn**.
+
+Gracias a que **Controller** y **Pawn** tiene una interfaz bien definida para gestionar la *rotación de control*, tanto la clase **Pawm** como muchos componentes pensandos para ser utilizados en un **Pawn** --como **CameraComponent** o **SpringArmComponent**-- vienen preparados para leer la *rotación de control* y usarla.
+
+Por ejemplo, en la @fig-pawn-control-rotation se pueden ver las opciones de configuración de la *rotación de control* en la clase **Pawn**, que pemirte sincronizar automáticamente la rotación del **Pawn** con la *rotación de control* en su controlador.
+Mientras que en la @fig-camera-control-rotation se pueden observar un opción similar en el componente de cámara **CameraComponent**.
+
+![Configuración de uso de la **rotación de control** en la clase **Pawn**.](figures/pawn-control-rotation.png){#fig-pawn-control-rotation}
+
+![Configuración de uso de la **rotación de control** en la clase **CameraComponent**.](figures/camera-control-rotation.png){#fig-camera-control-rotation}
+
+#### Punto de vista del jugador {#sec-controller-pov}
+
+Relacionado con la *rotación de control*, la clase **Controller** también maneja los conceptos de punto de vista --o POV, del inglés *point of view*-- del jugador y de *view target*.
+
+El *view target* se obtiene mediante el método {{< api GetViewTarget >}} de **Controller** y devuelve el actor «al que mira el controlador».
+Por lo general, se trata del **Pawn** poseido por el controlador, pero el **PlayerController** permite cambiarlo mediante el método {{< api SetViewTarget >}} y lo usa para determinar el POV de la cámara del jugador (ver la @sec-playercameramanager).
+
+El POV del jugador se obtiene mediante el método {{< api short Controller::GetPlayerViewPoint >}} de **Controller**, pero signifca cosas diferentes en función del tipo de controlador.
+
+En el **AIController** devuelve el punto de vista del **Pawn** desde la altura de sus «ojos».
+Para ello llama a `GetActorEyesViewPoint()` en el **Pawn** y devuelve el resultado.
+
+El método {{< api GetActorEyesViewPoint >}} de **Pawn** devuelve el POV en la posición del **Pawn** en el mundo, pero desplazado en el eje Z la cantidad indicada en la propiedad **Base Eye Height** del **Pawn**.
+Para la dirección del POV, considera la *rotación de control* del **Controller** que lo posee, si está poseido, o la rotación del propio **Pawn**, si no lo está.
+
+En el **PlayerController**, {{< api short PlayerController::GetPlayerViewPoint >}} devuelve el POV de la cámara calculado por el actor {{< api PlayerCameraManager >}}, en caso de que el **PlayerController** tenga una referencia a un actor de este tipo.
+En otro caso, si el controlador tiene un configurado un actor *view target*, devuelve la rotación y localización de dicho actor.
+Finalmente, si no tiene un *view target*, sigue las mismas reglas que el **AIController** para calcular el punto de vista del **Pawn** desde la supuesta altura de sus ojos.
 
 ## Gestión de la entrada del jugador (*PlayerController*)
 
-Como hemos comentado, el **PlayerController** (`APlayerController`) es el **Controller** responsable del leer la entrada del jugador y cambia el estado del personaje en base a ella.
+Como hemos comentado, el {{< api PlayerController >}} es el **Controller** responsable del leer la entrada del jugador y cambia el estado del personaje en base a ella.
 
 En este apartado veremos los componentes del *gameplay framework* que se encargan de gestionar la entrada del jugador y cómo se relacionan con el **PlayerController**.
 
 ### Sistema de entrada *legacy* vs. *enhanced*
 
-En Unreal Engine 4 se usaba un sistema donde la entrada de los controles de los dispositivos del jugador se mapeaba en acciones configurando las opciones en **Project Settings / Input**.
+En Unreal Engine 4 se usaba un sistema donde la entrada de los controles de los dispositivos del jugador se mapeaba en acciones configurando las opciones en **Project Settings / Input** (ver la @fig-input-legacy-setup).
 El código de *gameplay* de nuestro juego podía leer estas acciones, principalmente, a través de la clase **InputComponent**.
 
-// TODO: Dibujo ilustrativo del sistema de entrada legacy.
+![Configuración de las acciones de entrada en Unreal Engine 4.](figures/input-legacy-setup.png){#fig-input-legacy-setup}
 
 En Unreal Engine 5 este sistema pasó a considerase *legacy*, para ser sustituido por un nuevo sistema llamado **Enhanced Input**.
 
@@ -353,7 +416,7 @@ El **Enhanced Input** ofrece un montón de características nuevas.
 Entre otras diferencias, en el nuevo sistema las acciones de entrada y el mapeo a de los controles a estas, se definen mediante *assets* de tipo **Input Action**, lo que facilita migrar acciones de un proyecto a otro.
 
 Además, las **Input Action** soporta diferentes condiciones para notificar la acción de entrada al código de *gameplay*.
-Por ejemplo, se puede condicionar la activación de la acción a que el control se mantenga accionado cierto tiempo o a que el jugador accione cierta combinación de controles en un periodo de tiempo determinado ---lo que se llama, un *combo*---.
+Por ejemplo, se puede condicionar la activación de la acción a que el control se mantenga accionado cierto tiempo o a que el jugador accione cierta combinación de controles en un periodo de tiempo determinado --lo que se llama, un *combo*--.
 Esta funcionalidad permite ahorrar tiempo, ya que nos evita tener que implementar nosotros mismos el procesado de este tipo de entradas.
 
 En cualquier caso, el código de *gameplay* puede recibir estas acciones de entrada a través de la clase **EnhancedInputComponent**.
@@ -370,9 +433,12 @@ A continuación vamos a referirnos a **PlayerInput** y a **InputComponent** por 
 
 ### *PlayerInput*
 
-// TODO: Como se decide a qué LocalPlayer se le entrega la entrada en un Coop
+La instancia de **GameViewportClient** captura los eventos del entrada del jugador, localiza el controlador del jugador **PlayerController** que debe recibirlos --a través del objeto **LocalPlayer** correspondiente-- y se los entrega.
 
-La instancia de **GameViewportClient** captura los eventos del entrada del jugador, localiza el controlador del jugador **PlayerController** que debe recibirlos ---a través del objeto **LocalPlayer** correspondiente--- y se los entrega.
+:::{.callout-note}
+En juegos multijugador local se pueden crear nuevos jugadores y asignarles un dispositivo de entrada usando el nodo **Create Local Player**, en Blueprint, o la función {{< api CreatePlayer >}}.
+De esta forma, cuando llegan los eventos de entrada el motor sabe a qué jugador corresponde y puede localizar su **PlayerController**.
+:::
 
 El **PlayerController** entrega los eventos a su objeto **PlayerInput**, que tiene la responsabilidad de mapear los controles de los dispositivos del jugador en acciones de entrada.
 
@@ -380,7 +446,7 @@ Es posible suscribirse a los eventos de **PlayerInput** para recibir notificacio
 
 ### *InputComponent*
 
-El **InputComponent** es el componente que generalmente usan los actores para acceder a la entrada del jugador.
+El {{< api InputComponent >}} es el componente que generalmente usan los actores para acceder a la entrada del jugador.
 Es decir, lo podemos usar en el actor del **PlayerController** para controlar el personaje, pero también en el actor de una puerta o de un objeto recogible, para recibir la acción del jugador cuando quiera abrir la puerta o recoger el objeto en cuestión.
 
 Con **InputComponent** podemos conectar el código de *gameplay* del actor a las acciones de entrada definidas en el juego.
@@ -392,23 +458,21 @@ Esto se puede hacer usando eventos, para que el **InputComponent** ejecute nuest
 
 ![Lectura del valor de la **Input Action** en un *tick*.](figures/ue-input-action-polling.png){#fig-ue-input-action-polling}
 
-Acceso a la entrada del jugador mediante.
+Modos de acceso a las acciones de entrada del jugador.
 :::
 
-Sin embargo, si vamos a hacer algún tipo de cálculo combinando los valores de varias acciones de entrada, puede resultar más cómodo leer dichos valores cuando nos haga falta, como se observa en la @fig-ue-input-action-polling.
-
-// TODO: Referencia a los apuntes de C++ sobre como hacer lo mismo en C++ o en anexos.
+Sin embargo, si vamos a hacer algún tipo de cálculo combinando los valores de varias acciones de entrada, puede resultar más cómodo leer dichos valores cuando nos haga falta, como se observa en la @fig-ue-input-action-polling[Más sobre la entrada del jugador en C++ en @TorresD3DUnrealCpp].
 
 Aunque no veamos a **InputComponent** en el editor, todos los actores tienen una instancia de ese componente, porque cualquier actor en la escena puede acceder a la entrada del jugador.
 
-Quien conecta el **PlayerInput** ---que es quién tiene acceso a las acciones de la entrada--- con los **InputComponent** de los actores es el **PlayerController**.
+Quien conecta el **PlayerInput** --que es quién tiene acceso a las acciones de la entrada-- con los **InputComponent** de los actores es el **PlayerController**.
 
 ### *PlayerController*
 
 En la arquitectura de muchos juegos, es buena idea tener un objeto que represente al jugador y que controle y gestione todo aquello que le concierne a éł y a su personaje.
-Como hemos comentado anteriormente, en Unreal Engine, este objeto es el **PlayerController** (`APlayerController`).
+Como hemos comentado anteriormente, en Unreal Engine, este objeto es el {{< api PlayerController >}}.
 
-El **GameMode** crea un actor **PlayerController** para cada jugador ---generalmente a través del método `Login()`--- y se destruye al cargar un nuevo nivel.
+El **GameMode** crea un actor **PlayerController** para cada jugador --generalmente a través del método `Login()`-- y se destruye al cargar un nuevo nivel.
 
 En juegos multijugador online, el **PlayerController** existe en el servidor y se replica en el cliente del jugador correspondiente, donde tiene acceso a la entrada de dicho jugador.
 
@@ -419,19 +483,16 @@ El **PlayerController** tiene el objeto **PlayerInput** para leer la entrada y p
 
 * Gestionar la *rotación de control*, que se puede usar para controla la dirección en la que mira el personaje o la cámara del jugador.
 
-* Crear el HUD ---la interfaz de usuario--- del jugador.
+* Crear el HUD --la interfaz de usuario-- del jugador.
 Actualmente, la forma adecuada de hacerlo es creando *widgets* con UMG (*Unreal Motion Graphics*) y mostrarlos usando `AddToViewport()` en el evento `BeginPlay()` del **PlayerController**. 
 
 * Crear el actor que controla la cámara del jugador, llamado **PlayerCameraManager**.
-Se puede personalizar el actor **PlayerCameraManager** derivando de dicha clase y cambiando en las propiedades del **PlayerController** la clase que debe usar para crear el actor **PlayerCameraManager**.
-
+    
     Vincular el control de cámara y el HUD con el **PlayerController** es muy útil en los juegos multijugador, donde hay varías cámaras y varias interfaces de usuario.
     Así el resto de la lógica del juego puede localizar fácilmente el control de cámara y la interfaz de un jugador concreto con solo preguntarle al **PlayerController** correspondiente.
 
-// TODO: Imagen de las propiedades del PlayerController.
-
 * Gestionar información específica del jugador.
-El **PlayerController** puede usar para gestionar otra información del jugador ---a parte de su *rotación de control*--- especialmente si debe sobrevivir a la destrucción del actor personaje.
+El **PlayerController** puede usar para gestionar otra información del jugador --a parte de su *rotación de control*-- especialmente si debe sobrevivir a la destrucción del actor personaje.
 Por ejemplo, la puntuación, las habilidades adquiridas o su inventario.
 
 Respecto a esto último, debemos tener en cuenta que el **PlayerController** se destruye y se vuelve a crear al cargar un nuevo nivel.
@@ -442,9 +503,9 @@ En ese caso, es conveniente mantener una referencia a esta información en el **
 
 Para gestionar la entrada del jugador, el **PlayerController** tiene un objeto **PlayerInput**, que mapea los controles y dispositivos de entrada en acciones, y una pila de **InputComponent** de los actores interesados en leer la entrada del jugador.
 El **PlayerInput** emite los eventos de entrada y los entrega a los **InputComponent** en el orden determinado por la pila.
-Como se intenta esquematizar en @fig-input-component-stack, según va pasando por los **InputComponent**, cada uno de ellos puede elegir «consumir» el evento de entrada, haciendo que no alcance a componentes posteriores en la pila.
+Como se esquematiza en @fig-input-component-stack, según va pasando por los **InputComponent**, cada uno de ellos puede elegir «consumir» el evento de entrada, haciendo que no alcance a componentes posteriores en la pila.
 
-![Pila de **InputComponent** en **PlayerController**.](figures/input_component_stack.pdf){#fig-input-component-stack}
+![La pila de **InputComponent** en el **PlayerController**.](figures/input_component_stack.pdf){#fig-input-component-stack}
 
 El **PlayerController** es un actor, por lo que tiene un **InputComponent**.
 Este **InputComponent** es, generalmente, el primero de la pila.
@@ -452,7 +513,7 @@ Después está el del personaje que el **PlayerController** posee.
 
 Esto significa que la gestión de la entrada del jugador se puede implementar tanto en el **PlayerController** como en el actor del personaje.
 
-Obviamente, es posible gestionar toda la entrada del jugador en el **Pawn** del personaje, aunque esto solo es aconsejable en los casos más simples.
+Obviamente, es posible gestionar toda la entrada del jugador en el **Pawn** del personaje, aunque esto solo es aconsejable en los proyectos más simples.
 Cuando varios jugadores juegan en un mismo equipo, los jugadores pueden cambiar de personaje controlado durante la partida o la gestión de la entrada es compleja, es mejor hacerlo en el **PlayerController**.
 
 ### Interacción con objetos
@@ -470,22 +531,22 @@ Pero en la arquitectura descrita, los objetos pueden leer la entrada del jugador
 
 Después, cuando el jugador se aleja del objeto, lo único que hay que hacer es quitar el **InputComponent** del actor de la pila del **PlayerController**.
 
-Para realizar estas operaciones se usan los métodos `EnableInput()` y `DisableInput()` de la clase **Actor**.
+Para realizar estas operaciones se usan los métodos {{< api EnableInput >}} y {{< api DisableInput >}} de la clase **Actor**.
 Ambos necesitan como argumento el **PlayerController** del jugador del que quieren leer o dejar de leer la entrada.
 
 Esto permite implementar la lógica que gestiona la acción del jugador en el actor del objeto.
 
 La ventaja de hacerlo así es que evitamos añadir esta responsabilidad en el código del personaje que, por lo general, ya tiene muchas otras cosas de las que encargarse.
-De esta forma, es más fácil añadir nuevos tipos de de objetos con los que puede interactuar el jugador.
+De esta forma, es más fácil añadir nuevos tipos de objetos con los que puede interactuar el jugador.
 
-## Datos del jugador y *PlayerState* (`APlayerState`)
+## Datos del jugador y *PlayerState*
 
-El **PlayerController** tiene una propiedad que referencia a un actor **PlayerState**, que contiene la información específica de cada jugador que deba ser accesible al resto de jugadores en juegos multijugador online, como la saluda o la puntuación.
+El **PlayerController** tiene una propiedad que referencia a un actor {{< api PlayerState >}}, que contiene la información específica de cada jugador que deba ser accesible al resto de jugadores en juegos multijugador online, como la saluda o la puntuación.
 
-El **Pawn** poseído por el **PlayerController** de un jugador devuelve la instancia del **PlayerState** a través del método `GetPlayerState()`.
+El **Pawn** poseído por el **PlayerController** de un jugador devuelve la instancia del **PlayerState** a través del método {{< api GetPlayerState >}}.
 
-Para almacenar datos que el resto de jugadores no necesitan conocer ---como el inventario o la cantidad de munición--- se pueden usar objetos y estructuras de datos referenciadas desde el propio **Pawn** del personaje o el **PlayerController**.
-Aunque referenciar esta información desde el **Pawn** del personaje parece lo más intuitivo ---ya que son características del personaje--- en juegos multijugador online es común usar el **PlayerController**, ya que este actor solo existe en el cliente del jugador.
+Para almacenar datos que el resto de jugadores no necesitan conocer --como el inventario o la cantidad de munición-- se pueden usar objetos y estructuras de datos referenciadas desde el propio **Pawn** del personaje o el **PlayerController**.
+Aunque referenciar esta información desde el **Pawn** del personaje parece lo más intuitivo --ya que son características del personaje-- en juegos multijugador online es común usar el **PlayerController**, ya que este actor solo existe en el cliente del jugador.
 
 Teniendo en cuenta lo comentado, veamos algunos supuestos prácticos:
 
@@ -501,90 +562,815 @@ Teniendo en cuenta lo comentado, veamos algunos supuestos prácticos:
         A cambio, hay que reiniciar la propiedad manualmente cada vez que revive el personaje.
 
 * ¿Y un inventario? Por lo general el inventario es una entidad que no suele ser visible para el resto de jugadores, por lo que se puede guardar en el **PlayerController**.
-En cualquier caso, si el inventario debe persistir entre niveles, debería guardarse en el **GameInstance** ---o en un subsistema--- y, probablemente, referenciarlo desde el **PlayerController** para facilitar el acceso al resto de componentes que lo necesiten.
+En cualquier caso, si el inventario debe persistir entre niveles, debería guardarse en el **GameInstance** --o en un subsistema-- y, probablemente, referenciarlo desde el **PlayerController** para facilitar el acceso al resto de componentes que lo necesiten.
 
     En juegos multijugador online, hay que tener en cuenta que el **GameInstance** no se replica entre clientes y servidor.
-    Por tanto, el inventario debe ser gestionado en el **GameInstance** del servidor ---para evitar cualquier tipo de trampa--- pero al cargar un nivel debe copiarse la información necesaria al **PlayerController** de cada jugador, para que así sea replicada automáticamente en el **PlayerController** del cliente correspondiente.
+    Por tanto, el inventario debe ser gestionado en el **GameInstance** del servidor --para evitar cualquier tipo de trampa-- pero al cargar un nivel debe copiarse la información necesaria al **PlayerController** de cada jugador, para que así sea replicada automáticamente en el **PlayerController** del cliente correspondiente.
     De esta forma, cada jugador en su cliente tiene acceso a la información de su inventario, al mismo tiempo que el servidor se hace cargo de gestionar el inventario de todos los jugadores.
 
-## AIController
+## *AIController*
 
-// TODO: AI Tasks
+// TODO: AI Tasks  (AAIController)
 
-
-
-
+// PathFollowingComponent
 
 
 
 
-## Pawn y Character
 
-**Pawn** es la clase base de todos los actores que pueden interactuar con el mundo y ser controlados por el jugador o por la IA, mediante un **Controller**. Se puede usar para implementar personajes muy básicos, no necesariamente humanoides.
 
-El *gameplay framework* incluye los siguientes **Pawn**:
+## *Pawn* y *Character*
 
-* El **DefaultPawn** extiende **Pawn** añadiendo un *collider* esférico y un **StaticMesh**. Se puede mover libremente en 3D, sin ser afectado por la gravedad.
+Como hemos visto, {{< api Pawn >}} es la clase base de todos los actores que pueden interactuar con el mundo y ser controlados por el jugador o por la IA, mediante un **Controller**.
 
-* El **SpectatorPawn** extiende **DefaultPawn** para ofrecer la funcionalidad de espectador de la partida.
+El *gameplay framework* incluye las siguientes clases que heredan de **Pawn**:
 
-**Character** también extiende **Pawn**, pero para añadirle todo lo que necesita un personaje tradicional: una cápsula de colisión, un **SkeletalMeshComponent** ---es decir, una malla que puede ser animada mediante el sistema de animación de Unreal Engine--- y un **CharacterMovementComponent**, que implementa modos de movimiento típicos como: caminar, correr, saltar, volar y nadar.
+* El **DefaultPawn** extiende **Pawn** añadiendo un *collider* esférico y un **StaticMesh**.
+Se puede mover libremente en 3D, sin ser afectado por la gravedad, y se puede usar para explorar el nivel durante el desarrollo, independientemente de los personajes que se vayan a usar en el juego.
 
-::: {.tip}
-El código del **CharacterMovementComponent** puede ser muy ilustrativo sobre cómo hacer nuestro propio controlador de movimiento ---que podemos llamar `LocomotionController` o `MovementController`--- de un personaje en cualquier otro motor. En Unity el **CharacterController** es bastante simple, por lo que muchas veces acaba teniendo que ser sustituido por una implementación propia o comprada en la *Asset Store*.
+* El **SpectatorPawn**  extiende **DefaultPawn** para ofrecer la funcionalidad de espectador de la partida, útil en juegos multijugador online.
+
+* El {{< api WheeledVehiclePawn >}} extiende **Pawn** para implementar la clase base de vehículo con ruedas.
+
+    Esta clase de actor incluye por defecto un componente {{< api ChaosWheeledVehicleMovementComponent >}} que implementa la simulación del movimiento del vehículo, usando el motor de físicas Chaos[@TorresD3DFisicas] de Unreal Engine.
+    Este componente se puede sustituir fácilmente[Más sobre CDO en @TorresD3DUnrealCpp] por cualquier componente que herede de {{< api ChaosVehicleMovementComponent >}}, cuando se quiere usar una simulación diferente.
+
+* El {{< api Character >}} extiende **Pawn** para añadir todo lo que necesita un personaje tradicional humanoide, como el que se usa en muchos juegos de acción en primera o tercera persona: una cápsula de colisión, un **SkeletalMeshComponent** --es decir, una malla que puede ser animada mediante el sistema de animación de Unreal Engine-- y un **CharacterMovementComponent**, que implementa modos de movimiento típicos como: caminar, correr, saltar, nadaro, incluso, volar.
+
+Estas clases se heredan para añadir la funcionalidad específica que necesitemos en nuestro juego, según el tipo de personaje que queramos implementar.
+
+La clase **Character** es la base más común para desarrollar los personajes humanoides complejos.
+Mientras que la clase **Pawn** se usa como base para personajes o entidades controlables más básicas o cuando lo que se pretende implementar no encaja bien en ninguna de las clases anteriores.
+
+## Componentes de movimiento {#sec-movement-components}
+
+Obviamente, se puede heredar de **ActorComponent** para implementar un componente que se encargue del movimiento de un actor en cada *tick*.
+Sin embargo, es recomendable heredar de {{< api MovementComponent >}} para hacer un componente de movimiento, ya ofrece cierta utilidad que puede ser útil al implementar un componente de movimiento:
+
+* Facilita la restricción del movimiento a un plano o a un eje específico.
+* Incluye métodos que son útiles para manejar los resultados de colisión y hacer los cálculos para mover el actor.
+* Está configurado para hacer *tick* --y, por tanto, aplicar el movimiento-- antes de los cálculos de físicas y del *tick* del actor donde se añade.
+* Ofrece una interfaz para configurar a qué componente del actor se aplica el movimiento (ver {{< api SetUpdatedComponent >}}).
+Por defecto, si no se indica ninguno, usa el componente raíz del actor, moviendo de esta manera a todo el actor.
+
+Algunos de los componentes de movimiento más comunes son:
+
+* {{< api FloatingPawnMovement >}}.
+Componente de movimiento que permite mover un actor en cualquier dirección 3D, sin que sea afectado por la gravedad.
+Es el componente de movimiento que usa por defecto el **DefaultPawn**.
+
+* {{< api ProjectileMovementComponent >}}.
+Componente de movimiento que permite mover un actor en línea recta, con opciones para que sea afectado por la gravedad, para perseguir un objetivo y para que rebote al colisionar con otros elementos del nivel.
+Es un componente ideal para implementar todo tipo de proyectiles.
+
+* {{< api RotatingMovementComponent >}}.
+Componente de movimiento que permite rotar un actor en torno a un eje de forma continua.
+
+* {{< api InterpToMovementComponent >}}.
+Componente de movimiento que permite mover un actor de forma suave entre varios puntos.
+
+* {{< api CharacterMovementComponent >}}.
+Componente de movimiento diseñado para mover un actor de la clase **Character**.
+Es un componente muy completo, con mucha funcionalidad, que permite mover un personaje de forma realista.
+Soporta diferentes modos de desplazamiento, como caminar, correr, saltar o nadar y soporta añadir otros modos de desplazamiento personalizados.
+
+* {{< api NavMovementComponent >}}.
+Componente de movimiento que permite mover a un actor de forma automática, en base a una ruta calculada por el sistema de navegación de Unreal Engine.
+Componentes como **CharacterMovementComponent**, **FloatingPawnMovement** o **ChaosVehicleMovementComponent** heredan de **NavMovementComponent** para poder mover actores u otros componentes de forma automática por el nivel.
+
+* {{< api ChaosWheeledVehicleMovementComponent >}}.
+Componente de movimiento que permite mover un vehículo con ruedas.
+Es usado por defector por los actores de la clase **WheeledVehiclePawn**.
+
+## Control de cámara con *PlayerCameraManager* {#sec-playercameramanager}
+
+Como hemos comentado anteriormente, cada **PlayerController** crea y gestiona su actor **PlayerCameraManager**, que mantiene la información del punto de vista (POV) de la cámara que necesita el motor para renderizar la escena.
+
+El {{< api PlayerCameraManager >}} se puede modifcar derivando de dicha clase e indicando la nueva clase en las propiedades del **PlayerController**, como se puede observar en la @fig-playercontroller-camera-manager.
+
+![Configuración del **PlayerCameraManager** en el **PlayerController**.](figures/playercontroller-camera-manager.png){#fig-playercontroller-camera-manager}
+
+En cada *tick* el **PlayerController** llama al método `UpdateCamera()` de su **PlayerCameraManager** para que actualize las propiedades con el POV deseado más reciente.
+El motor accede a estas propiedades a través del **LocalPlayer**, que utiliza al **PlayerController** y al **PlayerCámeraManager** para recopilar la información.
+
+### Actor *view target*
+
+Sobreescribiendo `UpdateCamera()` en **PlayerCameraManager** se pueden establecer las propiedades del punto de vista de la cámara del jugador que usará el motor para el render.
+Sin embargo, la implementación por defecto que ofrece Unreal Engine en el **PlayerCameraManager** es bastante flexible, permitiendo ajustar el POV sobreescribiendo varios métodos.
+
+La implementación del **PlayerCameraManager** se basa en el concepto de *view target*, que es el actor que va a determinar el punto de vista del jugador.
+Este actor se puede obtener y cambiar manualmente en el **PlayerController**, mediante los métodos {{< api GetViewTarget >}}, {{< api SetViewTarget >}} y {{< api SetViewTargetWithBlend >}} (ver la @fig-playercontroller-view-target), aunque realmente esta configuración se almacena en el **PlayerCameraManager**.
+
+![Nodos para obtener y cambiar el *view target* en el **PlayerController**.](figures/playercontroller-view-target.png){#fig-playercontroller-view-target}
+
+Además, la asignación del *view target* puede ocurrir automáticamente, activando la opción **Auto Manage Active Camera Target** del **PlayerController** (ver la @fig-playercontroller-camera-manager).
+En ese caso el **PlayerController**:
+
+1. Busca un actor **CameraActor** con la opción **Auto Activate for Player** configurada con el jugador del **PlayerController** (ver la propiedad en la @fig-cameraactor-auto-activate).
+Si lo encuentra, asigna ese actor {{< api CameraActor >}} como *view target*.
+
+![Configuración de **CameraActor** para que sea el *view target* del jugador 3.](figures/cameraactor-auto-activate.png){#fig-cameraactor-auto-activate}
+
+2. En otro caso, utiliza el **Pawn** poseido en cada momento por el **PlayerController**.
+
+3. Si el **PlayerController** no posee a ningún **Pawn**, se usa el propio actor **PlayerController** como *view target*.
+
+Qué actor es el *view target* es importante porque durante la ejecución de `UpdateCamera()` se invoca el método {{< api CalcCamera >}} del *view target*.
+Mediante este método el actor devuelve el POV deseado para el jugador.
+
+:::{.callout-tip}
+Este sistema no solo ofrece mucha flexibilidad para gestionar múltiples cámaras de *gameplay*.
+También se puede explotar para desarrollar un sistema de cámaras de depuración, que permita cambiar el punto de vista y la configuración en tiempo real, para visualizar el nivel desde diferentes puntos de vista y encontrar y resolver problemas.
 :::
 
-Las clases **Pawn** y **Character** exponen la interfaz necesaria para que un **Controller** los controle para, por ejemplo, desplazarlos por la escena. Los **Controller** que «poseen» un **Pawn** o **Character** reciben muchos de los eventos que llegan a dicho **Pawn**, lo que les permite redefinir el comportamiento del actor mientras está poseído.
+El comportamiento por defecto de `CalcCamera()` en cualquier actor es buscar su primer componente **CameraComponent** y devolver su localización, rotación y otros propiedades como el punto de vista del jugador.
 
-**Pawn** también ofrece la API **Damage**, que se usa para causar distintos tipos de daño ---puntual, radial u otro que definamos--- en el personaje, registrando quién es el causante. Además, Unreal Engine ofrece el componente **ProjectileMovementComponent**, diseñado para dotar a cualquier actor del tipo de movimiento característico de un proyectil, y el componente **RotatingMovementComponent**, para implementar rotaciones contínuas a velocidad constante.
+Es decir, en Unreal Engine, el componente **CameraComponent** es realmente una especie de objeto *marcador* que facilita configurar las propiedades de las cámaras directamente en la escena.
+En realidad no tienen conexión directa con la cámara del sistema de render, ni son necesarios para ubicar y configurar adecudamente las cámaras.
 
-NOTE:
+Si un el actor *view target* no tiene un **CameraComponent**, el método `CalcCamera()` retorna la ubicación y rotación del actor como POV del jugador.
 
-En la arquitectura descrita puede surgir la duda de si colocar el código que procesa los eventos de entrada del usuario para manejar el personaje en el **PlayerController** o en el **Pawn** del personaje del jugador. La ventaja del utilizar el **PlayerController** es que facilita desacoplar la entrada de las acciones y habilidades de cada personaje. Los **Pawn** pueden exponer una interfaz común con acciones posibles, que en cada uno se pueden implementar de forma diferente y que pueden ser controladas indistintamente por el jugador, mediante un **PlayerController**, o por la IA, mediante un **AIController**. El **PlayerController** ---que en juegos en red solo existe en el cliente del jugador--- solo tiene la responsabilidad de procesar los eventos de entrada para llamar a la acción adecuada del personaje poseído. En cualquier caso, si un personaje necesita algún tipo de comportamiento especial, siempre es posible procesarla directamente en el **Pawn** de dicho personaje.
+### Transiciones entre *view targets*
 
-## PlayerState y otros datos del jugador 
+La arquitecta comentada facilita cambiar entre diferentes modo de cámara, si el juego lo requiere.
 
-# Level Blueprint
+Por ejemplo, en un juego de acción en tercera persona, el jugador puede controlar a un personaje que se mueve libremente por el nivel, utilizando una cámara que orbita libremente alrededor del personaje.
+Pero cuando cuando el jugador entra en un vehículo, el *view target* puede cambiar al vehículo, haciendo que se use una cámara externa que facilite la condución.
+Igualmente, cuando el personaje se acerca a una zona de escalada, el *view target* se puede cambiar a un actor con una cámara que se mueve en un plano paralelo a la pared, a una distancia mayor, para que el jugador pueda ver mejor lo que está haciendo.
+O en una arena de combate, el *view target* puede cambiar a un actor con una cámara externa que orbite en alto sobre la zona, facilitando al jugador tener una vista de la acción.
 
-Aunque no está relacionado con el *gameplay framework*, merece la pena señalar que cada nivel en Unreal Engine tiene un **Level Blueprint** donde escribir código global del nivel. Generalmente, se utiliza para el código de *gameplay* que facilita la coordinación de los actores en el nivel.
+Al cambiar el *view target* en el **PlayerController** mediante el método `SetViewTarget()`, la transición entre ambos POV es instantánea.
+Sin embargo, si se usa el método {{< api SetViewTargetWithBlend >}}, se puede configurar un tipo de transición, haciendo que el **PlayerCameraManager** interpole las propiedades de la cámara entre el POV del *view target* anterior y el nuevo (ver la @fig-playercontroller-view-target).
 
-En otros motores esto se asemeja a tener un *level manager*. Por ejemplo, en Unity es bastante común tener en cada escena un *GameObject* con un componente **LevelManager** con el código y propiedades globales del nivel.
+Por ejemplo, en el caso de la escalada, se puede usar una transición de tipo *ease out*, para que la cámara se aleje del personaje de forma suave, y otra de tipo *ease in*, para que la cámara se acerque al personaje de forma suave cuando termina la escalada.
 
-// TODO explicar mejor lo anterior
+<!-- TODO: Referencia a los ease aquí o en un capítulo de animaciones -->
 
-// TODO: C++
+### Personalizar el comportamiento de la cámara
 
-## MovementComponent
+En la arquitectura descrita existen diferentes puntos donde se puede personalizar el comportamiento de la cámara.
 
-// TODO: IMplementar un SplineMovementCOmponent
+#### *CalcCamera()* en el *view target*
 
-## PlayerCameraManager
+Sobreescribir el método {{< api CalcCamera >}} en el actor --solo en C++-- es ideal para hacer cambios del control de cámara especificos de ese actor.
+Por ejemplo, un **Pawn** puede tener varios **CameraComponent** para indicar diferenes posibles posiciones de la cámara, com: primera o tercera persona, cámara al hombro en el lado derecho o izquierdo, cámara con mira, etc.
+
+En `CalcCamera()` se puede implementar la lógica para elegir el **CameraComponent** adecuado, según las preferencias del jugador o el estado del personaje.
+`CalcCamera()` es, probablemente, el primer lugar donde mirar si queremos ajustar el comportamiento de la cámara.
+
+Parece hacer cambios más globales, es necesario ir al **PlayerCameraManager** y sobreescribir alguno de sus métodos.
+
+#### *BlueprintUpdateCamera()* y *UpdateViewTargetInternal()*
+
+Se puede sobreescribir `BlueprintUpdateCamera()` en Blueprint para hacer cambios que afecten a todos los **view target**.
+
+En **PlayerCameraManager**, durante el `UpdateCamera()`, se llama a `UpdateViewTargetInternal()` indicándole el *view target* en los argumentos.
+Este es el método que llama al `CalcCamera()` de dicho *view target* y, posteriormente, pasa el POV devuelto por ese método a `BlueprintUpdateCamera()`, para que pueda modificarlo en un Blueprint.
+Si `BlueprintUpdateCamera()` devuelve `true`, sus cambios tienen prioridad sobre los devuelto por `CalcCamera()`.
+
+Para hacer este tipo de cambios globables pero en C++, se puede sobreescribir `UpdateViewTargetInternal()`.
+Tanto `UpdateViewTargetInternal()` como `BlueprintUpdateCamera()` son ideales para cambios que solo requieran sobreescribir el POV devuelto por el método `CalcCamera()` del *view target* indicado, sin afectar al resto de maneras de obtener el POV del jugador.
+
+#### *UpdateViewTarget()*
+
+El método `UpdateViewTargetInternal()` es llamado por `UpdateViewTarget()`.
+
+En el método `UpdateViewTarget()` recibe el *view target* y para obtener el POV sigue los siguientes pasos:
+
+1. Si el **view target** indicado es un actor **CameraActor**, obtiene el POV directamente del **CameraActor**.
+
+2. En caso contrario, comprueba si se ha activado un estilo de cámara válido en la variable miembro `CameraStyle` --solo en C++-- del **PlayerCameraManager**.
+Si así fuera, calcula directamente el POV del jugador según el estilo indicado[^camera-style].
+
+[^camera-style]: `UpdateViewTarget()` incluye implementaciones de ejemplo para unos pocos estilos: **Fixed**, **ThirdPerson**, **FirstPerson**, **FreeCam** y **FreeCam_Default**.
+Obviamente, se puede sobreescribir el método para hacer implementaciones propias o añadir nuevos estilos, pero esta no es la forma más común de implementar el control de cámara, en la actualidad.
+
+3. En otro caso, llama a `UpdateViewTargetInternal()` que, a su vez, llama al `CalcCamera()` del **view target**.
+Luego llama `BlueprintUpdateCamera()`, para que pueda modificar el POV devuelto por dicho actor.
+
+4. Finamente, aplica los modificadores de cámara al POV obtenido en alguno de los pasos anteriores (ver la @sec-camera-modifiers) y retorna el POV resultante a `DoUpdateCamera()` del **PlayerCameraManager**.
+
+Por tanto, se puede sobreescribir `UpdateViewTarget()` para hacer cambios que afecten a todas las formas de calcular el POV deseado o para crear nuevos estilos de cámara, si preferimos implementar el control de la cámara directamente de esta última manera.
+
+#### *DoUpdateCamera()* y *UpdateCamera()*
+
+Finalmente, `UpdateViewTarget()` es llamado por `DoUpdateCamera()` que, a su vez, es llamado por `UpdateCamera()` desde el *tick* del **PlayerController**.
+
+`DoUpdateCamera` implementa el mecanismo de transición de *view target*, interpolando entre dos POV al indicar un nuevo *view target* mediante `SetViewTargetWithBlend()`.
+
+Como hemos comentado, `DoUpdateCamera()` llama `UpdateViewTarget()` con indicándole el *view target* actual para obtener el POV deseado.
+Si está en mitad de una transición entre dos *view target*, hace la llamada a `UpdateViewTarget()` dos veces, una para el *view target* previo y otra para el nuevo. 
+Después interpola entre los POV devueltos por ambas llamadas, para obtener el POV definitivo en el frame actual.
+
+Por tanto, se puede sobreescribir `DoUpdateCamera()` para hacer cambios en la manera en la que se interpola entre los POV al cambiar el *view target*.
+O para modificar complementamente el contro del cámara.
+
+Al finalizar, `DoUpdateCamera()` almacena el POV resultante en **PlayerCameraManager** para su uso durante el render.
+También actualiza el fundido de cámara y de audio, si está activo --ver {{< api StartCameraFade >}}, {{< api StopCameraFade >}} y {{< api SetManualCameraFade >}} de **PlayerCameraManager** en la @fig-playercameramanager-fade-- y aplica otros efectos.
+
+![Nodos de **PlayerCameraManager** para el control del fundido de cámara.](figures/playercameramanager-fade.png){#fig-playercameramanager-fade}
+
+En la @fig-update-camera se puede ver un esquema de la cadena de responsabilidad que se sigue para obtener el POV del jugador para el render.
+
+![Esquema de actualización del POV del jugador.](figures/update-camera-sequence.pdf){#fig-update-camera}
+
+### Modificadores de cámara {#sec-camera-modifiers}
+
+El **PlayerCameraManager** soporta modificadores de cámara que pueden añadir y eliminar mediante los métodos `AddNewCameraModifier()` y `RemoveCameraModifier()`, respectivamente (ver la @fig-playercameramanager-camera-modifiers) o en las propiedades de la clase en el editor.
+
+![Nodos de **PlayerCameraManager** para añadir y eliminar modificadores de cámara.](figures/playercameramanager-camera-modifiers.png){#fig-playercameramanager-camera-modifiers}
+
+Estos modificadiones puede afectar a:
+
+* La ubicación, rotación y otras propiedades de cámara del POV del jugador.
+* La rotación de control del jugador.
+Por ejemplo, para establacer límites
+* Modificar la configuración de los efectos de postprocesado.
+
+Los modificadores se aplican al final del método `UpdateViewTarget()`, durante el cálculo del POV del jugador.
+
+#### Activación y desactivación de modificadores
+
+Una vez se han añadido un modificador, se puede activar y desactivar, según el estado del juego, a través de los métodos `EnableModifier()`, `DisableModifier()` y `ToggleModifier()`, de la clase {{< api CameraModifier >}}, que se pueden ver en la @fig-cameramodifier-activation.
+
+![Nodos de **CameraModifier** para activar y desactivar el modificador.](figures/cameramodifier-activation.png){#fig-cameramodifier-activation}
+
+Por ejemplo, se puede añadir un modificador `UCameraModifier_CameraShake` para sacudir la cámara cuando el jugador recibe daño, activándolo y desactivándolo durante un timpo cuando se da el caso.
+
+Además, la activación y desactivación puede ser instantánea o gradual, según el valor de las propiedades `AlphaInTime`, `AlphaOutTime` de **CameraModifier** y el argumento `Immediate` de `DisableModifier()`.
+
+#### Prioridad de los modificadores
+
+Los modificadores se organizan en el **PlayerCameraManager** en una lista ordenada por su pioridad, que es una propiedad de la instancia de `CamaraModifier`. 
+De forma que se pueden aplicar varios modificadores a la vez, en un orden determinado por su prioridad.
+
+Aunque los efectos de los modificadores generalmente se combinan, es posible que un modificador de alta prioridad prevenga la ejecución de modificadores de menor prioridad.
+Esto se puede indicar mediante el valor de retorno del método {{< api ModifyCamera >}} de **CameraModifier**, que si `true` detendría la ejecución de los siguientes modificadores.
+
+#### Modificadores de cámara predefinidos
+
+Algunos de los modificadores de cámara predefinidos de Unreal Engine son:
+
+* {{< api    >}}.
+Sacude la cámara para crear sensación de impacto o agitación, lo que es útil con explosiones o al recibir daño.
+
+    El efecto se configura añandiendo al modificador uno o varios objetos de tipo {{< api UCameraShakeBase >}}.
+    Cada uno contiene un *patrón de movimiento* que es el objeto que realmente contiene la lógica que dirige el movimiento de la cámara[@UnrealCameraShakes]. 
+
+* {{< api UCameraAnimationCameraModifier >}}.
+Aplica una secuencia de animación a la cámara.
+
+#### Modificadores personalizados
+
+La clase base de los modificadores es {{< api CameraModifier >}} y se puede heredar de ella para implementar modificadores de cámara personalizados.
+
+Los métodos `BlueprintModifyCamera()` y {{< api ModifyCamera >}} son los que se deben sobreescribir para implementar la lógica de los modificadores de las propiedades de la cámara, en Blueprint o C++, respectivamente.
+Mientras que `BlueprintModifyPostProcess()` y {{< api ModifyPostProcess >}} se pueden sobreescribir para modificar la configuración de los efectos de postprocesado.
+
+En todo los casos, es responsabilidad del código en estas funciones interpretar y aplicar los valores de `Alpha`, si el efecto debe mezclarse de forma gradual al activarse o desactivarse.
+
+En realidad, **PlayerCameraManager** llama al método {{< api ModifyCamera >}} de cada modificador, pasándole la delta de tiempo y una estructura con la información del POV del jugador para que la modifique.
+Este método actualiza el `Alpha`, llama a los métodos anteriores y, por defecto, retorna `false` para que se puedan ejecutar los siguientes modificadores de menor prioridad.
+
+#### Relación con la *rotación de control*
+
+La *rotación de control* del **PlayerController** se puede ver afectada por los modificadores de la cámara y el **PlayerCameraManager**.
+
+En cada *tick* el **PlayerController** llama a su método `UpdateRotation()` para actualizar la *rotación de control* con la entrada del jugador acumulada hasta el momento en una variable interna.
+Este método llama a `ProcessViewRotation()` del **PlayerCameraManager** que, a su vez, llama al mismo método en cada modificador de cámara, pasando por referencia tanto la rotación de control actual como la indicada por la entrada del jugador.
+
+Gracias a esto, los modificadores de la cámara pueden modificar tanto *rotación de control* actual como la entrada del jugador acumulada, que se usará para actualizar la *rotación de control*.
+Esto sirve, por ejemplo, para que un modificador de cámara activo pueda limitar la *rotación de control* a cierto intervalo.
+
+En todo caso, para establecer limitaciones a la *rotación de control* del jugador de forma generalizada, se pueden usar las propiedades **View Pitch Min**, **View Pitch Max**, **View Yaw Min**, **View Yaw Max**, **View Roll Min** y **View Roll Max** que trae de serie **PlayerCameraManager**.
+
+// TODOL Imagen
 
 ## Gameplay Framework
 
-En la [figure\_title](#fig-ue-gameplay-framework) se puede observar un esquema del *gameplay framework* de Unreal Engine que hemos comentado en apartados anteriores.
+En la @fig-ue-gameplay-framework se puede observar un esquema del *gameplay framework* de Unreal Engine que hemos comentado en apartados anteriores.
 
-<!--
-![Esquema del *gameplay framework* de Unreal Engine.](media/diag-ea40ccdebc1947202411d1f67845c087.svg)
--->
+```{mermaid}
+%%| label: fig-ue-gameplay-framework
+%%| fig-cap: "Esquema del *gameplay framework* de Unreal Engine."
+%%| file: figures/ue-gameplay-framework.mm
+%%| fig-width: 15cm
+```
 
+Esta arquitectura se puede trasladar fácilmente a otros motores, con las modificaciones que mejor se adapten a nuestras necesidades y a las particularidades de cada motor.
 
-Esta arquitectura se puede trasladar fácilmente a otros motores, con las modificaciones que mejor se adapten a nuestras necesidades, si tenemos la necesidad de crear nuestro propio *framework*. Por ejemplo, para juegos de un solo jugador seguramente nos resulte más sencillo gestionar el controlador de la interfaz de usuario y el *manager* de la cámara desde el *game manager* que desde **PlayerController**.
+# Level Blueprint
 
-<!--
+Aunque no está relacionado con el *gameplay framework*, merece la pena señalar que cada nivel en Unreal Engine tiene asociado un **Level Blueprint** donde se puede escribir código global del nivel.
 
-que incluye algunos de los componentes que hemos comentado hasta el momento
+En otros motores esto se asemeja a tener un *level manager*.
+Sin embargo, en Unreal Engine el papel de *level manager* se divide, más bien, entre el **GameMode** y el **Level Blueprint**.
 
-Salvado de la partida
+Como el **Level Blueprint** tiene acceso directo a todos actores del nivel, es muy útil para implementar la lógica que conecta los eventos globales del nivel, para que los actores se coordinen.
+Por ejemplo, establecer suscripciones a eventos para que cuando el actor del jugador llegue a cierto punto del nivel se active un evento que haga que se instancie enemigos, se activen unas plataformas, etc.
+Mientras que el **GameMode** suele contener el resto del código de gestión del nivel.
 
-Damage API
+El **Level Blueprint** se puede editar desde el editor de Unreal Engine, seleccionando la opción **Blueprints / Open Level Blueprint** en el menú principal.
 
-GAS
--->
+<!-- TODO: Captura de un LevelBlueprint -->
 
-# Subsistemas {#sec-subsystems}
+El **Level Blueprint** es un actor de tipo `ALevelScriptActor` que es creado automáticamente por la instancia de **UWorld**.
 
-# Pausa y menús
+Se puede heredar de la clase `ALevelScriptActor` en C++ para crear una nueva clase base de **Level Blueprint**[Más en @TorresD3DUnrealCpp].
+Esto se suele hacer para incorporar métodos útiles o exponer ciertas funcionalidades al código de Blueprint en el **Level Blueprint**,.
+
+# Damage API
+
+Las mecánicas de daño y salud son fundamentales en juegos donde la interacción y el conflicto son elementos clave como, por ejemplo: *shooters*, RPG y juegos de supervivencia.
+Pero también es frecuente tener que implementar este tipo de mecánicas en juegos de otros géneros, aunque no sean de acción.
+
+Unreal Engine ofrece un API de daño que facilita la implementación de estas mecánicas, al establecer una interfaz común para que todos los actores puedan recibir diferentes tipos de daño y procesarlo, tanto sin son objetos genéricos del juego, como personajes o estructuras[@UnrealBlueprintDamageAPI].
+
+## Conceptos de la API de daño
+
+Antes de comentar la API de daño de Unreal Engine, vamos a introducir una serie de conceptos comunes en muchos juegos:
+
+* **Daño**.
+Cantidad de salud que se resta a un actor al causarle daño.
+
+* **Daño base**.
+Cantidad de dañó que se aplicaría a un actor sino se tuvieran en cuenta los modificadores.
+
+* **Daño efectivo**.
+Cantidad de dañó que se aplica a un actor, teniendo en cuenta los modificadores.
+Por tanto, es el *daño* que realmente se resta a la salud del actor dañado.
+
+* **Modificadores de daño**.
+Valores y formulas que se aplican al *daño base* para obtener el *daño efectivo* que se va a restar de la salud del actor.
+Los modificaciones pueden venir determinadas por el tipo de daño, la velocidad del impacto, el estado del actor, la distancia al origen del daño, el tiempo que lleva aplicándose el daño, etc.
+
+* **Tipo de daño**.
+Categoría del daño causado, como daño: ambiental, de combate, mágico, de caída, de envenamiento, de colisión, etc. 
+El *tipo de daño* suele determinar los modificadores de daño que se aplican.
+
+* **Causante del daño**.
+Actor que causa el daño.
+Por ejemplo, un proyectil o un objeto.
+
+* **Instigador del daño**.
+Es el jugador o personaje que causa el daño.
+Por ejemplo, si un proyectil impacta en un personaje, dicho proyectil es la *causa el daño* pero el *instigador* es el jugador o el personaje que lanzó el proyectil.
+Esto es útil en juegos multijugador, para que el responsable del dañó reciba la puntuación correspondiente.
+
+* **Daño por *raycast***.
+Daño que se aplica a los actores encontrados mediante un *raycast*.
+En Unreal Engine este tipo de daño se suele implementar como un *point damage*.
+
+* **Daño por colisión**.
+Daño que se aplica a los actores que colisionan con otro actor.
+En Unreal Engine este tipo de daño también se suele implementar como un *point damage*.
+
+* **Daño de área**.
+Daño que se aplica a los actores en un área determinada.
+En Unreal Engine este tipo de daño se suele implementar como un *radial damage*.
+
+* **Daño instantáneo**.
+Daño que se aplica de forma instantánea.
+La Damage API de Unreal Engine práctiamente solo soporta este tipo de daño.
+
+* **Daño periódico**.
+Daño que se aplica durante un periodo de tiempo determinado.
+La Damage API de Unreal Engine no soporta directamente este tipo de dañó, aunque se puede implementar fácilmente configurando un temporizador y aplicando daño instantáneo en cada evento de activación.
+Además, el motor incluye el actor {{< api PainCausingVolume >}}, que aplica daño periódico a los actores que se encuentran dentro de su volumen.
+
+## Interfaz de daño
+
+El API de daño no se declara en una interfaz específica de Unreal Engine, sino directamente en la clase **Actor**.
+Vamos a ver sus métodos y propiedades, para entender mejor su funcionamiento.
+
+### Recibir daño a actores
+
+Los actores pueden recibir daño mediante el método {{< api TakeDamage >}}, que recibe como argumentos:
+
+```cpp
+class AActor
+{
+public:
+    //...
+    virtual float TakeDamage(float DamageAmount,
+        FDamageEvent const& DamageEvent, AController* EventInstigator,
+        AActor* DamageCauser);
+    //...
+};
+``` 
+
+* `DamageAmount`. La cantidad de *daño base*.
+
+* `DamageEvent`. El evento de daño --de tipo {{< api FDamageEvent >}}-- que describe el daño recibido.
+Con esta información se pueden aplicar modificadores de daño para calcular el *daño efectivo*.
+
+* `EventInstigator`. El **Controller** que causó el daño.
+
+* `DamageCauser`. El actor que causó el daño.
+
+El Damage API define dos subclases de **FDamageEvent** para indicar dos tipos de daño diferentes y añadir propiedades adecuadas a cada uno:
+
+* {{< api FPointDamageEvent >}}, para el daño puntual, por *raycast* o colisión.
+Incluye información sobre el lugar del impacto, la dirección del impacto y el componente del actor que recibió el impacto.
+
+* {{< api FRadialDamageEvent >}}, para indicar un dañó de área.
+Incluye información sobre el centro del área, el radio del área y como del daño decae con la distancia.
+
+En el caso de recibir un evento de daño de tipo **FPointDamageEvent**, el método `TakeDamage()`:
+
+1. Llama al método {{< api InternalTakePointDamage >}}, pasándole los argumentos recibidos.
+Por defecto, este método retorna el *daño base* indicado en `DamageAmount`, para la idea es que se sobreescriba en las clases hijas de **Actor** para que calcule el *daño efectivo* en base a la información sobre el tipo de dañó.
+
+2. Llama al método {{< api ReceivePointDamage >}}, con información extraida del evento de daño recibido y con el *daño efectivo* calculado en el paso anterior.
+El objetivo es que el actor procese el daño recibido, actualizando su salud, aplicando efectos visuales, etc.
+
+3. Lanza al evemto {{< api OnTakePointDamage >}}, para que otros actores y componentes puedan suscribirse a este evento y reaccionar al daño recibido por este actor (ver la @fig-ontakedamage-events).
+
+![Eventos de daño de los actores en Unreal Engine.](figures/ontakedamage-events.png){#fig-ontakedamage-events}
+
+En el caso de recibir un evento de daño de tipo **FRadialDamageEvent**, el método `TakeDamage()` sigue uno pasos similares pero llamando a los métodos {{< api InternalTakeRadialDamage >}} y {{< api ReceiveRadialDamage >}} y lanzando el evento {{< api OnTakeRadialDamage >}}.
+
+Finalmente, tanto si el evento de daño es de alguno de los tipos anteriores, como si es de la clase base **FDamageEvent**, el método `TakeDamage()` llama al método {{< api ReceiveAnyDamage >}} y lanza el evento {{< api OnTakeAnyDamage >}}.
+
+`TakeDamage()` retorma el *daño efectivo* aplicado, calculador por defecto por los métodos `InternalTakePointDamage()` o `InternalTakeRadialDamage()`.
+
+### Propiedad *CanBeDamaged*
+
+Todo actor tiene una propiedad **Can Be Damaged** que para indicar si puede recibir daño o no.
+
+Esta propiedad se puede consultar mediante el método `CanBeDamaged()` y se puede modificar mediante `SetCanBeDamaged()`.
+Sin embargo, es una propiedad para ser usada por las subcles del actor.
+
+Es decir, el método `TakeDamage()` en **Actor** no tiene en cuenta el valor de `CanBeDamaged` y siempre aplica el daño recibido.
+Pero subclases como **Pawn** o **Character** sobreescriben `TakeDamage()` para que solo aplique el daño recibido si `CanBeDamaged` esta activa.
+
+### Funciones de ayuda *ApplyDamage*
+
+El API de daño también ofrece funciones de ayuda para aplicar daño a un actor, sin tener que llamar a `TakeDamage()` en el actor directamente.
+Estas funciones estan disponibles tanto en C++ como en Bluperint (ver la @fig-applydamage-methods):
+
+![Nodos para aplicar daño a un actor.](figures/applydamage-methods.png){#fig-applydamage-methods}
+
+Sin embargo, no debemos perder de vista que esta funciones no son más que una interfaz más sencilla para llamar a `TakeDamage()` en el actor indicado.
+Es decir, no procesan el daño de ninguna manera, sino que crean el tipo de evento de daño `FDamageEvent` adecuado con la información proporcionada, para luego llamar al método `TakeDamage()` del actor o actores afectados.
+Es nuestra reponsabilidad implementar el procesamiento del daño en las subclases de **Actor**.
+
+Como se puede observar, uno de los argumentos que reciben estas funciones *ApplyDamage* y que se guarda en el evento de daño, que recibira `TakeDamage()`, es el tipo de daño, indicado mediante una subclase de **UDamageType**.
+Esta clase se puede usar para definir diferentes tipos de daño, como fuego, hielo, eléctrico, francotirador, ambiental, etc.
+
+#### *ApplyDamage*
+
+La función {{< api ApplyDamage >}} aplica daño al actor especificado, indicando el *daño base*, causante, instigador y el tipo de daño.
+
+```cpp
+float ApplyDamage(AActor* DamagedActor, float BaseDamage,
+    AController* EventInstigator, AActor* DamageCauser,
+    TSubclassOf<UDamageType> DamageTypeClass);
+```
+
+#### *ApplyPointDamage*
+
+La función {{< api ApplyPointDamage >}} aplica daño puntual al actor especificado.
+
+A parte de los argumentos comunes con `ApplyDamage()`, también se debe indicar información específica sobre el impacto, como la dirección del impacto y la estructura **HitResult**.
+
+```cpp
+float ApplyPointDamage(AActor* DamagedActor, float BaseDamage,
+    FVector HitFromDirection, FHitResult const& HitInfo,
+    AController* EventInstigator, AActor* DamageCauser,
+    TSubclassOf<UDamageType> DamageTypeClass);
+```
+
+La estructura **HitResult** es la misma que se usa con las funciones de *raycast* y para detectar colisiones, por lo que pueden reutilizarse los resultados de estas funciones para aplicar daño.
+
+#### *ApplyRadialDamage*
+
+La función {{< api ApplyRadialDamage >}} aplica daño a todos los actores en un área esférica.
+
+A parte de los argumentos comunes con `ApplyDamage()`, como *daño base*, causante, instigador y el tipo de daño, también recibe otra información relevante en el caso de un daño de área, como el centro del área y el radio.
+
+```cpp
+float ApplyRadialDamage(const UObject * WorldContextObject,
+    float BaseDamage, FVector Origin, float DamageRadius,
+    TSubclassOf<UDamageType> DamageTypeClass,
+    TArray<AActor*> const& IgnoreActors, AActor* DamageCauser,
+    AController* InstigatedBy, bool bDoFullDamage,
+    ECollisionChannel DamagePreventionChannel);
+```
+
+Esta función no necesita al actor al que se va a dañar, ya que se encarga de buscar a todos los actores dentro del área esférica especificada.
+Sin embargo, necesita un `WorldContextObject` para poder acceder al objeto **World** donde hacer dicha búsqueda de actores.
+
+Como `WorldContextObject` se puede pasar el propio objeto **World** o cualquier otro actor del nivel.
+
+Por defecto, esta función crea un objeto **FRadialDamageEvent** donde se indica que el daño se escale de forma proporcional a la distancia al centro del área de daño.
+Esto lo hace poniendo la propiedad **Damage Falloff** a 1.0 en el evento de daño.
+Pero si `bDoFullDamage` es `true`, pondrá la propiedad **Damage Falloff** a 0.0, para aplicar todo el *daño base* a todos los actores en el área, independientemente de la distancia al centro del área.
+
+Finalmente, el argumento `DamagePreventionChannel` se usa para indicar una canal de colisión[Ver @TorresD3DGameplay01] en el que la función buscará objetos que puedan bloquear el daño.
+Es decir, no intentará aplicar daño a los actores que estén detrás de objetos que bloqueen los *raycast* en el canal indicado.
+
+#### *ApplyRadialDamageWithFalloff*
+
+La función {{< api ApplyRadialDamageWithFalloff >}} permite un uso más general que `ApplyRadialDamage()`, al permitir indicar todos los parámetros del evento de daño **FRadialDamageEvent** que va a crear.
+
+```cpp
+float ApplyRadialDamageWithFalloff(const UObject * WorldContextObject,
+    float BaseDamage, float MinimumDamage, FVector Origin,
+    float DamageInnerRadius, float DamageOuterRadius,
+    float DamageFalloff, TSubclassOf<UDamageType> DamageTypeClass,
+    TArray<AActor*> const& IgnoreActors, AActor* DamageCauser, 
+    AController* InstigatedBy, bool bDoFullDamage,
+    ECollisionChannel DamagePreventionChannel);
+```
+
+Esta función permite aplicar daño de área a varios actores, de tal forma que los que esten dentro del rádio minimo recibirían todo el *daño base*, mientras que los que esten dentro del rádio máximo, recibirían un daño que decae con la distancia, pero que nunca será menor que el daño mínimo indicado.
+
+Lo rápido que decae el daño con la distancia viene determinado por el argumento `DamageFalloff`, que se toma con un exponente que define la curva de decaimiento del daño.
+Por ejemplo, esta es una manera común de calcular el daño decaido con la distancia en base a `DamageFalloff`:
+
+```cpp
+float CalculateEffectiveRadialDamage(float ActorDistanceFromOrigin, ... )   // <1>
+{
+    float DeltaRadius = DamageOuterRadius - DamageInnerRadius;
+    float DeltaDamage = BaseDamage - MinimumDamage;
+    float ScaledDistance =
+        (ActorDistanceFromOrigin - DamageInnerRadius) / DeltaRadius;
+
+    float DamageReduction =
+        DeltaDamage * pow(ScaledDistance, DamageFalloff);
+    float EffectiveDamage = BaseDamage - DamageReduction;
+
+    return FMath::Clamp(Effective, MinimumDamage, BaseDamage);              // <2>
+}
+```
+1. `ActorDistanceFromOrigin` es la distancia del actor al centro del área de daño.
+2.  Asegurar que el daño no excede los límites.
+
+La función `ApplyRadialDamage()` es equivalente a `ApplyRadialDamageWithFalloff()`, con un radio mínimo de 0.0 y un `DamageFalloff` que vale 0.0 o 1.0, en función del valor de `bDoFullDamage`.
+
+### Referencia al instigador en el actor
+
+En el caso de los proyectiles, bombas y otras armas similares, el actor que causa el daño debe saber, desde el momento de su instanciación, qué jugador lo creó, para poder señalarlo como responsable del daño.
+Por ese motivo, la clase **Actor** tiene una propiedad **Instigator**, que refencia al **Pawn** del jugador que lo creó.
+
+Esta propiedad se puede consultar mediante el método `GetInstigator()` y se puede modificar mediante `SetInstigator()`.
+También se puede consultar el **Controller** correspondiente mediante el método `GetInstigatorController()`.
+
+:::{.callout-note}
+Es importante recordar que aunque la clase **Actor** puede guardar una referencia al **Pawn** del jugador, la información que espera la Damage API como indicación del responsable del  daño es el **Controller** del jugador.
+:::
+
+En el momento de instanciar un actor usando {{< api SpawnActor >}} se puede indicar directamente el **Pawn** del instigador para que lo guarde en la propiedad **Instigator** del nuevo actor.
+En Blueprint esto se hace mediante un pin de entrada del nodo `SpawnActor()` (ver el pin **Instigator** en la @fig-spawnactor).
+Mientras que en C++ se hace mediante la variable `Instigator` de la estructura {{< api FActorSpawnParameters >}} que se pasa el método `SpawnActor()`.
+
+![Nodo SpawnActor de Blueprint.](figures/spawnactor.png){#fig-spawnactor}
+
+## Volumen *Pain-Causing*
+
+Causar daño periódico es un área es muy común en muchos juegos, por ejemplo, cuando el jugador puede sufrir daño por caminar sobre un fuego, electricidad o respirar algún tipo de veneno.
+
+Unreal Engine incluye el actor {{< api PainCausingVolume >}}, que aplica daño periódico a los actores que se encuentran dentro de su volumen.
+
+Para ello, el actor configura un temporizador para que se active periódicamente en el intervalo indicado en la propiedad **Pain Interval**.
+En cada activación, se aplica como *daño base* el producto entre **Damage Per Sec** y el intervalo de activación **Pain Interval**.
+
+![Propiedades del actor **PainCausingVolume**.](figures/paincausingvolume.png){#fig-paincausingvolume}
+
+Además, como se puede observar en la @fig-paincausingvolume, el actor **PainCausingVolume** tiene una propiedad **Damage Type**, que permite indicar el tipo de daño que se aplicará a los actores que se encuentran dentro de su volumen.
+
+Como ocurre con otro volúmenes, la forma, tamaño y posición del volumen es completamente configurable.
+
+## Volumen *Kill Z*
+
+A veces interesante asegurar que un personaje va a morir o ser movido a otra zonas del nivel, si alcanza ciertas partes que no deberían ser inaccesibles.
+El motivo más común es evitar que el jugador quede atascado y no pueda continuar jugando.
+
+Unreal Engine ofrece un actor especial para esta tarea, llamado **KillZVolume**
+Además, permite configurar en los niveles un umbral de altura, llamado *Kill Z*, que mata a los personajes que caigan por debajo de él.
+
+El **KillZVolume** es un actor que se puede añadir al nivel desde el editor de Unreal Engine, pudiendo modificar fácilmente su forma, posición y tamaño.
+Mientras que el *Kill Z* global se puede configurar en **World Settings**, estableciendo el valor de la propiedad **Kill Z**, como se puede observar en la @fig-world-killz.
+Se puede desactivar desactivando la propiedad **Enable Wolrd Bounds Checks**.
+
+![Propiedad **Kill Z** en **World Settings**.](figures/world-killz.png){#fig-world-killz}
+
+En ambos casos se aplica un daño de tipo **DmgTypeBP_Environment**, que es una subclase de **UDamageType** que se utiliza cuando el daño viene causado por el entorno, no por un ememigo.
+Sin embargo, se puede configurar un tipo de daño diferente, indicando una subclase de **UDamageType** en la propiedad **Kill Z Damage Type** de **World Settings** (ver la @fig-world-killz).
+Tanto los volumenes **KillZVolume** como el *Kill Z* global utilizaran el tipo de daño que se configure en dicha propiedad.
+
+En ambos casos, para aplicar el daño, en lugar de llamar a `TakeDamage()`, se llama al método {{< api FellOutOfWorld >}} del actor que entra en el volumen o cae por debajo del *Kill Z*.
+Por defecto, esta función destruye el actor, pero se puede sobreescribir en las subclases de **Actor** para cambiar este comportamiento.
+
+<!-- TODO: # Gameplay Ability System (GAS) -->
+
+# Salvado de la partida {#sec-savegame}
+
+# Actualización, activación y pausa {#sec-ticks}
+
+Por lo general, todo juego tiene al menos un ciclo de ejecución en el que en cada frame se lee la entrada del jugador y se notifica a los diferentes sistemas y entidades en el juego para que actualicen su estado.
+
+A continuación veremos cómo se propagan estos eventos de actualización en Unreal Engine y como se pueden desactivar actores y componentes y  poner el juego en pausa.
+
+## Propagación de *ticks*
+
+El motor Unreal Engine tiene un ciclo principal de ejecución desde el que va haciendo *tick* en cada frame a varios sistemas esenciales para que actulizen su estado, como el render, la física, y el código de *gameplay*.
+
+Dentro de este ciclo principal, cada **UWorld** en Unreal Engine recibe un evento *tick* para que se actualice el estado del mundo del juego.
+Como hemos comentado anteriormente, el objeto **UWorld** representa el mundo del juego, contiene todos los objetos que existen en él y, por lo general, solo existe uno al mismo tiempo.
+
+En cada ciclo de *tick*, cada **UWorld** hace *tick* a sus actores y componentes, de tal forma que se actualiza el estado de todos los objetos del mundo del juego.
+Para eso, por defecto, llama al método `Tick()` de cada actor o `TickComponent()` de cada componente que contiene.
+
+### Funciones *tick*
+
+Realmente, los actores y componentes reciben un *tick* en `Tick()` y `TickComponent()`, respectivamente, porque durante su instanciación crean un objeto *functión de tick* y lo registran en el nivel para que reciba el *tick* desde **UWorld**.
+Luego es la instancia de la *función de tick* la que entrega el evento *tick* a su actor o componente.
+
+Estas *funciones de tick* son clases que heredan de {{< api FTickFunction >}} y se suelen instanciar como variables miembro del actor o componente donde se van a utilizar.
+A través de las propiedades del objeto, se puede configurar la frecuencia, grupo, prerequisitos y otras características de la *función de tick*.
+
+Por ejemplo, todo actor tiene una *función de tick* de tipo **FPrimariyActorTick** en la variable `PrimaryActorTick` de **Actor**, que se encarga de llamar a `Tick()` en el objeto actor en cada *tick* recibido.
+Igualmente, todo componente tiene una *función de tick* de tipo **FPrimaryComponentTick** en la variable `PrimaryComponentTick` de **ActorComponent**, que llama a `TickComponent()` en el componente en cada *tick*.
+
+Ambas variables se suelen configurar durante la construcción del actor o componente y se registran en el nivel al iniciar su ejecución en el juego.
+También se pueden configurar en el editor de Unreal Engine, en la sección **Actor Tick** o **Component Tick** de las propiedades del actor o componente (ver la @fig-actor-tick-properties).
+
+![Propiedades de la sección **Actor Tick** de un actor.](figures/actor-tick-properties.png){#fig-actor-tick-properties}
+
+Este sistema permite que los actores y componentes puedan tener múltiples funciones de *tick* diferentes, cada una con sus propias características.
+
+Estas funciones adicionales se definen instanciado una clase que herede de {{< api FTickFunction >}} y sobreescibiendo el método {{< api ExecuteTick >}}, puesto que es el que será llamado en cada *tick*:
+
+```{.cpp}
+struct FMyNewTick : public FTickFunction
+{
+    AActor* Target;                                             // <1>
+
+    // ...
+    virtual void ExecuteTick(...) override
+    {
+        // ...
+        Target->MyNewActorTick(...);                            // <2>
+        // ...
+    }
+    // ...
+};
+```
+1. Añadimos un campo para indicar el actor al que se quiere entregar el *tick*.
+2. En cada *tick* se llama al método `MyNewActorTick` del actor `Target` .
+
+El registro suele hacerse sobreescribiendo los métodos {{< api RegisterActorTickFunctions >}} o {{< api RegisterComponentTickFunctions >}}, dependiendo de si se trata de un actor o un componente.
+Por ejemplo, definir una nueva *función de tick* para un actor en C++ sería así:
+
+```{.cpp}
+UCLASS()
+class MyActor : public AActor
+{
+    GENERATED_BODY()
+    // ...
+    FMyNewTick MyNewTick;                                       // <1>
+    // ...
+};
+
+void AMyNewActor::AMyActor()
+{
+    // ...
+    MyNewTick.Target = this;                                    // <2>
+    MyNewTick.bCanEverTick = true;                              // <3>
+    MyNewTick.bTickEvenWhenPaused = true;                       // <4>
+    MyNewTick.TickGroup = TG_PrePhysics;                        // <5>
+    // ...
+}
+
+void AMyNewActor::RegisterActorTickFunctions(bool bRegister)
+{
+    Super::RegisterActorTickFunctions(bRegister);
+
+    if (bRegister)
+    {
+        MyNewTick.RegisterTickFunction(GetLevel());             // <6>
+    }
+    else
+    {
+        // ...
+        MyNewTick.UnRegisterTickFunction();                     // <7>
+        // ...
+    }
+}
+```
+1. Declarar la variable miembro `MyNewTick` de tipo **FMyNewTick** para almacenar la *función de tick*.
+1. Indicar a la nueva *función de tick* qué el actor actual recibirá el *tick*.
+2. Activar la *función de tick* desde el principio.
+Otra opción es configurarla como desactivada y activarla posteriormente, cuandos se necesario, usando el método {{< api SetTickFunctionEnable >}} de `MyNewTick`.
+3. Configurar la *función de tick* para que se ejecute incluso cuando el juego esté en pausa.
+4. Asignar la *función de tick* al grupo `TG_PrePhysics`, para que se ejecute antes de que se actualice la física del mundo.
+5. Registra la *función de tick* llamando a {{< api RegisterTickFunction >}}.
+Esto se hace cuando se ha invocado `RegisterActorTickFunctions()` con el argumento `true`, dado que seso indica se ha llamado a la función para que registre las *función de tick* del actor.
+La función recibe un objeto **ULevel**, que representa el nivel dónde se ejecuta el actor, asociado al **UWorld** actual.
+Este objeto se puede obtener utilizando el método `GetLevel()` del actor.
+6. Desregistrar la *función de tick* porque se ha llamado a `RegisterActorTickFunctions()` con el argumento `false`.
+
+### Grupos de *ticks*
+
+Unreal Engine define varios *grupos de ticks*, como: `TG_PrePhysics`, `TG_DuringPhysics`, `TG_PostPhysics` o `TG_PostUpdateWork`.
+Cada uno de estos grupos representa un punto específico en el ciclo de ejecución del juego, que se suceden en el orden anterior indicado[@UnrealActorTicking].
+
+Las *funciones de tick* comentadas se pueden asignar a un *grupo de tick* determinado mediante la propiedad **Tick Group** de la clase de la *función de tick*.
+
+Esto determina en qué punto del ciclo de ejecución serán invocadas, porque durante la ejecución del *tick*, **UWorld** hace **tick** a las funciones en cada *grupo de ticks*, en el orden específico.
+Es decir, primero actualiza todos los actores y componentes en el grupo `TG_PrePhysics`, luego procede al `TG_DuringPhysics`, y así sucesivamente.
+
+Los *grupos de ticks* son particularmente útiles para manejar dependencias entre actores y componentes.
+Por ejemplo, si un actor depende del resultado del *tick* de otro actor, podemos asegurarnos de que el segundo sea actualizado primero asignándo su *función de tick* primaria a un grupo anterior.
+
+### Prerequisitos
+
+En ocasiones, no es suficiente con asignar un *grupo de tick* a una *función de tick* para asegurar que se ejecute en el momento adecuado, por lo que hace falta un mecanismo adicional que ofrezca más control.
+Por ello, las *funciones de tick* también pueden tener *prerequisitos*, que deben cumplirse para que se ejecute el *tick*.
+
+Los *prerequisitos* son otras *funciones de tick* que deben ejecutarse antes de que se ejecute la *función de tick* que los tiene como *prerequisito*.
+Por ejemplo, si una *función de tick* tiene como *prerequisito* a otra que se ejecuta en el grupo `TG_PrePhysics`, **UWorld** ejecutará la primera después de que se ejecute la segunda.
+
+Para establecer *prerequisitos* la clase base {{< api FTickFunction >}} tiene los métodos {{< api AddPrerequisite >}} y {{< api RemovePrerequisite >}}.
+
+Como la mayor parte de los actores y componentes solo tienen una *función de tick*, la clase base de los actores **AActor** y la de los componentes **ActorComponent** tienen métodos específicos para establecer *prerequisitos* en su *función de tick* primaria: 
+
+* {{< api Actor::AddTickPrerequisiteActor >}}
+* {{< api Actor::AddTickPrerequisiteComponent >}}
+* {{< api ActorComponent::AddTickPrerequisiteActor >}}
+* {{< api ActorComponent::AddTickPrerequisiteComponent >}}.
+
+Así como los métodos para eliminarlos:
+
+* {{< api Actor::RemoveTickPrerequisiteActor >}}
+* {{< api Actor::RemoveTickPrerequisiteComponent >}}
+* {{< api ActorComponent::RemoveTickPrerequisiteActor >}}
+* {{< api ActorComponent::RemoveTickPrerequisiteComponent >}}.
+
+## Activación y desactivación de actores y componentes
+
+Es muy común en cualquier proyecto tener que activar y desactivar entidades temporalmente, para que no sean visibles ni se actualicen en ciertos momentos del juego.
+
+En Unreal Engine, los actores y componentes se pueden activar y desactivar en cualquier momento, pero los diferentes aspectos de su influencia en el mundo se controlan por separado.
+Es decir, que debemos activar y desactivar su visibilidad, colisiones, actualización, etc. de forma independiente.
+
+### Actualización
+
+Las *funciones de tick* se puede activar y desactivar individualmente usando el método {{< api SetTickFunctionEnable >}} de la clase **FTickFunction**.
+
+También se pueden usar los métodos {{< api SetActorTickEnabled >}} y {{< api SetComponentTickEnabled >}} para activar y desactivar la *función de tick* primaria de los actores y componentes, respectivamente.
+
+### Visibilidad
+
+En Unreal Engine, solo los componentes que heredan de **SceneComponent** pueden colocarse en la escena y, por tanto, ser visibles.
+Estos componentes tienen un método `SetVisibility` que permite activar y desactivar su visibilidad.
+
+Por otro lado, los actores tienen un método {{< api SetActorHiddenInGame >}} que permite activar y desactivar la visibilidad de todos los componentes del actor.
+
+### Colisiones
+
+Un componente o actor puede ser invvisible pero aun así tener colisiones activas, afectando a la física del mundo.
+
+En Unreal Engine, los componentes que heredan de **PrimitiveComponent** son **SceneComponent** que tienen o general algún tipo de geometría, generalmente para renderizarla o para causar colisiones.
+Estos componentes tienen un método `SetCollisionEnabled()` que permite activar y desactivar las colisiones del componente.
+Mientras que los actores tienen un método {{< api SetActorEnableCollision >}} que permite activar y desactivar las colisiones de todos los componentes del actor.
+
+## Pausa {#sec-pause}
+
+La pausa es un estado del juego en el que se detiene el paso del tiempo, pero el jugador puede seguir interactuando con el juego.
+
+Para que un nivel se pueda poner en pausa, el **GameMode** asociado debe tener la propiedad **Pauseable** activada.
+Esto permite marcar los niveles que se utilizan para mostrar menús o pantallas de carga, como no pausables.
+
+Cuando se activa la pausa, **UWorld** deja de hacer *tick* a los actores y componentes, excepto a aquellos cuyas *funciones de tick* tienen la propiedad **Tick Even When Paused** activada.
+Esto es lo que permite que jugador pueda seguir interactuando con partes del juego, mientras el resto de actores y componentes permanecen inactivos.
+
+El cambio de estado se puede hacer a través de diferentes componentes:
+
+* En el **GameMode**, mediante los métodos {{< api SetPause >}} y {{< api ClearPause >}} para activar y desactivar la pausa, respectivamente.
+
+    Al llamar a `SetPause()` se indica el **PlayerController** del jugador que solicita la pausa y la clase **GameMode** comprueba si tiene permiso para hacerlo llamando a {{< api AllowPausing >}}.
+    La implementación por defecto, solo comprueba si el nivel está configurado como `Pausable`, pero este mecanismo permite sobreescribir la función para implementar reglas más complejas.
+
+    Además, el método `SetPause()` también permite indicar una función que usará internamente `ClearPause()` para comprobar si se dan las condiciones para reanudar el juego.
+    Si vamos jugadores pausan el juego, cada uno puede incluir su propia función.
+
+    Finalmente, en el actor **WorldSettings** se puede acceder el **PlayerState** del jugador que pausó el juego a través del método `GetPauserPlayerState()`.
+
+* En el **PlayerController**, mediante el método {{< api SetPause >}}, que recibe un `bool` para indicar si se quiere pausar o reanudar el juego.
+Esta función llama a `SetPause()` del **GameMode** del nivel actual, pasando el **PlayerController** como argumento.
+
+* Llamando a {{< api SetGamePaused >}} de **UGameplayStatics**, que también recibe un `bool` para indicar si se quiere pausar o reanudar el juego.
+Se trata de una función de ayuda que intenta pausar el juego llamando a `SetPause()` del **GameMode** del nivel actual, pasando el **PlayerController** del primer jugador como argumento.
+
+---
+
+# Referencias de API {.unnumbered}
+
+::: {#api-refs}
+:::
 
 # Referencias {.unnumbered}
 
