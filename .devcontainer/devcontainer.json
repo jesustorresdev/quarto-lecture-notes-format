@@ -24,6 +24,7 @@
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
+			"editor.tabSize": 2,
 			"extensions": [
 				"sumneko.lua",
 				"valentjn.vscode-ltex",

@@ -1,0 +1,63 @@
+# Salvado de la partida {#sec-savegame}
+
+El sistema de `UObject` de Unreal Engine permite disponer en C++ de características presentes en lenguajes de programación gestionados, como Java o C#.
+Una de estas características es la serialización de objetos, que permite guardar y cargar objetos de forma sencilla.
+
+Todos los objetos que heredan de `UObject` tienen un método `Serialize()` que se llama cuando se va a guardar o cargar el objeto.
+Este método recibe un objeto de tipo `FArchive`, que representa el almacen de datos donde se va a guardar o cargar el objeto.
+
+Sin embargo, Unreal Engine ofrece una solución más sencilla para guardar y cargar el estado de la partida, que es utizizando la clase **SaveGame**.
+
+## Uso de *SaveGame*
+
+La clase {{< api SaveGame >}} es una clase que hereda de `UObject` y que puede ser utilizada para guardar y cargar el estado del juego[@UnrealSavingLoading].
+
+La forma de utilizar esta clase es muy sencilla:
+
+1. Crear una clase que herede de **SaveGame** y añadirle las propiedades adecuadas para almacenar los datos del estado del juego que se quieren preservar.
+Para este ejemplo, vamos a suponer que sa clase se llama **MySaveGame**.
+
+2. Llamar a {{< api CreateSaveGameObject >}} para crear un objeto de la clase **MySaveGame**.
+
+3. Copiar en las propiedades del objeto **MySaveGame** los datos del estado del juego que se quieren preservar.
+
+4. Llamar a {{< api SaveGameToSlot >}} o {{< api AsyncSaveGameToSlot >}} para guardar el objeto **MySaveGame** en un *slot* de partida guardada.
+El *slot* donde guardar la partida se indica mediante un *nombre de slot*, que se puede escoger libremente y que debe ser diferente para cada *slot*, y el *índice de usuario*, para identificar al usuario que está salvando la partida.
+
+:::{.callout-tip}
+Es recomendable utilizar `AsyncSaveGameToSlot()` en lugar de `SaveGameToSlot()` para guardar la partida, ya que la primera permite que el salvado ocurra en un hilo de ejecución diferente al principal, evitando que el juego se quede congelado mientras se guarda la partida.
+Sin embargo, si se guarda desde un menú o pantalla de pausa, dónde el juego ya está congelado, se puede utilizar `SaveGameToSlot()` sin problemas.
+:::
+
+Para realizar la carga de los datos de la partida, se tiene que realizar el mismo proceso pero se llama a {{< api LoadGameFromSlot >}} --o a {{< api AsyncLoadGameFromSlot >}}-- para cargar los datos en el objeto **MySaveGame**.
+
+// TODO: Imagen
+
+Luego, se pueden copiar los datos de las propiedades del objeto **MySaveGame** a las propiedades de los otros objetos del juego, para restablecer el estado de la partida.
+
+En cualquier momento se puede saber si hay una partida guardada en un *slot* concreto llamando a {{< api DoesSaveGameExist >}}.
+
+## Consejos para sistema de salvado
+
+El uso descritor de la clase **SaveGame** es muy sencillo, pero los pasos indicados realmente no son suficientes para implementar un sistema de salvado de partida completo, excepto en proyectos muy simples.
+
+<!-- TODO: Enlazar a na sección donde se desarrolle mejor estas ideas -->
+
+Para implementar un sistema de salvado de partida más completo, es conveniente seguir algunas recomendaciones.
+
+### Interfaz para actores salvables
+
+
+
+* **Definir una interfaz para guardar y cargar el estado de los objetos**.
+  Esta interfaz debe tener métodos para guardar y cargar el estado de los objetos, y cada objeto debe implementar esta interfaz para guardar y cargar su estado.
+  Esta interfaz debe ser implementada por la clase **SaveGame** para guardar y cargar el estado de los objetos que se quieren preservar.
+
+- **Guardar en un objeto de tipo SaveGame solo los datos que se quieren preservar**.
+  Si se guardan datos que no se quieren preservar, se puede aumentar el tamaño de la partida guardada y el tiempo de guardado y carga de la partida.
+  Además, si se guardan datos que no se quieren preservar, se puede aumentar el riesgo de que se produzcan errores al guardar o cargar la partida.
+
+
+
+## Cargar un nivel y la partida guardada
+

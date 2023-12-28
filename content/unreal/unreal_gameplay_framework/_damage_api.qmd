@@ -10,52 +10,52 @@ Unreal Engine ofrece un API de daño que facilita la implementación de estas me
 Antes de comentar la API de daño de Unreal Engine, vamos a introducir una serie de conceptos comunes en muchos juegos:
 
 * **Daño**.
-Cantidad de salud que se resta a un actor al causarle daño.
+  Cantidad de salud que se resta a un actor al causarle daño.
 
 * **Daño base**.
-Cantidad de dañó que se aplicaría a un actor sino se tuvieran en cuenta los modificadores.
+  Cantidad de dañó que se aplicaría a un actor sino se tuvieran en cuenta los modificadores.
 
 * **Daño efectivo**.
-Cantidad de dañó que se aplica a un actor, teniendo en cuenta los modificadores.
-Por tanto, es el *daño* que realmente se resta a la salud del actor dañado.
+  Cantidad de dañó que se aplica a un actor, teniendo en cuenta los modificadores.
+  Por tanto, es el *daño* que realmente se resta a la salud del actor dañado.
 
 * **Modificadores de daño**.
-Valores y formulas que se aplican al *daño base* para obtener el *daño efectivo* que se va a restar de la salud del actor.
-Los modificaciones pueden venir determinadas por el tipo de daño, la velocidad del impacto, el estado del actor, la distancia al origen del daño, el tiempo que lleva aplicándose el daño, etc.
+  Valores y formulas que se aplican al *daño base* para obtener el *daño efectivo* que se va a restar de la salud del actor.
+  Los modificaciones pueden venir determinadas por el tipo de daño, la velocidad del impacto, el estado del actor, la distancia al origen del daño, el tiempo que lleva aplicándose el daño, etc.
 
 * **Tipo de daño**.
-Categoría del daño causado, como daño: ambiental, de combate, mágico, de caída, de envenamiento, de colisión, etc. 
-El *tipo de daño* suele determinar los modificadores de daño que se aplican.
+  Categoría del daño causado, como daño: ambiental, de combate, mágico, de caída, de envenamiento, de colisión, etc. 
+  El *tipo de daño* suele determinar los modificadores de daño que se aplican.
 
 * **Causante del daño**.
-Actor que causa el daño.
-Por ejemplo, un proyectil o un objeto.
+  Actor que causa el daño.
+  Por ejemplo, un proyectil o un objeto.
 
 * **Instigador del daño**.
-Es el jugador o personaje que causa el daño.
-Por ejemplo, si un proyectil impacta en un personaje, dicho proyectil es la *causa el daño* pero el *instigador* es el jugador o el personaje que lanzó el proyectil.
-Esto es útil en juegos multijugador, para que el responsable del dañó reciba la puntuación correspondiente.
+  Es el jugador o personaje que causa el daño.
+  Por ejemplo, si un proyectil impacta en un personaje, dicho proyectil es la *causa el daño* pero el *instigador* es el jugador o el personaje que lanzó el proyectil.
+  Esto es útil en juegos multijugador, para que el responsable del dañó reciba la puntuación correspondiente.
 
 * **Daño por *raycast***.
-Daño que se aplica a los actores encontrados mediante un *raycast*.
-En Unreal Engine este tipo de daño se suele implementar como un *point damage*.
+  Daño que se aplica a los actores encontrados mediante un *raycast*.
+  En Unreal Engine este tipo de daño se suele implementar como un *point damage*.
 
 * **Daño por colisión**.
-Daño que se aplica a los actores que colisionan con otro actor.
-En Unreal Engine este tipo de daño también se suele implementar como un *point damage*.
+  Daño que se aplica a los actores que colisionan con otro actor.
+  En Unreal Engine este tipo de daño también se suele implementar como un *point damage*.
 
 * **Daño de área**.
-Daño que se aplica a los actores en un área determinada.
-En Unreal Engine este tipo de daño se suele implementar como un *radial damage*.
+  Daño que se aplica a los actores en un área determinada.
+  En Unreal Engine este tipo de daño se suele implementar como un *radial damage*.
 
 * **Daño instantáneo**.
-Daño que se aplica de forma instantánea.
-La Damage API de Unreal Engine práctiamente solo soporta este tipo de daño.
+  Daño que se aplica de forma instantánea.
+  La Damage API de Unreal Engine práctiamente solo soporta este tipo de daño.
 
 * **Daño periódico**.
-Daño que se aplica durante un periodo de tiempo determinado.
-La Damage API de Unreal Engine no soporta directamente este tipo de dañó, aunque se puede implementar fácilmente configurando un temporizador y aplicando daño instantáneo en cada evento de activación.
-Además, el motor incluye el actor {{< api PainCausingVolume >}}, que aplica daño periódico a los actores que se encuentran dentro de su volumen.
+  Daño que se aplica durante un periodo de tiempo determinado.
+  La Damage API de Unreal Engine no soporta directamente este tipo de dañó, aunque se puede implementar fácilmente configurando un temporizador y aplicando daño instantáneo en cada evento de activación.
+  Además, el motor incluye el actor {{< api PainCausingVolume >}}, que aplica daño periódico a los actores que se encuentran dentro de su volumen.
 
 ## Interfaz de daño
 
@@ -78,30 +78,34 @@ public:
 };
 ``` 
 
-* `DamageAmount`. La cantidad de *daño base*.
+* `DamageAmount`.
+  La cantidad de *daño base*.
 
-* `DamageEvent`. El evento de daño --de tipo {{< api FDamageEvent >}}-- que describe el daño recibido.
-Con esta información se pueden aplicar modificadores de daño para calcular el *daño efectivo*.
+* `DamageEvent`.
+  El evento de daño --de tipo {{< api FDamageEvent >}}-- que describe el daño recibido.
+  Con esta información se pueden aplicar modificadores de daño para calcular el *daño efectivo*.
 
-* `EventInstigator`. El **Controller** que causó el daño.
+* `EventInstigator`.
+  El **Controller** que causó el daño.
 
-* `DamageCauser`. El actor que causó el daño.
+* `DamageCauser`.
+  El actor que causó el daño.
 
 El Damage API define dos subclases de **FDamageEvent** para indicar dos tipos de daño diferentes y añadir propiedades adecuadas a cada uno:
 
 * {{< api FPointDamageEvent >}}, para el daño puntual, por *raycast* o colisión.
-Incluye información sobre el lugar del impacto, la dirección del impacto y el componente del actor que recibió el impacto.
+  Incluye información sobre el lugar del impacto, la dirección del impacto y el componente del actor que recibió el impacto.
 
 * {{< api FRadialDamageEvent >}}, para indicar un dañó de área.
-Incluye información sobre el centro del área, el radio del área y como del daño decae con la distancia.
+  Incluye información sobre el centro del área, el radio del área y como del daño decae con la distancia.
 
 En el caso de recibir un evento de daño de tipo **FPointDamageEvent**, el método `TakeDamage()`:
 
 1. Llama al método {{< api InternalTakePointDamage >}}, pasándole los argumentos recibidos.
-Por defecto, este método retorna el *daño base* indicado en `DamageAmount`, para la idea es que se sobreescriba en las clases hijas de **Actor** para que calcule el *daño efectivo* en base a la información sobre el tipo de dañó.
+   Por defecto, este método retorna el *daño base* indicado en `DamageAmount`, para la idea es que se sobreescriba en las clases hijas de **Actor** para que calcule el *daño efectivo* en base a la información sobre el tipo de dañó.
 
 2. Llama al método {{< api ReceivePointDamage >}}, con información extraida del evento de daño recibido y con el *daño efectivo* calculado en el paso anterior.
-El objetivo es que el actor procese el daño recibido, actualizando su salud, aplicando efectos visuales, etc.
+   El objetivo es que el actor procese el daño recibido, actualizando su salud, aplicando efectos visuales, etc.
 
 3. Lanza al evemto {{< api OnTakePointDamage >}}, para que otros actores y componentes puedan suscribirse a este evento y reaccionar al daño recibido por este actor (ver la @fig-ontakedamage-events).
 
@@ -224,7 +228,7 @@ float CalculateEffectiveRadialDamage(float ActorDistanceFromOrigin, ... )   // <
 }
 ```
 1. `ActorDistanceFromOrigin` es la distancia del actor al centro del área de daño.
-2.  Asegurar que el daño no excede los límites.
+2. Asegurar que el daño no excede los límites.
 
 La función `ApplyRadialDamage()` es equivalente a `ApplyRadialDamageWithFalloff()`, con un radio mínimo de 0.0 y un `DamageFalloff` que vale 0.0 o 1.0, en función del valor de `bDoFullDamage`.
 
