@@ -15,7 +15,14 @@ author:
     email: jmtorres@ull.es
     url: https://jesustorres.es/
     affiliation: Universidad de La Laguna
-    affiliation-url: https://www.ull.es/
+    affiliation-url: https://www.ull.es/ 
+thanks: |
+  Este trabajo © 2020-2024 está bajo una licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es).
+copyright:
+  holder: Jesús Torres
+  year: 2023
+  license: CC BY 4.0
+  license-url: https://creativecommons.org/licenses/by/4.0/deed.es
 
 abstract: |
   ::: {.callout-caution appearance="simple"}
