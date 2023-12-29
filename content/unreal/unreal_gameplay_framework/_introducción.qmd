@@ -1,7 +1,7 @@
 # Introducción {.unnumbered}
 
-Los motores de videojuegos ofrecen componentes y servicios comunes que puede necesitar cualquier aplicación multimedia interactiva: *render*, iluminación, lectura de la entrada y creación de interfaces de usuario, simulación física, efectos visuales, sistemas de animación, gestión de recursos, carga y almacenamiento de datos, etc.
-Sin embargo, desde el punto del vista del desarrollo, esto no es suficiente para hacer un videojuego.
+Los motores de videojuegos ofrecen componentes y servicios comunes que puede necesitar cualquier aplicación multimedia interactiva: render, iluminación, lectura de la entrada y creación de interfaces de usuario, simulación física, efectos visuales, sistemas de animación, gestión de recursos, carga y almacenamiento de datos, etc.
+Sin embargo, desde el punto de vista del desarrollo, esto no es suficiente para hacer un videojuego.
 
 Sobre los componentes y sistemas proporcionados por el motor se suele implementar una arquitectura software adecuada para el tipo de juego que se quiere desarrollar, a veces denominada *gameplay framework*.
 El objetivo de estos componentes es facilitar la implementación de las mecánicas del juego, de forma que el código sea fácil de mantener y extender. 

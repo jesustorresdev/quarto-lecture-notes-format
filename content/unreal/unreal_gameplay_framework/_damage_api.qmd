@@ -3,7 +3,7 @@
 Las mecánicas de daño y salud son fundamentales en juegos donde la interacción y el conflicto son elementos clave como, por ejemplo: *shooters*, RPG y juegos de supervivencia.
 Pero también es frecuente tener que implementar este tipo de mecánicas en juegos de otros géneros, aunque no sean de acción.
 
-Unreal Engine ofrece un API de daño que facilita la implementación de estas mecánicas, al establecer una interfaz común para que todos los actores puedan recibir diferentes tipos de daño y procesarlo, tanto sin son objetos genéricos del juego, como personajes o estructuras[@UnrealBlueprintDamageAPI].
+Unreal Engine ofrece una API de daño que facilita la implementación de estas mecánicas, al establecer una interfaz común para que todos los actores puedan recibir diferentes tipos de daño y procesarlo, tanto sin son objetos genéricos del juego, como personajes o estructuras[@UnrealBlueprintDamageAPI].
 
 ## Conceptos de la API de daño
 
@@ -13,18 +13,18 @@ Antes de comentar la API de daño de Unreal Engine, vamos a introducir una serie
   Cantidad de salud que se resta a un actor al causarle daño.
 
 * **Daño base**.
-  Cantidad de dañó que se aplicaría a un actor sino se tuvieran en cuenta los modificadores.
+  Cantidad de daño que se aplicaría a un actor si no se tuvieran en cuenta los modificadores.
 
 * **Daño efectivo**.
-  Cantidad de dañó que se aplica a un actor, teniendo en cuenta los modificadores.
+  Cantidad de daño que se aplica a un actor, teniendo en cuenta los modificadores.
   Por tanto, es el *daño* que realmente se resta a la salud del actor dañado.
 
 * **Modificadores de daño**.
-  Valores y formulas que se aplican al *daño base* para obtener el *daño efectivo* que se va a restar de la salud del actor.
-  Los modificaciones pueden venir determinadas por el tipo de daño, la velocidad del impacto, el estado del actor, la distancia al origen del daño, el tiempo que lleva aplicándose el daño, etc.
+  Valores y fórmulas que se aplican al *daño base* para obtener el *daño efectivo* que se va a restar de la salud del actor.
+  Las modificaciones pueden venir determinadas por el tipo de daño, la velocidad del impacto, el estado del actor, la distancia al origen del daño, el tiempo que lleva aplicándose el daño, etc.
 
 * **Tipo de daño**.
-  Categoría del daño causado, como daño: ambiental, de combate, mágico, de caída, de envenamiento, de colisión, etc. 
+  Categoría del daño causado, como daño: ambiental, de combate, mágico, de caída, de envenenamiento, de colisión, etc. 
   El *tipo de daño* suele determinar los modificadores de daño que se aplican.
 
 * **Causante del daño**.
@@ -33,8 +33,8 @@ Antes de comentar la API de daño de Unreal Engine, vamos a introducir una serie
 
 * **Instigador del daño**.
   Es el jugador o personaje que causa el daño.
-  Por ejemplo, si un proyectil impacta en un personaje, dicho proyectil es la *causa el daño* pero el *instigador* es el jugador o el personaje que lanzó el proyectil.
-  Esto es útil en juegos multijugador, para que el responsable del dañó reciba la puntuación correspondiente.
+  Por ejemplo, si un proyectil impacta en un personaje, dicho proyectil es la *causa el daño*, pero el *instigador* es el jugador o el personaje que lanzó el proyectil.
+  Esto es útil en juegos multijugador, para que el responsable del daño reciba la puntuación correspondiente.
 
 * **Daño por *raycast***.
   Daño que se aplica a los actores encontrados mediante un *raycast*.
@@ -50,11 +50,11 @@ Antes de comentar la API de daño de Unreal Engine, vamos a introducir una serie
 
 * **Daño instantáneo**.
   Daño que se aplica de forma instantánea.
-  La Damage API de Unreal Engine práctiamente solo soporta este tipo de daño.
+  La Damage API de Unreal Engine prácticamente solo soporta este tipo de daño.
 
 * **Daño periódico**.
   Daño que se aplica durante un periodo de tiempo determinado.
-  La Damage API de Unreal Engine no soporta directamente este tipo de dañó, aunque se puede implementar fácilmente configurando un temporizador y aplicando daño instantáneo en cada evento de activación.
+  La Damage API de Unreal Engine no soporta directamente este tipo de daño, aunque se puede implementar fácilmente configurando un temporizador y aplicando daño instantáneo en cada evento de activación.
   Además, el motor incluye el actor {{< api PainCausingVolume >}}, que aplica daño periódico a los actores que se encuentran dentro de su volumen.
 
 ## Interfaz de daño
@@ -102,43 +102,43 @@ El Damage API define dos subclases de **FDamageEvent** para indicar dos tipos de
 En el caso de recibir un evento de daño de tipo **FPointDamageEvent**, el método `TakeDamage()`:
 
 1. Llama al método {{< api InternalTakePointDamage >}}, pasándole los argumentos recibidos.
-   Por defecto, este método retorna el *daño base* indicado en `DamageAmount`, para la idea es que se sobreescriba en las clases hijas de **Actor** para que calcule el *daño efectivo* en base a la información sobre el tipo de dañó.
+   Por defecto, este método retorna el *daño base* indicado en `DamageAmount`, para la idea es que se sobreescriba en las clases hijas de **Actor** para que calcule el *daño efectivo* en base a la información sobre el tipo de daño.
 
-2. Llama al método {{< api ReceivePointDamage >}}, con información extraida del evento de daño recibido y con el *daño efectivo* calculado en el paso anterior.
+2. Llama al método {{< api ReceivePointDamage >}}, con información extraída del evento de daño recibido y con el *daño efectivo* calculado en el paso anterior.
    El objetivo es que el actor procese el daño recibido, actualizando su salud, aplicando efectos visuales, etc.
 
 3. Lanza al evento {{< api OnTakePointDamage >}}, para que otros actores y componentes puedan suscribirse a este evento y reaccionar al daño recibido por este actor (ver la @fig-ontakedamage-events).
 
 ![Eventos de daño de los actores en Unreal Engine.](figures/ontakedamage-events.png){#fig-ontakedamage-events}
 
-En el caso de recibir un evento de daño de tipo **FRadialDamageEvent**, el método `TakeDamage()` sigue uno pasos similares pero llamando a los métodos {{< api InternalTakeRadialDamage >}} y {{< api ReceiveRadialDamage >}} y lanzando el evento {{< api OnTakeRadialDamage >}}.
+En el caso de recibir un evento de daño de tipo **FRadialDamageEvent**, el método `TakeDamage()` sigue unos pasos similares pero llamando a los métodos {{< api InternalTakeRadialDamage >}} y {{< api ReceiveRadialDamage >}} y lanzando el evento {{< api OnTakeRadialDamage >}}.
 
 Finalmente, tanto si el evento de daño es de alguno de los tipos anteriores, como si es de la clase base **FDamageEvent**, el método `TakeDamage()` llama al método {{< api ReceiveAnyDamage >}} y lanza el evento {{< api OnTakeAnyDamage >}}.
 
-`TakeDamage()` retorma el *daño efectivo* aplicado, calculador por defecto por los métodos `InternalTakePointDamage()` o `InternalTakeRadialDamage()`.
+`TakeDamage()` retorna el *daño efectivo* aplicado, calculador por defecto por los métodos `InternalTakePointDamage()` o `InternalTakeRadialDamage()`.
 
 ### Propiedad *CanBeDamaged*
 
 Todo actor tiene una propiedad **Can Be Damaged** que para indicar si puede recibir daño o no.
 
 Esta propiedad se puede consultar mediante el método `CanBeDamaged()` y se puede modificar mediante `SetCanBeDamaged()`.
-Sin embargo, es una propiedad para ser usada por las subcles del actor.
+Sin embargo, es una propiedad para ser usada por las subclases del actor.
 
-Es decir, el método `TakeDamage()` en **Actor** no tiene en cuenta el valor de `CanBeDamaged` y siempre aplica el daño recibido.
-Pero subclases como **Pawn** o **Character** sobreescriben `TakeDamage()` para que solo aplique el daño recibido si `CanBeDamaged` esta activa.
+Es decir, el método `TakeDamage()` en **Actor** no tiene en cuenta el valor de **Can Be Damaged** y siempre aplica el daño recibido.
+Pero subclases como **Pawn** o **Character** sobreescriben `TakeDamage()` para que solo aplique el daño recibido si **Can Be Damaged** está activa.
 
 ### Funciones de ayuda *ApplyDamage*
 
-El API de daño también ofrece funciones de ayuda para aplicar daño a un actor, sin tener que llamar a `TakeDamage()` en el actor directamente.
-Estas funciones estan disponibles tanto en C++ como en Bluperint (ver la @fig-applydamage-methods):
+La API de daño también ofrece funciones de ayuda para aplicar daño a un actor, sin tener que llamar a `TakeDamage()` en el actor directamente.
+Estas funciones están disponibles tanto en C++ como en Bluperint (ver la @fig-applydamage-methods):
 
 ![Nodos para aplicar daño a un actor.](figures/applydamage-methods.png){#fig-applydamage-methods}
 
-Sin embargo, no debemos perder de vista que esta funciones no son más que una interfaz más sencilla para llamar a `TakeDamage()` en el actor indicado.
-Es decir, no procesan el daño de ninguna manera, sino que crean el tipo de evento de daño `FDamageEvent` adecuado con la información proporcionada, para luego llamar al método `TakeDamage()` del actor o actores afectados.
-Es nuestra reponsabilidad implementar el procesamiento del daño en las subclases de **Actor**.
+Sin embargo, no debemos perder de vista que estas funciones no son más que una interfaz más sencilla para llamar a `TakeDamage()` en el actor indicado.
+Es decir, no procesan el daño de ninguna manera, sino que crean el tipo de evento de daño **FDamageEvent** adecuado con la información proporcionada, para luego llamar al método `TakeDamage()` del actor o actores afectados.
+Es nuestra responsabilidad implementar el procesamiento del daño en las subclases de **Actor**.
 
-Como se puede observar, uno de los argumentos que reciben estas funciones *ApplyDamage* y que se guarda en el evento de daño, que recibira `TakeDamage()`, es el tipo de daño, indicado mediante una subclase de **UDamageType**.
+Como se puede observar, uno de los argumentos que reciben estas funciones *ApplyDamage* y que se guarda en el evento de daño, que recibirá `TakeDamage()`, es el tipo de daño, indicado mediante una subclase de **UDamageType**.
 Esta clase se puede usar para definir diferentes tipos de daño, como fuego, hielo, eléctrico, francotirador, ambiental, etc.
 
 #### *ApplyDamage*
@@ -155,7 +155,7 @@ float ApplyDamage(AActor* DamagedActor, float BaseDamage,
 
 La función {{< api ApplyPointDamage >}} aplica daño puntual al actor especificado.
 
-A parte de los argumentos comunes con `ApplyDamage()`, también se debe indicar información específica sobre el impacto, como la dirección del impacto y la estructura **HitResult**.
+Aparte de los argumentos comunes con `ApplyDamage()`, también se debe indicar información específica sobre el impacto, como la dirección del impacto y la estructura **HitResult**.
 
 ```cpp
 float ApplyPointDamage(AActor* DamagedActor, float BaseDamage,
@@ -170,7 +170,7 @@ La estructura **HitResult** es la misma que se usa con las funciones de *raycast
 
 La función {{< api ApplyRadialDamage >}} aplica daño a todos los actores en un área esférica.
 
-A parte de los argumentos comunes con `ApplyDamage()`, como *daño base*, causante, instigador y el tipo de daño, también recibe otra información relevante en el caso de un daño de área, como el centro del área y el radio.
+Aparte de los argumentos comunes con `ApplyDamage()`, como *daño base*, causante, instigador y el tipo de daño, también recibe otra información relevante en el caso de un daño de área, como el centro del área y el radio.
 
 ```cpp
 float ApplyRadialDamage(const UObject * WorldContextObject,
@@ -207,10 +207,10 @@ float ApplyRadialDamageWithFalloff(const UObject * WorldContextObject,
     ECollisionChannel DamagePreventionChannel);
 ```
 
-Esta función permite aplicar daño de área a varios actores, de tal forma que los que esten dentro del rádio minimo recibirían todo el *daño base*, mientras que los que esten dentro del rádio máximo, recibirían un daño que decae con la distancia, pero que nunca será menor que el daño mínimo indicado.
+Esta función permite aplicar daño de área a varios actores, de tal forma que los que estén dentro del radio mínimo recibirían todo el *daño base*, mientras que los que estén dentro del radio máximo, recibirían un daño que decae con la distancia, pero que nunca será menor que el daño mínimo indicado.
 
 Lo rápido que decae el daño con la distancia viene determinado por el argumento `DamageFalloff`, que se toma con un exponente que define la curva de decaimiento del daño.
-Por ejemplo, esta es una manera común de calcular el daño decaido con la distancia en base a `DamageFalloff`:
+Por ejemplo, esta es una manera común de calcular el daño decaído con la distancia en base a `DamageFalloff`:
 
 ```cpp
 float CalculateEffectiveRadialDamage(float ActorDistanceFromOrigin, ... )   // <1>
@@ -235,13 +235,13 @@ La función `ApplyRadialDamage()` es equivalente a `ApplyRadialDamageWithFalloff
 ### Referencia al instigador en el actor
 
 En el caso de los proyectiles, bombas y otras armas similares, el actor que causa el daño debe saber, desde el momento de su instanciación, qué jugador lo creó, para poder señalarlo como responsable del daño.
-Por ese motivo, la clase **Actor** tiene una propiedad **Instigator**, que refencia al **Pawn** del jugador que lo creó.
+Por ese motivo, la clase **Actor** tiene una propiedad **Instigator**, que referencia al **Pawn** del jugador que lo creó.
 
 Esta propiedad se puede consultar mediante el método `GetInstigator()` y se puede modificar mediante `SetInstigator()`.
 También se puede consultar el **Controller** correspondiente mediante el método `GetInstigatorController()`.
 
 :::{.callout-note}
-Es importante recordar que aunque la clase **Actor** puede guardar una referencia al **Pawn** del jugador, la información que espera la Damage API como indicación del responsable del  daño es el **Controller** del jugador.
+Es importante recordar que aunque la clase **Actor** puede guardar una referencia al **Pawn** del jugador, la información que espera la Damage API como indicación del responsable del daño es el **Controller** del jugador.
 :::
 
 En el momento de instanciar un actor usando {{< api SpawnActor >}} se puede indicar directamente el **Pawn** del instigador para que lo guarde en la propiedad **Instigator** del nuevo actor.
@@ -263,11 +263,11 @@ En cada activación, se aplica como *daño base* el producto entre **Damage Per 
 
 Además, como se puede observar en la @fig-paincausingvolume, el actor **PainCausingVolume** tiene una propiedad **Damage Type**, que permite indicar el tipo de daño que se aplicará a los actores que se encuentran dentro de su volumen.
 
-Como ocurre con otro volúmenes, la forma, tamaño y posición del volumen es completamente configurable.
+Como ocurre con otros volúmenes, la forma, tamaño y posición del volumen es completamente configurable.
 
 ## Volumen *Kill Z*
 
-A veces interesante asegurar que un personaje va a morir o ser movido a otra zonas del nivel, si alcanza ciertas partes que no deberían ser inaccesibles.
+A veces interesante asegurar que un personaje va a morir o ser movido a otras zonas del nivel, si alcanza ciertas partes que no deberían ser inaccesibles.
 El motivo más común es evitar que el jugador quede atascado y no pueda continuar jugando.
 
 Unreal Engine ofrece un actor especial para esta tarea, llamado **KillZVolume**
@@ -279,9 +279,9 @@ Se puede desactivar desactivando la propiedad **Enable Wolrd Bounds Checks**.
 
 ![Propiedad **Kill Z** en **World Settings**.](figures/world-killz.png){#fig-world-killz}
 
-En ambos casos se aplica un daño de tipo **DmgTypeBP_Environment**, que es una subclase de **UDamageType** que se utiliza cuando el daño viene causado por el entorno, no por un ememigo.
+En ambos casos se aplica un daño de tipo **DmgTypeBP_Environment**, que es una subclase de **UDamageType** que se utiliza cuando el daño viene causado por el entorno, no por un enemigo.
 Sin embargo, se puede configurar un tipo de daño diferente, indicando una subclase de **UDamageType** en la propiedad **Kill Z Damage Type** de **World Settings** (ver la @fig-world-killz).
-Tanto los volumenes **KillZVolume** como el *Kill Z* global utilizaran el tipo de daño que se configure en dicha propiedad.
+Tanto los volúmenes **KillZVolume** como el *Kill Z* global utilizaran el tipo de daño que se configure en dicha propiedad.
 
 En ambos casos, para aplicar el daño, en lugar de llamar a `TakeDamage()`, se llama al método {{< api FellOutOfWorld >}} del actor que entra en el volumen o cae por debajo del *Kill Z*.
 Por defecto, esta función destruye el actor, pero se puede sobreescribir en las subclases de **Actor** para cambiar este comportamiento.

@@ -24,7 +24,7 @@ Algunos **ActorComponent** tienen representación en el nivel --como mallas, col
 
 :::{.callout-note}
 Aunque la norma sea que son los objetos **Actor** los que se colocan en el mundo, realmente es posible instanciar **ActorComponent** directamente en el nivel.
-Se puede usar {{< api NewObject >}} para instanciar cualquier tipo de **UObject**, sin indicar que pertence a un **Actor** en el argumento `Outer` de la función.
+Se puede usar {{< api NewObject >}} para instanciar cualquier tipo de **UObject**, sin indicar que pertenece a un **Actor** en el argumento `Outer` de la función.
 Estos componentes no son guardados ni replicados y no reciben eventos como `BeginPlay()` o `TickComponent()`.
 Algunos **ActorComponent** a veces se usan de esta manera, como **AudioComponent** cuando se crea con `SpawnSoundAtLocation()`.
 :::
@@ -38,7 +38,7 @@ Para personalizarlo se hereda de la clase **GameInstance**, se le añaden las pr
 
 ![Configurar la clase **GameInstance** del proyecto.](figures/setup-gameinstance.png){#fig-gameinstance}
 
-En proyectos grandes, para respertar el *principio de responsabilidad única*[@WikipediaSRP] y evitar que la clase **GameInstance** se convierta en un *objeto todopoderoso*[@WikipediaGodObject], se suele dividir la funcionalidad en diferentes clases heredadas de **UObject**, que se instancian y referencian en propiedades del **GameInstance**.
+En proyectos grandes, para respetar el *principio de responsabilidad única*[@WikipediaSRP] y evitar que la clase **GameInstance** se convierta en un *objeto todopoderoso*[@WikipediaGodObject], se suele dividir la funcionalidad en diferentes clases heredadas de **UObject**, que se instancian y referencian en propiedades del **GameInstance**.
 De esta forma, son fácilmente localizables para el resto de componentes del juego a través del objeto **GameInstance**, que se puede obtener mediante la función {{< api short UGameplayStatics::GetGameInstance >}}.
 
 Sin embargo, desde Unreal Engine 4.22, se recomienda usar *subsistemas* para implementar funcionalidades globales del juego, que antes se implementaban en **GameInstance**[Más sobre *subsistemas* en @TorresD3DUnrealCpp].
@@ -66,7 +66,7 @@ La información de los **LocalPlayer** permite al **GameViewportClient** determi
 
 ## Como arranca un juego
 
-Al lanzar el ejecutable de un juego desarrollado con Unreal Engine desde la interfaz del sistema operaitvo:
+Al lanzar el ejecutable de un juego desarrollado con Unreal Engine desde la interfaz del sistema operativo:
 
 1. Se ejecuta el código de inicialización del motor, que crea el objeto **UEngine** y llama al método `UEngine::Init()`.
 

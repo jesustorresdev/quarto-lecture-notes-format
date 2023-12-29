@@ -35,7 +35,7 @@ Igual que en el caso del **GameInstance**, para evitar que la clase **GameMode**
 Como **GameMode** es un actor, se pueden añadir **ActorComponent** para implementar diferentes aspectos del juego.
 Si no estamos interesados en los eventos de ciclo de vida de los actores y componentes --como `BeginPlay()` o `TickComponent()`-- también se pueden usar clases **UObject**, referenciadas desde propiedades del **GameMode**.
 
-Además, desde Unreal Engine 4.24, también se puende implementar *subsistemas* que comparten su tiempo de vida con un objeto **UWorld**, por lo que también son interesantes para implementar funcionalidades especificas de un nivel.
+Además, desde Unreal Engine 4.24, también se puede implementar *subsistemas* que comparten su tiempo de vida con un objeto **UWorld**, por lo que también son interesantes para implementar funcionalidades específicas de un nivel.
 
 En la @fig-gamemode-inheritance se puede ver un ejemplo de jerarquía de herencia de **GameMode**.
 
@@ -50,7 +50,7 @@ En la @fig-gamemode-inheritance se puede ver un ejemplo de jerarquía de herenci
 
 {{< api GameState >}} es un actor pensado para almacenar los datos que describen el estado de la partida, como: puntuaciones, lista de jugadores, objetivos cumplidos, etc.
 
-Sea cual sea el motor de videojuegos, separar el códido del juego del estado de la partida facilita la implementación de diferentes funcionalidades:
+Sea cual sea el motor de videojuegos, separar el código del juego del estado de la partida facilita la implementación de diferentes funcionalidades:
 
 * Sincronización de los datos del juego en juegos multijugador online.
   En un juego multijugador online, la lógica con las reglas de la partida debe ejecutarse únicamente en el servidor para evitar las trampas.
@@ -91,7 +91,7 @@ Como no se sincroniza la información entre ellos --puesto que el **GameInstance
 
 **GameMode** incluye de serie propiedades a través de las que podemos configurar diferentes características del nivel, como por ejemplo: el nombre por defecto de los jugadores o si el nivel es pausable (ver la @sec-pause).
 
-Como se puede observar en la @fig-gamemode-properties, entre la propiedades que trae **GameMode** por defecto están otras clases de actores del *gameplay framework* que se van a instanciar para implementar diferentes aspectos del juego:
+Como se puede observar en la @fig-gamemode-properties, entre las propiedades que trae **GameMode** por defecto están otras clases de actores del *gameplay framework* que se van a instanciar para implementar diferentes aspectos del juego:
 
 ![Propiedades de la clase **GameMode**.](figures/gamemode-properties.png){#fig-gamemode-properties}
 
@@ -134,7 +134,7 @@ Sin embargo, esto no significa que el **Controller** sea el propietario del acto
 
 :::{.callout-note}
 Por ejemplo, en algunos RPG el jugador pueda controlar a varios personajes durante la partida, pudiendo cambiar entre ellos en cualquier momento.
-Mientras que en otros juego el jugador suele controlar a un personaje humano, pero en determinados momentos puede subir el persona a un vehículo y controlarlo para desplazarse con él.
+Mientras que en otros juego el jugador suele controlar a un personaje humano, pero en determinados momentos puede subir el personaje a un vehículo y controlarlo para desplazarse con él.
 :::
 
 ### Posesión de actores
@@ -156,16 +156,16 @@ El {{< api Controller >}} recibe los eventos {{< api OnPossess >}} o {{< api OnU
 
 ![Nodos de evento de posesión de **Pawn**.](figures/pawn-possess-events.png)
 
-Estos eventos son últiles.
-Por ejemplo, si un personaje está poseido por un **AIController** y el jugador lo posee, el **AIController** dejará de controlar al personaje.
-Si más tarde el jugador posee aun personaje diferente, el **AIController** no volverá a controlar al primer personaje, automáticamente.
+Estos eventos son útiles.
+Por ejemplo, si un personaje está poseído por un **AIController** y el jugador lo posee, el **AIController** dejará de controlar al personaje.
+Si más tarde el jugador posee aún personaje diferente, el **AIController** no volverá a controlar al primer personaje, automáticamente.
 Por tanto, se puede usar los eventos indicados para hacer que el **AIController** vuelva a controlar al primer personaje cuando el jugador deje de controlarlo.
 
 Además de usar los métodos `Possess()` y `UnPossess()`, los **Pawn** se puede configurar para que sean poseídos automáticamente por un **Controller** cuando son instanciados y comienza su ejecución en el nivel, como se puede ver en la @fig-pawn-auto-possess:
 
-* Si un **Pawn** se configura con la propiedad **Auto Possess Player**, es poseido automática por el **PlayerController** del jugador indicado, al ser instanciado.
+* Si un **Pawn** se configura con la propiedad **Auto Possess Player**, es poseído automática por el **PlayerController** del jugador indicado, al ser instanciado.
 
-* Si un **Pawn** se configura con la propiedad **Auto Possess AI**, es poseido automática por el **AIController** indicado.
+* Si un **Pawn** se configura con la propiedad **Auto Possess AI**, es poseído automática por el **AIController** indicado.
 
 ![Configuración **Auto Possess** de la clase **Pawn**.](figures/pawn-auto-possess.png){#fig-pawn-auto-possess}
 
@@ -173,7 +173,7 @@ Además de usar los métodos `Possess()` y `UnPossess()`, los **Pawn** se puede 
 
 Una vez el **Controller** posee un **Pawn** puede controlarlo a través de sus métodos, pero debemos tener en cuenta que por defecto las opciones se limitan a mover y rotar el actor.
 
-Para que el **Controller** pueda indicar acciones adicionales al **Pawn** --como atacar, salta, escalar o defenderse-- es necesario implemnentar una interfaz que exponga dichas acciones en el **Pawn** y que el **Controller** pueda llamar. 
+Para que el **Controller** pueda indicar acciones adicionales al **Pawn** --como atacar, salta, escalar o defenderse-- es necesario implementar una interfaz que exponga dichas acciones en el **Pawn** y que el **Controller** pueda llamar. 
 
 Por ejemplo, en la @fig-pawn-control se ilustra un posible caso dónde nuestro **MyPlayerController** --que hereda de **PlayerController** para añadirle funcionalidades adicionales, como la lectura de las acciones del jugador-- posee al actor para el personaje del jugador **MyPlayerPawn**
 
@@ -218,7 +218,7 @@ Es en el método `TickComponent()` de este componente de movimiento del actor, d
 Por ejemplo, todo actor {{< api Character >}} --que es una clase derivada de **Pawn**-- tiene por defecto un {{< api CharacterMovementComponent >}} que se hace cargo del movimiento del personaje.
 Este componente deriva de {{< api PawnMovementComponent >}} que, a su vez, deriva de **MovementComponent**.
 
-Realmente, si un actor **Pawn** detecta que se le ha añadido un **PawnMovementComponent**, su método `AddMovementInput` --que es llamado por el **Controller**-- no acumula el vector de movimiento en `ControlInputVector` directamente, sino que se lo entrega al **PawnMovementComponent**, através del método {{< api AddInputVector >}}.
+Realmente, si un actor **Pawn** detecta que se le ha añadido un **PawnMovementComponent**, su método `AddMovementInput` --que es llamado por el **Controller**-- no acumula el vector de movimiento en `ControlInputVector` directamente, sino que se lo entrega al **PawnMovementComponent**, a través del método {{< api AddInputVector >}}.
 
 Entonces, el componente puede decidir qué hacer con el vector de movimiento.
 Por defecto, se lo devuelve al **Pawn** sin cambios, para que lo acumule en `ControlInputVector`, pero siempre podemos sobrescribir la función `AddInputVector` para cambiar este comportamiento.
@@ -236,21 +236,21 @@ En la @fig-controller-character-movement-sequence se puede ver un diagrama de se
 
 Unreal Engine proporciona diferentes **MovementComponent** para implementar diferentes tipos de movimiento, como por ejemplo: {{< api FloatingPawnMovement >}}, {{< api ProjectileMovementComponent >}}, {{< api RotatingMovementComponent >}}, {{< api InterpToMovementComponent >}} o {{< api CharacterMovementComponent >}} (ver la @sec-movement-components).
 
-De estos, solo **FloatingPawnMovement** y **CharacterMovementComponent** heredan de **PawnMovementComponent**, por lo que interactuan con el actor **Pawn** de la forma comentada.
+De estos, solo **FloatingPawnMovement** y **CharacterMovementComponent** heredan de **PawnMovementComponent**, por lo que interactúan con el actor **Pawn** de la forma comentada.
 El resto sirve para mover cualquier actor de otras maneras.
 
 Obviamente, siempre podemos crear nuestros propios **MovementComponent** para implementar tipo de movimiento que necesitemos, tanto para **Pawn** --preferentemente heredando de **PawnMovementComponent**-- como para cualquier otro tipo de actor.
 
 #### Rotación de control
 
-En `ControlInputVector` el **Pawn** se almacena la dirección en la que el **Controller** quiere que se mueva el personaje, pero a veces puede interesar tener otra dirección con la que indicar hacia donde debe mirar el personaje o la cámara del juegador.
+En `ControlInputVector` el **Pawn** se almacena la dirección en la que el **Controller** quiere que se mueva el personaje, pero a veces puede interesar tener otra dirección con la que indicar hacia donde debe mirar el personaje o la cámara del jugador.
 
 Por ejemplo, en algunos juegos un personaje se puede mover en una dirección diferente a aquella en la que mira la cámara del jugador o en la que apunta.
-Esto es especialmente interesante con los NPC, ya que a veces la IA necesita poder controlar hacía dónde tiene que mirar un personaje, sin moverlo del sitio.
+Esto es especialmente interesante con los NPC, ya que a veces la IA necesita poder controlar hacia dónde tiene que mirar un personaje, sin moverlo del sitio.
 
 Para ello, el **Controller** tiene una variable interna de tipo {{< api Rotator >}}, llamada `ControlRotation`, que se puede leer y establecer mediante los métodos {{< api GetControlRotation >}} y {{< api SetControlRotation >}}.
 
-La clase {{< api PlayerController >}} derivada de **Controller** añade los métodos {{< api AddPitchInput >}} , {{< api AddYawInput >}} y {{< api AddRollInput >}} para acumular fácilmente ángulos de rotación en `ControlRotation`, en cualquiera de los 3 ángulos de Euler (ver la @fig-ue-euler-angles).
+La clase {{< api PlayerController >}} derivada de **Controller** añade los métodos {{< api AddPitchInput >}}, {{< api AddYawInput >}} y {{< api AddRollInput >}} para acumular fácilmente ángulos de rotación en `ControlRotation`, en cualquiera de los 3 ángulos de Euler (ver la @fig-ue-euler-angles).
 
 ![Ángulos de Euler en Unreal Engine.](figures/euler_angles.png){#fig-ue-euler-angles}
 
@@ -258,20 +258,20 @@ Los valores indicados al invocar estas funciones son multiplicados por las propi
 Como en el caso del movimiento, los valores se acumulan en la variable interna `RotationInput`, para luego procesarla y actualizar `ControlRotation` convenientemente en el método `Tick()`.
 
 Las funciones `AddPitchInput()`, `AddYawInput()` y `AddRollInput()` son ideales para usarlas con los eventos de la entrada del jugador.
-Por ejemplo, que cuanto más acciona el jugador el *stick* a la derecha, más ángulo de *yaw* se acumule en la *rotación de control* .
+Por ejemplo, que cuanto más acciona el jugador el *stick* a la derecha, más ángulo de *yaw* se acumule en la *rotación de control*.
 
 Además, la clase **Pawn** también incluye tres funciones por conveniencia: {{< api AddControllerYawInput >}}, {{< api AddControllerPitchInput >}} y {{< api AddControllerRollInput >}}, que realmente llaman a las anteriores en el **PlayerController**.
 
 En la @fig-pawn-control-rotation-input se puede observar un ejemplo dónde se recibe la acción de entrada *Look* en el **Pawn** y se usan estas funciones para cambiar la *rotación de control* en el **Controller**.
 
-![Uso de la entrada para actualiza *rotación de control* desde el **Pawn**.](figures/pawn-control-rotation-input.png){#fig-pawn-control-rotation-input}
+![Uso de la entrada para actualizar la *rotación de control* desde el **Pawn**.](figures/pawn-control-rotation-input.png){#fig-pawn-control-rotation-input}
 
 Igualmente, la clase **Pawn** tiene la función {{< api GetViewRotation >}}, que sirve para leer directamente la *rotación de control* del **Controller** desde el **Pawn**.
 
-Gracias a que **Controller** y **Pawn** tiene una interfaz bien definida para gestionar la *rotación de control*, tanto la clase **Pawm** como muchos componentes pensandos para ser utilizados en un **Pawn** --como **CameraComponent** o **SpringArmComponent**-- vienen preparados para leer la *rotación de control* y usarla.
+Gracias a que **Controller** y **Pawn** tiene una interfaz bien definida para gestionar la *rotación de control*, tanto la clase **Pawm** como muchos componentes pensados para ser utilizados en un **Pawn** --como **CameraComponent** o **SpringArmComponent**-- vienen preparados para leer la *rotación de control* y usarla.
 
-Por ejemplo, en la @fig-pawn-control-rotation se pueden ver las opciones de configuración de la *rotación de control* en la clase **Pawn**, que pemirte sincronizar automáticamente la rotación del **Pawn** con la *rotación de control* en su controlador.
-Mientras que en la @fig-camera-control-rotation se pueden observar un opción similar en el componente de cámara **CameraComponent**.
+Por ejemplo, en la @fig-pawn-control-rotation se pueden ver las opciones de configuración de la *rotación de control* en la clase **Pawn**, que pemite sincronizar automáticamente la rotación del **Pawn** con la *rotación de control* en su controlador.
+Mientras que en la @fig-camera-control-rotation se pueden observar una opción similar en el componente de cámara **CameraComponent**.
 
 ![Configuración de uso de la **rotación de control** en la clase **Pawn**.](figures/pawn-control-rotation.png){#fig-pawn-control-rotation}
 
@@ -282,15 +282,15 @@ Mientras que en la @fig-camera-control-rotation se pueden observar un opción si
 Relacionado con la *rotación de control*, la clase **Controller** también maneja los conceptos de punto de vista --o POV, del inglés *point of view*-- del jugador y de *view target*.
 
 El *view target* se obtiene mediante el método {{< api GetViewTarget >}} de **Controller** y devuelve el actor «al que mira el controlador».
-Por lo general, se trata del **Pawn** poseido por el controlador, pero el **PlayerController** permite cambiarlo mediante el método {{< api SetViewTarget >}} y lo usa para determinar el POV de la cámara del jugador (ver la @sec-playercameramanager).
+Por lo general, se trata del **Pawn** poseído por el controlador, pero el **PlayerController** permite cambiarlo mediante el método {{< api SetViewTarget >}} y lo usa para determinar el POV de la cámara del jugador (ver la @sec-playercameramanager).
 
-El POV del jugador se obtiene mediante el método {{< api short Controller::GetPlayerViewPoint >}} de **Controller**, pero signifca cosas diferentes en función del tipo de controlador.
+El POV del jugador se obtiene mediante el método {{< api short Controller::GetPlayerViewPoint >}} de **Controller**, pero significa cosas diferentes en función del tipo de controlador.
 
 En el **AIController** devuelve el punto de vista del **Pawn** desde la altura de sus «ojos».
 Para ello llama a `GetActorEyesViewPoint()` en el **Pawn** y devuelve el resultado.
 
 El método {{< api GetActorEyesViewPoint >}} de **Pawn** devuelve el POV en la posición del **Pawn** en el mundo, pero desplazado en el eje Z la cantidad indicada en la propiedad **Base Eye Height** del **Pawn**.
-Para la dirección del POV, considera la *rotación de control* del **Controller** que lo posee, si está poseido, o la rotación del propio **Pawn**, si no lo está.
+Para la dirección del POV, considera la *rotación de control* del **Controller** que lo posee, si está poseído, o la rotación del propio **Pawn**, si no lo está.
 
 En el **PlayerController**, {{< api short PlayerController::GetPlayerViewPoint >}} devuelve el POV de la cámara calculado por el actor {{< api PlayerCameraManager >}}, en caso de que el **PlayerController** tenga una referencia a un actor de este tipo.
 En otro caso, si el controlador tiene un configurado un actor *view target*, devuelve la rotación y localización de dicho actor.
@@ -332,7 +332,7 @@ A continuación vamos a referirnos a **PlayerInput** y a **InputComponent** por 
 
 ### *PlayerInput*
 
-La instancia de **GameViewportClient** captura los eventos del entrada del jugador, localiza el controlador del jugador **PlayerController** que debe recibirlos --a través del objeto **LocalPlayer** correspondiente-- y se los entrega.
+La instancia de **GameViewportClient** captura los eventos de entrada del jugador, localiza el controlador del jugador **PlayerController** que debe recibirlos --a través del objeto **LocalPlayer** correspondiente-- y se los entrega.
 
 :::{.callout-note}
 En juegos multijugador local se pueden crear nuevos jugadores y asignarles un dispositivo de entrada usando el nodo **Create Local Player**, en Blueprint, o la función {{< api CreatePlayer >}}.
@@ -368,7 +368,7 @@ Quien conecta el **PlayerInput** --que es quién tiene acceso a las acciones de 
 
 ### *PlayerController*
 
-En la arquitectura de muchos juegos, es buena idea tener un objeto que represente al jugador y que controle y gestione todo aquello que le concierne a éł y a su personaje.
+En la arquitectura de muchos juegos, es buena idea tener un objeto que represente al jugador y que controle y gestione todo aquello que le concierne a él y a su personaje.
 Como hemos comentado anteriormente, en Unreal Engine, este objeto es el {{< api PlayerController >}}.
 
 El **GameMode** crea un actor **PlayerController** para cada jugador --generalmente a través del método `Login()`-- y se destruye al cargar un nuevo nivel.
@@ -380,7 +380,7 @@ Por defecto, el **PlayerController** tienen varias responsabilidades:
 * Gestionar la entrada y teledirigir al personaje de su jugador.
   El **PlayerController** tiene el objeto **PlayerInput** para leer la entrada y puede poseer a cualquier actor derivado de la clase `Pawn` para controlarlo.
 
-* Gestionar la *rotación de control*, que se puede usar para controla la dirección en la que mira el personaje o la cámara del jugador.
+* Gestionar la *rotación de control*, que se puede usar para controlar la dirección en la que mira el personaje o la cámara del jugador.
 
 * Crear el HUD --la interfaz de usuario-- del jugador.
   Actualmente, la forma adecuada de hacerlo es creando *widgets* con UMG (*Unreal Motion Graphics*) y mostrarlos usando `AddToViewport()` en el evento `BeginPlay()` del **PlayerController**. 
@@ -391,7 +391,7 @@ Por defecto, el **PlayerController** tienen varias responsabilidades:
   Así el resto de la lógica del juego puede localizar fácilmente el control de cámara y la interfaz de un jugador concreto con solo preguntarle al **PlayerController** correspondiente.
 
 * Gestionar información específica del jugador.
-  El **PlayerController** puede usar para gestionar otra información del jugador --a parte de su *rotación de control*-- especialmente si debe sobrevivir a la destrucción del actor personaje.
+  El **PlayerController** puede usar para gestionar otra información del jugador --aparte de su *rotación de control*-- especialmente si debe sobrevivir a la destrucción del actor personaje.
   Por ejemplo, la puntuación, las habilidades adquiridas o su inventario.
 
 Respecto a esto último, debemos tener en cuenta que el **PlayerController** se destruye y se vuelve a crear al cargar un nuevo nivel.
@@ -420,7 +420,7 @@ Cuando varios jugadores juegan en un mismo equipo, los jugadores pueden cambiar 
 Veamos como usar la arquitectura descrita para implementar la interacción con objetos.
 
 Un caso de uso típico en cualquier videojuego es hacer que cuando el jugador esté cerca de un objeto pueda cogerlo o accionarlo.
-Es algo múy típico con armas, botiquines, puertas, interruptores, objetos que podemos agarrare para empujar, etc.
+Es algo muy típico con armas, botiquines, puertas, interruptores, objetos que podemos agarrar para empujar, etc.
 
 Todo empieza porque el objeto tenga un ***trigger** que permita saber cuándo estamos cerca de él.
 Sin embargo, tanto el personaje como el objeto pueden ser informados del momento en el que eso ocurre, por lo que podríamos implementar el código de esta funcionalidad tanto en el actor del objeto como en el del personaje.
@@ -449,14 +449,14 @@ Aunque referenciar esta información desde el **Pawn** del personaje parece lo m
 
 Teniendo en cuenta lo comentado, veamos algunos supuestos prácticos:
 
-* ¿Dónde propieda guardar una propiedad como la salud del personaje?
+* ¿Dónde guardar una propiedad como la salud del personaje?
   
   * **Si el juego es multijugador online**, la propiedad debe estar en **PlayerState**, para que el servidor pueda gestionar esta información al tiempo que está disponible para los clientes.
 
   * **Mientras que un juego de un solo jugador**, serían igual de válidos **PlayerState**, **PlayerController** y el propio **Pawn** del personaje.
-    
+
     La ventaja de usar **Pawn** es que realmente es un tipo de dato que interesa que se reinicie cada vez que reaparece el personaje, lo que ocurre automáticamente si se guarda en el actor del personaje.
-    
+
     Sin embargo, se puede optar por el **PlayerController** para centralizar toda la información del jugador en un mismo lugar, que además es fácilmente accesible tanto por el sistema de salvado como por el código de la interfaz de usuario.
     A cambio, hay que reiniciar la propiedad manualmente cada vez que revive el personaje.
 
@@ -487,14 +487,14 @@ El *gameplay framework* incluye las siguientes clases que heredan de **Pawn**:
 * El **DefaultPawn** extiende **Pawn** añadiendo un *collider* esférico y un **StaticMesh**.
   Se puede mover libremente en 3D, sin ser afectado por la gravedad, y se puede usar para explorar el nivel durante el desarrollo, independientemente de los personajes que se vayan a usar en el juego.
 
-* El **SpectatorPawn**  extiende **DefaultPawn** para ofrecer la funcionalidad de espectador de la partida, útil en juegos multijugador online.
+* El **SpectatorPawn** extiende **DefaultPawn** para ofrecer la funcionalidad de espectador de la partida, útil en juegos multijugador online.
 
 * El {{< api WheeledVehiclePawn >}} extiende **Pawn** para implementar la clase base de vehículo con ruedas.
 
   Esta clase de actor incluye por defecto un componente {{< api ChaosWheeledVehicleMovementComponent >}} que implementa la simulación del movimiento del vehículo, usando el motor de físicas Chaos[@TorresD3DFisicas] de Unreal Engine.
   Este componente se puede sustituir fácilmente[Más sobre CDO en @TorresD3DUnrealCpp] por cualquier componente que herede de {{< api ChaosVehicleMovementComponent >}}, cuando se quiere usar una simulación diferente.
 
-* El {{< api Character >}} extiende **Pawn** para añadir todo lo que necesita un personaje tradicional humanoide, como el que se usa en muchos juegos de acción en primera o tercera persona: una cápsula de colisión, un **SkeletalMeshComponent** --es decir, una malla que puede ser animada mediante el sistema de animación de Unreal Engine-- y un **CharacterMovementComponent**, que implementa modos de movimiento típicos como: caminar, correr, saltar, nadaro, incluso, volar.
+* El {{< api Character >}} extiende **Pawn** para añadir todo lo que necesita un personaje tradicional humanoide, como el que se usa en muchos juegos de acción en primera o tercera persona: una cápsula de colisión, un **SkeletalMeshComponent** --es decir, una malla que puede ser animada mediante el sistema de animación de Unreal Engine-- y un **CharacterMovementComponent**, que implementa modos de movimiento típicos como: caminar, correr, saltar, nadar, incluso, volar.
 
 Estas clases se heredan para añadir la funcionalidad específica que necesitemos en nuestro juego, según el tipo de personaje que queramos implementar.
 
@@ -548,11 +548,11 @@ Algunos de los componentes de movimiento más comunes son:
 
 Como hemos comentado anteriormente, cada **PlayerController** crea y gestiona su actor **PlayerCameraManager**, que mantiene la información del punto de vista (POV) de la cámara que necesita el motor para renderizar la escena.
 
-El {{< api PlayerCameraManager >}} se puede modifcar derivando de dicha clase e indicando la nueva clase en las propiedades del **PlayerController**, como se puede observar en la @fig-playercontroller-camera-manager.
+El {{< api PlayerCameraManager >}} se puede modificar derivando de dicha clase e indicando la nueva clase en las propiedades del **PlayerController**, como se puede observar en la @fig-playercontroller-camera-manager.
 
 ![Configuración del **PlayerCameraManager** en el **PlayerController**.](figures/playercontroller-camera-manager.png){#fig-playercontroller-camera-manager}
 
-En cada *tick* el **PlayerController** llama al método `UpdateCamera()` de su **PlayerCameraManager** para que actualize las propiedades con el POV deseado más reciente.
+En cada *tick* el **PlayerController** llama al método `UpdateCamera()` de su **PlayerCameraManager** para que actualice las propiedades con el POV deseado más reciente.
 El motor accede a estas propiedades a través del **LocalPlayer**, que utiliza al **PlayerController** y al **PlayerCámeraManager** para recopilar la información.
 
 ### Actor *view target*
@@ -573,7 +573,7 @@ En ese caso el **PlayerController**:
 
 ![Configuración de **CameraActor** para que sea el *view target* del jugador 3.](figures/cameraactor-auto-activate.png){#fig-cameraactor-auto-activate}
 
-2. En otro caso, utiliza el **Pawn** poseido en cada momento por el **PlayerController**.
+2. En otro caso, utiliza el **Pawn** poseído en cada momento por el **PlayerController**.
 
 3. Si el **PlayerController** no posee a ningún **Pawn**, se usa el propio actor **PlayerController** como *view target*.
 
@@ -585,19 +585,19 @@ Este sistema no solo ofrece mucha flexibilidad para gestionar múltiples cámara
 También se puede explotar para desarrollar un sistema de cámaras de depuración, que permita cambiar el punto de vista y la configuración en tiempo real, para visualizar el nivel desde diferentes puntos de vista y encontrar y resolver problemas.
 :::
 
-El comportamiento por defecto de `CalcCamera()` en cualquier actor es buscar su primer componente **CameraComponent** y devolver su localización, rotación y otros propiedades como el punto de vista del jugador.
+El comportamiento por defecto de `CalcCamera()` en cualquier actor es buscar su primer componente **CameraComponent** y devolver su localización, rotación y otras propiedades como el punto de vista del jugador.
 
 Es decir, en Unreal Engine, el componente **CameraComponent** es realmente una especie de objeto *marcador* que facilita configurar las propiedades de las cámaras directamente en la escena.
-En realidad no tienen conexión directa con la cámara del sistema de render, ni son necesarios para ubicar y configurar adecudamente las cámaras.
+En realidad no tienen conexión directa con la cámara del sistema de render, ni son necesarios para ubicar y configurar adecuadamente las cámaras.
 
 Si un el actor *view target* no tiene un **CameraComponent**, el método `CalcCamera()` retorna la ubicación y rotación del actor como POV del jugador.
 
 ### Transiciones entre *view targets*
 
-La arquitecta comentada facilita cambiar entre diferentes modo de cámara, si el juego lo requiere.
+La arquitecta comentada facilita cambiar entre diferentes modos de cámara, si el juego lo requiere.
 
 Por ejemplo, en un juego de acción en tercera persona, el jugador puede controlar a un personaje que se mueve libremente por el nivel, utilizando una cámara que orbita libremente alrededor del personaje.
-Pero cuando cuando el jugador entra en un vehículo, el *view target* puede cambiar al vehículo, haciendo que se use una cámara externa que facilite la condución.
+Pero cuando el jugador entra en un vehículo, el *view target* puede cambiar al vehículo, haciendo que se use una cámara externa que facilite la condución.
 Igualmente, cuando el personaje se acerca a una zona de escalada, el *view target* se puede cambiar a un actor con una cámara que se mueve en un plano paralelo a la pared, a una distancia mayor, para que el jugador pueda ver mejor lo que está haciendo.
 O en una arena de combate, el *view target* puede cambiar a un actor con una cámara externa que orbite en alto sobre la zona, facilitando al jugador tener una vista de la acción.
 
@@ -614,8 +614,8 @@ En la arquitectura descrita existen diferentes puntos donde se puede personaliza
 
 #### *CalcCamera()* en el *view target*
 
-Sobreescribir el método {{< api CalcCamera >}} en el actor --solo en C++-- es ideal para hacer cambios del control de cámara especificos de ese actor.
-Por ejemplo, un **Pawn** puede tener varios **CameraComponent** para indicar diferenes posibles posiciones de la cámara, com: primera o tercera persona, cámara al hombro en el lado derecho o izquierdo, cámara con mira, etc.
+Sobreescribir el método {{< api CalcCamera >}} en el actor --solo en C++-- es ideal para hacer cambios del control de cámara específicos de ese actor.
+Por ejemplo, un **Pawn** puede tener varios **CameraComponent** para indicar diferentes posibles posiciones de la cámara, como: primera o tercera persona, cámara al hombro en el lado derecho o izquierdo, cámara con mira, etc.
 
 En `CalcCamera()` se puede implementar la lógica para elegir el **CameraComponent** adecuado, según las preferencias del jugador o el estado del personaje.
 `CalcCamera()` es, probablemente, el primer lugar donde mirar si queremos ajustar el comportamiento de la cámara.
@@ -630,7 +630,7 @@ En **PlayerCameraManager**, durante el `UpdateCamera()`, se llama a `UpdateViewT
 Este es el método que llama al `CalcCamera()` de dicho *view target* y, posteriormente, pasa el POV devuelto por ese método a `BlueprintUpdateCamera()`, para que pueda modificarlo en un Blueprint.
 Si `BlueprintUpdateCamera()` devuelve `true`, sus cambios tienen prioridad sobre los devuelto por `CalcCamera()`.
 
-Para hacer este tipo de cambios globables pero en C++, se puede sobreescribir `UpdateViewTargetInternal()`.
+Para hacer este tipo de cambios globales, pero en C++, se puede sobreescribir `UpdateViewTargetInternal()`.
 Tanto `UpdateViewTargetInternal()` como `BlueprintUpdateCamera()` son ideales para cambios que solo requieran sobreescribir el POV devuelto por el método `CalcCamera()` del *view target* indicado, sin afectar al resto de maneras de obtener el POV del jugador.
 
 #### *UpdateViewTarget()*
@@ -665,7 +665,7 @@ Si está en mitad de una transición entre dos *view target*, hace la llamada a 
 Después interpola entre los POV devueltos por ambas llamadas, para obtener el POV definitivo en el frame actual.
 
 Por tanto, se puede sobreescribir `DoUpdateCamera()` para hacer cambios en la manera en la que se interpola entre los POV al cambiar el *view target*.
-O para modificar complementamente el contro del cámara.
+O para modificar completamente el control del cámara.
 
 Al finalizar, `DoUpdateCamera()` almacena el POV resultante en **PlayerCameraManager** para su uso durante el render.
 También actualiza el fundido de cámara y de audio, si está activo --ver {{< api StartCameraFade >}}, {{< api StopCameraFade >}} y {{< api SetManualCameraFade >}} de **PlayerCameraManager** en la @fig-playercameramanager-fade-- y aplica otros efectos.
@@ -687,9 +687,9 @@ Estos modificadiones puede afectar a:
 * La ubicación, rotación y otras propiedades de cámara del POV del jugador.
 
 * La rotación de control del jugador.
-  Por ejemplo, para establacer límites.
+  Por ejemplo, para establrcer límites.
 
-* Modificar la configuración de los efectos de postprocesado.
+* Modificar la configuración de los efectos de posprocesado.
 
 Los modificadores se aplican al final del método `UpdateViewTarget()`, durante el cálculo del POV del jugador.
 
@@ -705,7 +705,7 @@ Además, la activación y desactivación puede ser instantánea o gradual, segú
 
 #### Prioridad de los modificadores
 
-Los modificadores se organizan en el **PlayerCameraManager** en una lista ordenada por su pioridad, que es una propiedad de la instancia de `CamaraModifier`. 
+Los modificadores se organizan en el **PlayerCameraManager** en una lista ordenada por su prioridad, que es una propiedad de la instancia de `CamaraModifier`. 
 De forma que se pueden aplicar varios modificadores a la vez, en un orden determinado por su prioridad.
 
 Aunque los efectos de los modificadores generalmente se combinan, es posible que un modificador de alta prioridad prevenga la ejecución de modificadores de menor prioridad.
@@ -718,7 +718,7 @@ Algunos de los modificadores de cámara predefinidos de Unreal Engine son:
 * {{< api CameraShakeBase >}}.
   Sacude la cámara para crear sensación de impacto o agitación, lo que es útil con explosiones o al recibir daño.
 
-  El efecto se configura añandiendo al modificador uno o varios objetos de tipo {{< api CameraShakeBase >}}.
+  El efecto se configura añadiendo al modificador uno o varios objetos de tipo {{< api CameraShakeBase >}}.
   Cada uno contiene un *patrón de movimiento* que es el objeto que realmente contiene la lógica que dirige el movimiento de la cámara[@UnrealCameraShakes]. 
 
 * {{< api UCameraAnimationCameraModifier >}}.
@@ -729,7 +729,7 @@ Algunos de los modificadores de cámara predefinidos de Unreal Engine son:
 La clase base de los modificadores es {{< api CameraModifier >}} y se puede heredar de ella para implementar modificadores de cámara personalizados.
 
 Los métodos `BlueprintModifyCamera()` y {{< api ModifyCamera >}} son los que se deben sobreescribir para implementar la lógica de los modificadores de las propiedades de la cámara, en Blueprint o C++, respectivamente.
-Mientras que `BlueprintModifyPostProcess()` y {{< api ModifyPostProcess >}} se pueden sobreescribir para modificar la configuración de los efectos de postprocesado.
+Mientras que `BlueprintModifyPostProcess()` y {{< api ModifyPostProcess >}} se pueden sobreescribir para modificar la configuración de los efectos de posprocesado.
 
 En todo los casos, es responsabilidad del código en estas funciones interpretar y aplicar los valores de `Alpha`, si el efecto debe mezclarse de forma gradual al activarse o desactivarse.
 
@@ -746,9 +746,9 @@ Este método llama a `ProcessViewRotation()` del **PlayerCameraManager** que, a 
 Gracias a esto, los modificadores de la cámara pueden modificar tanto *rotación de control* actual como la entrada del jugador acumulada, que se usará para actualizar la *rotación de control*.
 Esto sirve, por ejemplo, para que un modificador de cámara activo pueda limitar la *rotación de control* a cierto intervalo.
 
-En todo caso, para establecer limitaciones a la *rotación de control* del jugador de forma generalizada, se pueden usar las propiedades **View Pitch Min**, **View Pitch Max**, **View Yaw Min**, **View Yaw Max**, **View Roll Min** y **View Roll Max** que trae de serie **PlayerCameraManager**.
+En todo caso, para establecer limitaciones a la *rotación de control* del jugador de forma generalizada, se pueden usar las propiedades **View Pitch Min**, **View Pitch Max**, **View Yaw Min**, **View Yaw Max**, **View Roll Min** y **View Roll Max** que trae de serie **PlayerCameraManager**, como se puede ver en la @fig-playercameramanager-view-limits.
 
-// TODOL Imagen
+![Propiedades de **PlayerCameraManager** para limitar la *rotación de control* del jugador.](figures/playercameramanager-view-limits.png){#fig-playercameramanager-view-limits}
 
 ## Gameplay Framework
 

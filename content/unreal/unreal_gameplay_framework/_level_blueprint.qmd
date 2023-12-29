@@ -6,7 +6,7 @@ En otros motores esto se asemeja a tener un *level manager*.
 Sin embargo, en Unreal Engine el papel de *level manager* se divide, más bien, entre el **GameMode** y el **Level Blueprint**.
 
 Como el **Level Blueprint** tiene acceso directo a todos actores del nivel, es muy útil para implementar la lógica que conecta los eventos globales del nivel, para que los actores se coordinen.
-Por ejemplo, establecer suscripciones a eventos para que cuando el actor del jugador llegue a cierto punto del nivel se active un evento que haga que se instancie enemigos, se activen unas plataformas, etc.
+Por ejemplo, establecer suscripciones a eventos para que cuando el actor del jugador llegue a cierto punto del nivel se active un evento que haga que se instancien enemigos, se activen unas plataformas, etc.
 Mientras que el **GameMode** suele contener el resto del código de gestión del nivel.
 
 El **Level Blueprint** se puede editar desde el editor de Unreal Engine, seleccionando la opción **Blueprints / Open Level Blueprint** en el menú principal.
