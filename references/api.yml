@@ -118,6 +118,10 @@ ActorComponent:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UActorComponent/index.html
   members:
+    GetName:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/CoreUObject/UObject/UObjectBaseUtility/GetName/
     SetComponentTickEnabled:
       refs:
         - lang: Blueprint
@@ -540,6 +544,16 @@ Rotator:
     - lang: C++
       url: https://docs.unrealengine.com/4.27/en-US/API/Runtime/Core/Math/FRotator/
 
+SaveGame:
+  internal-name: USaveGame
+  extends: UObject
+  refs:
+    - name: Saving and Loading Your Game
+      url: https://docs.unrealengine.com/en-US/saving-and-loading-your-game-in-unreal-engine/
+      order: 1
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/USaveGame/index.html
+
 InputComponent:
   internal-name: UInputComponent
   extends: ActorComponent
@@ -568,6 +582,54 @@ UGameplayStatics:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/
   members:
+    OpenLevel:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/4.26/en-US/BlueprintAPI/Game/OpenLevel/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/OpenLevel/index.html
+    GetAllActorsWithInterface:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/4.27/en-US/BlueprintAPI/Utilities/GetAllActorswithInterface/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/GetAllActorsWithInterface/index.html
+    DoesSaveGameExist:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/SaveGame/DoesSaveGameExist/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/DoesSaveGameExist/index.html
+    AsyncLoadGameFromSlot:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/SaveGame/AsyncLoadGamefromSlot/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/AsyncLoadGameFromSlot/index.html
+    LoadGameFromSlot:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/SaveGame/LoadGamefromSlot/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/LoadGameFromSlot/index.html
+    AsyncSaveGameToSlot:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/SaveGame/AsyncSaveGametoSlot/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/AsyncSaveGameToSlot/index.html
+    SaveGameToSlot:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/SaveGame/SaveGametoSlot/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/SaveGameToSlot/index.html
+    CreateSaveGameObject:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/SaveGame/CreateSaveGameObject/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/CreateSaveGameObject/index.html
     SetGamePaused:
       refs:
         - lang: Blueprint

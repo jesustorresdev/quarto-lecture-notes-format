@@ -70,13 +70,13 @@ Los actores pueden recibir daño mediante el método {{< api TakeDamage >}}, que
 class AActor
 {
 public:
-    //...
+    // ...
     virtual float TakeDamage(float DamageAmount,
         FDamageEvent const& DamageEvent, AController* EventInstigator,
         AActor* DamageCauser);
-    //...
+    // ...
 };
-``` 
+```
 
 * `DamageAmount`.
   La cantidad de *daño base*.
@@ -107,7 +107,7 @@ En el caso de recibir un evento de daño de tipo **FPointDamageEvent**, el méto
 2. Llama al método {{< api ReceivePointDamage >}}, con información extraida del evento de daño recibido y con el *daño efectivo* calculado en el paso anterior.
    El objetivo es que el actor procese el daño recibido, actualizando su salud, aplicando efectos visuales, etc.
 
-3. Lanza al evemto {{< api OnTakePointDamage >}}, para que otros actores y componentes puedan suscribirse a este evento y reaccionar al daño recibido por este actor (ver la @fig-ontakedamage-events).
+3. Lanza al evento {{< api OnTakePointDamage >}}, para que otros actores y componentes puedan suscribirse a este evento y reaccionar al daño recibido por este actor (ver la @fig-ontakedamage-events).
 
 ![Eventos de daño de los actores en Unreal Engine.](figures/ontakedamage-events.png){#fig-ontakedamage-events}
 

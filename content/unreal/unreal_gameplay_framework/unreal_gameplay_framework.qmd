@@ -12,6 +12,10 @@ subtitle: "Guía del *gameplay framework* y de otros componentes de Unreal Engin
 {{< include _damage_api.qmd >}}
 
 <!-- TODO: # Gameplay Ability System (GAS) -->
+<!-- TODO: # Cheats and Shortcuts in Development
+PLayable any scene, Application state machine
+https://medium.com/@bada/functional-unity-architecture-a-developers-guide-359e5111c5c2
+-->
 
 {{< include _save_game.qmd >}}
 {{< include _tick_and_pause.qmd >}}
