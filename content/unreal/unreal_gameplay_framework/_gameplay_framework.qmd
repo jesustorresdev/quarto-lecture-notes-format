@@ -414,6 +414,7 @@ Esto significa que la gestión de la entrada del jugador se puede implementar ta
 
 Obviamente, es posible gestionar toda la entrada del jugador en el **Pawn** del personaje, aunque esto solo es aconsejable en los proyectos más simples.
 Cuando varios jugadores juegan en un mismo equipo, los jugadores pueden cambiar de personaje controlado durante la partida o la gestión de la entrada es compleja, es mejor hacerlo en el **PlayerController**.
+Aún así, si los diferentes personajes tienen algún aspecto del control que es muy específico de cada personaje, puede ser conveniente implementar la gestión de esos controles específicos en el **Pawn** de cada personaje.
 
 ### Interacción con objetos
 
@@ -468,14 +469,6 @@ Teniendo en cuenta lo comentado, veamos algunos supuestos prácticos:
   De esta forma, cada jugador en su cliente tiene acceso a la información de su inventario, al mismo tiempo que el servidor se hace cargo de gestionar el inventario de todos los jugadores.
 
 ## *AIController*
-
-// TODO: AI Tasks  (AAIController)
-
-// PathFollowingComponent
-
-
-
-
 
 
 ## *Pawn* y *Character*

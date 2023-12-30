@@ -32,7 +32,7 @@ Algunos **ActorComponent** a veces se usan de esta manera, como **AudioComponent
 ## *GameInstance*
 
 Un {{< api GameInstance >}} es el principal objeto *manager* de un juego en Unreal Engine. 
-Se instancia al inicio del juego y se destruye al finalizar, por lo que suele usarse para alojar código y datos globales, que deban persistir entre la carga de niveles, como: los inventarios y las habilidades de los personales o la configuración del juego.
+Se instancia al inicio del juego y se destruye al finalizar, por lo que suele usarse para alojar código y datos globales, que deban persistir entre la carga de niveles, como: los inventarios y las habilidades de los personales o la configuración general del juego.
 
 Para personalizarlo se hereda de la clase **GameInstance**, se le añaden las propiedades y el código necesario y, finalmente, se indica la nueva clase heredada en **Project Settings... / Project - Maps & Modes / Game Instance Class**, como se ilustra en la @fig-gameinstance.
 
