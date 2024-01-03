@@ -28,11 +28,12 @@
 				"editor.tabSize": 2
 			},
 			"extensions": [
+				"github.vscode-github-actions",
+				"GitHub.vscode-pull-request-github",
+				"pascalreitermann93.vscode-yaml-sort",
 				"sumneko.lua",
 				"valentjn.vscode-ltex",
-				"zfscgy.bibtex-helper",
-				"github.vscode-github-actions",
-				"GitHub.vscode-pull-request-github"
+				"zfscgy.bibtex-helper"
 			]
 		}
 	}
