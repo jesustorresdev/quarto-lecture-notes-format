@@ -81,13 +81,13 @@ Actor:
         - lang: Blueprint
           url: https://docs.unrealengine.com/en-US/BlueprintAPI/Input/EnableInput/
         - lang: C++
-          url: https://docs.unrealengine.com/5.3/en-US/API/Runtime/Engine/GameFramework/AActor/EnableInput/
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/EnableInput/
     DisableInput:
       refs:
         - lang: Blueprint
           url: https://docs.unrealengine.com/en-US/BlueprintAPI/Input/DisableInput/
         - lang: C++
-          url: https://docs.unrealengine.com/5.3/en-US/API/Runtime/Engine/GameFramework/AActor/DisableInput/
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/AActor/DisableInput/
     GetActorLocation:
       refs:
         - lang: Blueprint
@@ -370,6 +370,56 @@ AIController:
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/index.html
+  members:
+    RunBehaviorTree:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/5.3/en-US/BlueprintAPI/AI/RunBehaviorTree/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/RunBehaviorTree/index.html
+    GetFocalPointOnActor:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/GetFocalPointOnActor/index.html
+    GetFocalPoint:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/GetFocalPoint/index.html
+    SetFocalPoint:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/SetFocalPoint/index.html
+    GetFocusActor:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/GetFocusActor/index.html
+    SetFocus:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/SetFocus/index.html
+    ClearFocus:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/ClearFocus/index.html
+    MoveToLocation:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/AI/AIMoveTo/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/MoveToLocation/index.html
+    MoveToActor:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/AI/AIMoveTo/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/MoveToActor/index.html
+
+PathFollowingComponent:
+  internal-name: UPathFollowingComponent
+  extends: ActorComponent
+  refs:
+    - lang: C++
+      url: en-US/API/Runtime/AIModule/Navigation/UPathFollowingComponent/
 
 PlayerState:
   internal-name: APlayerState
@@ -423,7 +473,16 @@ NavMovementComponent:
   extends: MovementComponent
   refs:
     - lang: C++
-      url: https://docs.unrealengine.com/5.3/en-US/API/Runtime/Engine/GameFramework/UNavMovementComponent/
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UNavMovementComponent/
+  members:
+    RequestPathMove:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UNavMovementComponent/RequestPathMove/index.html
+    RequestDirectMove:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UNavMovementComponent/RequestDirectMove/index.html
 
 PawnMovementComponent:
   internal-name: UPawnMovementComponent
@@ -472,7 +531,7 @@ InterpToMovementComponent:
   extends: MovementComponent
   refs:
     - lang: C++
-      url: https://docs.unrealengine.com/5.3/en-US/API/Runtime/Engine/Components/UInterpToMovementComponent/
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UInterpToMovementComponent/
 
 ChaosVehicleMovementComponent:
   internal-name: UChaosVehicleMovementComponent
@@ -575,6 +634,40 @@ FRadialDamageEvent:
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FRadialDamageEvent/index.html
+
+AIPerceptionComponent:
+  internal-name: UAIPerceptionComponent
+  extends: ActorComponent
+  refs:
+    - name: AI Perception
+      url: https://docs.unrealengine.com/en-US/ai-perception-in-unreal-engine/
+      order: 1
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/Perception/UAIPerceptionComponent/
+
+BrainComponent:
+  internal-name: UBrainComponent
+  extends: ActorComponent
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/UBrainComponent/
+  members:
+    StartLogic:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/AI/Logic/StartLogic/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/UBrainComponent/StartLogic/
+    StopLogic:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/AI/Logic/StopLogic/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/UBrainComponent/StopLogic/
+    PauseLogic:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/UBrainComponent/PauseLogic/
 
 UGameplayStatics:
   extends: UObject
@@ -721,6 +814,21 @@ FTickFunction:
       refs:
         - lang: C++
           url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FTickFunction/RemovePrerequisite/index.html
+
+GameplayTask:
+  internal-name: UGameplayTask
+  extends: UObject
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/BlueprintAPI/GameplayTasks/
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/GameplayTasks/UGameplayTask/index.html
+
+UNavigationSystem:
+  extends: UObject
+  refs:
+    - lang: C++
+      url: en-US/API/Runtime/NavigationSystem/UNavigationSystemV1/
 
 NewObject:
   name: NewObject<T>()

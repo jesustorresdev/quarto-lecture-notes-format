@@ -169,7 +169,7 @@ Además de usar los métodos `Possess()` y `UnPossess()`, los **Pawn** se puede 
 
 ![Configuración **Auto Possess** de la clase **Pawn**.](figures/pawn-auto-possess.png){#fig-pawn-auto-possess}
 
-### Control de actores
+### Control de actores {#sec-controller-control}
 
 Una vez el **Controller** posee un **Pawn** puede controlarlo a través de sus métodos, pero debemos tener en cuenta que por defecto las opciones se limitan a mover y rotar el actor.
 
@@ -470,6 +470,121 @@ Teniendo en cuenta lo comentado, veamos algunos supuestos prácticos:
 
 ## *AIController*
 
+El {{< api AIController >}} en Unreal Engine es el **Controller** que se encarga de controlar el movimiento de los NPC, así como de su comportamiento.
+Por tanto, no utiliza la entrada del jugador, sino que tiene programado unas reglas de comportamiento predeterminadas.
+
+En la @fig-ai-controller se puede ver un diagrama de clases simplificado del actor **AIController** y sus componentes:
+
+```{mermaid}
+%%| label: fig-ai-controller
+%%| fig-cap: "Diagrama de clases de **AIController** y sus componentes."
+%%| file: figures/aicontroller-classes.mm
+%%| fig-width: 15cm
+```
+
+### Lógica de la IA
+
+Obviamente, es posible heredar de **AIController** para implementar la lógica de la IA en el propio actor del controlador --por ejemplo, en el método `Tick()`--.
+Sin embargo, **AIController** está diseñado para incorporar un componente **BrainComponent** que se encargue de implementar la lógica de la IA.
+
+La clase {{< api BrainComponent >}} proporciona una interfaz para controlar la ejecución de la lógica: {{< api StartLogic >}}, {{< api StopLogic >}} o {{< api PauseLogic >}} --esta última es muy útil durante las cinemáticas-- y la implementación de un mecanismo para enviar y recibir mensajes de otras IA. 
+
+Cuando se ejecuta el método {{< api RunBehaviorTree >}} del **AIController**, se añade un **BrainComponent** de tipo **BehaviorTreeComponent** al controlador, que se encarga de ejecutar la lógica de un árbol de comportamiento, descrito en el *asset* indicado en los argumentos.
+Extendiendo **BrainComponent** se pueden implementar otras técnica de IA, como por ejemplo, máquinas de estado, *utility AI*, etc.
+
+En muchas implementaciones de la IA, se utiliza un *blackboard*, que es una estructura de datos que almacena información sobre el estado del juego --como la ubicación del jugador, el estado de salud del NPC, o si el NPC debe huir, defenderse o atacar--.
+Por eso, el **AIController** también incorpora un componente **BlackboardComponent** que se encarga de almacenar y gestionar el *blackboard*, cuyo datos pueden ser consultados tanto por la implementación de árboles de comportamiento de Unreal Engine, como por implementaciones propias de la lógica de la IA.
+
+Algo que también suele ser interesante en cualquier implementación de una IA, es tener un sistema para planificar y ejecutar tareas.
+Por lo general, estas tareas se inician desde la lógica de la IA, en función de las condiciones, para ejecutarse en paralelo con el resto de la lógica del juego.
+
+En Unreal Engine se pueden utilizar {{< api GameplayTask >}} para implementar estas tareas.
+
+En concreto, componentes como la implementación de árboles de comportamiento, pueden iniciar tareas de tipo **AITask**, que extienden **GameplayTask**.
+El propietario de las tareas es el **AIController**, pero son planificadas y ejecutadas por el **GameplayTaskComponent** que el controlador añade al **Pawn** cuando lo posee.
+
+### Navegación
+
+Una pieza fundamental de la IA es el sistema de navegación, que permite a los NPC moverse por el mundo del juego.
+
+Unreal Engine proporciona un sistema de navegación basado en *NavMesh* a través del subsistema **NavigationSystem**.
+Este subsistema se puede consultar directamente en C++ a través de los métodos de clase {{< api UNavigationSystem >}}[@TorresD3DUnrealCpp], pero también se puede utilizar indirectamente a través de los métodos de **AIController** y el componente **PathFollowingComponent** de este.
+
+La clase **AIController** proporcionar los métodos {{< api MoveToLocation >}} y {{< api MoveToActor >}}  para indicar que se quiere mover el **Pawn** poseído a una ubicación determinada o para perseguir a otro actor, respectivamente.
+El nodo de Blueprint **AI MoveTo** (ver la @fig-ai-moveto) y la tarea de árbol de comportamiento **AITask MoveTo**, también se implementa utilizan estos métodos.
+
+![Nodo de Blueprint **AI MoveTo** para mover un **Pawn** a un punto o seguir a un actor.](figures/ai-moveto.png){#fig-ai-moveto}
+
+Ambos métodos se apoyan en el componente {{< api PathFollowingComponent >}}, que implementa la lógica necesaria para calcular la ruta y dar las órdenes al **Pawn** necesarias para que se mueva a lo largo de ella.
+Si al llamar a los métodos `MoveToLocation()` o `MoveToActor()` se indica `UsePathfinding` como `true`, **PathfollowingComponent** utilizará el **NavigationSystem** para calcular la ruta más eficiente para llegar al destino.
+En caso contrario, usará la línea recta.
+
+Para controlar al **Pawn**, **PathFollowingComponent** necesita que el **Pawn** tenga un componente {{< api NavMovementComponent >}} --como **PawnMovementComponent** o **CharacterMovementComponent**-- ya que espera poder comunicarse con él directamente de la siguiente manera:
+
+* El **NavMovementComponent** tiene las propiedades que representan a un *agente* que se quiere mover usando el sistema de navegación.
+  Por ejemplo, su altura y su radio, que son fundamentales para calcular la ruta más eficiente por el entorno.
+  Por tanto, el **PathfollowingComponent** consulta estas propiedades del **NavMovementComponent** para poder usarlas con el **NavigationSystem**.
+
+* El **PathfollowingComponent** se registra en el **NavMovementComponent** para que le comunique algunos eventos importantes durante el movimiento, como: cuándo el **Pawn** comienza a caer y cuándo ha llegado al suelo, cuándo es bloqueado por otro objeto o cuándo el **PathfollowingComponent** no puede seguir controlando el movimiento del **Pawn**, por alguna razón.
+  Por ejemplo, el **CharacterMovementComponent** informa al **PathfollowingComponent** que no puede seguir controlando el movimiento del **Pawn** cuando este *ha caído en el agua* y el **CharacterMovementComponent** tiene el *modo nadar* desactivado.
+
+  De esta manera, el **PathfollowingComponent** puede hacer peticiones del movimiento deseado y luego recibir información sobre lo que está ocurriendo y cuando puede o no puede controlar al **Pawn**.
+
+* El **PathfollowingComponent** no indica la entrada para mover el **Pawn** por la misma vía que se espera que lo haga el código que gestiona la entrada del jugador (ver la @sec-controller-control).
+  En su lugar, indica el movimiento del **Pawn** mediante los métodos `RequestPathMove()` o `RequestDirectMove()` del **NavMovementComponent**.
+
+:::{.callout-note}
+Los objetos que pueden ser considerados agentes en el sistema de navegación, deben implementar la interfaz **INavAgentInterface**.
+El **Pawn** es el ejemplo más típico de agente, pero también se puede implementar la interfaz en otros objetos.
+Por defecto, el **Pawn** devuelve a través de esta interfaz la información de agente de navegación guardada en su componente **NavMovementComponent**, pero si no tiene uno, devuelve los valores por defecto.
+:::
+
+El método {{< api RequestPathMove >}} se parece mucho a los métodos usados cuando el control es del jugador, porque recibe un vector de movimiento que indica la dirección deseada del movimiento.
+Si este vector tiene magnitud 1.0, es que se desea la máxima intensidad.
+
+Una forma frecuente de gestionar esta petición es acumular el vector de movimiento en `ControlInputVector` en el **Pawn** y luego, en cada *tick*, interpretar dicho vector como una entrada de aceleración, multiplicándola por la aceleración máxima configurada para el **Pawn**, antes de proceder a usarla para calcular la nueva posición del **Pawn**.
+
+**PathfollowingComponent** llama a {{< api RequestPathMove >}} si la propiedad **Use Acceleration For Paths** del **NavMovementComponent** está activa.
+Mientras que, si no está activa, llama a {{< api RequestDirectMove >}}, que espera un vector de velocidad, de forma que el **Pawn** se mueva directamente con la velocidad y dirección indicada.
+Por ejemplo, **CharacterMovementComponent** se puede configurar para utilizar instantáneamente la velocidad indicada o para considerar esta velocidad un objetivo, de forma que acelerará o frenará al actor --según la aceleración o desaceleración máxima configurada-- hasta alcanzarla.
+
+### Foco
+
+El **AIController** también proporciona un mecanismo para gestionar el *foco* del NPC, que es el objeto que el NPC considera más importante en cada momento.
+Algunos de los métodos que proporciona para gestionar el foco son: {{< api SetFocus >}}, {{< api GetFocusActor >}}, {{< api ClearFocus >}}.
+
+Al cambiar el *foco* en el **AIController**, se actualiza el *punto focal*, que es el punto del mundo en el que el NPC debería centrar su atención.
+Otra opción es gestionar directamente el *punto focal* utilizando los métodos: {{< api SetFocalPoint >}}, {{< api GetFocalPoint >}}.
+
+El **PathfollowingComponent** también se encarga de actualizar el *punto focal* cuando el **Pawn** sigue una ruta.
+Si la propiedad **Can Strafe** de **AIController** está activa y el **Pawn** sigue a un actor, el *punto focal* será la ubicación del actor seguido en cada momento.
+En otro caso, será el siguiente punto de destino de la ruta.
+
+En cada *tick* el **AIController** actualiza la *rotación de control* en la dirección del *punto focal*, de forma que luego esta rotación se puede usar para orientar el **Pawn** --activando las propiedades **Use Controller Rotation...** del **Pawn**-- o para orientar hacia donde mira o apunta el NPC.
+
+### Percepción
+
+Por lo general, la percepción de los NPC --que pueden ver u oír-- se implementa utilizando *raycasts* o *triggers*[@TorresD3DGameplay01].
+Sin embargo, Unreal Engine implementa un sistema de percepción que permite a los NPC detectar a los jugadores y otros objetos de forma más avanzada, así como saber cuándo están siendo dañados por algo.
+Este sistema se basa en el componente **AIPerceptionComponent** y en los *estímulos* que emiten los objetos[@UnrealAIPerception].
+
+El {{< api AIPerceptionComponent >}} es un componente que se añade al **AIController** de un NPC y que permite definir que estímulos puede percibir el NPC y cómo reaccionar a ellos.
+
+:::{.callout-note}
+Existe un componente *legacy* alternativo a **AIPerceptionComponent** que se denomina **PawnSensingComponent** y que se añade al **Pawn** de un NPC, en lugar de al **AIController**.
+Este componente es más sencillo de utilizar, pero es menos flexible y ofrece peor rendimiento, puesto que la percepción se ejecuta de forma independiente en cada NPC, en lugar de combinar y optimizar operaciones de manera centralizada[@UnrealForumPawnSensingVsAIPerception].
+:::
+
+Algunos de los estímulos perceptibles por un **AIPerceptionComponent** son:
+
+* **Sight**: Permite al NPC ver otros objetos.
+* **Damage**: Permite al NPC saber cuando está siendo dañado.
+* **Hearing**: Permite al NPC oír a otros objetos.
+* **Team**: Permite al NPC saber si otros miembros del mismo equipo están cerca.
+* **Touch**: Permite al NPC saber cuando toca otro objeto.
+
+Para que un actor de la escena pueda generar un estímulo debe tener un componente **AIPerceptionStimuliSource**.
+Este componente permite registrar al actor al que pertenece como una fuente de estímulos, para la lista de estímulos que interese.
 
 ## *Pawn* y *Character*
 

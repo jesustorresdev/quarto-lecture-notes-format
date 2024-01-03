@@ -65,6 +65,7 @@ format:
         \hyphenation{Up-da-te-Vi-ew-Tar-get-In-ter-nal}
         \hyphenation{Blu-e-print-Up-da-te-Ca-me-ra}
         \hyphenation{In-ter-nal-Ta-ke-Ra-di-al-Da-ma-ge}
+        \hyphenation{Cha-rac-ter-Mo-ve-ment-Com-po-nent}
 
 api-reference: 
   path: references/api.yml
