@@ -10,19 +10,13 @@ project:
     - content/unreal/unreal_gameplay_framework/unreal_gameplay_framework.qmd
 
 subtitle: Desarrollo de Videojuegos 3D (20XX/20XY)
+institute: Master Universitario en Desarrollo de Videojuegos de la Universidad de La Laguna
 author:   
   - name: Jesús Torres
     email: jmtorres@ull.es
-    url: https://jesustorres.es/
-    affiliation: Universidad de La Laguna
-    affiliation-url: https://www.ull.es/ 
-thanks: |
-  Este trabajo © 2020-2024 está bajo una licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es).
+author-meta: Jesús Torres <jmtorres@ull.es>
 copyright:
-  holder: Jesús Torres
-  year: 2023
-  license: CC BY 4.0
-  license-url: https://creativecommons.org/licenses/by/4.0/deed.es
+  license: Este trabajo está bajo una licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es).
 
 abstract: |
   ::: {.callout-caution appearance="simple"}
@@ -40,6 +34,23 @@ crossref:
 suppress-bibliography: false
 bibliography: references/references.bib
 csl: references/chicago-fullnote-bibliography-short-title-subsequent.csl
+api-reference: 
+  path: references/api.yml
+
+hyphenation:
+  - In-terp-To-Mo-ve-ment-Com-po-nent
+  - Add-Con-tro-ller-Yaw-In-put
+  - Pla-yer-Ca-me-ra-Ma-na-ger
+  - Set-Com-po-nent-Tick-E-na-bled
+  - Cha-os-Whee-led-Ve-hi-cle-Mo-ve-ment-Com-po-nent
+  - Cha-os-Ve-hi-cle-Mo-ve-ment-Com-po-nent
+  - Up-da-te-Vi-ew-Tar-get-In-ter-nal
+  - Blu-e-print-Up-da-te-Ca-me-ra
+  - In-ter-nal-Ta-ke-Ra-di-al-Da-ma-ge
+  - Cha-rac-ter-Move-ment-Com-po-nent
+  - Pawn-Move-ment-Com-po-nent
+  - Get-Con-trol-Ro-ta-tion
+  - Add-Pitch-In-put
 
 filters:
   - reading-time
@@ -52,20 +63,6 @@ format:
     documentclass: scrartcl
     classoption: numbers=endperiod
     papersize: a4
-    include-before-body: 
-      text: |
-        %% Enable hyphenation for tt fonts
-        \DeclareFontFamily{\encodingdefault}{\ttdefault}{\hyphenchar\font=`\-}
-        \hyphenation{In-terp-To-Mo-ve-ment-Com-po-nent}
-        \hyphenation{Add-Con-tro-ller-Yaw-In-put}
-        \hyphenation{Pla-yer-Ca-me-ra-Ma-na-ger}
-        \hyphenation{Set-Com-po-nent-Tick-E-na-bled}
-        \hyphenation{Cha-os-Whee-led-Ve-hi-cle-Mo-ve-ment-Com-po-nent}
-        \hyphenation{Cha-os-Ve-hi-cle-Mo-ve-ment-Com-po-nent}
-        \hyphenation{Up-da-te-Vi-ew-Tar-get-In-ter-nal}
-        \hyphenation{Blu-e-print-Up-da-te-Ca-me-ra}
-        \hyphenation{In-ter-nal-Ta-ke-Ra-di-al-Da-ma-ge}
-        \hyphenation{Cha-rac-ter-Mo-ve-ment-Com-po-nent}
-
-api-reference: 
-  path: references/api.yml
+    template-partials:
+      - partials/title.tex
+      - partials/before-body.tex

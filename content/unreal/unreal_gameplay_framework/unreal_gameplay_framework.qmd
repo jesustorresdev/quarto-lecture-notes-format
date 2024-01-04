@@ -1,6 +1,6 @@
 ---
-title: "Unreal Engine Gameplay Framework"
-subtitle: "Guía del *gameplay framework* y de otros componentes de Unreal Engine"
+title: "Guía del Unreal Engine Gameplay Framework y otros sistemas"
+title-meta: "Guía del Unreal Engine Gameplay Framework y otros sistemas"
 ---
 
 {{< pagebreak >}}

@@ -568,12 +568,10 @@ Por lo general, la percepción de los NPC --que pueden ver u oír-- se implement
 Sin embargo, Unreal Engine implementa un sistema de percepción que permite a los NPC detectar a los jugadores y otros objetos de forma más avanzada, así como saber cuándo están siendo dañados por algo.
 Este sistema se basa en el componente **AIPerceptionComponent** y en los *estímulos* que emiten los objetos[@UnrealAIPerception].
 
-El {{< api AIPerceptionComponent >}} es un componente que se añade al **AIController** de un NPC y que permite definir que estímulos puede percibir el NPC y cómo reaccionar a ellos.
-
-:::{.callout-note}
-Existe un componente *legacy* alternativo a **AIPerceptionComponent** que se denomina **PawnSensingComponent** y que se añade al **Pawn** de un NPC, en lugar de al **AIController**.
+También existe un componente *legacy* alternativo a **AIPerceptionComponent** que se denomina **PawnSensingComponent** y que se añade al **Pawn** de un NPC, en lugar de al **AIController**.
 Este componente es más sencillo de utilizar, pero es menos flexible y ofrece peor rendimiento, puesto que la percepción se ejecuta de forma independiente en cada NPC, en lugar de combinar y optimizar operaciones de manera centralizada[@UnrealForumPawnSensingVsAIPerception].
-:::
+
+El {{< api AIPerceptionComponent >}} es un componente que se añade al **AIController** de un NPC y que permite definir que estímulos puede percibir el NPC y cómo reaccionar a ellos.
 
 Algunos de los estímulos perceptibles por un **AIPerceptionComponent** son:
 
