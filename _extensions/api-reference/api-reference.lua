@@ -12,12 +12,12 @@ local KNOWN_LANGUAGES = {
   ["cpp"] = {
     id = "cpp",
     -- reftitle = "C++ API Reference",
-    reftitle = "API de C++",
+    reftitle = "C++ API",
   },
   blueprint = {
     id = "blueprint",
     -- reftitle = "Blueprint API Reference",
-    reftitle = "API de Blueprint",
+    reftitle = "Blueprint API",
   },
 }
 
@@ -29,6 +29,8 @@ local LANG_MAPPING = {
 }
 
 local stringify = pandoc.utils.stringify
+local Link = pandoc.Link
+local Span = pandoc.Span
 
 local globalReferences
 
@@ -53,8 +55,26 @@ local function refsSorting(left, right)
   elseif right.order then
     return false
   else
-    return left.name < right.name
+    return left.label < right.label
   end
+end
+
+local function buildRefLabel(ref)
+  -- quarto.log.output(ref)
+  local label = Link(ref.url, ref.url)
+  if (ref.label) then
+    label = Link(ref.label, ref.url)
+  elseif ref.lang then
+    label = KNOWN_LANGUAGES[ref.lang].reftitle
+    if ref.name then
+      label = Span({label, ": ", Link(ref.name, ref.url)})
+    else
+      label = Link(label, ref.url)
+    end
+  elseif ref.name then
+    label = Link(ref.name, ref.url)
+  end
+  return label
 end
 
 local function intializeReference(item, parent)
@@ -63,7 +83,7 @@ local function intializeReference(item, parent)
   entry.used = false
   entry.type = item.type and stringify(item.type)
     or parent and ENTITY_TYPES.func or ENTITY_TYPES.class
-  entry.name = item.name and stringify(item.name)
+  entry.label = item.label and stringify(item.label)
     or entry.type == ENTITY_TYPES.func and item.id .. "()" or item.id
   entry.refname = table.concat({
     parent and parent.refname or CROSSREF_PREFIX,
@@ -80,19 +100,21 @@ local function intializeReference(item, parent)
     for _, refItem in ipairs(item.refs) do
       local ref = {}
       if not refItem.url then
-        quarto.log.warning("api-reference: ignoring an '" .. entry.name .. "' reference because the URL is missing.")
+        quarto.log.warning("api-reference: ignoring an '" .. entry.label .. "' reference because the URL is missing.")
         goto continue
       end
 
       ref.url = stringify(refItem.url)
+      ref.label = refItem.label and stringify(refItem.label)
+      ref.name = refItem.name and stringify(refItem.name)
       ref.order = refItem.order and stringify(refItem.order)
       if refItem.lang then
         local lang = LANG_MAPPING[stringify(refItem.lang):lower()].id
         if lang then ref.lang = lang end
       end
     
-      ref.name = refItem.name and stringify(refItem.name)
-        or ref.lang and KNOWN_LANGUAGES[ref.lang].reftitle or ref.url
+      ref.richLabel = buildRefLabel(ref)
+      ref.label = stringify(ref.richLabel)
       table.insert(entry.refs, ref)
       ::continue::
     end

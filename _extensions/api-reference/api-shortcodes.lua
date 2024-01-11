@@ -57,7 +57,7 @@ local function apiShortcode(args, kwargs, meta)
       parent.used = true
   end
   
-  reftext = isFull and parent.name .. "::" .. entry.name or entry.name 
+  reftext = isFull and parent.label .. "::" .. entry.label or entry.label 
   return Plain({
     entry.type == apiref.ENTITY_TYPES.func and Code(reftext) or Strong(reftext),
     Superscript(Link(faLink, "#" .. entry.refname))

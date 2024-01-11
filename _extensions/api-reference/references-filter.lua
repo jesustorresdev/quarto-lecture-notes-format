@@ -11,7 +11,6 @@ local DefinitionList = pandoc.DefinitionList
 local Code = pandoc.Code
 local Div = pandoc.Div
 local Emph = pandoc.Emph
-local Link = pandoc.Link
 local RawInline = pandoc.RawInline
 local Space = pandoc.Space
 local Span = pandoc.Span
@@ -27,8 +26,8 @@ local function processEntry(entry, parent)
   local term = Span({
     entry.type == apiref.ENTITY_TYPES.func and faArrow or faCube,
     Space(),
-    pandoc.Str(entry.name)
-  }, {id=entry.refname, sortBy=entry.name})
+    pandoc.Str(entry.label)
+  }, {id=entry.refname, sortBy=entry.label})
   local descriptionParagraph = {}
   local refsList = {}
 
@@ -57,7 +56,8 @@ local function processEntry(entry, parent)
   -- reference list
   if entry.refs then
     for _, ref in pairs(entry.refs) do
-      table.insert(refsList, Link(ref.name, ref.url))
+      -- quarto.log.output(ref.label)
+      table.insert(refsList, ref.richLabel)
     end
   end
 
