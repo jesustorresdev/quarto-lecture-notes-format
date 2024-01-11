@@ -3,6 +3,10 @@
 $for(hyphenation)$
 \hyphenation{$it$}
 $endfor$
+\newcommand\appendixmore{%
+  \cleardoubleoddpage
+  \pagenumbering{Alph}%
+}
 $if(has-frontmatter)$
 \frontmatter
 $endif$

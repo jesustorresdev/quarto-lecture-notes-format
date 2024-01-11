@@ -1,25 +1,26 @@
 classDiagram
-    UObject <|-- AActor
+    UObject <|-- Actor
     
-    AActor <|-- APawn
-    AActor <|-- ATriggerBase
-    ATriggerBase <|-- ATriggerBox
-    ATriggerBase <|-- ATriggerSphere
-    ATriggerBase <|-- ATriggerCapsule
+    Actor <|-- Pawn
+    Actor <|-- TriggerBase
+    TriggerBase <|-- TriggerBox
+    TriggerBase <|-- TriggerSphere
+    TriggerBase <|-- TriggerCapsule
 
-    AActor <|-- ABrush
-    ABrush <|-- AVolume
-    AVolume <|-- ATriggerVolume
+    Actor <|-- Brush
+    Brush <|-- Volume
+    Volume <|-- TriggerVolume
     
-    UObject <|-- UActorComponent
+    UObject <|-- ActorComponent
+    UObject <|-- UWorld
 
-    UActorComponent <|-- USceneComponent
-    UActorComponent <|-- UMovementComponent
+    ActorComponent <|-- SceneComponent
+    ActorComponent <|-- MovementComponent
 
-    USceneComponent <|-- UPrimitiveComponent
-    UPrimitiveComponent <|-- UShapeComponent
-    UPrimitiveComponent <|-- UStaticMeshComponent
-    UPrimitiveComponent <|-- UBrushComponent
-    UShapeComponent <|-- UBoxComponent
-    UShapeComponent <|-- USphereComponent
-    UShapeComponent <|-- UCapsuleComponent
+    SceneComponent <|-- PrimitiveComponent
+    PrimitiveComponent <|-- ShapeComponent
+    PrimitiveComponent <|-- StaticMeshComponent
+    PrimitiveComponent <|-- BrushComponent
+    ShapeComponent <|-- BoxComponent
+    ShapeComponent <|-- SphereComponent
+    ShapeComponent <|-- CapsuleComponent
