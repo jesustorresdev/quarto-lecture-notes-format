@@ -15,6 +15,10 @@ title-meta: "Guía del Unreal Engine Gameplay Framework y otros sistemas"
 <!-- TODO: # Cheats and Shortcuts in Development
 PLayable any scene, Application state machine
 https://medium.com/@bada/functional-unity-architecture-a-developers-guide-359e5111c5c2
+Temporizador
+GameplayTasks
+  https://forums.unrealengine.com/t/gameplay-tasks-module/41472/8
+  http://blog.coolcoding.cn/?p=3144
 -->
 
 {{< include _save_game.qmd >}}

@@ -12,7 +12,7 @@ Para ello, Unreal Engine ofrece las clases **GameMode** y **GameState**, que son
 
 {{< api GameMode >}} es un actor pensando para contener el código con las reglas específicas del nivel, como por ejemplo: el número de jugadores, las condiciones para ganar, las reglas para hacer aparecer o reaparecer a los jugadores, cuándo se puede pausar la partida y qué ocurre cuando se pide, la transición a otros niveles, etc.
 
-:::{.callout-note}
+::: {.callout-note}
 El actor **GameMode** es el primer actor que recibe el evento `BeginPlay()` tras cargar el nivel.
 :::
 
@@ -26,7 +26,7 @@ Probablemente, heredando de una clase base común para todos los niveles, que im
 Por ejemplo, si el juego tiene un modo historia y un modo multijugador, se puede tener una clase **GameMode** para cada uno de ellos, que herede de una clase base que implemente la funcionalidad común a ambos.
 Igualmente, es común tener un nivel solo para el menú principal del juego, con su propia clase **GameMode**.
 
-:::{.callout-tip}
+::: {.callout-tip}
 La clase **GameMode** que se incluye en Unreal Engine implementa el comportamiento esperable de un juego multijugador competitivo.
 Si se trabaja en otro tipo de juego, es mejor comenzar heredando de **GameModeBase**, que también es la clase base de **GameMode**.
 :::
@@ -62,7 +62,7 @@ Sea cual sea el motor de videojuegos, separar el código del juego del estado de
 Lo primero es exactamente para lo que Unreal Engine usa **GameState**.
 El actor **GameMode** solo existe y se ejecuta en el servidor, mientras que **GameState** y **PlayerState** --del que hablaremos más adelante-- contienen datos que se replican automáticamente en los clientes.
 
-:::{.callout-note}
+::: {.callout-note}
 Tanto **GameState** como **PlayerState** son actores porque, básicamente, es un requisito para que estos objetos sean replicados en los diferentes clientes en juegos multijugador online.
 :::
 
@@ -78,7 +78,7 @@ Incluso si en todos los niveles se usa la misma clase **GameMode**, es común em
 En este sentido, los **GameMode** hacen de *game / level manager*.
 Mientras que **GameInstance** sirve para preservar información entre partidas, como el número de victorias de cada equipo --por ejemplo, para enfrentamientos del tipo «el mejor de X partidas»-- los inventarios, las habilidades o la configuración del juego y de los personajes.
 
-:::{.callout-note}
+::: {.callout-note}
 El *game manager* es un tipo especial de *manager* dedicado a llevar el flujo del juego: carga de escenas y transiciones, activación de modos de menús y pausa, etc.
 Puede usarse para guardar referencias a otros componentes a los que se necesita acceder globalmente, evitando tener que buscar entre todas las entidades del juego cada vez que los necesitamos.
 En juegos relativamente grandes, el *game manager* se usa para implementar aspectos globales del juego, mientras que para la lógica específica de un nivel, cada nivel suele tener su *level manager*.
@@ -132,7 +132,7 @@ El *gameplay framework* incluye dos clases que heredan de {{< api Controller >}}
 En la terminología de Unreal Engine, se dice que cuando un **Controller** comienza a controlar a otro actor, es que lo «posee».
 Sin embargo, esto no significa que el **Controller** sea el propietario del actor, sino que es el responsable de dirigirlo temporalmente, de forma que durante el juego, un mismo controlador puede cambiar el personaje que controla.
 
-:::{.callout-note}
+::: {.callout-note}
 Por ejemplo, en algunos RPG el jugador pueda controlar a varios personajes durante la partida, pudiendo cambiar entre ellos en cualquier momento.
 Mientras que en otros juego el jugador suele controlar a un personaje humano, pero en determinados momentos puede subir el personaje a un vehículo y controlarlo para desplazarse con él.
 :::
@@ -150,7 +150,7 @@ Si un **Controller** posee a un **Pawn** que ya estaba siendo controlado por otr
 Igualmente, si un **Controller** ya posee a un **Pawn** y se le indica que posea a otro, deja de controlar al primero y pasa a controlar al segundo.
 
 En todos los casos tanto el **Controller** como el **Pawn** son notificados.
-El {{< api Controller >}} recibe los eventos {{< api OnPossess >}} o {{< api OnUnPossess >}} y el {{< api Pawn >}} recibe los eventos Possessed() / {{< api PossessedBy >}} o {{< api UnPossessed >}}.
+El {{< api Controller >}} recibe los eventos {{< api OnPossess >}} o {{< api OnUnPossess >}} y el {{< api Pawn >}} recibe los eventos {{< api Possessed >}} o {{< api UnPossessed >}}.
 
 ![Nodos de evento de posesión de **Controller**.](figures/controller-possess-events.png)
 
@@ -334,7 +334,7 @@ A continuación vamos a referirnos a **PlayerInput** y a **InputComponent** por 
 
 La instancia de **GameViewportClient** captura los eventos de entrada del jugador, localiza el controlador del jugador **PlayerController** que debe recibirlos --a través del objeto **LocalPlayer** correspondiente-- y se los entrega.
 
-:::{.callout-note}
+::: {.callout-note}
 En juegos multijugador local se pueden crear nuevos jugadores y asignarles un dispositivo de entrada usando el nodo **Create Local Player**, en Blueprint, o la función {{< api CreatePlayer >}}.
 De esta forma, cuando llegan los eventos de entrada el motor sabe a qué jugador corresponde y puede localizar su **PlayerController**.
 :::
@@ -533,7 +533,7 @@ Para controlar al **Pawn**, **PathFollowingComponent** necesita que el **Pawn** 
 * El **PathfollowingComponent** no indica la entrada para mover el **Pawn** por la misma vía que se espera que lo haga el código que gestiona la entrada del jugador (ver la @sec-controller-control).
   En su lugar, indica el movimiento del **Pawn** mediante los métodos `RequestPathMove()` o `RequestDirectMove()` del **NavMovementComponent**.
 
-:::{.callout-note}
+::: {.callout-note}
 Los objetos que pueden ser considerados agentes en el sistema de navegación, deben implementar la interfaz **INavAgentInterface**.
 El **Pawn** es el ejemplo más típico de agente, pero también se puede implementar la interfaz en otros objetos.
 Por defecto, el **Pawn** devuelve a través de esta interfaz la información de agente de navegación guardada en su componente **NavMovementComponent**, pero si no tiene uno, devuelve los valores por defecto.
@@ -569,7 +569,8 @@ Sin embargo, Unreal Engine implementa un sistema de percepción que permite a lo
 Este sistema se basa en el componente **AIPerceptionComponent** y en los *estímulos* que emiten los objetos[@UnrealAIPerception].
 
 También existe un componente *legacy* alternativo a **AIPerceptionComponent** que se denomina **PawnSensingComponent** y que se añade al **Pawn** de un NPC, en lugar de al **AIController**.
-Este componente es más sencillo de utilizar, pero es menos flexible y ofrece peor rendimiento, puesto que la percepción se ejecuta de forma independiente en cada NPC, en lugar de combinar y optimizar operaciones de manera centralizada[@UnrealForumPawnSensingVsAIPerception].
+Este componente es más sencillo de utilizar, pero es menos flexible y ofrece peor rendimiento.
+Esto último es debido a que que la percepción se ejecuta de forma independiente en cada NPC --cada componente lanza sus *raycasts*-- en lugar de combinar y optimizar operaciones de manera centralizada[@UnrealForumPawnSensingVsAIPerception].
 
 El {{< api AIPerceptionComponent >}} es un componente que se añade al **AIController** de un NPC y que permite definir que estímulos puede percibir el NPC y cómo reaccionar a ellos.
 
@@ -679,14 +680,14 @@ En ese caso el **PlayerController**:
 
 ![Configuración de **CameraActor** para que sea el *view target* del jugador 3.](figures/cameraactor-auto-activate.png){#fig-cameraactor-auto-activate}
 
-2. En otro caso, utiliza el **Pawn** poseído en cada momento por el **PlayerController**.
+1. En otro caso, utiliza el **Pawn** poseído en cada momento por el **PlayerController**.
 
-3. Si el **PlayerController** no posee a ningún **Pawn**, se usa el propio actor **PlayerController** como *view target*.
+1. Si el **PlayerController** no posee a ningún **Pawn**, se usa el propio actor **PlayerController** como *view target*.
 
 Qué actor es el *view target* es importante porque durante la ejecución de `UpdateCamera()` se invoca el método {{< api CalcCamera >}} del *view target*.
 Mediante este método el actor devuelve el POV deseado para el jugador.
 
-:::{.callout-tip}
+::: {.callout-tip}
 Este sistema no solo ofrece mucha flexibilidad para gestionar múltiples cámaras de *gameplay*.
 También se puede explotar para desarrollar un sistema de cámaras de depuración, que permita cambiar el punto de vista y la configuración en tiempo real, para visualizar el nivel desde diferentes puntos de vista y encontrar y resolver problemas.
 :::
@@ -747,16 +748,16 @@ En el método `UpdateViewTarget()` recibe el *view target* y para obtener el POV
 
 1. Si el **view target** indicado es un actor **CameraActor**, obtiene el POV directamente del **CameraActor**.
 
-2. En caso contrario, comprueba si se ha activado un estilo de cámara válido en la variable miembro `CameraStyle` --solo en C++-- del **PlayerCameraManager**.
+1. En caso contrario, comprueba si se ha activado un estilo de cámara válido en la variable miembro `CameraStyle` --solo en C++-- del **PlayerCameraManager**.
    Si así fuera, calcula directamente el POV del jugador según el estilo indicado[^camera-style].
 
 [^camera-style]: `UpdateViewTarget()` incluye implementaciones de ejemplo para unos pocos estilos: **Fixed**, **ThirdPerson**, **FirstPerson**, **FreeCam** y **FreeCam_Default**.
 Obviamente, se puede sobreescribir el método para hacer implementaciones propias o añadir nuevos estilos, pero esta no es la forma más común de implementar el control de cámara, en la actualidad.
 
-3. En otro caso, llama a `UpdateViewTargetInternal()` que, a su vez, llama al `CalcCamera()` del **view target**.
+1. En otro caso, llama a `UpdateViewTargetInternal()` que, a su vez, llama al `CalcCamera()` del **view target**.
    Luego llama `BlueprintUpdateCamera()`, para que pueda modificar el POV devuelto por dicho actor.
 
-4. Finamente, aplica los modificadores de cámara al POV obtenido en alguno de los pasos anteriores (ver la @sec-camera-modifiers) y retorna el POV resultante a `DoUpdateCamera()` del **PlayerCameraManager**.
+1. Finamente, aplica los modificadores de cámara al POV obtenido en alguno de los pasos anteriores (ver la @sec-camera-modifiers) y retorna el POV resultante a `DoUpdateCamera()` del **PlayerCameraManager**.
 
 Por tanto, se puede sobreescribir `UpdateViewTarget()` para hacer cambios que afecten a todas las formas de calcular el POV deseado o para crear nuevos estilos de cámara, si preferimos implementar el control de la cámara directamente de esta última manera.
 

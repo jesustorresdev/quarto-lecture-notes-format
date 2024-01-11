@@ -213,7 +213,8 @@ Lo rápido que decae el daño con la distancia viene determinado por el argument
 Por ejemplo, esta es una manera común de calcular el daño decaído con la distancia en base a `DamageFalloff`:
 
 ```cpp
-float CalculateEffectiveRadialDamage(float ActorDistanceFromOrigin, ... )   // <1>
+float CalculateEffectiveRadialDamage(float ActorDistanceFromOrigin,   // <1>
+    ... )
 {
     float DeltaRadius = DamageOuterRadius - DamageInnerRadius;
     float DeltaDamage = BaseDamage - MinimumDamage;
@@ -224,7 +225,7 @@ float CalculateEffectiveRadialDamage(float ActorDistanceFromOrigin, ... )   // <
         DeltaDamage * pow(ScaledDistance, DamageFalloff);
     float EffectiveDamage = BaseDamage - DamageReduction;
 
-    return FMath::Clamp(Effective, MinimumDamage, BaseDamage);              // <2>
+    return FMath::Clamp(Effective, MinimumDamage, BaseDamage);        // <2>
 }
 ```
 1. `ActorDistanceFromOrigin` es la distancia del actor al centro del área de daño.

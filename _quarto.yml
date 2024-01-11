@@ -51,6 +51,16 @@ hyphenation:
   - Pawn-Move-ment-Com-po-nent
   - Get-Con-trol-Ro-ta-tion
   - Add-Pitch-In-put
+  - Over-lap-Block-ing-Test-By-Chan-nel
+  - Over-lap-Block-ing-Test-By-Pro-file
+  - Line-Trace-Sin-gle-By-Ob-ject-Type
+  - Line-Trace-Multi-By-Ob-ject-Type
+  - Line-Trace-Test-By-Ob-ject-Type
+  - Add-Ac-tor-World-Off-set
+  - Set-Ac-tor-Trans-form
+  - Set-World-Trans-form
+  - Set-Ac-tor-Rel-a-tive-Trans-form
+  - Set-Rel-a-tive-Lo-ca-tion-And-Ro-ta-tion
 
 filters:
   - reading-time
