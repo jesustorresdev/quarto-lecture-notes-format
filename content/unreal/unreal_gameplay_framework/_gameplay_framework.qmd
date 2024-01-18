@@ -201,6 +201,7 @@ En este ejemplo la lectura de la acción se hace desde el propio **Pawn**, no de
 ![Uso de la entrada para el movimiento desde el **Pawn**.](figures/pawn-movement-input.png){#fig-pawn-movement-input}
 
 La clase **Pawn** acumula las direcciones indicadas a través `AddMovementInput()` en una variable interna de tipo vector, llamada `ControlInputVector`.
+Cómo se debe interpretar este vector --si es un desplazamiento, una velocidad o una aceleración-- dependen de la implementación de la lógica de movimiento.
 
 Por defecto, la clase **Pawn** no hace nada con este vector, pero la idea es que en cada *tick* se lea el valor acumulado en `ControlInputVector`, usando el método `ConsumeMovementInputVector()`, y este valor se use para mover el personaje.
 Al usar `ConsumeMovementInputVector()`, el valor de `ControlInputVector` se pone a $(0, 0, 0)$, preparado para el siguiente frame.
@@ -236,12 +237,19 @@ En la @fig-controller-character-movement-sequence se puede ver un diagrama de se
 
 Unreal Engine proporciona diferentes **MovementComponent** para implementar diferentes tipos de movimiento, como por ejemplo: {{< api FloatingPawnMovement >}}, {{< api ProjectileMovementComponent >}}, {{< api RotatingMovementComponent >}}, {{< api InterpToMovementComponent >}} o {{< api CharacterMovementComponent >}} (ver la @sec-movement-components).
 
-De estos, solo **FloatingPawnMovement** y **CharacterMovementComponent** heredan de **PawnMovementComponent**, por lo que interactúan con el actor **Pawn** de la forma comentada.
-El resto sirve para mover cualquier actor de otras maneras.
+De estos, solo **FloatingPawnMovement** y **CharacterMovementComponent** heredan de **PawnMovementComponent**, por lo que interactúan con el actor **Pawn** de la forma comentada, intepretando el `ControlInputVector` como un vector de aceleración.
+El resto sirve para mover un actor de otras maneras.
 
-Obviamente, siempre podemos crear nuestros propios **MovementComponent** para implementar tipo de movimiento que necesitemos, tanto para **Pawn** --preferentemente heredando de **PawnMovementComponent**-- como para cualquier otro tipo de actor.
+Obviamente, siempre podemos crear nuestros propios **MovementComponent** para implementar el tipo de movimiento que necesitemos, tanto para **Pawn** --preferentemente heredando de **PawnMovementComponent**-- como para cualquier otro tipo de actor.
+En ese caso, tenemos que decidir cómo interpretar `ControlInputVector` y cómo tratar, si fuera necesario, las diferencias entre los valores que pueden llegar según el dispositivo de control utilizado por el jugador, a través de `AddMovementInput()`.
+Por ejemplo, tenemos que considerar que tanto con teclados como con *gamepads*, los vectores devueltos por las **Input Action** correspondientes tienen magnitudes entre 1.0 y -1.0, pero el ratón u otros dispositivos puede devolver valores en un rango mayor.
+Por eso, el **CharacterMovementComponent** recorta el valor de movimiento leido a 1.0 y luego lo multiplica por la aceleración máxima de movimiento del personaje, para obtener la aceleración deseada.
 
-#### Rotación de control
+```cs
+Acceleration = MaxAcceleration * ClampToMaxSize(ControlInputVector, MaxSize=1.0f)
+```
+
+#### Rotación de control {#sec-rotación-de-control}
 
 En `ControlInputVector` el **Pawn** se almacena la dirección en la que el **Controller** quiere que se mueva el personaje, pero a veces puede interesar tener otra dirección con la que indicar hacia donde debe mirar el personaje o la cámara del jugador.
 
@@ -416,28 +424,13 @@ Obviamente, es posible gestionar toda la entrada del jugador en el **Pawn** del 
 Cuando varios jugadores juegan en un mismo equipo, los jugadores pueden cambiar de personaje controlado durante la partida o la gestión de la entrada es compleja, es mejor hacerlo en el **PlayerController**.
 Aún así, si los diferentes personajes tienen algún aspecto del control que es muy específico de cada personaje, puede ser conveniente implementar la gestión de esos controles específicos en el **Pawn** de cada personaje.
 
-### Interacción con objetos
+La @fig-input-component-stack también ilustra como cualquier actor puede colocar su **InputComponent** al principio de la pila, usando el método {{< api EnableInput >}}.
+Es decir, por lo general, que el jugador pueda interactuar con un objeto cercano --como puertas, interruptores u objetos recogibles-- se implementa leyendo la acción del jugador en el **PlayerController** para luego comunicarla al objeto, a través de alguno de sus métodos.
+Sin embargo, gracias a este mecanismo, el objeto puede leer la entrada del jugador directamente y reaccionar a la acción indicada.
 
-Veamos como usar la arquitectura descrita para implementar la interacción con objetos.
-
-Un caso de uso típico en cualquier videojuego es hacer que cuando el jugador esté cerca de un objeto pueda cogerlo o accionarlo.
-Es algo muy típico con armas, botiquines, puertas, interruptores, objetos que podemos agarrar para empujar, etc.
-
-Todo empieza porque el objeto tenga un ***trigger** que permita saber cuándo estamos cerca de él.
-Sin embargo, tanto el personaje como el objeto pueden ser informados del momento en el que eso ocurre, por lo que podríamos implementar el código de esta funcionalidad tanto en el actor del objeto como en el del personaje.
-
-Si solo el personaje tuviera acceso a la entrada del jugador, probablemente la segunda sería la mejor o, quizás, la única opción.
-Pero en la arquitectura descrita, los objetos pueden leer la entrada del jugador si se colocan los primeros en la pila de **InputComponent** del **PlayerController**, como se ilustra en la @fig-input-component-stack.
-
-Después, cuando el jugador se aleja del objeto, lo único que hay que hacer es quitar el **InputComponent** del actor de la pila del **PlayerController**.
-
-Para realizar estas operaciones se usan los métodos {{< api EnableInput >}} y {{< api DisableInput >}} de la clase **Actor**.
-Ambos necesitan como argumento el **PlayerController** del jugador del que quieren leer o dejar de leer la entrada.
-
-Esto permite implementar la lógica que gestiona la acción del jugador en el actor del objeto.
-
-La ventaja de hacerlo así es que evitamos añadir esta responsabilidad en el código del personaje que, por lo general, ya tiene muchas otras cosas de las que encargarse.
-De esta forma, es más fácil añadir nuevos tipos de objetos con los que puede interactuar el jugador.
+Por ejemplo, la clase de los botiquines puede llamar a `EnableInput()` para colocar su **InputComponent** al principio de la pila cuando detecta que el jugador está cerca --usando un *trigger* o de cualquier otra manera--.
+Si el jugador pulsa el control para recoger el botiquín, el **InputComponent** del botiquín consumirá el evento de entrada, sin que llegue al **PlayerController**, siendo el propio botiquín el que se encargue de recogerse, restaurar la salud del jugador y desaparecer.
+Si el jugador se aleja del botiquín, este puede llamar a `DisableInput()` para quitar su **InputComponent** de la pila y que el **PlayerController** vuelva a ser el primero en recibir la entrada del jugador.
 
 ## Datos del jugador y *PlayerState*
 
@@ -519,9 +512,16 @@ Ambos métodos se apoyan en el componente {{< api PathFollowingComponent >}}, qu
 Si al llamar a los métodos `MoveToLocation()` o `MoveToActor()` se indica `UsePathfinding` como `true`, **PathfollowingComponent** utilizará el **NavigationSystem** para calcular la ruta más eficiente para llegar al destino.
 En caso contrario, usará la línea recta.
 
-Para controlar al **Pawn**, **PathFollowingComponent** necesita que el **Pawn** tenga un componente {{< api NavMovementComponent >}} --como **PawnMovementComponent** o **CharacterMovementComponent**-- ya que espera poder comunicarse con él directamente de la siguiente manera:
+Para controlar al **Pawn**, **PathFollowingComponent** necesita que el **Pawn** tenga un componente {{< api NavMovementComponent >}} --como **PawnMovementComponent** o **CharacterMovementComponent**-- ya que espera poder comunicarse con él directamente de la siguiente manera (ver la @fig-ue-character-movement-hierarchy):
 
-* El **NavMovementComponent** tiene las propiedades que representan a un *agente* que se quiere mover usando el sistema de navegación.
+```{mermaid}
+%%| label: fig-ue-character-movement-hierarchy
+%%| file: figures/ue-character-movement-hierarchy.mm
+%%| fig-width: 15cm
+%%| fig-cap: Diagrama de clases involucradas en el control de NPC.
+```
+
+* El **NavMovementComponent** tiene en **NavAgentProps** las propiedades que representan a un *agente* que se quiere mover usando el sistema de navegación.
   Por ejemplo, su altura y su radio, que son fundamentales para calcular la ruta más eficiente por el entorno.
   Por tanto, el **PathfollowingComponent** consulta estas propiedades del **NavMovementComponent** para poder usarlas con el **NavigationSystem**.
 

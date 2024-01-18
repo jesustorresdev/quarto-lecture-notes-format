@@ -10,7 +10,7 @@ Por ejemplo, gestión automática de memoria, mediante el uso de un recolector d
 ## *UWorld*
 
 Un {{< api UWorld >}} es la clase del objeto de Unreal Engine que representa el mundo del juego y contiene todos los objetos que existen en él.
-Por tanto, por lo general, solo hay existe una instancia de **UWorld** al mismo tiempo, excepto cuando tiene lugar una transición fluida entre nivel, en cuyo caso existen dos instancias de **UWorld** simultáneamente: la del nivel que se está descargando y la del que se está cargando.
+Por tanto, por lo general, solo existe una instancia de **UWorld** al mismo tiempo, excepto cuando tiene lugar una transición fluida entre niveles, en cuyo caso existen dos instancias de **UWorld** simultáneamente: la del nivel que se está descargando y la del que se está cargando.
 
 La clase **UWorld**, por ejemplo, contiene los métodos para instanciar objetos en el nivel y para consultar la geometría del nivel mediante *raycasts* y barridos de formas[Ver @TorresD3DGameplay01].
 
@@ -32,7 +32,7 @@ Algunos **ActorComponent** a veces se usan de esta manera, como **AudioComponent
 ## *GameInstance*
 
 Un {{< api GameInstance >}} es el principal objeto *manager* de un juego en Unreal Engine. 
-Se instancia al inicio del juego y se destruye al finalizar, por lo que suele usarse para alojar código y datos globales, que deban persistir entre la carga de niveles, como: los inventarios y las habilidades de los personales o la configuración general del juego.
+Se instancia al inicio del juego y se destruye al finalizar, por lo que suele usarse para alojar código y datos globales que deban persistir entre la carga de niveles, como: los inventarios y las habilidades de los personales o la configuración general del juego.
 
 Para personalizarlo se hereda de la clase **GameInstance**, se le añaden las propiedades y el código necesario y, finalmente, se indica la nueva clase heredada en **Project Settings... / Project - Maps & Modes / Game Instance Class**, como se ilustra en la @fig-gameinstance.
 
@@ -52,7 +52,7 @@ En C++ se obtiene acceso global a este objeto mediante la variable estática `GE
 
 ## *GameViewportClient* y *LocalPlayer*
 
-La clase **GameViewportClient** es la interfaz del motor a la ventana de juego y a los sistemas de gráficos, audio y entrada de la plataforma dónde se ejecuta el motor.
+La clase **GameViewportClient** es la interfaz del motor a la ventana de juego y a los sistemas de gráficos, audio y entrada de la plataforma donde se ejecuta el motor.
 
 Por lo general, el motor solo crea una instancia de **GameViewportClient**.
 
@@ -62,9 +62,9 @@ Por lo general, solo hay un **LocalPlayer** por jugador, pero puede haber varios
 En este caso, el **GameViewportClient** gestiona cómo se dibujan y se organizan las vistas de los distintos **LocalPlayer** en la pantalla.
 
 Cuando **GameViewportClient** procesa eventos de la entrada del jugador, estos son entregados a las clases del *gameplay framework* para su interpretación.
-La información de los **LocalPlayer** permite al **GameViewportClient** determinar que actor se hará cargo de procesar los eventos.
+La información de los **LocalPlayer** permite al **GameViewportClient** determinar qué actor se hará cargo de procesar los eventos.
 
-## Como arranca un juego
+## Cómo arranca un juego
 
 Al lanzar el ejecutable de un juego desarrollado con Unreal Engine desde la interfaz del sistema operativo:
 

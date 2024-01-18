@@ -1,0 +1,41 @@
+%%{init: {'themeVariables': { 'fontSize': '10px'}}}%%
+%%ÁÁÁ Fix for an encoding problem
+classDiagram
+    class INavAgentInterface {
+        <<interface>>
+    }
+    
+    Controller <|-- AIController
+    AIController o-- PathFollowingComponent
+
+    class AIController {
+        +MoveToLocation()
+        +MoveToActor()
+    }
+
+    ActorComponent <|-- MovementComponent
+    MovementComponent <|-- NavMovementComponent
+
+    class Pawn {
+        -ControlInputVector
+        +AddMovementInput()
+        +Tick()
+    }
+
+    Pawn <|-- Character
+    NavMovementComponent <|-- PawnMovementComponent
+    PawnMovementComponent <|-- CharacterMovementComponent
+
+    class NavMovementComponent {
+        +NavAgentProps
+        +AddInputVector()
+        +RequestDirectMove()
+        +RequestPathMove()
+        +TickComponent()
+    }
+
+    INavAgentInterface <|.. Pawn
+    INavAgentInterface <|.. NavMovementComponent
+
+    Controller --> Pawn: posee
+    CharacterMovementComponent --o Character
