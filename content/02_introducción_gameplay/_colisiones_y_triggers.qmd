@@ -2,7 +2,7 @@
 
 Aunque como jugadores tengamos la percepción de que los juegos se desarrollan en un bonito mundo 3D lleno de detalles y colores, realmente el juego tiene lugar en una versión mucho más primitiva compuesta por **mallas de colisión**.
 
-Por ejemplo, en la @fig-lyra-collisions podemos comparar la vista renderizada de «LyraStarterGame»[@EpicLyraStarterGame] con la vista de la geometría con la que puede colisionar el personaje del jugador, que es la que realmente define la forma de los objetos y el espacio de juego.
+Por ejemplo, en la @fig-lyra-collisions podemos comparar la vista renderizada de *«Lyra Starter Game»*[@EpicLyraStarterGame] con la vista de la geometría con la que puede colisionar el personaje del jugador, que es la que realmente define la forma de los objetos y el espacio de juego.
 
 ::: {#fig-lyra-collisions layout-nrow=2}
 
@@ -298,7 +298,7 @@ Esto es lo que haríamos con los ***hitboxes*** del ejemplo del tanque de la @fi
 En el caso de los actores ***trigger***, comentados en la @sec-make-triggers, se puede heredar de ellos para crear una clase a la que añadirle el comportamiento deseado cuando se dispara el ***trigger***
 
 Otra opción es usar el **Level Blueprint** del nivel.
-El **Level Blueprint** es un tipo de Blueprint que hace de *manager* global del nivel[Ver «Level Blueprint» en @TorresD3DGameplayFramework].
+El **Level Blueprint** es un tipo de Blueprint que hace de *manager* global del nivel[Ver *«Level Blueprint»* en @TorresD3DGameplayFramework].
 Sirve para tener código que conecta los distintos actores del nivel mediante funciones y eventos para que actúen de forma sincronizada.
 
 Por ejemplo, si cuando el personaje entra en un ***trigger*** queremos que se creen varios enemigos en otro punto del nivel y se dirijan hacia el jugador, el **Level Blueprint** nos permite conectar el evento del actor ***trigger*** con la función que lanza la creación de enemigos, programada en otro actor destinado a tener esa responsabilidad.

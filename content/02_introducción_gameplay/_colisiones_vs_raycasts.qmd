@@ -35,7 +35,7 @@ Tampoco es problema poner **triggers** en cada arbusto, para que el *gameplay* s
 Por eso comenzamos diciendo que los **triggers** se usan de forma extensa en cualquier videojuego.
 
 Sin embargo, hay juegos que usan mundos tan grandes que el trabajo de poner **triggers** por todos lados es excesivo.
-Un ejemplo muy claro de esto es «Read Dead Redemption 2» (2018).
+Un ejemplo muy claro de esto es *«Read Dead Redemption 2» (2018)*.
 
 En estos juegos, el controlador de personaje utiliza extensamente los **raycast** para reconocer el mundo que le rodea.
 La idea es que, en lo posible, no sea un **trigger** el que le diga si puede hacer algo, sino las pruebas que hace el controlador del personaje por medio de **raycasts**.
@@ -51,6 +51,6 @@ El controlador del personaje puede usar **raycasts** para comprobar si hay un ob
 Igualmente, al caer sobre un obstáculo, se pueden usar **raycasts** para conocer el ancho de este *grosso modo* y determinar si hay suficiente superficie como para que el personaje caiga de pie.
 O si debe adoptar una postura más adecuada para alguien que tiene que mantener el equilibrio, como en la @fig-assassins-creed.
 
-![Captura de «Assassin's Creed Odyssey» (2018).](figures/assassins-creed.jpg){#fig-assassins-creed}
+![Captura de *«Assassin's Creed Odyssey» (2018)*.](figures/assassins-creed.jpg){#fig-assassins-creed}
 
 En resumen, las comprobaciones mediante **raycasts** sirven al controlador para determinar el modo en el que debe moverse el personaje y las animaciones que deben encadenarse.
