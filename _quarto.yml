@@ -3,8 +3,7 @@ project:
   render:
     - content/01_flujo_de_trabajo/flujo_de_trabajo.qmd
     - content/02_introducción_gameplay/colisiones_y_triggers.qmd
-    - content/02_introducción_gameplay/entrada_e_interacción.qmd
-    - content/02_introducción_gameplay/control_de_personajes_y_armas.qmd
+    - content/02_introducción_gameplay/control_de_personajes.qmd
     - content/extras/perforce/perforce.qmd
     - content/extras/estructura_proyectos/estructura_proyectos.qmd
     - content/unreal/unreal_gameplay_framework/unreal_gameplay_framework.qmd
