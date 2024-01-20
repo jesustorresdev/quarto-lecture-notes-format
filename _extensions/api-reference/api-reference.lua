@@ -40,7 +40,12 @@ local function readYamlFile(filename)
     quarto.log.warning("api-reference: '" .. filename .. "' file cannot open.")
     return {}
   end
-  local content = "---\n" .. file:read("*a") .. "\n---\n"
+  local content = file:read("*a")
+  if not content:find("^---\n") then
+    content = "---\n" .. content
+  end
+  content:gsub("\n...\n*$", "")
+  content = content .. "\n---\n"
   file:close()
   local metadata = pandoc.read(content, "markdown-raw_html").meta
   -- quarto.log.output(metadata)

@@ -1,3 +1,4 @@
+---
 AIController:
   extends: Controller
   internal-name: AAIController
