@@ -22,7 +22,7 @@ end
 
 local function apiShortcode(args, kwargs, meta)
   if not (meta['api-reference'] and meta['api-reference']['path']) then
-    return Strong("api-ref?")
+    return Strong("?api:")
   end
 
   if not apiref.isInitialized() then
@@ -31,7 +31,7 @@ local function apiShortcode(args, kwargs, meta)
   end
 
   if #args < 1 then
-      return Strong("api-ref?")
+      return Strong("?api:")
   end 
 
   local mode
@@ -49,7 +49,7 @@ local function apiShortcode(args, kwargs, meta)
   local parent = found.parent
 
   if not entry then
-      return Strong("api-ref " .. crossref .. "?")
+      return Strong("?api:" .. crossref)
   end
 
   entry.used = true
