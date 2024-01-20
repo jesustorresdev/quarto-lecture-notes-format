@@ -17,11 +17,11 @@ La forma de utilizar esta clase es muy sencilla:
 1. Crear una clase que herede de **SaveGame** y añadirle las propiedades adecuadas para almacenar los datos del estado del juego que se quieren preservar.
    Para este ejemplo, vamos a suponer que la clase se llama **MySaveGame**.
 
-2. Llamar a {{< api CreateSaveGameObject >}} para crear un objeto de la clase **MySaveGame**.
+1. Llamar a {{< api CreateSaveGameObject >}} para crear un objeto de la clase **MySaveGame**.
 
-3. Copiar en las propiedades del objeto **MySaveGame** los datos del estado del juego que se quieren preservar.
+1. Copiar en las propiedades del objeto **MySaveGame** los datos del estado del juego que se quieren preservar.
 
-4. Llamar a {{< api SaveGameToSlot >}} o {{< api AsyncSaveGameToSlot >}} para guardar el objeto **MySaveGame** en un *slot* de partida guardada (ver la @fig-save-game-to-slot).
+1. Llamar a {{< api SaveGameToSlot >}} o {{< api AsyncSaveGameToSlot >}} para guardar el objeto **MySaveGame** en un *slot* de partida guardada (ver la @fig-save-game-to-slot).
    El *slot* donde guardar la partida se indica mediante un *nombre de slot*, que se puede escoger libremente y que debe ser diferente para cada *slot*, y el *índice de usuario*, para identificar al usuario que está salvando la partida.
 
 :::{.callout-tip}
@@ -126,7 +126,7 @@ Algunas de las tareas que tendría que hacer para salvar una partida serían:
    Entre esta información probablemente se deba incluir el nivel actual, la posición del jugador, el inventario o las habilidades, etc.
    También puede ser buena idea incluir un número de versión, para poder detectar si la partida guardada es compatible con la versión actual del juego o, incluso, para realizar conversiones automáticas de partidas guardadas en versiones anteriores.
 
-2. Buscar los actores salvables en el nivel actual y guardar su estado en el objeto **SaveGame**.
+1. Buscar los actores salvables en el nivel actual y guardar su estado en el objeto **SaveGame**.
    Si se utiliza una interfaz --como la descrita anteriormente-- se pueden localizar los actores salvables usando {{< api GetAllActorsWithInterface >}} o recorriendo la lista de actores y comprobando si implementan dicha interfaz.
 
    En cada actor encontrado se puede llamar a la función `SaveActorState()` de la interfaz y la estructura de datos devuelta por esta función se debe añadir a una lista de actores salvables en el objeto **SaveGame**.
@@ -135,21 +135,19 @@ Algunas de las tareas que tendría que hacer para salvar una partida serían:
    Entre la información que deben salvar todos los actores debe haber alguna propiedad que los identifique, como su nombre --que se puede obtener mediante el método {{< api GetName >}}-- o algún otro tipo de identificador.
    Esto es necesario para poder localizar el actor, con el objeto de restablecer su estado, al cargar la partida guardada.
 
-3. Guardar el objeto **SaveGame** en un *slot* llamando a {{< api AsyncSaveGameToSlot >}}.
+1. Guardar el objeto **SaveGame** en un *slot* llamando a {{< api AsyncSaveGameToSlot >}}.
 
 Al cargar una partida guardada, el sistema probablemente debería realizar las siguientes tareas:
 
 1. Leer el objeto **SaveGame** del *slot* llamando a {{< api AsyncLoadGameFromSlot >}}.
 
-2. Si una de las propiedades del objeto **SaveGame** es el nivel de la partida guardada, puede cargar dicho nivel llamando a {{< api OpenLevel >}}.
-En ese sentido, usar previamente `LoadPackageAsync()` permite precargar el nivel de forma asíncrona --para mostrar mientras una pantalla de carga, haciendo que luego la carga del nivel con `OpenLevel()` sea inmediata.
+1. Si una de las propiedades del objeto **SaveGame** es el nivel de la partida guardada, puede cargar dicho nivel llamando a {{< api OpenLevel >}}.
+En ese sentido, se puede utilizar la técnica descrita en la @sec-async-load-level para cargar el nivel de forma asíncrona, de tal forma que el juego no se quede congelado mientras se carga el nivel.
 
-3. Restablecer los valores de las propiedades guardadas en el objeto **SaveGame** en el nivel cargado, puesto que la carga con `OpenLevel()` se realiza con los valores por defecto.
+1. Restablecer los valores de las propiedades guardadas en el objeto **SaveGame** en el nivel cargado, puesto que la carga con `OpenLevel()` se realiza con los valores por defecto.
 
    Esto se puede hacer desde el **GameMode** del nivel cargado, en métodos como `BeginPlay()` o `InitGame()`, antes de que el resto de actores inicien su ejecución.
 
-   Para que el **GameMode** sepa que tiene que cargar los datos de una partida salvada, se puede utilizar el argumento **Options** de `OpenLevel()`, que sirve para pasar información adicional al **GameMode** del nivel cargado en la forma de los parametros de una URL, como se puede observar en la @fig-openlevel-options.
+   Para que el **GameMode** sepa que tiene que cargar los datos de una partida salvada, se puede utilizar el argumento **Options** de `OpenLevel()`, como se puede observar en la @fig-openlevel-options.
 
-4. Para restablecer las propiedades guardadas en el objeto **SaveGame** se deben buscar los actores salvables en el nivel, localizar los datos de su estado en la lista de actores salvables del objeto **SaveGame** y usar la función `LoadActorState()` de la interfaz con ellos.
-
-![Uso de **OpenLevel** con la cadena de opciones.](figures/openlevel-options.png){#fig-openlevel-options}
+1. Para restablecer las propiedades guardadas en el objeto **SaveGame** se deben buscar los actores salvables en el nivel, localizar los datos de su estado en la lista de actores salvables del objeto **SaveGame** y usar la función `LoadActorState()` de la interfaz con ellos.

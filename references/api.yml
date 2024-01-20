@@ -29,7 +29,7 @@ AIController:
     RunBehaviorTree:
       refs:
         - lang: Blueprint
-          url: https://docs.unrealengine.com/5.3/en-US/BlueprintAPI/AI/RunBehaviorTree/
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/AI/RunBehaviorTree/
         - lang: C++
           url: https://docs.unrealengine.com/en-US/API/Runtime/AIModule/AAIController/RunBehaviorTree/index.html
     SetFocalPoint:
@@ -431,6 +431,59 @@ FTickFunction:
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FTickFunction/
+FTimerManager:
+  members:
+    ClearTimer:
+      refs:
+        - lang: Blueprint
+          name: ClearandInvalidateTimerbyHandle()
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/ClearandInvalidateTimerbyHandle/
+        - lang: Blueprint
+          name: ClearTimerbyFunctionName()
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/ClearTimerbyFunctionName/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/FTimerManager/ClearTimer/index.html
+    PauseTimer:
+      refs:
+        - lang: Blueprint
+          name: PauseTimerbyFunctionName()
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/PauseTimerbyFunctionName/
+        - lang: Blueprint
+          name: PauseTimerbyHandle()
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/PauseTimerbyHandle/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/FTimerManager/PauseTimer/index.html
+    SetTimer:
+      refs:
+        - lang: Blueprint
+          name: SetTimerbyEvent()
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/SetTimerbyEvent/
+        - lang: Blueprint
+          name: SetTimerbyFunctionName()
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/SetTimerbyFunctionName/
+        - lang: Blueprint
+          name: SetTimerforNextTickbyEvent()
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/SetTimerforNextTickbyEvent/
+        - lang: Blueprint
+          name: SetTimerforNextTickbyFunctionName()
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/SetTimerforNextTickbyFunctionNam-/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/FTimerManager/SetTimer/index.html
+    UnPauseTimer:
+      refs:
+        - lang: Blueprint
+          name: UnpauseTimerbyFunctionName()
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/UnpauseTimerbyFunctionName/
+        - lang: Blueprint
+          name: UnpauseTimerbyHandle()
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/UnpauseTimerbyHandle/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/FTimerManager/UnPauseTimer/index.html
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/FTimerManager/index.html
 FloatingPawnMovement:
   extends: PawnMovementComponent
   internal-name: UFloatingPawnMovement
@@ -493,6 +546,12 @@ InterpToMovementComponent:
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UInterpToMovementComponent/
+LoadPackageAsync:
+  label: LoadPackageAsync()
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/5.1/en-US/API/Runtime/CoreUObject/UObject/LoadPackageAsync/
+  type: function
 MovementComponent:
   extends: ActorComponent
   internal-name: UMovementComponent
@@ -861,18 +920,37 @@ UGameplayStatics:
           url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetGameInstance/
         - lang: C++
           url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/GetGameInstance/index.html
+    GetStreamingLevel:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetStreamingLevel/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/GetStreamingLevel/index.html
     LoadGameFromSlot:
       refs:
         - lang: Blueprint
           url: https://docs.unrealengine.com/en-US/BlueprintAPI/SaveGame/LoadGamefromSlot/
         - lang: C++
           url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/LoadGameFromSlot/index.html
+    LoadStreamLevel:
+      refs:
+        - name: Loading and Unloading Levels using Blueprints
+          order: 1
+          url: https://docs.unrealengine.com/en-US/loading-and-unloading-levels-using-blueprints-in-unreal-engine/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/LoadStreamLevel/index.html
     OpenLevel:
       refs:
         - lang: Blueprint
           url: https://docs.unrealengine.com/4.26/en-US/BlueprintAPI/Game/OpenLevel/
         - lang: C++
           url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/OpenLevel/index.html
+    ParseOption:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/GameOptions/ParseOption/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/ParseOption/index.html
     SaveGameToSlot:
       refs:
         - lang: Blueprint
@@ -885,6 +963,13 @@ UGameplayStatics:
           url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/SetGamePaused/
         - lang: C++
           url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/SetGamePaused/index.html
+    UnloadStreamLevel:
+      refs:
+        - name: Loading and Unloading Levels using Blueprints
+          order: 1
+          url: https://docs.unrealengine.com/en-US/loading-and-unloading-levels-using-blueprints-in-unreal-engine/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/UnloadStreamLevel/index.html
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/

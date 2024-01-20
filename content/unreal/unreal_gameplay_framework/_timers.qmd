@@ -1,0 +1,55 @@
+# Temporizadores
+
+Los temporizadores son herramientas cruciales en el desarrollo de videojuegos, proporcionando una manera de ejecutar código en intervalos regulares o después de un retraso específico.
+
+Su uso es fundamental en muchas áreas, como:
+
+1. *Respawn* de jugadores, enemigos u objetos.
+   Se pueden usar temporizadores para controlar el tiempo de reaparición después de que un jugador o enemigo es derrotado.
+   Igualmente, para reaparecer objetos que se destruyen o que han sido consumidos.
+
+1. Eventos de temporizados.
+   Por ejemplo, activar una trampa después de un cierto tiempo, cambiar el estado del juego después de un período o fijar límites en el uso de ciertas armas.
+
+1. Animaciones o efectos temporizados.
+   Ejecutar animaciones o efectos visuales que deben ocurrir en o durante momentos específicos.
+
+   Al animar propiedades, el uso de curvas es fundamental para que los diseñadores pueda establecer como deben variar en el tiempo.
+   Los temporizadores facilitan la evaluación de estas curvas en el tiempo y la aplicación de los cambios correspondientes en las propiedades en cada instante.
+
+::: {.callout-note}
+En Blueprint, una herramienta muy sencilla para animar propiedades usando curvas es la función `Timeline`.
+Sin embargo, esta función realmente usa un componente, por lo que no se puede usar dentro de otro componente, solo dentro de actores.
+:::
+
+Los temporizadores son gestionados por un *manager* {{< api FTimerManager >}} al que se puede acceder desde cualquier punto del código:
+
+```cpp
+FTimerManager TimerManager = GetWorld()->GetTimerManager();
+```
+
+El *manager* tiene un método {{< api SetTimer >}} que permite crear temporizadores (ver la @fig-settimer):
+
+![Creación de un temporizador](figures/settimer-methods.png){#fig-settimer}
+
+```cpp
+FTimerHandle TimerHandle;                                 // <1>
+GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, // <2>
+    &MyClass::MyFunction, 5.0f, true, 2); 
+```
+1. Identificador del temporizador creado.
+1. LLamar a `MyFunction` dentro de 2 segundos y luego periódicamente, cada 5 segundos.
+
+Una vez se ha creado un temporizador, se puede detener o pausar usando los métodos {{< api ClearTimer >}} (ver la @fig-cleartimer-methods) y {{< api PauseTimer >}} (ver la @fig-pausetimer-methods) con el identificador del temporizador:
+
+![Nodos para detener un temporizador](figures/cleartimer-methods.png){#fig-cleartimer-methods}
+
+![Nodos para pausar un temporizador](figures/pausetimer-methods.png){#fig-pausetimer-methods}
+
+```cpp
+GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+```
+
+Los temporizadores pausados con `PauseTimer()` se pueden reanudar usando {{< api UnPauseTimer >}} (ver la @fig-unpausetimer-methods).
+
+![Nodos para reanudar un temporizador](figures/unpausetimer-methods.png){#fig-unpausetimer-methods}

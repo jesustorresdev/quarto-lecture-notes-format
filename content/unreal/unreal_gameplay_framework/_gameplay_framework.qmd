@@ -320,7 +320,8 @@ El código de *gameplay* de nuestro juego podía leer estas acciones, principalm
 En Unreal Engine 5 este sistema pasó a considerase *legacy*, para ser sustituido por un nuevo sistema llamado **Enhanced Input**.
 
 El **Enhanced Input** ofrece un montón de características nuevas.
-Entre otras diferencias, en el nuevo sistema las acciones de entrada y el mapeo a de los controles a estas, se definen mediante *assets* de tipo **Input Action**, lo que facilita migrar acciones de un proyecto a otro.
+Entre otras diferencias, en el nuevo sistema las acciones de entrada se definen mediante *assets* de tipo **Input Action**, mientras que el mapeo de estas acciones a controles se define en *assets* **Input Mapping Context**.
+Esto facilita migrar la configuración de la entrada de un proyecto a otro, así como activar distintos mapeos de entrada en función del estado del juego.
 
 Además, las **Input Action** soporta diferentes condiciones para notificar la acción de entrada al código de *gameplay*.
 Por ejemplo, se puede condicionar la activación de la acción a que el control se mantenga accionado cierto tiempo o a que el jugador accione cierta combinación de controles en un periodo de tiempo determinado --lo que se llama, un *combo*--.

@@ -70,10 +70,10 @@ Al lanzar el ejecutable de un juego desarrollado con Unreal Engine desde la inte
 
 1. Se ejecuta el código de inicialización del motor, que crea el objeto **UEngine** y llama al método `UEngine::Init()`.
 
-2. `UEngine::Init()` inicializa el **GameInstance** y llama al método `Init()` de **GameInstance**.
+1. `UEngine::Init()` inicializa el **GameInstance** y llama al método `Init()` de **GameInstance**.
 
-3. Se llama a `UEngine::Start()` que llama a `UGameInstance::StatGameInstance()`, que crea el **UWorld** inicial.
+1. Se llama a `UEngine::Start()` que llama a `UGameInstance::StatGameInstance()`, que crea el **UWorld** inicial.
 
-4. *Inicializaciones relacionadas con el gameplay framework que veremos más adelante*.
+1. *Inicializaciones relacionadas con el gameplay framework que veremos más adelante*.
 
-5. **UEngine** hace *tick* al **GameInstance** y al **UWorld** para animar el juego.
+1. **UEngine** hace *tick* al **GameInstance** y al **UWorld** para animar el juego.
