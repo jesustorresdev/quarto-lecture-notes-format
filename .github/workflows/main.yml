@@ -6,13 +6,16 @@ on:
     tags:
       - '*'
 
+env:
+  ACADEMIC_YEAR: 20XX-20XY
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
 
     - name: Obtener el proyecto
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         persist-credentials: false
 
@@ -31,7 +34,7 @@ jobs:
         tag: ${{ github.ref }}
         file: _output/{**/*.pdf,desarrollo3d.zip}
         file_glob: true
-        body: "Apuntes de Desarrollo de Videojuegos 3D del curso 20XX-20XY."
-        release_name: "Curso 20XX-20XY"
+        body: "Apuntes de Desarrollo de Videojuegos 3D del curso ${{ env.ACADEMIC_YEAR }}."
+        release_name: "Curso ${{ env.ACADEMIC_YEAR }}"
         prerelease: true
         overwrite: true
