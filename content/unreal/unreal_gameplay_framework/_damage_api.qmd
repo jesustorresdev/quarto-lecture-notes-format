@@ -115,11 +115,11 @@ En el caso de recibir un evento de daño de tipo **FRadialDamageEvent**, el mét
 
 Finalmente, tanto si el evento de daño es de alguno de los tipos anteriores, como si es de la clase base **FDamageEvent**, el método `TakeDamage()` llama al método {{< api ReceiveAnyDamage >}} y lanza el evento {{< api OnTakeAnyDamage >}}.
 
-`TakeDamage()` retorna el *daño efectivo* aplicado, calculador por defecto por los métodos `InternalTakePointDamage()` o `InternalTakeRadialDamage()`.
+`TakeDamage()` retorna el *daño efectivo* aplicado, calculado por defecto por los métodos `InternalTakePointDamage()` o `InternalTakeRadialDamage()`.
 
 ### Propiedad *CanBeDamaged*
 
-Todo actor tiene una propiedad **Can Be Damaged** que para indicar si puede recibir daño o no.
+Todo actor tiene una propiedad **Can Be Damaged** para indicar si puede recibir daño o no.
 
 Esta propiedad se puede consultar mediante el método `CanBeDamaged()` y se puede modificar mediante `SetCanBeDamaged()`.
 Sin embargo, es una propiedad para ser usada por las subclases del actor.
@@ -276,7 +276,7 @@ Además, permite configurar en los niveles un umbral de altura, llamado *Kill Z*
 
 El **KillZVolume** es un actor que se puede añadir al nivel desde el editor de Unreal Engine, pudiendo modificar fácilmente su forma, posición y tamaño.
 Mientras que el *Kill Z* global se puede configurar en **World Settings**, estableciendo el valor de la propiedad **Kill Z**, como se puede observar en la @fig-world-killz.
-Se puede desactivar desactivando la propiedad **Enable Wolrd Bounds Checks**.
+Se puede desactivar desmarcando la propiedad **Enable World Bounds Checks**.
 
 ![Propiedad **Kill Z** en **World Settings**.](figures/world-killz.png){#fig-world-killz}
 

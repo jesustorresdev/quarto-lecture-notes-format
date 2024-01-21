@@ -48,7 +48,7 @@ En la @fig-gamemode-inheritance se puede ver un ejemplo de jerarquía de herenci
 
 ### *GameState*
 
-{{< api GameState >}} es un actor pensado para almacenar los datos que describen el estado de la partida, como: puntuaciones, lista de jugadores, objetivos cumplidos, etc.
+{{< api GameState >}} es un actor pensado para almacenar los datos que describen el estado de la partida, como puntuaciones, lista de jugadores, objetivos cumplidos, etc.
 
 Sea cual sea el motor de videojuegos, separar el código del juego del estado de la partida facilita la implementación de diferentes funcionalidades:
 
@@ -95,21 +95,27 @@ Como se puede observar en la @fig-gamemode-properties, entre las propiedades que
 
 ![Propiedades de la clase **GameMode**.](figures/gamemode-properties.png){#fig-gamemode-properties}
 
-* **Game State Class**, clase del actor que almacena el estado de la partida.
+* **Game State Class**. 
+  Clase del actor que almacena el estado de la partida.
   Es instanciada por el **GameMode** al cargarse el nivel.
 
-* **Default Pawn Class**, clase por defecto del actor del personaje del jugador.
+* **Default Pawn Class**. 
+  Clase por defecto del actor del personaje del jugador.
 
-* **Spectator Class**, clase por defecto del actor del personaje de un espectador.
+* **Spectator Class**.
+  Clase por defecto del actor del personaje de un espectador.
   Los jugadores permanecen como espectadores al iniciarse la partida si la propiedad **Start Players As Spectators** de **Game Mode** está activada.
 
-* **Player Controller Class**, clase actor del controlador del personaje del jugador.
+* **Player Controller Class**.
+  Clase actor del controlador del personaje del jugador.
   Es instanciada por el **GameMode** en el método `Login()`, al unirse un jugador a la partida.
 
-* **Player State Class**, clase del actor que guardará los datos específicos de cada jugador.
+* **Player State Class**.
+  Clase del actor que guardará los datos específicos de cada jugador.
   Es instanciada por el **PlayerController** durante su inicialización.
 
-* **HUD Class**, para configurar la clase de la interfaz del juego.
+* **HUD Class**.
+  Clase de la interfaz del juego.
   Esta propiedad no suele usarse actualmente, dado que las interfaces de usuario suele implementarse mediante *widgets* UMG (*Unreal Motion Graphics*).
 
 Obviamente, nada impide que añadamos otras propiedades específicas de cada nivel.
@@ -127,7 +133,7 @@ El *gameplay framework* incluye dos clases que heredan de {{< api Controller >}}
 
 * {{< api AIController >}}.
   Actor que implementa el control de un personaje cuando proviene de una IA.
-  Es decir, este controlado resulta útil para implementar *personajes no jugadores* (PNJ).
+  Es decir, este controlador resulta útil para implementar *personajes no jugadores* (PNJ).
 
 En la terminología de Unreal Engine, se dice que cuando un **Controller** comienza a controlar a otro actor, es que lo «posee».
 Sin embargo, esto no significa que el **Controller** sea el propietario del actor, sino que es el responsable de dirigirlo temporalmente, de forma que durante el juego, un mismo controlador puede cambiar el personaje que controla.
@@ -139,7 +145,7 @@ Mientras que en otros juego el jugador suele controlar a un personaje humano, pe
 
 ### Posesión de actores
 
-Para que un actor que pueda ser poseído por un **Controller** debe heredar de la clase de actor {{< api Pawn >}}, que ofrece una interfaz mínima común para ser controlado.
+Para que un actor pueda ser poseído por un **Controller** debe heredar de la clase de actor {{< api Pawn >}}, que ofrece una interfaz mínima común para ser controlado.
 
 Para poseerlo se usa el método {{< api Possess >}} del {{< api Controller >}}, indicando el **Pawn** que se quiere controlar.
 Mientras que para desposeerlo se usa el método {{< api UnPossess >}}.
@@ -360,7 +366,7 @@ Es decir, lo podemos usar en el actor del **PlayerController** para controlar el
 Con **InputComponent** podemos conectar el código de *gameplay* del actor a las acciones de entrada definidas en el juego.
 Esto se puede hacer usando eventos, para que el **InputComponent** ejecute nuestro código cuando llegue cierta entrada del jugador, como se puede observar en la @fig-ue-input-action-event.
 
-::: {#fig-ue-input-action layout-nrow=2}
+::: {#fig-ue-input-action layout="[[1], [-1], [1]]}
 
 ![Evento de **Input Action**.](figures/ue-input-action-event.png){#fig-ue-input-action-event}
 
@@ -384,7 +390,7 @@ El **GameMode** crea un actor **PlayerController** para cada jugador --generalme
 
 En juegos multijugador online, el **PlayerController** existe en el servidor y se replica en el cliente del jugador correspondiente, donde tiene acceso a la entrada de dicho jugador.
 
-Por defecto, el **PlayerController** tienen varias responsabilidades:
+Por defecto, el **PlayerController** tiene varias responsabilidades:
 
 * Gestionar la entrada y teledirigir al personaje de su jugador.
   El **PlayerController** tiene el objeto **PlayerInput** para leer la entrada y puede poseer a cualquier actor derivado de la clase `Pawn` para controlarlo.
@@ -526,7 +532,7 @@ Para controlar al **Pawn**, **PathFollowingComponent** necesita que el **Pawn** 
   Por ejemplo, su altura y su radio, que son fundamentales para calcular la ruta más eficiente por el entorno.
   Por tanto, el **PathfollowingComponent** consulta estas propiedades del **NavMovementComponent** para poder usarlas con el **NavigationSystem**.
 
-* El **PathfollowingComponent** se registra en el **NavMovementComponent** para que le comunique algunos eventos importantes durante el movimiento, como: cuándo el **Pawn** comienza a caer y cuándo ha llegado al suelo, cuándo es bloqueado por otro objeto o cuándo el **PathfollowingComponent** no puede seguir controlando el movimiento del **Pawn**, por alguna razón.
+* El **PathfollowingComponent** se registra en el **NavMovementComponent** para que le comunique algunos eventos importantes durante el movimiento, como cuándo el **Pawn** comienza a caer y cuándo ha llegado al suelo, cuándo es bloqueado por otro objeto o cuándo el **PathfollowingComponent** no puede seguir controlando el movimiento del **Pawn**, por alguna razón.
   Por ejemplo, el **CharacterMovementComponent** informa al **PathfollowingComponent** que no puede seguir controlando el movimiento del **Pawn** cuando este *ha caído en el agua* y el **CharacterMovementComponent** tiene el *modo nadar* desactivado.
 
   De esta manera, el **PathfollowingComponent** puede hacer peticiones del movimiento deseado y luego recibir información sobre lo que está ocurriendo y cuando puede o no puede controlar al **Pawn**.
@@ -650,7 +656,7 @@ Algunos de los componentes de movimiento más comunes son:
 
 * {{< api ChaosWheeledVehicleMovementComponent >}}.
   Componente de movimiento que permite mover un vehículo con ruedas.
-  Es usado por defector por los actores de la clase **WheeledVehiclePawn**.
+  Es usado por defecto por los actores de la clase **WheeledVehiclePawn**.
 
 ## Control de cámara con *PlayerCameraManager* {#sec-playercameramanager}
 
@@ -702,7 +708,7 @@ Si un el actor *view target* no tiene un **CameraComponent**, el método `CalcCa
 
 ### Transiciones entre *view targets*
 
-La arquitecta comentada facilita cambiar entre diferentes modos de cámara, si el juego lo requiere.
+La arquitectura comentada facilita cambiar entre diferentes modos de cámara, si el juego lo requiere.
 
 Por ejemplo, en un juego de acción en tercera persona, el jugador puede controlar a un personaje que se mueve libremente por el nivel, utilizando una cámara que orbita libremente alrededor del personaje.
 Pero cuando el jugador entra en un vehículo, el *view target* puede cambiar al vehículo, haciendo que se use una cámara externa que facilite la condución.
@@ -723,7 +729,7 @@ En la arquitectura descrita existen diferentes puntos donde se puede personaliza
 #### *CalcCamera()* en el *view target*
 
 Sobreescribir el método {{< api CalcCamera >}} en el actor --solo en C++-- es ideal para hacer cambios del control de cámara específicos de ese actor.
-Por ejemplo, un **Pawn** puede tener varios **CameraComponent** para indicar diferentes posibles posiciones de la cámara, como: primera o tercera persona, cámara al hombro en el lado derecho o izquierdo, cámara con mira, etc.
+Por ejemplo, un **Pawn** puede tener varios **CameraComponent** para indicar diferentes posibles posiciones de la cámara, como primera o tercera persona, cámara al hombro en el lado derecho o izquierdo, cámara con mira, etc.
 
 En `CalcCamera()` se puede implementar la lógica para elegir el **CameraComponent** adecuado, según las preferencias del jugador o el estado del personaje.
 `CalcCamera()` es, probablemente, el primer lugar donde mirar si queremos ajustar el comportamiento de la cámara.
@@ -790,7 +796,7 @@ El **PlayerCameraManager** soporta modificadores de cámara que pueden añadir y
 
 ![Nodos de **PlayerCameraManager** para añadir y eliminar modificadores de cámara.](figures/playercameramanager-camera-modifiers.png){#fig-playercameramanager-camera-modifiers}
 
-Estos modificadiones puede afectar a:
+Estos modificadores puede afectar a:
 
 * La ubicación, rotación y otras propiedades de cámara del POV del jugador.
 
@@ -803,11 +809,11 @@ Los modificadores se aplican al final del método `UpdateViewTarget()`, durante 
 
 #### Activación y desactivación de modificadores
 
-Una vez se han añadido un modificador, se puede activar y desactivar, según el estado del juego, a través de los métodos `EnableModifier()`, `DisableModifier()` y `ToggleModifier()`, de la clase {{< api CameraModifier >}}, que se pueden ver en la @fig-cameramodifier-activation.
+Una vez se ha añadido un modificador, se puede activar y desactivar, según el estado del juego, a través de los métodos `EnableModifier()`, `DisableModifier()` y `ToggleModifier()`, de la clase {{< api CameraModifier >}}, que se pueden ver en la @fig-cameramodifier-activation.
 
 ![Nodos de **CameraModifier** para activar y desactivar el modificador.](figures/cameramodifier-activation.png){#fig-cameramodifier-activation}
 
-Por ejemplo, se puede añadir un modificador `UCameraModifier_CameraShake` para sacudir la cámara cuando el jugador recibe daño, activándolo y desactivándolo durante un timpo cuando se da el caso.
+Por ejemplo, se puede añadir un modificador `UCameraModifier_CameraShake` para sacudir la cámara cuando el jugador recibe daño, activándolo y desactivándolo durante un tiempo cuando se da el caso.
 
 Además, la activación y desactivación puede ser instantánea o gradual, según el valor de las propiedades `AlphaInTime`, `AlphaOutTime` de **CameraModifier** y el argumento `Immediate` de `DisableModifier()`.
 
@@ -839,7 +845,7 @@ La clase base de los modificadores es {{< api CameraModifier >}} y se puede here
 Los métodos `BlueprintModifyCamera()` y {{< api ModifyCamera >}} son los que se deben sobreescribir para implementar la lógica de los modificadores de las propiedades de la cámara, en Blueprint o C++, respectivamente.
 Mientras que `BlueprintModifyPostProcess()` y {{< api ModifyPostProcess >}} se pueden sobreescribir para modificar la configuración de los efectos de posprocesado.
 
-En todo los casos, es responsabilidad del código en estas funciones interpretar y aplicar los valores de `Alpha`, si el efecto debe mezclarse de forma gradual al activarse o desactivarse.
+En todo los casos, es responsabilidad del código de estas funciones interpretar y aplicar los valores de `Alpha`, si el efecto debe mezclarse de forma gradual al activarse o desactivarse.
 
 En realidad, **PlayerCameraManager** llama al método {{< api ModifyCamera >}} de cada modificador, pasándole la delta de tiempo y una estructura con la información del POV del jugador para que la modifique.
 Este método actualiza el `Alpha`, llama a los métodos anteriores y, por defecto, retorna `false` para que se puedan ejecutar los siguientes modificadores de menor prioridad.

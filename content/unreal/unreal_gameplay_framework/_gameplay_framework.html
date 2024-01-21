@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.528">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>gameplay_framework</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="_gameplay_framework_files/libs/clipboard/clipboard.min.js"></script>
+<script src="_gameplay_framework_files/libs/quarto-html/quarto.js"></script>
+<script src="_gameplay_framework_files/libs/quarto-html/popper.min.js"></script>
+<script src="_gameplay_framework_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="_gameplay_framework_files/libs/quarto-html/anchor.min.js"></script>
+<link href="_gameplay_framework_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="_gameplay_framework_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="_gameplay_framework_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="_gameplay_framework_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="_gameplay_framework_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="_gameplay_framework_files/libs/quarto-diagram/mermaid.min.js"></script>
+<script src="_gameplay_framework_files/libs/quarto-diagram/mermaid-init.js"></script>
+<link href="_gameplay_framework_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="gameplay-framework" class="level1">
+<h1>Gameplay Framework</h1>
+<p>Con los componentes básicos comentados hasta el momento se puede implementar un juego, pero no es lo más sencillo. Por eso Unreal Engine incluye <em>gameplay framework</em>, prescribiendo ciertas decisiones sobre la arquitectura software y facilitando la implementación de los juegos.</p>
+<section id="gamemode-y-gamestate" class="level2">
+<h2 class="anchored" data-anchor-id="gamemode-y-gamestate"><em>GameMode</em> y <em>GameState</em></h2>
+<p><strong>GameInstance</strong> es un buen lugar para guardar datos globales del juego, pero no es el lugar adecuado para implementar lógica específica del nivel. Para ello, Unreal Engine ofrece las clases <strong>GameMode</strong> y <strong>GameState</strong>, que son instanciados por el objeto <strong>Word</strong> al cargar un nivel y se destruyen al cargar otro.</p>
+<section id="sec-gamemode" class="level3">
+<h3 class="anchored" data-anchor-id="sec-gamemode"><em>GameMode</em></h3>
+<p>{{&lt; api GameMode &gt;}} es un actor pensando para contener el código con las reglas específicas del nivel, como por ejemplo: el número de jugadores, las condiciones para ganar, las reglas para hacer aparecer o reaparecer a los jugadores, cuándo se puede pausar la partida y qué ocurre cuando se pide, la transición a otros niveles, etc.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El actor <strong>GameMode</strong> es el primer actor que recibe el evento <code>BeginPlay()</code> tras cargar el nivel.</p>
+</div>
+</div>
+<p>La clase <strong>GameMode</strong> por defecto del proyecto se indica en las propiedades del proyecto, en <strong>Project Settings… / Project - Maps &amp; Modes / Game Mode Override</strong>, pero se puede cambiar en cada nivel, en la propiedad <strong>World Settings / Game Mode Override</strong>, como se muestra en la <a href="#fig-world-override-game-mode" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div id="fig-world-override-game-mode" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-world-override-game-mode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/world-settings-override-game-mode.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-world-override-game-mode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Configurar la clase <strong>GameMode</strong> del nivel.
+</figcaption>
+</figure>
+</div>
+<p>Por tanto, es posible y recomendable tener diferentes clases <strong>GameMode</strong> para cada nivel si hay diferentes modos de juego, en lugar de una única clase para todo el juego. Probablemente, heredando de una clase base común para todos los niveles, que implemente la funcionalidad común a todos ellos.</p>
+<p>Por ejemplo, si el juego tiene un modo historia y un modo multijugador, se puede tener una clase <strong>GameMode</strong> para cada uno de ellos, que herede de una clase base que implemente la funcionalidad común a ambos. Igualmente, es común tener un nivel solo para el menú principal del juego, con su propia clase <strong>GameMode</strong>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La clase <strong>GameMode</strong> que se incluye en Unreal Engine implementa el comportamiento esperable de un juego multijugador competitivo. Si se trabaja en otro tipo de juego, es mejor comenzar heredando de <strong>GameModeBase</strong>, que también es la clase base de <strong>GameMode</strong>.</p>
+</div>
+</div>
+<p>Igual que en el caso del <strong>GameInstance</strong>, para evitar que la clase <strong>GameMode</strong> se convierta en un <em>objeto todopoderoso</em>, se suele dividir la funcionalidad en diferentes clases. Como <strong>GameMode</strong> es un actor, se pueden añadir <strong>ActorComponent</strong> para implementar diferentes aspectos del juego. Si no estamos interesados en los eventos de ciclo de vida de los actores y componentes –como <code>BeginPlay()</code> o <code>TickComponent()</code>– también se pueden usar clases <strong>UObject</strong>, referenciadas desde propiedades del <strong>GameMode</strong>.</p>
+<p>Además, desde Unreal Engine 4.24, también se puede implementar <em>subsistemas</em> que comparten su tiempo de vida con un objeto <strong>UWorld</strong>, por lo que también son interesantes para implementar funcionalidades específicas de un nivel.</p>
+<p>En la <a href="#fig-gamemode-inheritance" class="quarto-xref">Figure&nbsp;2</a> se puede ver un ejemplo de jerarquía de herencia de <strong>GameMode</strong>.</p>
+<div class="cell" data-file="figures/gamemode-inheritance.mm" data-fig-width="15cm" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-gamemode-inheritance" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gamemode-inheritance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-gamemode-inheritance">classDiagram
+    GameModeBase &lt;|-- LevelGameModeBase
+    GameModeBase &lt;|-- MainMenuGameMode
+
+    %%namespace Gameplay {
+        class MainMenuGameMode
+        class LevelGameModeBase {
+            AchievementsSubsystem
+            WeatherSubsystem
+        }
+        class StoryGameMode {
+            QuestSubsystem
+        }
+        class TutorialGameMode {
+            TutorialSubsystem
+        }
+        class RaceGameMode
+    %%}
+
+    LevelGameModeBase &lt;|-- RaceGameMode
+    LevelGameModeBase &lt;|-- StoryGameMode
+    StoryGameMode &lt;-- TutorialGameMode</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gamemode-inheritance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Ejemplo de posible jerarquía de herencia de <strong>GameMode</strong>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="gamestate" class="level3">
+<h3 class="anchored" data-anchor-id="gamestate"><em>GameState</em></h3>
+<p>{{&lt; api GameState &gt;}} es un actor pensado para almacenar los datos que describen el estado de la partida, como puntuaciones, lista de jugadores, objetivos cumplidos, etc.</p>
+<p>Sea cual sea el motor de videojuegos, separar el código del juego del estado de la partida facilita la implementación de diferentes funcionalidades:</p>
+<ul>
+<li><p>Sincronización de los datos del juego en juegos multijugador online. En un juego multijugador online, la lógica con las reglas de la partida debe ejecutarse únicamente en el servidor para evitar las trampas. Los datos del juego también deben almacenarse en el servidor, pero al mismo tiempo es necesario mantener una copia sincronizada en cada cliente.</p></li>
+<li><p>Mecanismo de salvado de la partida. En general, separar la lógica de los datos facilita poder almacenar estos últimos para salvar y recuperar el estado del juego (ver la <strong>?@sec-savegame</strong>).</p></li>
+</ul>
+<p>Lo primero es exactamente para lo que Unreal Engine usa <strong>GameState</strong>. El actor <strong>GameMode</strong> solo existe y se ejecuta en el servidor, mientras que <strong>GameState</strong> y <strong>PlayerState</strong> –del que hablaremos más adelante– contienen datos que se replican automáticamente en los clientes.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Tanto <strong>GameState</strong> como <strong>PlayerState</strong> son actores porque, básicamente, es un requisito para que estos objetos sean replicados en los diferentes clientes en juegos multijugador online.</p>
+</div>
+</div>
+<p>No se recomienda guardar directamente en <strong>GameState</strong> datos específicos de cada jugador –como el nombre, el nivel de salud o la puntuación específica de cada jugador– sino solo datos generales del estado del juego. Como veremos más adelante, <strong>GameState</strong> gestiona una instancia de <strong>PlayerState</strong> para cada jugador, que es donde se deben almacenar los datos específicos de cada uno. El <strong>PlayerState</strong> de cada jugador también es accesible a través de su controlador del personaje.</p>
+</section>
+<section id="separación-de-responsabilidades-entre-gameinstance-y-gamemode" class="level3">
+<h3 class="anchored" data-anchor-id="separación-de-responsabilidades-entre-gameinstance-y-gamemode">Separación de responsabilidades entre <em>GameInstance</em> y <em>GameMode</em></h3>
+<p>La separación entre <strong>GameMode</strong> y <strong>GameInstance</strong> permite tener diferentes clases <strong>GameMode</strong> con distintas reglas para cada nivel. Incluso si en todos los niveles se usa la misma clase <strong>GameMode</strong>, es común emplear un nivel solo para el menú principal del juego, de forma que la lógica del menú puede estar en su propio <strong>GameMode</strong>, separado de la lógica de los niveles jugables.</p>
+<p>En este sentido, los <strong>GameMode</strong> hacen de <em>game / level manager</em>. Mientras que <strong>GameInstance</strong> sirve para preservar información entre partidas, como el número de victorias de cada equipo –por ejemplo, para enfrentamientos del tipo «el mejor de X partidas»– los inventarios, las habilidades o la configuración del juego y de los personajes.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El <em>game manager</em> es un tipo especial de <em>manager</em> dedicado a llevar el flujo del juego: carga de escenas y transiciones, activación de modos de menús y pausa, etc. Puede usarse para guardar referencias a otros componentes a los que se necesita acceder globalmente, evitando tener que buscar entre todas las entidades del juego cada vez que los necesitamos. En juegos relativamente grandes, el <em>game manager</em> se usa para implementar aspectos globales del juego, mientras que para la lógica específica de un nivel, cada nivel suele tener su <em>level manager</em>.</p>
+</div>
+</div>
+<p>En juegos multijugador online hay un <strong>GameInstance</strong> independiente en el servidor y en cada cliente. Como no se sincroniza la información entre ellos –puesto que el <strong>GameInstance</strong> no es un actor sino un <strong>UObject</strong>– puede ser necesario copiar en el servidor parte de la información de <strong>GameInstance</strong> a <strong>GameState</strong> o <strong>PlayerState</strong> –según corresponda– al cargar un nuevo nivel para que esté disponible en los clientes.</p>
+</section>
+<section id="gamemode-como-configurador-de-la-partida" class="level3">
+<h3 class="anchored" data-anchor-id="gamemode-como-configurador-de-la-partida"><em>GameMode</em> como configurador de la partida</h3>
+<p><strong>GameMode</strong> incluye de serie propiedades a través de las que podemos configurar diferentes características del nivel, como por ejemplo: el nombre por defecto de los jugadores o si el nivel es pausable (ver la <strong>?@sec-pause</strong>).</p>
+<p>Como se puede observar en la <a href="#fig-gamemode-properties" class="quarto-xref">Figure&nbsp;3</a>, entre las propiedades que trae <strong>GameMode</strong> por defecto están otras clases de actores del <em>gameplay framework</em> que se van a instanciar para implementar diferentes aspectos del juego:</p>
+<div id="fig-gamemode-properties" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gamemode-properties-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/gamemode-properties.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gamemode-properties-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Propiedades de la clase <strong>GameMode</strong>.
+</figcaption>
+</figure>
+</div>
+<ul>
+<li><p><strong>Game State Class</strong>. Clase del actor que almacena el estado de la partida. Es instanciada por el <strong>GameMode</strong> al cargarse el nivel.</p></li>
+<li><p><strong>Default Pawn Class</strong>. Clase por defecto del actor del personaje del jugador.</p></li>
+<li><p><strong>Spectator Class</strong>. Clase por defecto del actor del personaje de un espectador. Los jugadores permanecen como espectadores al iniciarse la partida si la propiedad <strong>Start Players As Spectators</strong> de <strong>Game Mode</strong> está activada.</p></li>
+<li><p><strong>Player Controller Class</strong>. Clase actor del controlador del personaje del jugador. Es instanciada por el <strong>GameMode</strong> en el método <code>Login()</code>, al unirse un jugador a la partida.</p></li>
+<li><p><strong>Player State Class</strong>. Clase del actor que guardará los datos específicos de cada jugador. Es instanciada por el <strong>PlayerController</strong> durante su inicialización.</p></li>
+<li><p><strong>HUD Class</strong>. Clase de la interfaz del juego. Esta propiedad no suele usarse actualmente, dado que las interfaces de usuario suele implementarse mediante <em>widgets</em> UMG (<em>Unreal Motion Graphics</em>).</p></li>
+</ul>
+<p>Obviamente, nada impide que añadamos otras propiedades específicas de cada nivel.</p>
+</section>
+</section>
+<section id="controladores" class="level2">
+<h2 class="anchored" data-anchor-id="controladores">Controladores</h2>
+<p>En Unreal Engine Gameplay Framework, se llama <strong>Controller</strong> al actor responsable de controlar al actor del personaje. Es decir, el personaje y su controlador son actores diferentes, mientras que en Unity es común que el controlador sea un componente del <em>GameObject</em> del personaje.</p>
+<p>El <em>gameplay framework</em> incluye dos clases que heredan de {{&lt; api Controller &gt;}}:</p>
+<ul>
+<li><p>{{&lt; api PlayerController &gt;}}. Actor que controla el personaje según las órdenes del jugador. Es decir, que es el responsable del leer la entrada del jugador y cambia el estado del personaje en base a ella.</p></li>
+<li><p>{{&lt; api AIController &gt;}}. Actor que implementa el control de un personaje cuando proviene de una IA. Es decir, este controlador resulta útil para implementar <em>personajes no jugadores</em> (PNJ).</p></li>
+</ul>
+<p>En la terminología de Unreal Engine, se dice que cuando un <strong>Controller</strong> comienza a controlar a otro actor, es que lo «posee». Sin embargo, esto no significa que el <strong>Controller</strong> sea el propietario del actor, sino que es el responsable de dirigirlo temporalmente, de forma que durante el juego, un mismo controlador puede cambiar el personaje que controla.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Por ejemplo, en algunos RPG el jugador pueda controlar a varios personajes durante la partida, pudiendo cambiar entre ellos en cualquier momento. Mientras que en otros juego el jugador suele controlar a un personaje humano, pero en determinados momentos puede subir el personaje a un vehículo y controlarlo para desplazarse con él.</p>
+</div>
+</div>
+<section id="posesión-de-actores" class="level3">
+<h3 class="anchored" data-anchor-id="posesión-de-actores">Posesión de actores</h3>
+<p>Para que un actor pueda ser poseído por un <strong>Controller</strong> debe heredar de la clase de actor {{&lt; api Pawn &gt;}}, que ofrece una interfaz mínima común para ser controlado.</p>
+<p>Para poseerlo se usa el método {{&lt; api Possess &gt;}} del {{&lt; api Controller &gt;}}, indicando el <strong>Pawn</strong> que se quiere controlar. Mientras que para desposeerlo se usa el método {{&lt; api UnPossess &gt;}}.</p>
+<div class="img-fluid quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/possess-nodes.png" class="img-fluid figure-img"></p>
+<figcaption>Nodos de los <strong>Controller</strong> para poseer y desposeer un <strong>Pawn</strong>.</figcaption>
+</figure>
+</div>
+<p>Si un <strong>Controller</strong> posee a un <strong>Pawn</strong> que ya estaba siendo controlado por otro <strong>Controller</strong>, este último deja de controlarlo y pasa a ser controlado por el nuevo <strong>Controller</strong>. Igualmente, si un <strong>Controller</strong> ya posee a un <strong>Pawn</strong> y se le indica que posea a otro, deja de controlar al primero y pasa a controlar al segundo.</p>
+<p>En todos los casos tanto el <strong>Controller</strong> como el <strong>Pawn</strong> son notificados. El {{&lt; api Controller &gt;}} recibe los eventos {{&lt; api OnPossess &gt;}} o {{&lt; api OnUnPossess &gt;}} y el {{&lt; api Pawn &gt;}} recibe los eventos {{&lt; api Possessed &gt;}} o {{&lt; api UnPossessed &gt;}}.</p>
+<div class="img-fluid quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/controller-possess-events.png" class="img-fluid figure-img"></p>
+<figcaption>Nodos de evento de posesión de <strong>Controller</strong>.</figcaption>
+</figure>
+</div>
+<div class="img-fluid quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/pawn-possess-events.png" class="img-fluid figure-img"></p>
+<figcaption>Nodos de evento de posesión de <strong>Pawn</strong>.</figcaption>
+</figure>
+</div>
+<p>Estos eventos son útiles. Por ejemplo, si un personaje está poseído por un <strong>AIController</strong> y el jugador lo posee, el <strong>AIController</strong> dejará de controlar al personaje. Si más tarde el jugador posee aún personaje diferente, el <strong>AIController</strong> no volverá a controlar al primer personaje, automáticamente. Por tanto, se puede usar los eventos indicados para hacer que el <strong>AIController</strong> vuelva a controlar al primer personaje cuando el jugador deje de controlarlo.</p>
+<p>Además de usar los métodos <code>Possess()</code> y <code>UnPossess()</code>, los <strong>Pawn</strong> se puede configurar para que sean poseídos automáticamente por un <strong>Controller</strong> cuando son instanciados y comienza su ejecución en el nivel, como se puede ver en la <a href="#fig-pawn-auto-possess" class="quarto-xref">Figure&nbsp;4</a>:</p>
+<ul>
+<li><p>Si un <strong>Pawn</strong> se configura con la propiedad <strong>Auto Possess Player</strong>, es poseído automática por el <strong>PlayerController</strong> del jugador indicado, al ser instanciado.</p></li>
+<li><p>Si un <strong>Pawn</strong> se configura con la propiedad <strong>Auto Possess AI</strong>, es poseído automática por el <strong>AIController</strong> indicado.</p></li>
+</ul>
+<div id="fig-pawn-auto-possess" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pawn-auto-possess-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/pawn-auto-possess.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pawn-auto-possess-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Configuración <strong>Auto Possess</strong> de la clase <strong>Pawn</strong>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-controller-control" class="level3">
+<h3 class="anchored" data-anchor-id="sec-controller-control">Control de actores</h3>
+<p>Una vez el <strong>Controller</strong> posee un <strong>Pawn</strong> puede controlarlo a través de sus métodos, pero debemos tener en cuenta que por defecto las opciones se limitan a mover y rotar el actor.</p>
+<p>Para que el <strong>Controller</strong> pueda indicar acciones adicionales al <strong>Pawn</strong> –como atacar, salta, escalar o defenderse– es necesario implementar una interfaz que exponga dichas acciones en el <strong>Pawn</strong> y que el <strong>Controller</strong> pueda llamar.</p>
+<p>Por ejemplo, en la <a href="#fig-pawn-control" class="quarto-xref">Figure&nbsp;5</a> se ilustra un posible caso dónde nuestro <strong>MyPlayerController</strong> –que hereda de <strong>PlayerController</strong> para añadirle funcionalidades adicionales, como la lectura de las acciones del jugador– posee al actor para el personaje del jugador <strong>MyPlayerPawn</strong></p>
+<div class="cell" data-file="figures/pawn-control.mm" data-fig-width="15cm" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-pawn-control" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pawn-control-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-pawn-control">classDiagram
+    %%ÁÁÁ Fix for an encoding problem
+    class Pawn {
+        +AddMovementInput()
+    }
+
+    class MyPlayerPawnInterface {
+        &lt;&lt;interface&gt;&gt;
+        +Attack()
+        +Crouch()
+        +Fire()
+        +Jump()
+    }
+
+    Pawn &lt;|--  MyPlayerPawn
+    MyPlayerPawnInterface &lt;|.. MyPlayerPawn
+
+    PlayerController &lt;|-- MyPlayerController
+    MyPlayerController ..&gt; Pawn: posee
+    MyPlayerController ..&gt; MyPlayerPawnInterface: usa</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pawn-control-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Ejemplo de interfaz para el control del <strong>Pawn</strong> del jugador.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Este <strong>Pawn</strong> es teledirigido por el controlador. Puede dirigir su movimiento usando el método {{&lt; api AddMovementInput &gt;}} (ver la <a href="#fig-pawn-addmovementinput" class="quarto-xref">Figure&nbsp;6</a>) de la clase <strong>Pawn</strong> o indicar otras acciones utilizando la implementación en <strong>MyPlayerPawn</strong> de la interfaz <strong>MyPlayerPawnInterface</strong> que contiene acciones del personaje especificas para este juego.</p>
+<div id="fig-pawn-addmovementinput" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pawn-addmovementinput-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/pawn-addmovementinput.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pawn-addmovementinput-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Función <code>AddMovementInput()</code> de <strong>Pawn</strong>.
+</figcaption>
+</figure>
+</div>
+<section id="movimiento-del-actor" class="level4">
+<h4 class="anchored" data-anchor-id="movimiento-del-actor">Movimiento del actor</h4>
+<p>Un <strong>Controller</strong> puede mover un <strong>Pawn</strong> directamente llamando a métodos como <code>SetActorLocation()</code> o <code>AddActorWorldOffset()</code>, que tienen todos los actores.</p>
+<p>Sin embargo, lo más habitual es que el <strong>Controller</strong> indique al <strong>Pawn</strong> que se mueva en una dirección, para lo que puede usar al método {{&lt; api AddMovementInput &gt;}} de <strong>Pawn</strong>.</p>
+<p>En la <a href="#fig-pawn-movement-input" class="quarto-xref">Figure&nbsp;7</a> se puede observar como se lee la acción de entrada <em>Move</em>, para luego llamar a <code>AddMovementInput</code> con sus valores para actualizar el movimiento del <strong>Pawn</strong>. En este ejemplo la lectura de la acción se hace desde el propio <strong>Pawn</strong>, no desde el <strong>Controller</strong>.</p>
+<div id="fig-pawn-movement-input" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pawn-movement-input-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/pawn-movement-input.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pawn-movement-input-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Uso de la entrada para el movimiento desde el <strong>Pawn</strong>.
+</figcaption>
+</figure>
+</div>
+<p>La clase <strong>Pawn</strong> acumula las direcciones indicadas a través <code>AddMovementInput()</code> en una variable interna de tipo vector, llamada <code>ControlInputVector</code>. Cómo se debe interpretar este vector –si es un desplazamiento, una velocidad o una aceleración– dependen de la implementación de la lógica de movimiento.</p>
+<p>Por defecto, la clase <strong>Pawn</strong> no hace nada con este vector, pero la idea es que en cada <em>tick</em> se lea el valor acumulado en <code>ControlInputVector</code>, usando el método <code>ConsumeMovementInputVector()</code>, y este valor se use para mover el personaje. Al usar <code>ConsumeMovementInputVector()</code>, el valor de <code>ControlInputVector</code> se pone a <span class="math inline">\((0, 0, 0)\)</span>, preparado para el siguiente frame.</p>
+<p>Lo ideal no es implementar la lógica de movimiento directamente en el método <code>Tick()</code> del <strong>Pawn</strong>, sino en un componente {{&lt; api MovementComponent &gt;}} que luego se añade al actor <strong>Pawn</strong>. Es en el método <code>TickComponent()</code> de este componente de movimiento del actor, donde se llama a <code>ConsumeMovementInputVector()</code> y se usa el valor devuelto para mover el <strong>Pawn</strong>, de la forma que corresponda, como se ilustra en el diagrama de secuencia de la <a href="#fig-controller-pawn-movement-sequence" class="quarto-xref">Figure&nbsp;8</a>.</p>
+<div class="cell" data-file="figures/pawn-movement-sequence.mm" data-fig-width="15cm" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-controller-pawn-movement-sequence" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-controller-pawn-movement-sequence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-controller-pawn-movement-sequence">sequenceDiagram
+    participant Engine
+    participant PlayerController
+    participant Pawn
+    participant MovementComponent
+
+    activate PlayerController
+    PlayerController -&gt;&gt; Pawn: AddMovementInput
+    note over Pawn: Acumular en ControlInputVector
+    deactivate PlayerController
+
+    Engine -&gt;&gt; MovementComponent: Tick
+    activate MovementComponent
+    MovementComponent -&gt;&gt; Pawn: ConsumeMovementInputVector()
+    MovementComponent -&gt;&gt; Pawn: AddActorWorldOffset(FinalOffset, Sweep=true, ...)
+    note over MovementComponent, Pawn: Mover el personaje
+    deactivate MovementComponent
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-controller-pawn-movement-sequence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Ejemplo de control de movimiento de un <strong>Pawn</strong>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Por ejemplo, todo actor {{&lt; api Character &gt;}} –que es una clase derivada de <strong>Pawn</strong>– tiene por defecto un {{&lt; api CharacterMovementComponent &gt;}} que se hace cargo del movimiento del personaje. Este componente deriva de {{&lt; api PawnMovementComponent &gt;}} que, a su vez, deriva de <strong>MovementComponent</strong>.</p>
+<p>Realmente, si un actor <strong>Pawn</strong> detecta que se le ha añadido un <strong>PawnMovementComponent</strong>, su método <code>AddMovementInput</code> –que es llamado por el <strong>Controller</strong>– no acumula el vector de movimiento en <code>ControlInputVector</code> directamente, sino que se lo entrega al <strong>PawnMovementComponent</strong>, a través del método {{&lt; api AddInputVector &gt;}}.</p>
+<p>Entonces, el componente puede decidir qué hacer con el vector de movimiento. Por defecto, se lo devuelve al <strong>Pawn</strong> sin cambios, para que lo acumule en <code>ControlInputVector</code>, pero siempre podemos sobrescribir la función <code>AddInputVector</code> para cambiar este comportamiento.</p>
+<p>Luego, en cada <em>tick</em>, el <strong>MovementComponent</strong> consume el valor acumulado en <code>ControlInputVector</code> mediante <code>ConsumeMovementInputVector()</code> y desplaza al actor como corresponda.</p>
+<p>En la <a href="#fig-controller-character-movement-sequence" class="quarto-xref">Figure&nbsp;9</a> se puede ver un diagrama de secuencia para los actores de la clase <strong>Character</strong>.</p>
+<div class="cell" data-file="figures/character-movement-sequence.mm" data-fig-width="15cm" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-controller-character-movement-sequence" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-controller-character-movement-sequence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-controller-character-movement-sequence">sequenceDiagram
+    participant Engine
+    participant PlayerController
+    participant Character
+    participant CharacterMovementComponent
+
+    activate PlayerController
+    PlayerController -&gt;&gt; Character: AddMovementInput
+    Character -&gt;&gt; CharacterMovementComponent: AddInputVector
+    CharacterMovementComponent -&gt;&gt; Character: Internal_AddMovementInput
+    note over CharacterMovementComponent, Character: Acumular en ControlInputVector
+    deactivate PlayerController
+
+    Engine -&gt;&gt; CharacterMovementComponent: Tick
+    activate CharacterMovementComponent
+    CharacterMovementComponent -&gt;&gt; Character: ConsumeMovementInputVector()
+    CharacterMovementComponent -&gt;&gt; Character: AddActorWorldOffset(FinalOffset, Sweep=true, ...)
+    note over CharacterMovementComponent, Character: Mover el personaje
+    deactivate CharacterMovementComponent</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-controller-character-movement-sequence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Ejemplo de control de movimiento de un <strong>Character</strong>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Unreal Engine proporciona diferentes <strong>MovementComponent</strong> para implementar diferentes tipos de movimiento, como por ejemplo: {{&lt; api FloatingPawnMovement &gt;}}, {{&lt; api ProjectileMovementComponent &gt;}}, {{&lt; api RotatingMovementComponent &gt;}}, {{&lt; api InterpToMovementComponent &gt;}} o {{&lt; api CharacterMovementComponent &gt;}} (ver la <a href="#sec-movement-components" class="quarto-xref">Section&nbsp;1.7</a>).</p>
+<p>De estos, solo <strong>FloatingPawnMovement</strong> y <strong>CharacterMovementComponent</strong> heredan de <strong>PawnMovementComponent</strong>, por lo que interactúan con el actor <strong>Pawn</strong> de la forma comentada, intepretando el <code>ControlInputVector</code> como un vector de aceleración. El resto sirve para mover un actor de otras maneras.</p>
+<p>Obviamente, siempre podemos crear nuestros propios <strong>MovementComponent</strong> para implementar el tipo de movimiento que necesitemos, tanto para <strong>Pawn</strong> –preferentemente heredando de <strong>PawnMovementComponent</strong>– como para cualquier otro tipo de actor. En ese caso, tenemos que decidir cómo interpretar <code>ControlInputVector</code> y cómo tratar, si fuera necesario, las diferencias entre los valores que pueden llegar según el dispositivo de control utilizado por el jugador, a través de <code>AddMovementInput()</code>. Por ejemplo, tenemos que considerar que tanto con teclados como con <em>gamepads</em>, los vectores devueltos por las <strong>Input Action</strong> correspondientes tienen magnitudes entre 1.0 y -1.0, pero el ratón u otros dispositivos puede devolver valores en un rango mayor. Por eso, el <strong>CharacterMovementComponent</strong> recorta el valor de movimiento leido a 1.0 y luego lo multiplica por la aceleración máxima de movimiento del personaje, para obtener la aceleración deseada.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cs code-with-copy"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Acceleration <span class="op">=</span> MaxAcceleration <span class="op">*</span> <span class="fu">ClampToMaxSize</span><span class="op">(</span>ControlInputVector<span class="op">,</span> MaxSize<span class="op">=</span><span class="fl">1.0f</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sec-rotación-de-control" class="level4">
+<h4 class="anchored" data-anchor-id="sec-rotación-de-control">Rotación de control</h4>
+<p>En <code>ControlInputVector</code> el <strong>Pawn</strong> se almacena la dirección en la que el <strong>Controller</strong> quiere que se mueva el personaje, pero a veces puede interesar tener otra dirección con la que indicar hacia donde debe mirar el personaje o la cámara del jugador.</p>
+<p>Por ejemplo, en algunos juegos un personaje se puede mover en una dirección diferente a aquella en la que mira la cámara del jugador o en la que apunta. Esto es especialmente interesante con los NPC, ya que a veces la IA necesita poder controlar hacia dónde tiene que mirar un personaje, sin moverlo del sitio.</p>
+<p>Para ello, el <strong>Controller</strong> tiene una variable interna de tipo {{&lt; api Rotator &gt;}}, llamada <code>ControlRotation</code>, que se puede leer y establecer mediante los métodos {{&lt; api GetControlRotation &gt;}} y {{&lt; api SetControlRotation &gt;}}.</p>
+<p>La clase {{&lt; api PlayerController &gt;}} derivada de <strong>Controller</strong> añade los métodos {{&lt; api AddPitchInput &gt;}}, {{&lt; api AddYawInput &gt;}} y {{&lt; api AddRollInput &gt;}} para acumular fácilmente ángulos de rotación en <code>ControlRotation</code>, en cualquiera de los 3 ángulos de Euler (ver la <a href="#fig-ue-euler-angles" class="quarto-xref">Figure&nbsp;10</a>).</p>
+<div id="fig-ue-euler-angles" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ue-euler-angles-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/euler_angles.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ue-euler-angles-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Ángulos de Euler en Unreal Engine.
+</figcaption>
+</figure>
+</div>
+<p>Los valores indicados al invocar estas funciones son multiplicados por las propiedades <strong>Input Pitch Scale</strong>, <strong>Input Yaw Scale</strong> y <strong>Input Roll Scale</strong> del <strong>PlayerController</strong>, antes de ser acumulados. Como en el caso del movimiento, los valores se acumulan en la variable interna <code>RotationInput</code>, para luego procesarla y actualizar <code>ControlRotation</code> convenientemente en el método <code>Tick()</code>.</p>
+<p>Las funciones <code>AddPitchInput()</code>, <code>AddYawInput()</code> y <code>AddRollInput()</code> son ideales para usarlas con los eventos de la entrada del jugador. Por ejemplo, que cuanto más acciona el jugador el <em>stick</em> a la derecha, más ángulo de <em>yaw</em> se acumule en la <em>rotación de control</em>.</p>
+<p>Además, la clase <strong>Pawn</strong> también incluye tres funciones por conveniencia: {{&lt; api AddControllerYawInput &gt;}}, {{&lt; api AddControllerPitchInput &gt;}} y {{&lt; api AddControllerRollInput &gt;}}, que realmente llaman a las anteriores en el <strong>PlayerController</strong>.</p>
+<p>En la <a href="#fig-pawn-control-rotation-input" class="quarto-xref">Figure&nbsp;11</a> se puede observar un ejemplo dónde se recibe la acción de entrada <em>Look</em> en el <strong>Pawn</strong> y se usan estas funciones para cambiar la <em>rotación de control</em> en el <strong>Controller</strong>.</p>
+<div id="fig-pawn-control-rotation-input" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pawn-control-rotation-input-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/pawn-control-rotation-input.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pawn-control-rotation-input-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: Uso de la entrada para actualizar la <em>rotación de control</em> desde el <strong>Pawn</strong>.
+</figcaption>
+</figure>
+</div>
+<p>Igualmente, la clase <strong>Pawn</strong> tiene la función {{&lt; api GetViewRotation &gt;}}, que sirve para leer directamente la <em>rotación de control</em> del <strong>Controller</strong> desde el <strong>Pawn</strong>.</p>
+<p>Gracias a que <strong>Controller</strong> y <strong>Pawn</strong> tiene una interfaz bien definida para gestionar la <em>rotación de control</em>, tanto la clase <strong>Pawm</strong> como muchos componentes pensados para ser utilizados en un <strong>Pawn</strong> –como <strong>CameraComponent</strong> o <strong>SpringArmComponent</strong>– vienen preparados para leer la <em>rotación de control</em> y usarla.</p>
+<p>Por ejemplo, en la <a href="#fig-pawn-control-rotation" class="quarto-xref">Figure&nbsp;12</a> se pueden ver las opciones de configuración de la <em>rotación de control</em> en la clase <strong>Pawn</strong>, que pemite sincronizar automáticamente la rotación del <strong>Pawn</strong> con la <em>rotación de control</em> en su controlador. Mientras que en la <a href="#fig-camera-control-rotation" class="quarto-xref">Figure&nbsp;13</a> se pueden observar una opción similar en el componente de cámara <strong>CameraComponent</strong>.</p>
+<div id="fig-pawn-control-rotation" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pawn-control-rotation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/pawn-control-rotation.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pawn-control-rotation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: Configuración de uso de la <strong>rotación de control</strong> en la clase <strong>Pawn</strong>.
+</figcaption>
+</figure>
+</div>
+<div id="fig-camera-control-rotation" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-camera-control-rotation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/camera-control-rotation.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-camera-control-rotation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: Configuración de uso de la <strong>rotación de control</strong> en la clase <strong>CameraComponent</strong>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-controller-pov" class="level4">
+<h4 class="anchored" data-anchor-id="sec-controller-pov">Punto de vista del jugador</h4>
+<p>Relacionado con la <em>rotación de control</em>, la clase <strong>Controller</strong> también maneja los conceptos de punto de vista –o POV, del inglés <em>point of view</em>– del jugador y de <em>view target</em>.</p>
+<p>El <em>view target</em> se obtiene mediante el método {{&lt; api GetViewTarget &gt;}} de <strong>Controller</strong> y devuelve el actor «al que mira el controlador». Por lo general, se trata del <strong>Pawn</strong> poseído por el controlador, pero el <strong>PlayerController</strong> permite cambiarlo mediante el método {{&lt; api SetViewTarget &gt;}} y lo usa para determinar el POV de la cámara del jugador (ver la <a href="#sec-playercameramanager" class="quarto-xref">Section&nbsp;1.8</a>).</p>
+<p>El POV del jugador se obtiene mediante el método {{&lt; api short Controller::GetPlayerViewPoint &gt;}} de <strong>Controller</strong>, pero significa cosas diferentes en función del tipo de controlador.</p>
+<p>En el <strong>AIController</strong> devuelve el punto de vista del <strong>Pawn</strong> desde la altura de sus «ojos». Para ello llama a <code>GetActorEyesViewPoint()</code> en el <strong>Pawn</strong> y devuelve el resultado.</p>
+<p>El método {{&lt; api GetActorEyesViewPoint &gt;}} de <strong>Pawn</strong> devuelve el POV en la posición del <strong>Pawn</strong> en el mundo, pero desplazado en el eje Z la cantidad indicada en la propiedad <strong>Base Eye Height</strong> del <strong>Pawn</strong>. Para la dirección del POV, considera la <em>rotación de control</em> del <strong>Controller</strong> que lo posee, si está poseído, o la rotación del propio <strong>Pawn</strong>, si no lo está.</p>
+<p>En el <strong>PlayerController</strong>, {{&lt; api short PlayerController::GetPlayerViewPoint &gt;}} devuelve el POV de la cámara calculado por el actor {{&lt; api PlayerCameraManager &gt;}}, en caso de que el <strong>PlayerController</strong> tenga una referencia a un actor de este tipo. En otro caso, si el controlador tiene un configurado un actor <em>view target</em>, devuelve la rotación y localización de dicho actor. Finalmente, si no tiene un <em>view target</em>, sigue las mismas reglas que el <strong>AIController</strong> para calcular el punto de vista del <strong>Pawn</strong> desde la supuesta altura de sus ojos.</p>
+</section>
+</section>
+</section>
+<section id="gestión-de-la-entrada-del-jugador-playercontroller" class="level2">
+<h2 class="anchored" data-anchor-id="gestión-de-la-entrada-del-jugador-playercontroller">Gestión de la entrada del jugador (<em>PlayerController</em>)</h2>
+<p>Como hemos comentado, el {{&lt; api PlayerController &gt;}} es el <strong>Controller</strong> responsable del leer la entrada del jugador y cambia el estado del personaje en base a ella.</p>
+<p>En este apartado veremos los componentes del <em>gameplay framework</em> que se encargan de gestionar la entrada del jugador y cómo se relacionan con el <strong>PlayerController</strong>.</p>
+<section id="sistema-de-entrada-legacy-vs.-enhanced" class="level3">
+<h3 class="anchored" data-anchor-id="sistema-de-entrada-legacy-vs.-enhanced">Sistema de entrada <em>legacy</em> vs.&nbsp;<em>enhanced</em></h3>
+<p>En Unreal Engine 4 se usaba un sistema donde la entrada de los controles de los dispositivos del jugador se mapeaba en acciones configurando las opciones en <strong>Project Settings / Input</strong> (ver la <a href="#fig-input-legacy-setup" class="quarto-xref">Figure&nbsp;14</a>). El código de <em>gameplay</em> de nuestro juego podía leer estas acciones, principalmente, a través de la clase <strong>InputComponent</strong>.</p>
+<div id="fig-input-legacy-setup" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-input-legacy-setup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/input-legacy-setup.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-input-legacy-setup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14: Configuración de las acciones de entrada en Unreal Engine 4.
+</figcaption>
+</figure>
+</div>
+<p>En Unreal Engine 5 este sistema pasó a considerase <em>legacy</em>, para ser sustituido por un nuevo sistema llamado <strong>Enhanced Input</strong>.</p>
+<p>El <strong>Enhanced Input</strong> ofrece un montón de características nuevas. Entre otras diferencias, en el nuevo sistema las acciones de entrada se definen mediante <em>assets</em> de tipo <strong>Input Action</strong>, mientras que el mapeo de estas acciones a controles se define en <em>assets</em> <strong>Input Mapping Context</strong>. Esto facilita migrar la configuración de la entrada de un proyecto a otro, así como activar distintos mapeos de entrada en función del estado del juego.</p>
+<p>Además, las <strong>Input Action</strong> soporta diferentes condiciones para notificar la acción de entrada al código de <em>gameplay</em>. Por ejemplo, se puede condicionar la activación de la acción a que el control se mantenga accionado cierto tiempo o a que el jugador accione cierta combinación de controles en un periodo de tiempo determinado –lo que se llama, un <em>combo</em>–. Esta funcionalidad permite ahorrar tiempo, ya que nos evita tener que implementar nosotros mismos el procesado de este tipo de entradas.</p>
+<p>En cualquier caso, el código de <em>gameplay</em> puede recibir estas acciones de entrada a través de la clase <strong>EnhancedInputComponent</strong>.</p>
+<p>El antiguo sistema sigue siendo el usado por defecto en los proyectos nuevos de Unreal Engine 5.0 aunque, en cualquier momento, se puede activar el nuevo en <strong>Project Settings / Input</strong>. Pero desde Unreal Engine 5.1 la situación es a la inversa. El <strong>Enhanced Input</strong> viene activado por defecto, pudiendo volver al antiguo en la configuración del proyecto, si es realmente necesario.</p>
+<p>Para los temas de entrada e interacción que veremos a continuación, en general, no importa que sistema estemos usando. Ambos permite definir acciones que se disparan cuando el jugador las acciona los controles configurados para ellas. Lo único que tiene que hacer el código de <em>gameplay</em> es «atender» a dichos eventos.</p>
+<p>A continuación vamos a referirnos a <strong>PlayerInput</strong> y a <strong>InputComponent</strong> por economía del lenguaje, pero debemos recordar que, si estamos usando el <strong>Enhanced Input</strong>, realmente estaríamos hablando de las clases <strong>EnhancedPlayerInput</strong> y <strong>EnhancedInputComponent</strong>.</p>
+</section>
+<section id="playerinput" class="level3">
+<h3 class="anchored" data-anchor-id="playerinput"><em>PlayerInput</em></h3>
+<p>La instancia de <strong>GameViewportClient</strong> captura los eventos de entrada del jugador, localiza el controlador del jugador <strong>PlayerController</strong> que debe recibirlos –a través del objeto <strong>LocalPlayer</strong> correspondiente– y se los entrega.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En juegos multijugador local se pueden crear nuevos jugadores y asignarles un dispositivo de entrada usando el nodo <strong>Create Local Player</strong>, en Blueprint, o la función {{&lt; api CreatePlayer &gt;}}. De esta forma, cuando llegan los eventos de entrada el motor sabe a qué jugador corresponde y puede localizar su <strong>PlayerController</strong>.</p>
+</div>
+</div>
+<p>El <strong>PlayerController</strong> entrega los eventos a su objeto <strong>PlayerInput</strong>, que tiene la responsabilidad de mapear los controles de los dispositivos del jugador en acciones de entrada.</p>
+<p>Es posible suscribirse a los eventos de <strong>PlayerInput</strong> para recibir notificaciones cuando se acciona una acción de entrada, pero lo más habitual es hacerlo a través del <strong>InputComponent</strong>.</p>
+</section>
+<section id="inputcomponent" class="level3">
+<h3 class="anchored" data-anchor-id="inputcomponent"><em>InputComponent</em></h3>
+<p>El {{&lt; api InputComponent &gt;}} es el componente que generalmente usan los actores para acceder a la entrada del jugador. Es decir, lo podemos usar en el actor del <strong>PlayerController</strong> para controlar el personaje, pero también en el actor de una puerta o de un objeto recogible, para recibir la acción del jugador cuando quiera abrir la puerta o recoger el objeto en cuestión.</p>
+<p>Con <strong>InputComponent</strong> podemos conectar el código de <em>gameplay</em> del actor a las acciones de entrada definidas en el juego. Esto se puede hacer usando eventos, para que el <strong>InputComponent</strong> ejecute nuestro código cuando llegue cierta entrada del jugador, como se puede observar en la <a href="#fig-ue-input-action-event" class="quarto-xref">Figure&nbsp;15 (a)</a>.</p>
+<div id="fig-ue-input-action" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ue-input-action-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ue-input-action" style="flex-basis: 100.0%;justify-content: flex-start;display: flex;">
+<div id="fig-ue-input-action-event" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-ue-input-action-event-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/ue-input-action-event.png" class="img-fluid figure-img" data-ref-parent="fig-ue-input-action">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ue-input-action-event-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Evento de <strong>Input Action</strong>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;display: flex;">
+<p>&nbsp;</p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ue-input-action" style="flex-basis: 100.0%;justify-content: flex-start;display: flex;">
+<div id="fig-ue-input-action-polling" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-ue-input-action-polling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/ue-input-action-polling.png" class="img-fluid figure-img" data-ref-parent="fig-ue-input-action">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ue-input-action-polling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Lectura del valor de la <strong>Input Action</strong> en un <em>tick</em>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ue-input-action-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15: Modos de acceso a las acciones de entrada del jugador.
+</figcaption>
+</figure>
+</div>
+<p>Sin embargo, si vamos a hacer algún tipo de cálculo combinando los valores de varias acciones de entrada, puede resultar más cómodo leer dichos valores cuando nos haga falta, como se observa en la <a href="#fig-ue-input-action-polling" class="quarto-xref">Figure&nbsp;15 (b)</a>.</p>
+<p>Aunque no veamos a <strong>InputComponent</strong> en el editor, todos los actores tienen una instancia de ese componente, porque cualquier actor en la escena puede acceder a la entrada del jugador.</p>
+<p>Quien conecta el <strong>PlayerInput</strong> –que es quién tiene acceso a las acciones de la entrada– con los <strong>InputComponent</strong> de los actores es el <strong>PlayerController</strong>.</p>
+</section>
+<section id="playercontroller" class="level3">
+<h3 class="anchored" data-anchor-id="playercontroller"><em>PlayerController</em></h3>
+<p>En la arquitectura de muchos juegos, es buena idea tener un objeto que represente al jugador y que controle y gestione todo aquello que le concierne a él y a su personaje. Como hemos comentado anteriormente, en Unreal Engine, este objeto es el {{&lt; api PlayerController &gt;}}.</p>
+<p>El <strong>GameMode</strong> crea un actor <strong>PlayerController</strong> para cada jugador –generalmente a través del método <code>Login()</code>– y se destruye al cargar un nuevo nivel.</p>
+<p>En juegos multijugador online, el <strong>PlayerController</strong> existe en el servidor y se replica en el cliente del jugador correspondiente, donde tiene acceso a la entrada de dicho jugador.</p>
+<p>Por defecto, el <strong>PlayerController</strong> tiene varias responsabilidades:</p>
+<ul>
+<li><p>Gestionar la entrada y teledirigir al personaje de su jugador. El <strong>PlayerController</strong> tiene el objeto <strong>PlayerInput</strong> para leer la entrada y puede poseer a cualquier actor derivado de la clase <code>Pawn</code> para controlarlo.</p></li>
+<li><p>Gestionar la <em>rotación de control</em>, que se puede usar para controlar la dirección en la que mira el personaje o la cámara del jugador.</p></li>
+<li><p>Crear el HUD –la interfaz de usuario– del jugador. Actualmente, la forma adecuada de hacerlo es creando <em>widgets</em> con UMG (<em>Unreal Motion Graphics</em>) y mostrarlos usando <code>AddToViewport()</code> en el evento <code>BeginPlay()</code> del <strong>PlayerController</strong>.</p></li>
+<li><p>Crear el actor que controla la cámara del jugador, llamado <strong>PlayerCameraManager</strong>.</p>
+<p>Vincular el control de cámara y el HUD con el <strong>PlayerController</strong> es muy útil en los juegos multijugador, donde hay varías cámaras y varias interfaces de usuario. Así el resto de la lógica del juego puede localizar fácilmente el control de cámara y la interfaz de un jugador concreto con solo preguntarle al <strong>PlayerController</strong> correspondiente.</p></li>
+<li><p>Gestionar información específica del jugador. El <strong>PlayerController</strong> puede usar para gestionar otra información del jugador –aparte de su <em>rotación de control</em>– especialmente si debe sobrevivir a la destrucción del actor personaje. Por ejemplo, la puntuación, las habilidades adquiridas o su inventario.</p></li>
+</ul>
+<p>Respecto a esto último, debemos tener en cuenta que el <strong>PlayerController</strong> se destruye y se vuelve a crear al cargar un nuevo nivel. La información que debe mantenerse durante toda la ejecución del juego puede alojarse en la instancia de <strong>GameInstance</strong> o en un subsistema. En ese caso, es conveniente mantener una referencia a esta información en el <strong>PlayerController</strong>, para facilitar el acceder a ella, por ejemplo, desde el actor del personaje o desde la interfaz de usuario.</p>
+</section>
+<section id="la-pila-de-inputcomponent-del-playercontroller" class="level3">
+<h3 class="anchored" data-anchor-id="la-pila-de-inputcomponent-del-playercontroller">La pila de <em>InputComponent</em> del <em>PlayerController</em></h3>
+<p>Para gestionar la entrada del jugador, el <strong>PlayerController</strong> tiene un objeto <strong>PlayerInput</strong>, que mapea los controles y dispositivos de entrada en acciones, y una pila de <strong>InputComponent</strong> de los actores interesados en leer la entrada del jugador. El <strong>PlayerInput</strong> emite los eventos de entrada y los entrega a los <strong>InputComponent</strong> en el orden determinado por la pila. Como se esquematiza en <a href="#fig-input-component-stack" class="quarto-xref">Figure&nbsp;16</a>, según va pasando por los <strong>InputComponent</strong>, cada uno de ellos puede elegir «consumir» el evento de entrada, haciendo que no alcance a componentes posteriores en la pila.</p>
+<div id="fig-input-component-stack" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-input-component-stack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<embed src="figures/input_component_stack.pdf" class="img-fluid">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-input-component-stack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16: La pila de <strong>InputComponent</strong> en el <strong>PlayerController</strong>.
+</figcaption>
+</figure>
+</div>
+<p>El <strong>PlayerController</strong> es un actor, por lo que tiene un <strong>InputComponent</strong>. Este <strong>InputComponent</strong> es, generalmente, el primero de la pila. Después está el del personaje que el <strong>PlayerController</strong> posee.</p>
+<p>Esto significa que la gestión de la entrada del jugador se puede implementar tanto en el <strong>PlayerController</strong> como en el actor del personaje.</p>
+<p>Obviamente, es posible gestionar toda la entrada del jugador en el <strong>Pawn</strong> del personaje, aunque esto solo es aconsejable en los proyectos más simples. Cuando varios jugadores juegan en un mismo equipo, los jugadores pueden cambiar de personaje controlado durante la partida o la gestión de la entrada es compleja, es mejor hacerlo en el <strong>PlayerController</strong>. Aún así, si los diferentes personajes tienen algún aspecto del control que es muy específico de cada personaje, puede ser conveniente implementar la gestión de esos controles específicos en el <strong>Pawn</strong> de cada personaje.</p>
+<p>La <a href="#fig-input-component-stack" class="quarto-xref">Figure&nbsp;16</a> también ilustra como cualquier actor puede colocar su <strong>InputComponent</strong> al principio de la pila, usando el método {{&lt; api EnableInput &gt;}}. Es decir, por lo general, que el jugador pueda interactuar con un objeto cercano –como puertas, interruptores u objetos recogibles– se implementa leyendo la acción del jugador en el <strong>PlayerController</strong> para luego comunicarla al objeto, a través de alguno de sus métodos. Sin embargo, gracias a este mecanismo, el objeto puede leer la entrada del jugador directamente y reaccionar a la acción indicada.</p>
+<p>Por ejemplo, la clase de los botiquines puede llamar a <code>EnableInput()</code> para colocar su <strong>InputComponent</strong> al principio de la pila cuando detecta que el jugador está cerca –usando un <em>trigger</em> o de cualquier otra manera–. Si el jugador pulsa el control para recoger el botiquín, el <strong>InputComponent</strong> del botiquín consumirá el evento de entrada, sin que llegue al <strong>PlayerController</strong>, siendo el propio botiquín el que se encargue de recogerse, restaurar la salud del jugador y desaparecer. Si el jugador se aleja del botiquín, este puede llamar a <code>DisableInput()</code> para quitar su <strong>InputComponent</strong> de la pila y que el <strong>PlayerController</strong> vuelva a ser el primero en recibir la entrada del jugador.</p>
+</section>
+</section>
+<section id="datos-del-jugador-y-playerstate" class="level2">
+<h2 class="anchored" data-anchor-id="datos-del-jugador-y-playerstate">Datos del jugador y <em>PlayerState</em></h2>
+<p>El <strong>PlayerController</strong> tiene una propiedad que referencia a un actor {{&lt; api PlayerState &gt;}}, que contiene la información específica de cada jugador que deba ser accesible al resto de jugadores en juegos multijugador online, como la saluda o la puntuación.</p>
+<p>El <strong>Pawn</strong> poseído por el <strong>PlayerController</strong> de un jugador devuelve la instancia del <strong>PlayerState</strong> a través del método {{&lt; api GetPlayerState &gt;}}.</p>
+<p>Para almacenar datos que el resto de jugadores no necesitan conocer –como el inventario o la cantidad de munición– se pueden usar objetos y estructuras de datos referenciadas desde el propio <strong>Pawn</strong> del personaje o el <strong>PlayerController</strong>. Aunque referenciar esta información desde el <strong>Pawn</strong> del personaje parece lo más intuitivo –ya que son características del personaje– en juegos multijugador online es común usar el <strong>PlayerController</strong>, ya que este actor solo existe en el cliente del jugador.</p>
+<p>Teniendo en cuenta lo comentado, veamos algunos supuestos prácticos:</p>
+<ul>
+<li><p>¿Dónde guardar una propiedad como la salud del personaje?</p>
+<ul>
+<li><p><strong>Si el juego es multijugador online</strong>, la propiedad debe estar en <strong>PlayerState</strong>, para que el servidor pueda gestionar esta información al tiempo que está disponible para los clientes.</p></li>
+<li><p><strong>Mientras que un juego de un solo jugador</strong>, serían igual de válidos <strong>PlayerState</strong>, <strong>PlayerController</strong> y el propio <strong>Pawn</strong> del personaje.</p>
+<p>La ventaja de usar <strong>Pawn</strong> es que realmente es un tipo de dato que interesa que se reinicie cada vez que reaparece el personaje, lo que ocurre automáticamente si se guarda en el actor del personaje.</p>
+<p>Sin embargo, se puede optar por el <strong>PlayerController</strong> para centralizar toda la información del jugador en un mismo lugar, que además es fácilmente accesible tanto por el sistema de salvado como por el código de la interfaz de usuario. A cambio, hay que reiniciar la propiedad manualmente cada vez que revive el personaje.</p></li>
+</ul></li>
+<li><p>¿Y un inventario? Por lo general el inventario es una entidad que no suele ser visible para el resto de jugadores, por lo que se puede guardar en el <strong>PlayerController</strong>. En cualquier caso, si el inventario debe persistir entre niveles, debería guardarse en el <strong>GameInstance</strong> –o en un subsistema– y, probablemente, referenciarlo desde el <strong>PlayerController</strong> para facilitar el acceso al resto de componentes que lo necesiten.</p>
+<p>En juegos multijugador online, hay que tener en cuenta que el <strong>GameInstance</strong> no se replica entre clientes y servidor. Por tanto, el inventario debe ser gestionado en el <strong>GameInstance</strong> del servidor –para evitar cualquier tipo de trampa– pero al cargar un nivel debe copiarse la información necesaria al <strong>PlayerController</strong> de cada jugador, para que así sea replicada automáticamente en el <strong>PlayerController</strong> del cliente correspondiente. De esta forma, cada jugador en su cliente tiene acceso a la información de su inventario, al mismo tiempo que el servidor se hace cargo de gestionar el inventario de todos los jugadores.</p></li>
+</ul>
+</section>
+<section id="aicontroller" class="level2">
+<h2 class="anchored" data-anchor-id="aicontroller"><em>AIController</em></h2>
+<p>El {{&lt; api AIController &gt;}} en Unreal Engine es el <strong>Controller</strong> que se encarga de controlar el movimiento de los NPC, así como de su comportamiento. Por tanto, no utiliza la entrada del jugador, sino que tiene programado unas reglas de comportamiento predeterminadas.</p>
+<p>En la <a href="#fig-ai-controller" class="quarto-xref">Figure&nbsp;17</a> se puede ver un diagrama de clases simplificado del actor <strong>AIController</strong> y sus componentes:</p>
+<div class="cell" data-file="figures/aicontroller-classes.mm" data-fig-width="15cm" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-ai-controller" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ai-controller-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-ai-controller">classDiagram
+    class AIController {
+        +BlackboardComponent
+        +BrainComponent
+        +PathFollowingComponent
+        +AIPerceptionComponent
+        +MoveToLocation()
+        +MoveToActor()
+    }
+
+    class BlackboardComponent {
+        +GetBlackboardAsset()
+    }
+
+    class BrainComponent {
+        +StartLogic()
+        +RestartLogic()
+        +StopLogic()
+        +PauseLogic()
+    }
+
+    class BehaviorTreeComponent {
+        +GetCurrentTree()
+        +GetRootTree()
+    }
+
+    AIController *-- BlackboardComponent
+    AIController *-- BrainComponent
+    BrainComponent &lt;|-- BehaviorTreeComponent 
+    AIController *-- PathFollowingComponent
+    AIController *-- AIPerceptionComponent
+
+    AIController --&gt; Pawn : posee
+    Pawn *-- GameplayTaskComponent
+
+    AIController --&gt; "*" GameplayTask: tiene
+    GameplayTask &lt;|-- AITask
+
+    GameplayTaskComponent --&gt; GameplayTask: ejecuta
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ai-controller-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;17: Diagrama de clases de <strong>AIController</strong> y sus componentes.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="lógica-de-la-ia" class="level3">
+<h3 class="anchored" data-anchor-id="lógica-de-la-ia">Lógica de la IA</h3>
+<p>Obviamente, es posible heredar de <strong>AIController</strong> para implementar la lógica de la IA en el propio actor del controlador –por ejemplo, en el método <code>Tick()</code>–. Sin embargo, <strong>AIController</strong> está diseñado para incorporar un componente <strong>BrainComponent</strong> que se encargue de implementar la lógica de la IA.</p>
+<p>La clase {{&lt; api BrainComponent &gt;}} proporciona una interfaz para controlar la ejecución de la lógica: {{&lt; api StartLogic &gt;}}, {{&lt; api StopLogic &gt;}} o {{&lt; api PauseLogic &gt;}} –esta última es muy útil durante las cinemáticas– y la implementación de un mecanismo para enviar y recibir mensajes de otras IA.</p>
+<p>Cuando se ejecuta el método {{&lt; api RunBehaviorTree &gt;}} del <strong>AIController</strong>, se añade un <strong>BrainComponent</strong> de tipo <strong>BehaviorTreeComponent</strong> al controlador, que se encarga de ejecutar la lógica de un árbol de comportamiento, descrito en el <em>asset</em> indicado en los argumentos. Extendiendo <strong>BrainComponent</strong> se pueden implementar otras técnica de IA, como por ejemplo, máquinas de estado, <em>utility AI</em>, etc.</p>
+<p>En muchas implementaciones de la IA, se utiliza un <em>blackboard</em>, que es una estructura de datos que almacena información sobre el estado del juego –como la ubicación del jugador, el estado de salud del NPC, o si el NPC debe huir, defenderse o atacar–. Por eso, el <strong>AIController</strong> también incorpora un componente <strong>BlackboardComponent</strong> que se encarga de almacenar y gestionar el <em>blackboard</em>, cuyo datos pueden ser consultados tanto por la implementación de árboles de comportamiento de Unreal Engine, como por implementaciones propias de la lógica de la IA.</p>
+<p>Algo que también suele ser interesante en cualquier implementación de una IA, es tener un sistema para planificar y ejecutar tareas. Por lo general, estas tareas se inician desde la lógica de la IA, en función de las condiciones, para ejecutarse en paralelo con el resto de la lógica del juego.</p>
+<p>En Unreal Engine se pueden utilizar {{&lt; api GameplayTask &gt;}} para implementar estas tareas.</p>
+<p>En concreto, componentes como la implementación de árboles de comportamiento, pueden iniciar tareas de tipo <strong>AITask</strong>, que extienden <strong>GameplayTask</strong>. El propietario de las tareas es el <strong>AIController</strong>, pero son planificadas y ejecutadas por el <strong>GameplayTaskComponent</strong> que el controlador añade al <strong>Pawn</strong> cuando lo posee.</p>
+</section>
+<section id="navegación" class="level3">
+<h3 class="anchored" data-anchor-id="navegación">Navegación</h3>
+<p>Una pieza fundamental de la IA es el sistema de navegación, que permite a los NPC moverse por el mundo del juego.</p>
+<p>Unreal Engine proporciona un sistema de navegación basado en <em>NavMesh</em> a través del subsistema <strong>NavigationSystem</strong>. Este subsistema se puede consultar directamente en C++ a través de los métodos de clase {{&lt; api UNavigationSystem &gt;}}<span class="citation" data-cites="TorresD3DUnrealCpp">[@TorresD3DUnrealCpp]</span>, pero también se puede utilizar indirectamente a través de los métodos de <strong>AIController</strong> y el componente <strong>PathFollowingComponent</strong> de este.</p>
+<p>La clase <strong>AIController</strong> proporcionar los métodos {{&lt; api MoveToLocation &gt;}} y {{&lt; api MoveToActor &gt;}} para indicar que se quiere mover el <strong>Pawn</strong> poseído a una ubicación determinada o para perseguir a otro actor, respectivamente. El nodo de Blueprint <strong>AI MoveTo</strong> (ver la <a href="#fig-ai-moveto" class="quarto-xref">Figure&nbsp;18</a>) y la tarea de árbol de comportamiento <strong>AITask MoveTo</strong>, también se implementa utilizan estos métodos.</p>
+<div id="fig-ai-moveto" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ai-moveto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/ai-moveto.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ai-moveto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18: Nodo de Blueprint <strong>AI MoveTo</strong> para mover un <strong>Pawn</strong> a un punto o seguir a un actor.
+</figcaption>
+</figure>
+</div>
+<p>Ambos métodos se apoyan en el componente {{&lt; api PathFollowingComponent &gt;}}, que implementa la lógica necesaria para calcular la ruta y dar las órdenes al <strong>Pawn</strong> necesarias para que se mueva a lo largo de ella. Si al llamar a los métodos <code>MoveToLocation()</code> o <code>MoveToActor()</code> se indica <code>UsePathfinding</code> como <code>true</code>, <strong>PathfollowingComponent</strong> utilizará el <strong>NavigationSystem</strong> para calcular la ruta más eficiente para llegar al destino. En caso contrario, usará la línea recta.</p>
+<p>Para controlar al <strong>Pawn</strong>, <strong>PathFollowingComponent</strong> necesita que el <strong>Pawn</strong> tenga un componente {{&lt; api NavMovementComponent &gt;}} –como <strong>PawnMovementComponent</strong> o <strong>CharacterMovementComponent</strong>– ya que espera poder comunicarse con él directamente de la siguiente manera (ver la <a href="#fig-ue-character-movement-hierarchy" class="quarto-xref">Figure&nbsp;19</a>):</p>
+<div class="cell" data-file="figures/ue-character-movement-hierarchy.mm" data-fig-width="15cm" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-ue-character-movement-hierarchy" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ue-character-movement-hierarchy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-ue-character-movement-hierarchy">%%{init: {'themeVariables': { 'fontSize': '10px'}}}%%
+%%ÁÁÁ Fix for an encoding problem
+classDiagram
+    class INavAgentInterface {
+        &lt;&lt;interface&gt;&gt;
+    }
+    
+    Controller &lt;|-- AIController
+    AIController o-- PathFollowingComponent
+
+    class AIController {
+        +MoveToLocation()
+        +MoveToActor()
+    }
+
+    ActorComponent &lt;|-- MovementComponent
+    MovementComponent &lt;|-- NavMovementComponent
+
+    class Pawn {
+        -ControlInputVector
+        +AddMovementInput()
+        +Tick()
+    }
+
+    Pawn &lt;|-- Character
+    NavMovementComponent &lt;|-- PawnMovementComponent
+    PawnMovementComponent &lt;|-- CharacterMovementComponent
+
+    class NavMovementComponent {
+        +NavAgentProps
+        +AddInputVector()
+        +RequestDirectMove()
+        +RequestPathMove()
+        +TickComponent()
+    }
+
+    INavAgentInterface &lt;|.. Pawn
+    INavAgentInterface &lt;|.. NavMovementComponent
+
+    Controller --&gt; Pawn: posee
+    CharacterMovementComponent --o Character
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ue-character-movement-hierarchy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;19: Diagrama de clases involucradas en el control de NPC.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>El <strong>NavMovementComponent</strong> tiene en <strong>NavAgentProps</strong> las propiedades que representan a un <em>agente</em> que se quiere mover usando el sistema de navegación. Por ejemplo, su altura y su radio, que son fundamentales para calcular la ruta más eficiente por el entorno. Por tanto, el <strong>PathfollowingComponent</strong> consulta estas propiedades del <strong>NavMovementComponent</strong> para poder usarlas con el <strong>NavigationSystem</strong>.</p></li>
+<li><p>El <strong>PathfollowingComponent</strong> se registra en el <strong>NavMovementComponent</strong> para que le comunique algunos eventos importantes durante el movimiento, como cuándo el <strong>Pawn</strong> comienza a caer y cuándo ha llegado al suelo, cuándo es bloqueado por otro objeto o cuándo el <strong>PathfollowingComponent</strong> no puede seguir controlando el movimiento del <strong>Pawn</strong>, por alguna razón. Por ejemplo, el <strong>CharacterMovementComponent</strong> informa al <strong>PathfollowingComponent</strong> que no puede seguir controlando el movimiento del <strong>Pawn</strong> cuando este <em>ha caído en el agua</em> y el <strong>CharacterMovementComponent</strong> tiene el <em>modo nadar</em> desactivado.</p>
+<p>De esta manera, el <strong>PathfollowingComponent</strong> puede hacer peticiones del movimiento deseado y luego recibir información sobre lo que está ocurriendo y cuando puede o no puede controlar al <strong>Pawn</strong>.</p></li>
+<li><p>El <strong>PathfollowingComponent</strong> no indica la entrada para mover el <strong>Pawn</strong> por la misma vía que se espera que lo haga el código que gestiona la entrada del jugador (ver la <a href="#sec-controller-control" class="quarto-xref">Section&nbsp;1.2.2</a>). En su lugar, indica el movimiento del <strong>Pawn</strong> mediante los métodos <code>RequestPathMove()</code> o <code>RequestDirectMove()</code> del <strong>NavMovementComponent</strong>.</p></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Los objetos que pueden ser considerados agentes en el sistema de navegación, deben implementar la interfaz <strong>INavAgentInterface</strong>. El <strong>Pawn</strong> es el ejemplo más típico de agente, pero también se puede implementar la interfaz en otros objetos. Por defecto, el <strong>Pawn</strong> devuelve a través de esta interfaz la información de agente de navegación guardada en su componente <strong>NavMovementComponent</strong>, pero si no tiene uno, devuelve los valores por defecto.</p>
+</div>
+</div>
+<p>El método {{&lt; api RequestPathMove &gt;}} se parece mucho a los métodos usados cuando el control es del jugador, porque recibe un vector de movimiento que indica la dirección deseada del movimiento. Si este vector tiene magnitud 1.0, es que se desea la máxima intensidad.</p>
+<p>Una forma frecuente de gestionar esta petición es acumular el vector de movimiento en <code>ControlInputVector</code> en el <strong>Pawn</strong> y luego, en cada <em>tick</em>, interpretar dicho vector como una entrada de aceleración, multiplicándola por la aceleración máxima configurada para el <strong>Pawn</strong>, antes de proceder a usarla para calcular la nueva posición del <strong>Pawn</strong>.</p>
+<p><strong>PathfollowingComponent</strong> llama a {{&lt; api RequestPathMove &gt;}} si la propiedad <strong>Use Acceleration For Paths</strong> del <strong>NavMovementComponent</strong> está activa. Mientras que, si no está activa, llama a {{&lt; api RequestDirectMove &gt;}}, que espera un vector de velocidad, de forma que el <strong>Pawn</strong> se mueva directamente con la velocidad y dirección indicada. Por ejemplo, <strong>CharacterMovementComponent</strong> se puede configurar para utilizar instantáneamente la velocidad indicada o para considerar esta velocidad un objetivo, de forma que acelerará o frenará al actor –según la aceleración o desaceleración máxima configurada– hasta alcanzarla.</p>
+</section>
+<section id="foco" class="level3">
+<h3 class="anchored" data-anchor-id="foco">Foco</h3>
+<p>El <strong>AIController</strong> también proporciona un mecanismo para gestionar el <em>foco</em> del NPC, que es el objeto que el NPC considera más importante en cada momento. Algunos de los métodos que proporciona para gestionar el foco son: {{&lt; api SetFocus &gt;}}, {{&lt; api GetFocusActor &gt;}}, {{&lt; api ClearFocus &gt;}}.</p>
+<p>Al cambiar el <em>foco</em> en el <strong>AIController</strong>, se actualiza el <em>punto focal</em>, que es el punto del mundo en el que el NPC debería centrar su atención. Otra opción es gestionar directamente el <em>punto focal</em> utilizando los métodos: {{&lt; api SetFocalPoint &gt;}}, {{&lt; api GetFocalPoint &gt;}}.</p>
+<p>El <strong>PathfollowingComponent</strong> también se encarga de actualizar el <em>punto focal</em> cuando el <strong>Pawn</strong> sigue una ruta. Si la propiedad <strong>Can Strafe</strong> de <strong>AIController</strong> está activa y el <strong>Pawn</strong> sigue a un actor, el <em>punto focal</em> será la ubicación del actor seguido en cada momento. En otro caso, será el siguiente punto de destino de la ruta.</p>
+<p>En cada <em>tick</em> el <strong>AIController</strong> actualiza la <em>rotación de control</em> en la dirección del <em>punto focal</em>, de forma que luego esta rotación se puede usar para orientar el <strong>Pawn</strong> –activando las propiedades <strong>Use Controller Rotation…</strong> del <strong>Pawn</strong>– o para orientar hacia donde mira o apunta el NPC.</p>
+</section>
+<section id="percepción" class="level3">
+<h3 class="anchored" data-anchor-id="percepción">Percepción</h3>
+<p>Por lo general, la percepción de los NPC –que pueden ver u oír– se implementa utilizando <em>raycasts</em> o <em>triggers</em><span class="citation" data-cites="TorresD3DGameplay01">[@TorresD3DGameplay01]</span>. Sin embargo, Unreal Engine implementa un sistema de percepción que permite a los NPC detectar a los jugadores y otros objetos de forma más avanzada, así&nbsp;como saber cuándo están siendo dañados por algo. Este sistema se basa en el componente <strong>AIPerceptionComponent</strong> y en los <em>estímulos</em> que emiten los objetos<span class="citation" data-cites="UnrealAIPerception">[@UnrealAIPerception]</span>.</p>
+<p>También existe un componente <em>legacy</em> alternativo a <strong>AIPerceptionComponent</strong> que se denomina <strong>PawnSensingComponent</strong> y que se añade al <strong>Pawn</strong> de un NPC, en lugar de al <strong>AIController</strong>. Este componente es más sencillo de utilizar, pero es menos flexible y ofrece peor rendimiento. Esto último es debido a que que la percepción se ejecuta de forma independiente en cada NPC –cada componente lanza sus <em>raycasts</em>– en lugar de combinar y optimizar operaciones de manera centralizada<span class="citation" data-cites="UnrealForumPawnSensingVsAIPerception">[@UnrealForumPawnSensingVsAIPerception]</span>.</p>
+<p>El {{&lt; api AIPerceptionComponent &gt;}} es un componente que se añade al <strong>AIController</strong> de un NPC y que permite definir que estímulos puede percibir el NPC y cómo reaccionar a ellos.</p>
+<p>Algunos de los estímulos perceptibles por un <strong>AIPerceptionComponent</strong> son:</p>
+<ul>
+<li><strong>Sight</strong>: Permite al NPC ver otros objetos.</li>
+<li><strong>Damage</strong>: Permite al NPC saber cuando está siendo dañado.</li>
+<li><strong>Hearing</strong>: Permite al NPC oír a otros objetos.</li>
+<li><strong>Team</strong>: Permite al NPC saber si otros miembros del mismo equipo están cerca.</li>
+<li><strong>Touch</strong>: Permite al NPC saber cuando toca otro objeto.</li>
+</ul>
+<p>Para que un actor de la escena pueda generar un estímulo debe tener un componente <strong>AIPerceptionStimuliSource</strong>. Este componente permite registrar al actor al que pertenece como una fuente de estímulos, para la lista de estímulos que interese.</p>
+</section>
+</section>
+<section id="pawn-y-character" class="level2">
+<h2 class="anchored" data-anchor-id="pawn-y-character"><em>Pawn</em> y <em>Character</em></h2>
+<p>Como hemos visto, {{&lt; api Pawn &gt;}} es la clase base de todos los actores que pueden interactuar con el mundo y ser controlados por el jugador o por la IA, mediante un <strong>Controller</strong>.</p>
+<p>El <em>gameplay framework</em> incluye las siguientes clases que heredan de <strong>Pawn</strong>:</p>
+<ul>
+<li><p>El <strong>DefaultPawn</strong> extiende <strong>Pawn</strong> añadiendo un <em>collider</em> esférico y un <strong>StaticMesh</strong>. Se puede mover libremente en 3D, sin ser afectado por la gravedad, y se puede usar para explorar el nivel durante el desarrollo, independientemente de los personajes que se vayan a usar en el juego.</p></li>
+<li><p>El <strong>SpectatorPawn</strong> extiende <strong>DefaultPawn</strong> para ofrecer la funcionalidad de espectador de la partida, útil en juegos multijugador online.</p></li>
+<li><p>El {{&lt; api WheeledVehiclePawn &gt;}} extiende <strong>Pawn</strong> para implementar la clase base de vehículo con ruedas.</p>
+<p>Esta clase de actor incluye por defecto un componente {{&lt; api ChaosWheeledVehicleMovementComponent &gt;}} que implementa la simulación del movimiento del vehículo, usando el motor de físicas Chaos<span class="citation" data-cites="TorresD3DFisicas">[@TorresD3DFisicas]</span> de Unreal Engine. Este componente se puede sustituir fácilmente<span class="citation" data-cites="TorresD3DUnrealCpp">[Más sobre CDO en @TorresD3DUnrealCpp]</span> por cualquier componente que herede de {{&lt; api ChaosVehicleMovementComponent &gt;}}, cuando se quiere usar una simulación diferente.</p></li>
+<li><p>El {{&lt; api Character &gt;}} extiende <strong>Pawn</strong> para añadir todo lo que necesita un personaje tradicional humanoide, como el que se usa en muchos juegos de acción en primera o tercera persona: una cápsula de colisión, un <strong>SkeletalMeshComponent</strong> –es decir, una malla que puede ser animada mediante el sistema de animación de Unreal Engine– y un <strong>CharacterMovementComponent</strong>, que implementa modos de movimiento típicos como: caminar, correr, saltar, nadar, incluso, volar.</p></li>
+</ul>
+<p>Estas clases se heredan para añadir la funcionalidad específica que necesitemos en nuestro juego, según el tipo de personaje que queramos implementar.</p>
+<p>La clase <strong>Character</strong> es la base más común para desarrollar los personajes humanoides complejos. Mientras que la clase <strong>Pawn</strong> se usa como base para personajes o entidades controlables más básicas o cuando lo que se pretende implementar no encaja bien en ninguna de las clases anteriores.</p>
+</section>
+<section id="sec-movement-components" class="level2">
+<h2 class="anchored" data-anchor-id="sec-movement-components">Componentes de movimiento</h2>
+<p>Obviamente, se puede heredar de <strong>ActorComponent</strong> para implementar un componente que se encargue del movimiento de un actor en cada <em>tick</em>. Sin embargo, es recomendable heredar de {{&lt; api MovementComponent &gt;}} para hacer un componente de movimiento, ya ofrece cierta utilidad que puede ser útil al implementar un componente de movimiento:</p>
+<ul>
+<li><p>Facilita la restricción del movimiento a un plano o a un eje específico.</p></li>
+<li><p>Incluye métodos que son útiles para manejar los resultados de colisión y hacer los cálculos para mover el actor.</p></li>
+<li><p>Está configurado para hacer <em>tick</em> –y, por tanto, aplicar el movimiento– antes de los cálculos de físicas y del <em>tick</em> del actor donde se añade.</p></li>
+<li><p>Ofrece una interfaz para configurar a qué componente del actor se aplica el movimiento (ver {{&lt; api SetUpdatedComponent &gt;}}). Por defecto, si no se indica ninguno, usa el componente raíz del actor, moviendo de esta manera a todo el actor.</p></li>
+</ul>
+<p>Algunos de los componentes de movimiento más comunes son:</p>
+<ul>
+<li><p>{{&lt; api FloatingPawnMovement &gt;}}. Componente de movimiento que permite mover un actor en cualquier dirección 3D, sin que sea afectado por la gravedad. Es el componente de movimiento que usa por defecto el <strong>DefaultPawn</strong>.</p></li>
+<li><p>{{&lt; api ProjectileMovementComponent &gt;}}. Componente de movimiento que permite mover un actor en línea recta, con opciones para que sea afectado por la gravedad, para perseguir un objetivo y para que rebote al colisionar con otros elementos del nivel. Es un componente ideal para implementar todo tipo de proyectiles.</p></li>
+<li><p>{{&lt; api RotatingMovementComponent &gt;}}. Componente de movimiento que permite rotar un actor en torno a un eje de forma continua.</p></li>
+<li><p>{{&lt; api InterpToMovementComponent &gt;}}. Componente de movimiento que permite mover un actor de forma suave entre varios puntos.</p></li>
+<li><p>{{&lt; api CharacterMovementComponent &gt;}}. Componente de movimiento diseñado para mover un actor de la clase <strong>Character</strong>. Es un componente muy completo, con mucha funcionalidad, que permite mover un personaje de forma realista. Soporta diferentes modos de desplazamiento, como caminar, correr, saltar o nadar y soporta añadir otros modos de desplazamiento personalizados.</p></li>
+<li><p>{{&lt; api NavMovementComponent &gt;}}. Componente de movimiento que permite mover a un actor de forma automática, en base a una ruta calculada por el sistema de navegación de Unreal Engine. Componentes como <strong>CharacterMovementComponent</strong>, <strong>FloatingPawnMovement</strong> o <strong>ChaosVehicleMovementComponent</strong> heredan de <strong>NavMovementComponent</strong> para poder mover actores u otros componentes de forma automática por el nivel.</p></li>
+<li><p>{{&lt; api ChaosWheeledVehicleMovementComponent &gt;}}. Componente de movimiento que permite mover un vehículo con ruedas. Es usado por defecto por los actores de la clase <strong>WheeledVehiclePawn</strong>.</p></li>
+</ul>
+</section>
+<section id="sec-playercameramanager" class="level2">
+<h2 class="anchored" data-anchor-id="sec-playercameramanager">Control de cámara con <em>PlayerCameraManager</em></h2>
+<p>Como hemos comentado anteriormente, cada <strong>PlayerController</strong> crea y gestiona su actor <strong>PlayerCameraManager</strong>, que mantiene la información del punto de vista (POV) de la cámara que necesita el motor para renderizar la escena.</p>
+<p>El {{&lt; api PlayerCameraManager &gt;}} se puede modificar derivando de dicha clase e indicando la nueva clase en las propiedades del <strong>PlayerController</strong>, como se puede observar en la <a href="#fig-playercontroller-camera-manager" class="quarto-xref">Figure&nbsp;20</a>.</p>
+<div id="fig-playercontroller-camera-manager" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-playercontroller-camera-manager-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/playercontroller-camera-manager.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-playercontroller-camera-manager-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;20: Configuración del <strong>PlayerCameraManager</strong> en el <strong>PlayerController</strong>.
+</figcaption>
+</figure>
+</div>
+<p>En cada <em>tick</em> el <strong>PlayerController</strong> llama al método <code>UpdateCamera()</code> de su <strong>PlayerCameraManager</strong> para que actualice las propiedades con el POV deseado más reciente. El motor accede a estas propiedades a través del <strong>LocalPlayer</strong>, que utiliza al <strong>PlayerController</strong> y al <strong>PlayerCámeraManager</strong> para recopilar la información.</p>
+<section id="actor-view-target" class="level3">
+<h3 class="anchored" data-anchor-id="actor-view-target">Actor <em>view target</em></h3>
+<p>Sobreescribiendo <code>UpdateCamera()</code> en <strong>PlayerCameraManager</strong> se pueden establecer las propiedades del punto de vista de la cámara del jugador que usará el motor para el render. Sin embargo, la implementación por defecto que ofrece Unreal Engine en el <strong>PlayerCameraManager</strong> es bastante flexible, permitiendo ajustar el POV sobreescribiendo varios métodos.</p>
+<p>La implementación del <strong>PlayerCameraManager</strong> se basa en el concepto de <em>view target</em>, que es el actor que va a determinar el punto de vista del jugador. Este actor se puede obtener y cambiar manualmente en el <strong>PlayerController</strong>, mediante los métodos {{&lt; api GetViewTarget &gt;}}, {{&lt; api SetViewTarget &gt;}} y {{&lt; api SetViewTargetWithBlend &gt;}} (ver la <a href="#fig-playercontroller-view-target" class="quarto-xref">Figure&nbsp;21</a>), aunque realmente esta configuración se almacena en el <strong>PlayerCameraManager</strong>.</p>
+<div id="fig-playercontroller-view-target" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-playercontroller-view-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/playercontroller-view-target.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-playercontroller-view-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;21: Nodos para obtener y cambiar el <em>view target</em> en el <strong>PlayerController</strong>.
+</figcaption>
+</figure>
+</div>
+<p>Además, la asignación del <em>view target</em> puede ocurrir automáticamente, activando la opción <strong>Auto Manage Active Camera Target</strong> del <strong>PlayerController</strong> (ver la <a href="#fig-playercontroller-camera-manager" class="quarto-xref">Figure&nbsp;20</a>). En ese caso el <strong>PlayerController</strong>:</p>
+<ol type="1">
+<li>Busca un actor <strong>CameraActor</strong> con la opción <strong>Auto Activate for Player</strong> configurada con el jugador del <strong>PlayerController</strong> (ver la propiedad en la <a href="#fig-cameraactor-auto-activate" class="quarto-xref">Figure&nbsp;22</a>). Si lo encuentra, asigna ese actor {{&lt; api CameraActor &gt;}} como <em>view target</em>.</li>
+</ol>
+<div id="fig-cameraactor-auto-activate" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cameraactor-auto-activate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/cameraactor-auto-activate.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cameraactor-auto-activate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22: Configuración de <strong>CameraActor</strong> para que sea el <em>view target</em> del jugador 3.
+</figcaption>
+</figure>
+</div>
+<ol type="1">
+<li><p>En otro caso, utiliza el <strong>Pawn</strong> poseído en cada momento por el <strong>PlayerController</strong>.</p></li>
+<li><p>Si el <strong>PlayerController</strong> no posee a ningún <strong>Pawn</strong>, se usa el propio actor <strong>PlayerController</strong> como <em>view target</em>.</p></li>
+</ol>
+<p>Qué actor es el <em>view target</em> es importante porque durante la ejecución de <code>UpdateCamera()</code> se invoca el método {{&lt; api CalcCamera &gt;}} del <em>view target</em>. Mediante este método el actor devuelve el POV deseado para el jugador.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Este sistema no solo ofrece mucha flexibilidad para gestionar múltiples cámaras de <em>gameplay</em>. También se puede explotar para desarrollar un sistema de cámaras de depuración, que permita cambiar el punto de vista y la configuración en tiempo real, para visualizar el nivel desde diferentes puntos de vista y encontrar y resolver problemas.</p>
+</div>
+</div>
+<p>El comportamiento por defecto de <code>CalcCamera()</code> en cualquier actor es buscar su primer componente <strong>CameraComponent</strong> y devolver su localización, rotación y otras propiedades como el punto de vista del jugador.</p>
+<p>Es decir, en Unreal Engine, el componente <strong>CameraComponent</strong> es realmente una especie de objeto <em>marcador</em> que facilita configurar las propiedades de las cámaras directamente en la escena. En realidad no tienen conexión directa con la cámara del sistema de render, ni son necesarios para ubicar y configurar adecuadamente las cámaras.</p>
+<p>Si un el actor <em>view target</em> no tiene un <strong>CameraComponent</strong>, el método <code>CalcCamera()</code> retorna la ubicación y rotación del actor como POV del jugador.</p>
+</section>
+<section id="transiciones-entre-view-targets" class="level3">
+<h3 class="anchored" data-anchor-id="transiciones-entre-view-targets">Transiciones entre <em>view targets</em></h3>
+<p>La arquitectura comentada facilita cambiar entre diferentes modos de cámara, si el juego lo requiere.</p>
+<p>Por ejemplo, en un juego de acción en tercera persona, el jugador puede controlar a un personaje que se mueve libremente por el nivel, utilizando una cámara que orbita libremente alrededor del personaje. Pero cuando el jugador entra en un vehículo, el <em>view target</em> puede cambiar al vehículo, haciendo que se use una cámara externa que facilite la condución. Igualmente, cuando el personaje se acerca a una zona de escalada, el <em>view target</em> se puede cambiar a un actor con una cámara que se mueve en un plano paralelo a la pared, a una distancia mayor, para que el jugador pueda ver mejor lo que está haciendo. O en una arena de combate, el <em>view target</em> puede cambiar a un actor con una cámara externa que orbite en alto sobre la zona, facilitando al jugador tener una vista de la acción.</p>
+<p>Al cambiar el <em>view target</em> en el <strong>PlayerController</strong> mediante el método <code>SetViewTarget()</code>, la transición entre ambos POV es instantánea. Sin embargo, si se usa el método {{&lt; api SetViewTargetWithBlend &gt;}}, se puede configurar un tipo de transición, haciendo que el <strong>PlayerCameraManager</strong> interpole las propiedades de la cámara entre el POV del <em>view target</em> anterior y el nuevo (ver la <a href="#fig-playercontroller-view-target" class="quarto-xref">Figure&nbsp;21</a>).</p>
+<p>Por ejemplo, en el caso de la escalada, se puede usar una transición de tipo <em>ease out</em>, para que la cámara se aleje del personaje de forma suave, y otra de tipo <em>ease in</em>, para que la cámara se acerque al personaje de forma suave cuando termina la escalada.</p>
+<!-- TODO: Referencia a los ease aquí o en un capítulo de animaciones -->
+</section>
+<section id="personalizar-el-comportamiento-de-la-cámara" class="level3">
+<h3 class="anchored" data-anchor-id="personalizar-el-comportamiento-de-la-cámara">Personalizar el comportamiento de la cámara</h3>
+<p>En la arquitectura descrita existen diferentes puntos donde se puede personalizar el comportamiento de la cámara.</p>
+<section id="calccamera-en-el-view-target" class="level4">
+<h4 class="anchored" data-anchor-id="calccamera-en-el-view-target"><em>CalcCamera()</em> en el <em>view target</em></h4>
+<p>Sobreescribir el método {{&lt; api CalcCamera &gt;}} en el actor –solo en C++– es ideal para hacer cambios del control de cámara específicos de ese actor. Por ejemplo, un <strong>Pawn</strong> puede tener varios <strong>CameraComponent</strong> para indicar diferentes posibles posiciones de la cámara, como primera o tercera persona, cámara al hombro en el lado derecho o izquierdo, cámara con mira, etc.</p>
+<p>En <code>CalcCamera()</code> se puede implementar la lógica para elegir el <strong>CameraComponent</strong> adecuado, según las preferencias del jugador o el estado del personaje. <code>CalcCamera()</code> es, probablemente, el primer lugar donde mirar si queremos ajustar el comportamiento de la cámara.</p>
+<p>Parece hacer cambios más globales, es necesario ir al <strong>PlayerCameraManager</strong> y sobreescribir alguno de sus métodos.</p>
+</section>
+<section id="blueprintupdatecamera-y-updateviewtargetinternal" class="level4">
+<h4 class="anchored" data-anchor-id="blueprintupdatecamera-y-updateviewtargetinternal"><em>BlueprintUpdateCamera()</em> y <em>UpdateViewTargetInternal()</em></h4>
+<p>Se puede sobreescribir <code>BlueprintUpdateCamera()</code> en Blueprint para hacer cambios que afecten a todos los <strong>view target</strong>.</p>
+<p>En <strong>PlayerCameraManager</strong>, durante el <code>UpdateCamera()</code>, se llama a <code>UpdateViewTargetInternal()</code> indicándole el <em>view target</em> en los argumentos. Este es el método que llama al <code>CalcCamera()</code> de dicho <em>view target</em> y, posteriormente, pasa el POV devuelto por ese método a <code>BlueprintUpdateCamera()</code>, para que pueda modificarlo en un Blueprint. Si <code>BlueprintUpdateCamera()</code> devuelve <code>true</code>, sus cambios tienen prioridad sobre los devuelto por <code>CalcCamera()</code>.</p>
+<p>Para hacer este tipo de cambios globales, pero en C++, se puede sobreescribir <code>UpdateViewTargetInternal()</code>. Tanto <code>UpdateViewTargetInternal()</code> como <code>BlueprintUpdateCamera()</code> son ideales para cambios que solo requieran sobreescribir el POV devuelto por el método <code>CalcCamera()</code> del <em>view target</em> indicado, sin afectar al resto de maneras de obtener el POV del jugador.</p>
+</section>
+<section id="updateviewtarget" class="level4">
+<h4 class="anchored" data-anchor-id="updateviewtarget"><em>UpdateViewTarget()</em></h4>
+<p>El método <code>UpdateViewTargetInternal()</code> es llamado por <code>UpdateViewTarget()</code>.</p>
+<p>En el método <code>UpdateViewTarget()</code> recibe el <em>view target</em> y para obtener el POV sigue los siguientes pasos:</p>
+<ol type="1">
+<li><p>Si el <strong>view target</strong> indicado es un actor <strong>CameraActor</strong>, obtiene el POV directamente del <strong>CameraActor</strong>.</p></li>
+<li><p>En caso contrario, comprueba si se ha activado un estilo de cámara válido en la variable miembro <code>CameraStyle</code> –solo en C++– del <strong>PlayerCameraManager</strong>. Si así fuera, calcula directamente el POV del jugador según el estilo indicado<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p></li>
+</ol>
+<ol type="1">
+<li><p>En otro caso, llama a <code>UpdateViewTargetInternal()</code> que, a su vez, llama al <code>CalcCamera()</code> del <strong>view target</strong>. Luego llama <code>BlueprintUpdateCamera()</code>, para que pueda modificar el POV devuelto por dicho actor.</p></li>
+<li><p>Finamente, aplica los modificadores de cámara al POV obtenido en alguno de los pasos anteriores (ver la <a href="#sec-camera-modifiers" class="quarto-xref">Section&nbsp;1.8.4</a>) y retorna el POV resultante a <code>DoUpdateCamera()</code> del <strong>PlayerCameraManager</strong>.</p></li>
+</ol>
+<p>Por tanto, se puede sobreescribir <code>UpdateViewTarget()</code> para hacer cambios que afecten a todas las formas de calcular el POV deseado o para crear nuevos estilos de cámara, si preferimos implementar el control de la cámara directamente de esta última manera.</p>
+</section>
+<section id="doupdatecamera-y-updatecamera" class="level4">
+<h4 class="anchored" data-anchor-id="doupdatecamera-y-updatecamera"><em>DoUpdateCamera()</em> y <em>UpdateCamera()</em></h4>
+<p>Finalmente, <code>UpdateViewTarget()</code> es llamado por <code>DoUpdateCamera()</code> que, a su vez, es llamado por <code>UpdateCamera()</code> desde el <em>tick</em> del <strong>PlayerController</strong>.</p>
+<p><code>DoUpdateCamera</code> implementa el mecanismo de transición de <em>view target</em>, interpolando entre dos POV al indicar un nuevo <em>view target</em> mediante <code>SetViewTargetWithBlend()</code>.</p>
+<p>Como hemos comentado, <code>DoUpdateCamera()</code> llama <code>UpdateViewTarget()</code> con indicándole el <em>view target</em> actual para obtener el POV deseado. Si está en mitad de una transición entre dos <em>view target</em>, hace la llamada a <code>UpdateViewTarget()</code> dos veces, una para el <em>view target</em> previo y otra para el nuevo. Después interpola entre los POV devueltos por ambas llamadas, para obtener el POV definitivo en el frame actual.</p>
+<p>Por tanto, se puede sobreescribir <code>DoUpdateCamera()</code> para hacer cambios en la manera en la que se interpola entre los POV al cambiar el <em>view target</em>. O para modificar completamente el control del cámara.</p>
+<p>Al finalizar, <code>DoUpdateCamera()</code> almacena el POV resultante en <strong>PlayerCameraManager</strong> para su uso durante el render. También actualiza el fundido de cámara y de audio, si está activo –ver {{&lt; api StartCameraFade &gt;}}, {{&lt; api StopCameraFade &gt;}} y {{&lt; api SetManualCameraFade &gt;}} de <strong>PlayerCameraManager</strong> en la <a href="#fig-playercameramanager-fade" class="quarto-xref">Figure&nbsp;23</a>– y aplica otros efectos.</p>
+<div id="fig-playercameramanager-fade" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-playercameramanager-fade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/playercameramanager-fade.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-playercameramanager-fade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23: Nodos de <strong>PlayerCameraManager</strong> para el control del fundido de cámara.
+</figcaption>
+</figure>
+</div>
+<p>En la <a href="#fig-update-camera" class="quarto-xref">Figure&nbsp;24</a> se puede ver un esquema de la cadena de responsabilidad que se sigue para obtener el POV del jugador para el render.</p>
+<div id="fig-update-camera" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-update-camera-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<embed src="figures/update-camera-sequence.pdf" class="img-fluid">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-update-camera-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;24: Esquema de actualización del POV del jugador.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="sec-camera-modifiers" class="level3">
+<h3 class="anchored" data-anchor-id="sec-camera-modifiers">Modificadores de cámara</h3>
+<p>El <strong>PlayerCameraManager</strong> soporta modificadores de cámara que pueden añadir y eliminar mediante los métodos <code>AddNewCameraModifier()</code> y <code>RemoveCameraModifier()</code>, respectivamente (ver la <a href="#fig-playercameramanager-camera-modifiers" class="quarto-xref">Figure&nbsp;25</a>) o en las propiedades de la clase en el editor.</p>
+<div id="fig-playercameramanager-camera-modifiers" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-playercameramanager-camera-modifiers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/playercameramanager-camera-modifiers.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-playercameramanager-camera-modifiers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;25: Nodos de <strong>PlayerCameraManager</strong> para añadir y eliminar modificadores de cámara.
+</figcaption>
+</figure>
+</div>
+<p>Estos modificadores puede afectar a:</p>
+<ul>
+<li><p>La ubicación, rotación y otras propiedades de cámara del POV del jugador.</p></li>
+<li><p>La rotación de control del jugador. Por ejemplo, para establrcer límites.</p></li>
+<li><p>Modificar la configuración de los efectos de posprocesado.</p></li>
+</ul>
+<p>Los modificadores se aplican al final del método <code>UpdateViewTarget()</code>, durante el cálculo del POV del jugador.</p>
+<section id="activación-y-desactivación-de-modificadores" class="level4">
+<h4 class="anchored" data-anchor-id="activación-y-desactivación-de-modificadores">Activación y desactivación de modificadores</h4>
+<p>Una vez se ha añadido un modificador, se puede activar y desactivar, según el estado del juego, a través de los métodos <code>EnableModifier()</code>, <code>DisableModifier()</code> y <code>ToggleModifier()</code>, de la clase {{&lt; api CameraModifier &gt;}}, que se pueden ver en la <a href="#fig-cameramodifier-activation" class="quarto-xref">Figure&nbsp;26</a>.</p>
+<div id="fig-cameramodifier-activation" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cameramodifier-activation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/cameramodifier-activation.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cameramodifier-activation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;26: Nodos de <strong>CameraModifier</strong> para activar y desactivar el modificador.
+</figcaption>
+</figure>
+</div>
+<p>Por ejemplo, se puede añadir un modificador <code>UCameraModifier_CameraShake</code> para sacudir la cámara cuando el jugador recibe daño, activándolo y desactivándolo durante un tiempo cuando se da el caso.</p>
+<p>Además, la activación y desactivación puede ser instantánea o gradual, según el valor de las propiedades <code>AlphaInTime</code>, <code>AlphaOutTime</code> de <strong>CameraModifier</strong> y el argumento <code>Immediate</code> de <code>DisableModifier()</code>.</p>
+</section>
+<section id="prioridad-de-los-modificadores" class="level4">
+<h4 class="anchored" data-anchor-id="prioridad-de-los-modificadores">Prioridad de los modificadores</h4>
+<p>Los modificadores se organizan en el <strong>PlayerCameraManager</strong> en una lista ordenada por su prioridad, que es una propiedad de la instancia de <code>CamaraModifier</code>. De forma que se pueden aplicar varios modificadores a la vez, en un orden determinado por su prioridad.</p>
+<p>Aunque los efectos de los modificadores generalmente se combinan, es posible que un modificador de alta prioridad prevenga la ejecución de modificadores de menor prioridad. Esto se puede indicar mediante el valor de retorno del método {{&lt; api ModifyCamera &gt;}} de <strong>CameraModifier</strong>, que si <code>true</code> detendría la ejecución de los siguientes modificadores.</p>
+</section>
+<section id="modificadores-de-cámara-predefinidos" class="level4">
+<h4 class="anchored" data-anchor-id="modificadores-de-cámara-predefinidos">Modificadores de cámara predefinidos</h4>
+<p>Algunos de los modificadores de cámara predefinidos de Unreal Engine son:</p>
+<ul>
+<li><p>{{&lt; api CameraShakeBase &gt;}}. Sacude la cámara para crear sensación de impacto o agitación, lo que es útil con explosiones o al recibir daño.</p>
+<p>El efecto se configura añadiendo al modificador uno o varios objetos de tipo {{&lt; api CameraShakeBase &gt;}}. Cada uno contiene un <em>patrón de movimiento</em> que es el objeto que realmente contiene la lógica que dirige el movimiento de la cámara<span class="citation" data-cites="UnrealCameraShakes">[@UnrealCameraShakes]</span>.</p></li>
+<li><p>{{&lt; api UCameraAnimationCameraModifier &gt;}}. Aplica una secuencia de animación a la cámara.</p></li>
+</ul>
+</section>
+<section id="modificadores-personalizados" class="level4">
+<h4 class="anchored" data-anchor-id="modificadores-personalizados">Modificadores personalizados</h4>
+<p>La clase base de los modificadores es {{&lt; api CameraModifier &gt;}} y se puede heredar de ella para implementar modificadores de cámara personalizados.</p>
+<p>Los métodos <code>BlueprintModifyCamera()</code> y {{&lt; api ModifyCamera &gt;}} son los que se deben sobreescribir para implementar la lógica de los modificadores de las propiedades de la cámara, en Blueprint o C++, respectivamente. Mientras que <code>BlueprintModifyPostProcess()</code> y {{&lt; api ModifyPostProcess &gt;}} se pueden sobreescribir para modificar la configuración de los efectos de posprocesado.</p>
+<p>En todo los casos, es responsabilidad del código de estas funciones interpretar y aplicar los valores de <code>Alpha</code>, si el efecto debe mezclarse de forma gradual al activarse o desactivarse.</p>
+<p>En realidad, <strong>PlayerCameraManager</strong> llama al método {{&lt; api ModifyCamera &gt;}} de cada modificador, pasándole la delta de tiempo y una estructura con la información del POV del jugador para que la modifique. Este método actualiza el <code>Alpha</code>, llama a los métodos anteriores y, por defecto, retorna <code>false</code> para que se puedan ejecutar los siguientes modificadores de menor prioridad.</p>
+</section>
+<section id="relación-con-la-rotación-de-control" class="level4">
+<h4 class="anchored" data-anchor-id="relación-con-la-rotación-de-control">Relación con la <em>rotación de control</em></h4>
+<p>La <em>rotación de control</em> del <strong>PlayerController</strong> se puede ver afectada por los modificadores de la cámara y el <strong>PlayerCameraManager</strong>.</p>
+<p>En cada <em>tick</em> el <strong>PlayerController</strong> llama a su método <code>UpdateRotation()</code> para actualizar la <em>rotación de control</em> con la entrada del jugador acumulada hasta el momento en una variable interna. Este método llama a <code>ProcessViewRotation()</code> del <strong>PlayerCameraManager</strong> que, a su vez, llama al mismo método en cada modificador de cámara, pasando por referencia tanto la rotación de control actual como la indicada por la entrada del jugador.</p>
+<p>Gracias a esto, los modificadores de la cámara pueden modificar tanto <em>rotación de control</em> actual como la entrada del jugador acumulada, que se usará para actualizar la <em>rotación de control</em>. Esto sirve, por ejemplo, para que un modificador de cámara activo pueda limitar la <em>rotación de control</em> a cierto intervalo.</p>
+<p>En todo caso, para establecer limitaciones a la <em>rotación de control</em> del jugador de forma generalizada, se pueden usar las propiedades <strong>View Pitch Min</strong>, <strong>View Pitch Max</strong>, <strong>View Yaw Min</strong>, <strong>View Yaw Max</strong>, <strong>View Roll Min</strong> y <strong>View Roll Max</strong> que trae de serie <strong>PlayerCameraManager</strong>, como se puede ver en la <a href="#fig-playercameramanager-view-limits" class="quarto-xref">Figure&nbsp;27</a>.</p>
+<div id="fig-playercameramanager-view-limits" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-playercameramanager-view-limits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/playercameramanager-view-limits.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-playercameramanager-view-limits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;27: Propiedades de <strong>PlayerCameraManager</strong> para limitar la <em>rotación de control</em> del jugador.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+<section id="gameplay-framework-1" class="level2">
+<h2 class="anchored" data-anchor-id="gameplay-framework-1">Gameplay Framework</h2>
+<p>En la <a href="#fig-ue-gameplay-framework" class="quarto-xref">Figure&nbsp;28</a> se puede observar un esquema del <em>gameplay framework</em> de Unreal Engine que hemos comentado en apartados anteriores.</p>
+<div class="cell" data-file="figures/ue-gameplay-framework.mm" data-fig-width="15cm" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-ue-gameplay-framework" class="quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ue-gameplay-framework-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-ue-gameplay-framework">classDiagram
+    Actor &lt;|-- GameMode
+    Actor &lt;|-- GameState
+    Actor &lt;|-- PlayerState
+    Actor &lt;|-- Controller
+    Actor &lt;|-- Pawn
+
+    GameMode --&gt; GameState
+    GameState "1" --&gt; "*" PlayerState
+
+    PlayerController --&gt; PlayerCameraManager
+    PlayerController --&gt; PlayerInput
+    PlayerController --&gt; HUD
+    GameMode --&gt; PlayerController : crea
+    PlayerController "1" --&gt; "1" PlayerState
+
+    Controller &lt;|-- PlayerController
+    Controller &lt;|-- AIController
+    PlayerController --&gt; Pawn : posee
+    AIController --&gt; Pawn : posee
+
+    Pawn &lt;|-- Character
+    Pawn &lt;|-- DefaultPawn
+    Pawn &lt;|-- SpectatorPawn
+
+    ActorComponent &lt;|-- MovementComponent
+    MovementComponent &lt;|-- CharacterMovementComponent
+    Character *-- CharacterMovementComponent</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ue-gameplay-framework-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;28: Esquema del <em>gameplay framework</em> de Unreal Engine.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Esta arquitectura se puede trasladar fácilmente a otros motores, con las modificaciones que mejor se adapten a nuestras necesidades y a las particularidades de cada motor.</p>
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><code>UpdateViewTarget()</code> incluye implementaciones de ejemplo para unos pocos estilos: <strong>Fixed</strong>, <strong>ThirdPerson</strong>, <strong>FirstPerson</strong>, <strong>FreeCam</strong> y <strong>FreeCam_Default</strong>. Obviamente, se puede sobreescribir el método para hacer implementaciones propias o añadir nuevos estilos, pero esta no es la forma más común de implementar el control de cámara, en la actualidad.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

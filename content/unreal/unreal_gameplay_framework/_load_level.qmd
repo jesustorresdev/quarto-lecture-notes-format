@@ -4,7 +4,7 @@ En Unreal Engine la carga de un nuevo nivel se realiza usando el método {{< api
 
 ![Uso de **OpenLevel** para cargar un nivel.](figures/openlevel.png){#fig-openlevel}
 
-El problema es que durante la carga, el juego se queda congelado, cuando los jugadores esperan que se muestre una pantalla de carga.
+El problema es que durante la carga el juego se queda congelado, pese a que los jugadores esperan que se muestre una pantalla de carga.
 Para implementar una pantalla de carga, existen principalmente dos opciones: streaming de niveles o carga asíncrona de niveles.
 
 ## Streaming de niveles
@@ -34,7 +34,7 @@ Idealmente, lo que interesaría es tener una función `OpenLevel()` que fuera as
 De esta forma, se podría cargar el *widget* de la pantalla de carga y llamar a la función `OpenLevel()` para cargar el nivel que se quiere mostrar.
 Cuando la carga del nivel finalice, ocultar la pantalla de carga y dejar que se muestre el nivel.
 
-La ventaja de esta opción es que así, cada nivel tiene su propio **GameMode** y se pueden probar los niveles de forma independiente en el editor.
+La ventaja de esta opción es que así, cada nivel tiene su propio **GameMode** y se pueden probar los niveles de forma independiente en el editor, de manera que se puede iterar de forma más ágil.
 Además, nada impide que cada nivel use subniveles, tanto para dividir el nivel en partes más pequeñas como para facilitar la colaboración entre los desarrolladores.
 
 Para conseguir un `OpenLevel()` asíncrono, se puede utilizar el método {{< api LoadPackageAsync >}} en C++.
