@@ -194,7 +194,7 @@ Para implementar esto, tenemos varias opciones:
   En general, estos materiales se asignan a las **colisiones** y sirven para ajustar ciertas propiedades físicas de las superficies, que solo entran en juego si los objetos tienen activada la **simulación física**[@TorresD3DFisicas].
   Pero en este caso no hablamos de usarlos para eso, sino utilizar el **materiales físico** asignado a la **colisión** como identificador del tipo de superficie, para así poder generar los efectos adecuados.
 
-  Esto, por ejemplo, permite tener varios actores de la clase `Floor` en la escena pero con **materiales físicos** diferentes, como: `PM_Concrete`, `PM_Wood` o `PM_Grass`.
+  Esto, por ejemplo, permite tener varios actores de la clase `Floor` en la escena pero con **materiales físicos** diferentes, como `PM_Concrete`, `PM_Wood` o `PM_Grass`.
 
 En Unreal Engine los **Physical Material**[@UnrealPhysicalMaterials] son un tipo de *asset* se pueden aplicar a materiales, **Material Instance**, mallas estáticas y **Physics Assets** --que son quienes determinan las colisiones de las mallas esqueletales--.
 

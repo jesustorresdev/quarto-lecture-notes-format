@@ -243,7 +243,7 @@ En Unreal Engine se suele seguir la convención de nombrar los *assets* con un p
 Por ejemplo, `BP_` para los Blueprints, `SM_` para las **Static Mesh**, `SK_` para las **Skeletal Mesh**, `M_` para los materiales, etc.
 A veces también se usan sufijos para indicar variantes como, por ejemplo, `_Cue` para indicar que un recursos de sonido --seguramente con prefijo `A_`--  es un **Sound Cue**.
 
-En «Gamemakin UE4 Style Guide()»[@AllarAssetNamingConventions] se recopila una lista de prefijos y sufijos recomendados.
+En *«Gamemakin UE4 Style Guide()»*[@AllarAssetNamingConventions] se recopila una lista de prefijos y sufijos recomendados.
 
 Uno de los efectos de esta convención es que realmente no hace falta tener subdirectorios por tipo de *asset* --del estilo de `Materials`, `Meshes` o `Textures`-- puesto que resulta redundante.
 Este tipo de carpetas solo hacen falta cuando la cantidad de *asset* es tan grande que es conveniente separarlos y construir una jerarquía de directorios para su organización.
@@ -278,12 +278,12 @@ En la @fig-ue-assets-tree-by-feature se puede observar un ejemplo de organizaci�
   Por ejemplo, los técnicos de sonido suelen trabajar con sus propias herramientas --a veces no pertenecen al estudio, porque son trabajadores externos-- y periódicamente importan todo su trabajo en el motor.
   En ese caso es más sencillo importa el trabajo en una carpeta como `Content/Sounds`, sobrescribiendo el contenido anterior, que ir buscando cada *asset* de sonido uno a uno para sustituirlo.
 
-La estructura mostrada en la @fig-ue-assets-tree-by-feature toma algunas ideas de «Gamemakin UE4 Style Guide()»[@AllarDirectoryStructure], que es un documento que conviene tener a mano porque recoge recomendaciones sobre cómo nombrar y organizar los recursos.
+La estructura mostrada en la @fig-ue-assets-tree-by-feature toma algunas ideas de *«Gamemakin UE4 Style Guide()»*[@AllarDirectoryStructure], que es un documento que conviene tener a mano porque recoge recomendaciones sobre cómo nombrar y organizar los recursos.
 Estas recomendaciones se basan en la guía que originalmente estaba disponible en el Wiki de Unreal Engine[@AssetsNamingConventionOldUE4Wiki].
 
 ### Subdirectorio de *assets* del proyecto
 
-Una recomendación que hace «Gamemakin UE4 Style Guide()» es crear una carpeta con el nombre del proyecto en `Content` y meter allí todos los recursos, de manera similar a lo comentado en la @sec-gameassets-folder para Unity.
+Una recomendación que hace *«Gamemakin UE4 Style Guide()»* es crear una carpeta con el nombre del proyecto en `Content` y meter allí todos los recursos, de manera similar a lo comentado en la @sec-gameassets-folder para Unity.
 
 Extensiones, DLC o parches, también deben tener carpetas propias para controlar los *assets* incluidos.
 Si durante el desarrollo, algún *asset* de una característica que se va a mantener hace referencia a un recurso fuera de la carpeta del proyecto --o de la extensión, parche o DLC-- la situación debe ser corregida.
@@ -350,7 +350,7 @@ Siguiendo con el ejemplo anterior, si el sistema de conducción es lo bastante g
 ### Plugins y características modulares
 
 Epic Games recomienda aprovechar las ventajas del sistema de *plugins* para dividir el proyecto y compartimentar el desarrollo.
-Por ejemplo, en el proyecto «Lyra Starter Game»[@EpicLyraStarterGame] la carpeta `Content` solo contiene *assets* genéricos y lo necesario para implementar el vestíbulo principal, donde el jugador escoge la experiencia que quiere probar.
+Por ejemplo, en el proyecto *«Lyra Starter Game»*[@EpicLyraStarterGame] la carpeta `Content` solo contiene *assets* genéricos y lo necesario para implementar el vestíbulo principal, donde el jugador escoge la experiencia que quiere probar.
 
 Las experiencias de juego se implementan en varios *plugins*.
 Uno de ellos contiene los materiales compartidos por todo el proyecto, otros implementan el *gameplay* principal de las diferentes experiencias de juego --por ejemplo, la lógica del modo de juego *shooter* se implementa en su propio *plugin*-- y otros contienen los niveles donde se van a jugar las experiencias y lógica específica de cada nivel.
@@ -361,7 +361,7 @@ Con ayuda de ambos se pueden distribuir características de juego en forma de *p
 
 Permiten, por ejemplo, modificar el *gameplay* o añadir un nuevo modo de juego o nuevo contenido.
 Por tanto, pueden ser útiles para desarrollar *plugins* con parches, DLC o nuevo contenido para juegos que siguen el modelo de «juego como servicio», como es el caso de Fornite.
-Obviamente, también se pueden aprovechar para compartimentar el desarrollo de cualquier proyecto, como se hace en «Lyra Starter Game», empaquetando diferentes características del juego en distintos *plugins* .
+Obviamente, también se pueden aprovechar para compartimentar el desarrollo de cualquier proyecto, como se hace en *«Lyra Starter Game»*, empaquetando diferentes características del juego en distintos *plugins* .
 
 Algunas de las acciones que pueden realizar estos *plugins* de características son:
 
@@ -498,7 +498,7 @@ Los VCS no entienden los formatos binarios, así que no son capaces de calcular 
 Por eso, lo más común es que el VCS se configure para bloquear los archivos binarios, de tal forma que mientras un usuario está modificando uno de estos archivos, otro no pueda editarlo.
 
 El problema es que si, por ejemplo, el archivo de un nivel se bloquea, otros usuarios no pueden trabajar en él al mismo tiempo.
-Y lo mismo ocurre con otros contenidos, como: sonidos, texturas, secuencias y más.
+Y lo mismo ocurre con otros contenidos, como sonidos, texturas, secuencias y más.
 Así que ¿cómo podríamos hacer para facilitar la colaboración?.
 
 ### Unity
