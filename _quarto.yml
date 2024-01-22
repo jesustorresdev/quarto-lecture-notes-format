@@ -1,9 +1,9 @@
 project:
   output-dir: _output
   render:
-    - content/01_flujo_de_trabajo/flujo_de_trabajo.qmd
-    - content/02_introducción_gameplay/colisiones_y_triggers.qmd
-    - content/02_introducción_gameplay/control_de_personajes.qmd
+    - content/flujo_de_trabajo/flujo_de_trabajo.qmd
+    - content/gameplay/colisiones_y_triggers.qmd
+    - content/gameplay/control_de_personajes.qmd
     - content/extras/perforce/perforce.qmd
     - content/extras/estructura_proyectos/estructura_proyectos.qmd
     - content/unreal/unreal_gameplay_framework/unreal_gameplay_framework.qmd
