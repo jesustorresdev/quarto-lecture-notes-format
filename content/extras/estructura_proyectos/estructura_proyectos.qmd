@@ -243,7 +243,8 @@ En Unreal Engine se suele seguir la convención de nombrar los *assets* con un p
 Por ejemplo, `BP_` para los Blueprints, `SM_` para las **Static Mesh**, `SK_` para las **Skeletal Mesh**, `M_` para los materiales, etc.
 A veces también se usan sufijos para indicar variantes como, por ejemplo, `_Cue` para indicar que un recursos de sonido --seguramente con prefijo `A_`--  es un **Sound Cue**.
 
-En *«Gamemakin UE4 Style Guide()»*[@AllarAssetNamingConventions] se recopila una lista de prefijos y sufijos recomendados.
+En la documentación de Unreal Engine[@UnrealAssetNameConventions] se indica una lista de prefijos recomendados para los diferentes tipos de *assets*.
+En el repositorio *«Gamemakin UE4 Style Guide()»*[@AllarAssetNamingConventions] se recopila una lista mucho más extensa de prefijos y sufijos sugeridos, que puede usarse para complementar a la anterior.
 
 Uno de los efectos de esta convención es que realmente no hace falta tener subdirectorios por tipo de *asset* --del estilo de `Materials`, `Meshes` o `Textures`-- puesto que resulta redundante.
 Este tipo de carpetas solo hacen falta cuando la cantidad de *asset* es tan grande que es conveniente separarlos y construir una jerarquía de directorios para su organización.
