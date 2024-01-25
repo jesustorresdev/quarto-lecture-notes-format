@@ -1,0 +1,33 @@
+stateDiagram-v2
+    direction LR
+
+    state Movement {
+        direction LR
+        [*] --> Move.Walk
+        Move.Walk --> Move.Jump: Jump Start
+        Move.Jump --> Move.Walk: Land
+        Move.Jump --> Move.DoubleJump: Jump Start\n[JumpElapsedTime < 1.5]
+        Move.DoubleJump --> Move.Walk: Land
+        Move.Walk --> Move.Crouch: Crouch Start
+        Move.Crouch --> Move.Walk: Crouch End
+    }
+
+    state Animation {
+        direction LR
+        [*] --> Anim.Idle 
+        Anim.Idle --> Anim.Walk: [Move.Speed >= 0.1]
+        Anim.Walk --> Anim.Idle: [Move.Speed < 0.1]
+        Anim.Idle --> Anim.Jump: [Move.IsJumping]
+        Anim.Walk --> Anim.Jump: [Move.IsJumping]
+        Anim.Jump --> Anim.Fall: [Move.IsJumping\n&& Move.Speed.Z < 0]
+        Anim.Fall --> Anim.Land: [!Move.IsJumping]
+        Anim.Land --> Anim.Idle: [Move.Speed < 0.1]
+        Anim.Land --> Anim.Walk: [Move.Speed >= 0.1]
+
+        Anim.Idle --> Anim.CrouchIdle: [Move.IsCrouched]
+        Anim.CrouchIdle --> Anim.Idle: [!Move.IsCrouched]
+        Anim.Walk --> Anim.CrouchWalk: [Move.IsCrouched]
+        Anim.CrouchWalk --> Anim.CrouchIdle: [!Move.IsCrouched]
+        Anim.CrouchIdle --> Anim.CrouchWalk: [Move.Speed >= 0.1]
+        Anim.CrouchWalk --> Anim.CrouchIdle: [Move.Speed < 0.1]
+    }
