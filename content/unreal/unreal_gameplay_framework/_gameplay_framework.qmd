@@ -169,9 +169,9 @@ Por tanto, se puede usar los eventos indicados para hacer que el **AIController*
 
 Además de usar los métodos `Possess()` y `UnPossess()`, los **Pawn** se puede configurar para que sean poseídos automáticamente por un **Controller** cuando son instanciados y comienza su ejecución en el nivel, como se puede ver en la @fig-pawn-auto-possess:
 
-* Si un **Pawn** se configura con la propiedad **Auto Possess Player**, es poseído automática por el **PlayerController** del jugador indicado, al ser instanciado.
+* Si un **Pawn** se configura con la propiedad **Auto Possess Player**, es poseído automáticamente por el **PlayerController** del jugador indicado, al ser instanciado.
 
-* Si un **Pawn** se configura con la propiedad **Auto Possess AI**, es poseído automática por el **AIController** indicado.
+* Si un **Pawn** se configura con la propiedad **Auto Possess AI**, es poseído automáticamente por el **AIController** indicado.
 
 ![Configuración **Auto Possess** de la clase **Pawn**.](figures/pawn-auto-possess.png){#fig-pawn-auto-possess}
 
@@ -181,7 +181,7 @@ Una vez el **Controller** posee un **Pawn** puede controlarlo a través de sus m
 
 Para que el **Controller** pueda indicar acciones adicionales al **Pawn** --como atacar, salta, escalar o defenderse-- es necesario implementar una interfaz que exponga dichas acciones en el **Pawn** y que el **Controller** pueda llamar. 
 
-Por ejemplo, en la @fig-pawn-control se ilustra un posible caso dónde nuestro **MyPlayerController** --que hereda de **PlayerController** para añadirle funcionalidades adicionales, como la lectura de las acciones del jugador-- posee al actor para el personaje del jugador **MyPlayerPawn**
+Por ejemplo, en la @fig-pawn-control se ilustra un posible caso donde nuestro **MyPlayerController** --que hereda de **PlayerController** para añadirle funcionalidades adicionales, como la lectura de las acciones del jugador-- posee al actor para el personaje del jugador **MyPlayerPawn**
 
 ```{mermaid}
 %%| label: fig-pawn-control
@@ -201,7 +201,7 @@ Un **Controller** puede mover un **Pawn** directamente llamando a métodos como 
 
 Sin embargo, lo más habitual es que el **Controller** indique al **Pawn** que se mueva en una dirección, para lo que puede usar al método {{< api AddMovementInput >}} de **Pawn**.
 
-En la @fig-pawn-movement-input se puede observar como se lee la acción de entrada *Move*, para luego llamar a `AddMovementInput` con sus valores para actualizar el movimiento del **Pawn**.
+En la @fig-pawn-movement-input se puede observar cómo se lee la acción de entrada *Move*, para luego llamar a `AddMovementInput` con sus valores para actualizar el movimiento del **Pawn**.
 En este ejemplo la lectura de la acción se hace desde el propio **Pawn**, no desde el **Controller**.
 
 ![Uso de la entrada para el movimiento desde el **Pawn**.](figures/pawn-movement-input.png){#fig-pawn-movement-input}
