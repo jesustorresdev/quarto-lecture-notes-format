@@ -1,3 +1,22 @@
+@article{Holden2020LearnedMotionMatching,
+title        = {Learned motion matching},
+author       = {Holden, D. and Kanoun, O. and Perepichka, M. and Popa, T.},
+year         = 2020,
+month        = {aug},
+journal      = {ACM Trans. Graph.},
+publisher    = {Association for Computing Machinery},
+address      = {New York, NY, USA},
+volume       = 39,
+number       = 4,
+doi          = {10.1145/3386569.3392440},
+issn         = {0730-0301},
+note         = {\url{https://www.ubisoft.com/en-us/studio/laforge/news/3NWqwcMU9lMfumgfPAEfka/learned-motion-matching}},
+issue_date   = {August 2020},
+abstract     = {In this paper we present a learned alternative to the Motion Matching algorithm which retains the positive properties of Motion Matching but additionally achieves the scalability of neural-network-based generative models. Although neural-network-based generative models for character animation are capable of learning expressive, compact controllers from vast amounts of animation data, methods such as Motion Matching still remain a popular choice in the games industry due to their flexibility, predictability, low preprocessing time, and visual quality - all properties which can sometimes be difficult to achieve with neural-network-based methods. Yet, unlike neural networks, the memory usage of such methods generally scales linearly with the amount of data used, resulting in a constant trade-off between the diversity of animation which can be produced and real world production budgets. In this work we combine the benefits of both approaches and, by breaking down the Motion Matching algorithm into its individual steps, show how learned, scalable alternatives can be used to replace each operation in turn. Our final model has no need to store animation data or additional matching meta-data in memory, meaning it scales as well as existing generative models. At the same time, we preserve the behavior of Motion Matching, retaining the quality, control, and quick iteration time which are so important in the industry.},
+articleno    = 53,
+numpages     = 13,
+keywords     = {animation, character animation, generative models, motion matching, neural networks}
+}
 @incollection{AllarAssetNamingConventions,
 title        = {Asset Naming Conventions},
 author       = {{Allar, M.}},
@@ -5,12 +24,33 @@ journal      = {GitHub},
 booktitle    = {Gamemakin UE4 Style Guide()},
 url          = {https://github.com/Allar/ue5-style-guide#1-asset-naming-conventions}
 }
+@online{O3DEMotionMatching,
+title        = {Motion Matching},
+author       = {{Open 3D Engine}},
+publisher    = {GitHub},
+url          = {https://github.com/o3de/o3de/tree/development/Gems/MotionMatching},
+howpublished = {Repositorio de software}
+}
 @incollection{AllarDirectoryStructure,
 title        = {Content Directory Structure},
 author       = {{Allar, M.}},
 journal      = {GitHub},
 booktitle    = {Gamemakin UE4 Style Guide()},
 url          = {https://github.com/Allar/ue5-style-guide#2-content-directory-structure}
+}
+@online{Jillich2022MotionMatching,
+title        = {Motion Matching in O3DE, a Data-Driven Animation Technique},
+author       = {Jillich, B.},
+journal      = {{O3DE Learn}},
+url          = {https://docs.o3de.org/blog/posts/blog-motionmatching/},
+date         = {2022-05-12}
+}
+@online{Cooper2016MotionMatching,
+title        = {Motion Matching in O3DE, a Data-Driven Animation Technique},
+author       = {Cooper, J.},
+journal      = {{GAME ANIM}},
+url          = {https://www.gameanim.com/2016/05/03/motion-matching-ubisofts-honor/},
+date         = {2016-05-03}
 }
 @online{AllarUE4StyleGuide,
 title        = {Gamemakin UE4 Style Guide()},
@@ -49,6 +89,62 @@ author       = {Burguess, J. and Purkeypile, N.},
 year         = 2013,
 journal      = {{Joel Burguess (blog)}},
 url          = {http://blog.joelburgess.com/2013/04/skyrims-modular-level-design-gdc-2013.html}
+}
+@online{Zadziuk2016MotionMatching,
+title        = {Animation Bootcamp: Motion Matching: The Future of Games Animation...Today},
+author       = {Zadziuk, K.},
+year         = 2016,
+journal      = {{GDC 2016}},
+url          = {https://www.gdcvault.com/play/1023478/Animation-Bootcamp-Motion-Matching-The}
+}
+@online{Zadziuk2016MotionMatchingExplained,
+title        = {Motion Matching --- Ubisoft Toronto's Interactive Locomotion Explained (ish)},
+author       = {Zadziuk, K.},
+journal      = {Youtube},
+url          = {https://www.youtube.com/watch?v=VBciHbVP8A4},
+date         = 2016
+}
+@online{Zadziuk2016DanceCardBreakdown,
+title        = {Motion Matching --- `Dance Card' Breakdown},
+author       = {Zadziuk, K.},
+journal      = {Youtube},
+url          = {https://www.youtube.com/watch?v=_Bd2T7uP9VA},
+date         = 2016
+}
+@online{Zadziuk2016ImpactTest,
+title        = {Motion Matching --- Stumble & Impact Tests},
+author       = {Zadziuk, K.},
+journal      = {Youtube},
+url          = {https://www.youtube.com/watch?v=0EIgj0KZHVg},
+date         = 2016
+}
+@online{Büttner2016MotionMatching,
+title        = {Motion Matching - The Road to Next-Gen Animation},
+author       = {Büttner, M. and Clavet, S.},
+year         = 2016,
+journal      = {{Nucl.ai 2015}},
+url          = {https://www.youtube.com/watch?v=z_wpgHFSWss&t=658s}
+}
+@online{Clavet2016MotionMatching,
+title        = {Motion Matching and The Road to Next-Gen Animation},
+author       = {Clavet, S.},
+year         = 2016,
+journal      = {{GDC 2016}},
+url          = {https://www.gdcvault.com/play/1023280/Motion-Matching-and-The-Road}
+}
+@online{VandenHeuvel2020MMHalfLifeAlyx,
+title        = {Test de locomoción de NPC para ``Half-Life Alyx"},
+author       = {Van den Heuvel, J.},
+journal      = {Twitter},
+url          = {https://twitter.com/ImplicitAction/status/1259177260042432513},
+date         = {2020-05-09}
+}
+@online{VandenHeuvel2021MMHalfLifeAlyx,
+title        = {Character Locomotion in Half-Life: Alyx},
+author       = {Van den Heuvel, J.},
+year         = 2021,
+journal      = {SIGGRAPH 2021},
+url          = {https://www.youtube.com/watch?v=RCu-NzH4zrs}
 }
 @online{Dillon2018Greyboxing,
 title        = {Greyboxing para ``Shooty Squad"},
@@ -179,6 +275,12 @@ url          = {https://docs.unrealengine.com/udk/Three/ModularLevelDesign.html}
 title        = {Realtime CSG},
 author       = {Prenominal},
 url          = {https://assetstore.unity.com/packages/tools/modeling/realtime-csg-69542},
+howpublished = {Unity Asset Store}
+}
+@online{AnimationUprisingMotionMatchingForUnity,
+title        = {Motion Matching for Unity},
+author       = {{Animation Uprising}},
+url          = {https://assetstore.unity.com/packages/tools/animation/motion-matching-for-unity-145624},
 howpublished = {Unity Asset Store}
 }
 @online{Reece2022Greyboxing,
@@ -363,6 +465,12 @@ title        = {Actor Ticking},
 author       = {{Epic Games, Inc.}},
 journal      = {Unreal Engine 5 Documentation},
 url          = {https://docs.unrealengine.com/en-US/actor-ticking-in-unreal-engine/}
+}
+@online{UnrealMotionMatching,
+title        = {Motion Matching},
+author       = {{Epic Games, Inc.}},
+journal      = {Unreal Engine 5 Documentation},
+url          = {https://docs.unrealengine.com/en-US/motion-matching-in-unreal-engine/}
 }
 @online{UnrealAIPerception,
 title        = {AI Perception},

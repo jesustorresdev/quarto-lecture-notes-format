@@ -7,6 +7,7 @@ project:
     - content/extras/perforce/perforce.qmd
     - content/extras/estructura_proyectos/estructura_proyectos.qmd
     - content/unreal/unreal_gameplay_framework/unreal_gameplay_framework.qmd
+    - content/animación/motion_matching.qmd
 
 subtitle: Desarrollo de Videojuegos 3D (20XX/20XY)
 institute: Master Universitario en Desarrollo de Videojuegos de la Universidad de La Laguna
