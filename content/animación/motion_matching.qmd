@@ -137,6 +137,12 @@ Esta parte de la posición y orientación actual del personaje, pero se curva ha
 Si la trayectoria es compleja de predecir, se puede intentar mejorar la predicción interpolando entre la trayectoria estimada a partir de la entrada del jugador y la trayectoria de la secuencia de *keyframes* actualmente seleccionada, que ha sido capturada de personas reales.
 Por lo general, esta interpolación se ajusta para que los puntos más próximos en tiempo se acerquen más a la trayectoria de la secuencia actual, mientras que en los más alejados solo se use la estimación a partir de la entrada del jugador.
 
+## Compatibilidad con otros sistemas
+
+La técnica de ***motion matching*** es perfectamente compatible con otras técnicas y sistemas de animación.
+Por ejemplo, se puede ejecutar como un nodo dentro de una máquina de estados de animación, lo que permite transicionar entre ***motion matching*** y *clips* seleccionados de forma tradicional o *blend spaces*.
+También se pueden introducir etapas posteriores para ajustar la animación de forma procedural, usando *cinemática inversa* o *simulación física*.
+
 # Consumo de memoria
 
 La principal limitación de esta técnica está en su elevado consumo de memoria, seguida, en mucha menor medida, por el tiempo de búsqueda.
