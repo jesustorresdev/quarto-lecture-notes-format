@@ -7,7 +7,7 @@ title-meta: "Animación: Motion matching"
 
 # Introducción
 
-Una de las técnicas más comunes para animar en tiempo real personajes en videojuegos, es el uso de varios *clips* de animación por *keyframes* y una máquina de estados que se encarga de seleccionar el *clip* de animación que se debe reproducir en cada momento.
+Una de las técnicas más comunes para animar personajes en tiempo real, es el uso de varios *clips* de animación por *keyframes* y una máquina de estados que se encarga de seleccionar el *clip* de animación que se debe reproducir en cada momento.
 
 Los animadores crean varias animaciones con una serie de *keyframes*, que definen el estado de las articulaciones del personaje en cada instante en el tiempo.
 Estas animaciones se pueden crear de forma enteramente manual o usando técnicas para capturar el movimiento de un actor real.
@@ -22,9 +22,9 @@ Esta técnica es muy flexible y permite crear animaciones complejas, pero cuanto
 Una de las alternativas a esta técnica más tradicional es el uso de ***motion matching***, que ha ido ganado popularidad desde que juegos como *«For Honor»* (2016)[@Cooper2016MotionMatching], *«EA Sports UFC 3»* (2019), *«The Last Of Us Part II»* (2020), *«Half-Life: Alyx»* (2020)[@VandenHeuvel2021MMHalfLifeAlyx; @VandenHeuvel2020MMHalfLifeAlyx], *«eFootball PES»* (2021) y *«FIFA 22»* (2022) la adoptaron.
 
 El ***motion matching***[@Büttner2016MotionMatching; @Clavet2016MotionMatching] se basa en la idea de que, en lugar de seleccionar un *clip* de animación, se selecciona un *keyframe* de un *clip* de animación, en función del estado del personaje, y se reproduce el *clip* desde ese *keyframe* en adelante.
-Esta selección se hace varias veces por segundo y el motor de videojuegos se encarga y el motor de videojuegos se encargar de saltar y mezclar los *clips*, sintetizando la animación del personaje.
+Esta selección se hace varias veces por segundo y el motor de videojuegos se encarga de saltar y mezclar los *clips*, sintetizando la animación del personaje.
 
-Esta técnica evita crear una máquina de estados de animación compleja.
+Esta técnica evita crear una máquina de estados compleja.
 En su lugar, se trata de una técnica de animación dirigida por datos, donde la mejor secuencia se escoge de forma automática, en función del estado del personaje y de su entorno, de una enorme base de *clips* de animación pregrabados.
 
 # *Motion matching*
@@ -87,7 +87,7 @@ Aunque al hablar de ***motion matching*** se suele usar como ejemplo la locomoci
 También se pueden incluir entre las propiedades del entorno, como la posición y altura de obstáculos, armas o de otros objetos con los que el personaje pueda interactuar.
 La clave es disponer de *clips* en situaciones similares a las que se pueden dar en el juego y escoger las propiedades adecuadas para que el sistema pueda encontrar el *keyframes* de esos *clips*.
 
-Las propiedades no solo se calcula y almacenan para cada *keyframe* de la base de datos de movimiento, sino que también se extraen para el estado actual y movimiento a partir de la entrada del jugador, con el objeto de usarlas para preparar la consulta a la base de datos.
+Las propiedades no solo se calculan y almacenan para cada *keyframe* de la base de datos de movimiento, sino que también se extraen para el estado actual y movimiento a partir de la entrada del jugador, con el objeto de usarlas para preparar la consulta a la base de datos.
 En cada frame, la consulta se compara con las propiedades de los *keyframes* de la base de datos de movimiento, de forma que se selecciona el *keyframe* más adecuado para la situación actual del personaje.
 
 Por ejemplo, si solamente se usa como propiedad la posición de los pies, se puede calcular la distancia al cuadrado entre la posición de los pies en la postura actual del personaje en el juego con la posición de los pies en los *keyframe* de la base de datos de movimiento, de forma que la distancia mínima indica el *keyframe* más adecuado en la base de datos.
