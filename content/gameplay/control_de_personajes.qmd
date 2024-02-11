@@ -239,39 +239,108 @@ while (RemainingTime > EPSILON) {
 Los controladores de movimiento de personajes pueden ser **cinemáticos** o **dinámicos**.
 
 Los **controladores de personaje cinemáticos** son los más comunes.
-Ofrecen un control muy directo y estable.
-Además, la disponibilidad general de motores de físicas, que necesitan los controladores dinámicos, es algo relativamente reciente.
+Ofrecen un control directo sobre el movimiento del personaje, aparte de ser muy flexibles y estables.
+Además, la disponibilidad general de motores de físicas, que es un requisito de los controladores dinámicos, es algo relativamente reciente.
 
 En cada frame, los **controladores cinemáticos**: 
 
 1. Calculan la posición final del personaje a partir de la entrada del controlador.
-  La entrada del controlador puede ser directamente el desplazamiento deseado pero, generalmente, suele ser la velocidad o la aceleración deseada para el personaje --es decir, un control de segundo o tercer orden, respectivamente--.
-  En estos casos, se suelen usar las ecuaciones de la mecánica cinemática para calcular la posición final estimada para el personaje, tal y como como vimos en la @sec-tipo-de-entrada.
+   La entrada del controlador puede ser directamente el desplazamiento deseado, pero generalmente suele ser la velocidad o la aceleración deseada para el personaje --es decir, un control de segundo o tercer orden, respectivamente--.
+   En estos casos, se suelen usar las ecuaciones de la mecánica cinemática para calcular la posición final estimada para el personaje, tal y como vimos en la @sec-tipo-de-entrada.
 
-1. Intentan mover al personaje hasta dicha ubicación, detectando las colisiones.
+1. Intentan mover al personaje hasta dicha ubicación, comprobando si la ubicación es válida.
+   Por ejemplo, detectando colisiones en el camino.
 
-1. En caso de colisión, se busca la posición viable --sin superposiciones-- más cercana a la posición deseada y, finalmente, el personaje es movido hasta ese punto.
+1. En caso de colisión, se busca la posición viable --sin superposición con colisiones-- más cercana a la posición deseada y, finalmente, el personaje es movido hasta ese punto.
 
-Al algoritmo descrito se lo denomina ***collide and slide***, porque es frecuente que se implemente haciendo que si el personaje colisiona con otro objeto al actualiza su posición, el resto del desplazamiento lo haga deslizando el personaje paralelamente a la superficie del objeto.
+Al algoritmo descrito se lo denomina ***collide and slide***, porque es frecuente que se implemente haciendo que si el personaje colisiona con otro objeto al actualizar su posición, el resto del desplazamiento lo haga deslizando el personaje paralelamente a la superficie del objeto.
 
-Por ejemplo, en la @fig-collide-and-slide se ilustra como el personaje se desliza por la superficie de una pared en lugar de atraversarla.
+Por ejemplo, en la @fig-collide-and-slide se ilustra como el personaje se desliza por la superficie de una pared en lugar de atravesarla.
 La distancia que se desliza es la proyección sobre la superficie del vector de desplazamiento restante tras la colisión.
-Esto se puede calcular fácilmente utilizando el producto escalar y el efecto es que hay menos deslizamiento cuanto más perpendicular es el vector del impacto a la superficie.
+Esto se puede calcular fácilmente utilizando el producto escalar y genera el efecto de que haya menos deslizamiento cuanto más perpendicular es el vector del impacto a la superficie.
 
 ![Ejemplo típico de *collide and slide*.](figures/collide-and-slide.pdf){#fig-collide-and-slide}
 
 El controlador suele soportar distintos modos para mover el personaje hasta una ubicación viable, según las mecánicas de movimiento del juego: volar, caminar o correr, subir o bajar escalones o rampas, saltar y maniobrar en el aire, moverse sobre plataformas --como ascensores o cintas transportadoras-- empujar objetos, nadar o escalar.
 
 Estos modos se utilizan según el estado en el que está personaje o según las colisiones detectadas.
-Por ejemplo, si el jugador ha pedido que salte, el personaje entra en el modo «salto», en el que no puede caminar o correr pero en el que recibe un impuso vertical inicial, puede maniobrar en el aire, y donde se ve afectado por la gravedad, para caer.
+Por ejemplo, si el jugador ha pedido que salte, el personaje entra en el modo «salto», en el que no puede caminar o correr, pero en el que recibe un impuso vertical inicial, puede maniobrar en el aire, y donde se ve afectado por la gravedad, para caer.
 Cuando el personaje aterriza, el controlador detecta la colisión con el suelo y cambia al modo «caminar», en el que puede caminar y correr y, generalmente, superar pequeños obstáculos.
 Igualmente, el personaje puede entrar en el modo «nadar» porque se detecta la superposición con un volumen marcado como de agua.
-En este modo el personaje tienen uu movimiento diferente al del modo «caminar», ya que la cápsula no tiene que mantenerse en vertical y el personaje puede sumergirse y salir a la superficie.
+En este modo el personaje tienen un movimiento diferente al del modo «caminar», ya que la cápsula no tiene que mantenerse en vertical y el personaje puede sumergirse y salir a la superficie.
 
-### Ejemplos de implementación de movimiento
+Para ilustrar el algoritmo de ***collide and slide***, vamos a ver como se suele gestionar el modo «caminar» en algunos casos muy comunes en cualquier personaje.
 
+### Deslizamiento
 
-// TODO: Poner y explicar más ilustraciones de los modos de movimiento.
+Caminar por un suelo plano implica, simplemente, deslizar el personaje en el plano XY, manteniendo la distancia con el suelo.
+Para hacerlo, el controlador toma la entrada de movimiento para calcular la posición final del personaje, manteniendo la altura Z, e intenta moverlo hasta dicha ubicación, mientras detecta colisiones.
+
+Por lo general, el personaje se mueve ligeramente por encima del suelo --de forma imperceptible-- para evitar que al moverse se detecte una colisión con el propio suelo.
+Por eso, uno de los primeros pasos del algoritmo, antes de desplazar la cápsula del personaje, es hacer un *raycast* hacia abajo para detectar la distancia al suelo y ajustar la posición en altura del personaje en consecuencia, asegurando que la distancia al suelo esté siempre por debajo de un máximo y por encima de un mínimo preestablecido.
+
+Si se detecta una colisión durante el deslizamiento, el personaje se coloca en la posición viable más cercana a la deseada.
+Luego se proyecta el vector del desplazamiento, que no se pudo realizar, sobre el plano de la superficie de contacto, para obtener el vector de desplazamiento final paralelo a esta, como se ilustra en la @fig-collide-and-slide.
+
+Comprobar si la posición final es viable puede implicar verificar otras condiciones, aparte de las colisiones.
+Por ejemplo, en muchos juegos el personaje puede caer, pero no siempre es así.
+Hay juegos donde no interesa que el jugador tenga que preocuparse de esa posibilidad, por lo que una alternativa a llenar el nivel con colisiones invisibles en cada borde, es que el controlador se haga cargo de evitar la caída.
+Para eso, el controlador verifica si hay suelo en la posición final y, en caso contrario, mueve el personaje solo hasta el borde más cercano.
+
+En otros casos, solo en determinadas situaciones se espera que el personaje no pueda caer o, al menos, que sea más complicado que ocurra, como cuando cruza sobre una estructura estrecha donde hace equilibrio, como se ilustra en la @fig-thin-bridge.
+En ese caso, un *trigger* en la estructura puede activar un modo de deslizamiento especial, que evita que el personaje caiga o donde se aplica cierto grado de resistencia contra los movimientos en la dirección en la que puede caer el personaje.
+
+![Cruce sobre una escalera en «Death Stranding» (2019).](figures/thin-bridge.jpg){#fig-thin-bridge}
+
+### Bajar rampas y escalones
+
+El *raycast* hacia el suelo comentado anteriormente, facilita implementar el descenso de escalones y rampas.
+Básicamente, el controlador debe tener configurada una *altura máxima de escalón*, de forma que si el suelo se detecta más cerca que dicha altura, el personaje es bajado hasta que la distancia al suelo esté dentro del rango permitido.
+
+En la @fig-collide-and-slide-stepdown y @fig-collide-and-slide-rampdown se ilustra como el resultado es que así el personaje puede descender por rampas y escalones.
+
+::: {layout="[10, -1, 10]"}
+![Descenso de escalones.](figures/collide-and-slide-stepdown.pdf){#fig-collide-and-slide-stepdown}
+
+![Descenso de rampas.](figures/collide-and-slide-rampdown.pdf){#fig-collide-and-slide-rampdown}
+:::
+
+En este caso, cada vez que el personaje avanza queda en el aire, por lo que el controlado baja automáticamente el personaje hasta el suelo para ajustar la distancia con respecto a este, haciendo que descienda.
+
+### Caída y aterrizaje
+
+Si durante la comprobación de la distancia al suelo esta es mayor que la *altura máxima de escalón*, entonces es que el personaje está en el aire.
+En ese caso, el controlador cambia al modo «salto» o «caída», en el que incluye en los cálculos el efecto de la aceleración de la gravedad, de manera que el personaje se mueva en Z para ir cayendo frame a frame hasta el suelo.
+
+Cómo se usa la entrada del jugador depende de la mecánica del juego.
+Por ejemplo, si se espera que el personaje pueda maniobrar en el aire, la entrada del jugador se puede usar para calcular el desplazamiento en XY, generalmente limitando la velocidad y aceleración, para restringir la movilidad del personaje en el aire.
+Si el personaje no puede maniobrar en el aire, la entrada del jugador no se utiliza, sino el vector de velocidad en el plano XY en el momento de entrar en el nuevo modo de movimiento.
+Es decir, en ese caso el desplazamiento horizontal solo viene determinado por la inercia del movimiento.
+
+Cuando el controlador detecta el suelo a una distancia menor que la *altura máxima de escalón*, vuelva al modo «caminar» porque el personaje ha aterrizado.
+
+#### Subir rampas y escalones
+
+Un controlador básico también sabe como hacer que el personaje suba rampas y escalones.
+De hecho, incluso cuando no es necesaria esta funcionalidad, es interesante implementarla porque facilita que el personaje pueda superar pequeñas irregularidades del suelo.
+
+Un escalón o una rampa se detectan con una colisión al mover el personaje hacia su posición definitiva, solo que se hacen varias comprobaciones antes de decidir que el personaje no puede superar el obstáculo:
+
+::: {layout="[10, -1, 10]"}
+![Subida de rampas.](figures/collide-and-slide-rampup.pdf){#fig-collide-and-slide-rampup}
+
+![Subida de escalones.](figures/collide-and-slide-stepup.pdf){#fig-collide-and-slide-stepup}
+:::
+
+1. Si la superficie de la colisión tiene una pendiente menor que la máxima permitida en la dirección del movimiento, es porque se trata de una rampa.
+   En ese caso, el personaje se desplaza lo que le queda paralelamente a la superficie, como se ilustra en la @fig-collide-and-slide-rampup.
+
+   Al llegar arriba, el controlador detecta que el personaje está por encima del suelo, por lo que lo baja y, nuevamente, lo hace moverse de forma paralela a este.
+
+1. En caso contrario, comprueba si el personaje puede continuar su movimiento si antes lo sube hasta la *altura máxima de escalón*.
+   En tal caso, es que personaje está ante un escalón, por lo que hace el movimiento indicado y continúa desplazándolo de forma paralela al suelo, como se ilustra en la @fig-collide-and-slide-stepup.
+
+1. Finalmente, si no es ni una rampa ni un escalón, es que el personaje está ante una pared, por lo que lo desplaza de forma paralela a la superficie, como se ilustra en la @fig-collide-and-slide.
 
 ## Controladores dinámicos
 
@@ -354,39 +423,94 @@ También es común usar máquinas de estado para implementar el cerebro de los N
 
 ## Control de rotación
 
-El movimiento del personaje no solo consiste en moverlo, sino también en rotarlo para que mire en la dirección adecuada.
+El movimiento del personaje no solo consiste en moverlo, sino también en rotarlo para que se oriente en la dirección adecuada.
 
-En algunos juegos, el personaje puede mirar en una dirección, mientras se desplaza en otra.
+En algunos juegos, el personaje del jugador puede mirar en una dirección, mientras se desplaza en otra.
 Esto significa que, aparte de la entrada de movimiento, que va al control de movimiento para mover el personaje, necesitamos por separado una entrada de rotación con la que establecer la dirección en la que mira o apunta el personaje.
 
-Por ejemplo, en muchos *first-person shooters* (FPS), donde el personaje se suele poder mover de forma totalmente libre usando un control --el teclado o un *stick* del *gamepad*-- mientras con otro --el ratón o el otro *stick* del *gamepad*-- se puede apuntar dónde se quiera.
-Esto permite un tipo de juego muy rápido, al poder apuntar y correr o esquivar sin parar, de forma totalmente independiente  
+Por ejemplo, en muchos *first-person shooters* (FPS), donde el personaje del jugador se suele poder mover de forma totalmente libre usando un control --el teclado o un *stick* del *gamepad*-- mientras con otro --el ratón o el otro *stick* del *gamepad*-- se puede apuntar dónde se quiera.
+Esto permite un tipo de juego muy rápido, al poder apuntar / mirar y correr / esquivar sin parar, de forma totalmente independiente.  
 
-En otros juegos se opta porque el personaje siempre se oriente en la dirección de su movimiento.
-En ese caso, el control de movimiento puede ser el encargado de rotar el personaje hasta alinearlo con la dirección de movimiento calculada.
-Esta rotación no se suele aplicar de forma instántane, sino que se interpola, limitando la velocidad angular máxima de la rotación, para que la animación del personaje tenga tiempo de ajustarse al cambio de orientación.
+En otros juegos, la dirección de movimiento y la orientación del personaje del jugador están acopladas, porque el personaje es orientado por el controlador en la dirección en la que se mueve.
+En ese caso, el control usado para la entrada de rotación queda disponible para otros usos, como el control de la cámara --como cuando se usa para el control de una cámara que orbita alrededor del personaje--.
+Si la cámara está es fija o se mueve sobre railes, este control se puede utilizar para que el jugador apunte de forma independiente al movimiento o para otras mecánicas del juego.
 
-Esto se puede observar en muchos juegos en tercera persona:
+Lo descrito en el párrafo anterior es común en muchos juegos de acción en tercera persona, donde:
 
-* El control de movimiento se encarga de mover el personaje en la dirección indicada, independientemente de como esté orientado el personaje
-  Limitado la velocidad y la aceleración y con la aceleración de frenado, se ajusta como de pesado o ligero el jugador percibe el control. 
+![Movimiento y rotación en tercera persona.](figures/tpp-movement-and-rotation.pdf){#fig-tpp-movement-and-rotation}
 
-* Como el personaje se puede mover en cualquier momento en cualquier dirección, se utilizan animaciones para todos los casos posibles. Al menos las cuatro direcciones principales: hacia adelante, hacia atrás, de lado hacia la derecha y hacia la izquierda; pero se pueden utilizar 8 o más para conseguir mayor fidelidad.
-  Estas animaciones se mezclan ponderadas en función de la dirección del movimiento.
+* El controlador mueve al personaje en la dirección indicada por el jugador en el frame, independientemente de como esté orientado el personaje, como se ilustra en la @fig-tpp-movement-and-rotation.
 
-  En este punto, en cada proyecto se debe ponderar la importacia que se le da a la fidelidad de la animación frente a tener un control más ligero.
-  Un control más ligero favorece una forma de jugar más dinámica, mientras que con un control más pesado --es decir, cuando el personaje responde más lento-- la animación puede encajar mejor con el movimiento, evitando, por ejemplo, que los pies de personaje se desplizen de forma poco realista sobre el suelo.
+  El motivo para hacerlo así, en lugar de que el personaje solo se pueda mover en la dirección en la que se orienta --como se ilustra en la @fig-steering-behaviours-seek-- es que el jugador perciba una respuesta más directa del personaje a sus órdenes, a cambio de menos realismo.
+  Limitado la velocidad y la aceleración y ajustando la aceleración de frenado, se puede determinar como de pesado o ligero puede percibir el jugador el control del personaje. 
+
+* Como el personaje se puede mover en cualquier momento en cualquier dirección, se utilizan animaciones para todos los casos posibles.
+  Al menos son necesarias las cuatro direcciones principales: hacia adelante, hacia atrás, de lado hacia la derecha y hacia la izquierda; pero se pueden utilizar 8 o más para conseguir mayor fidelidad.
+  Estas animaciones se mezclan ponderadas en función de la dirección del movimiento, usando **Blend Trees**[@UnityBlendTrees] en Unity o **Blend Spaces**[@UnrealLocomotionBasedBlending] en Unreal Engine.
+
+  En cada proyecto se debe ponderar la importacia que se le da a la fidelidad de la animación frente a tener un control más ligero.
+  Un control más ligero favorece una forma de jugar más dinámica, mientras que con un control más pesado --es decir, cuando el personaje responde más lento-- la animación puede encajar mejor con el movimiento, evitando, por ejemplo, que los pies de personaje se deslicen sobre el suelo de manera incoherente con el movimiento del personaje.
 
   En algunos juegos se opta por un control más lijero, pero se minimizan los problemas con la animación limitando el ángulo y la posición de la cámara para que prácticamente nunca se puedan ver los pies del personaje sobre el suelo.
 
-* El control de movimiento actualiza la orientación del personaje para orientarla en la dirección del movimiento del personaje.
-  Esta rotación se interpola a lo largo de varios frames, evitando que el personaje cambie de orientación instantaneamente.
+* El control de movimiento actualiza la orientación del personaje hacia la dirección del movimiento del personaje.
+  Como se puede ver en la @fig-tpp-movement-and-rotation, esta rotación se interpola a lo largo de varios frames, evitando que el personaje cambie de orientación instantaneamente.
   Como en el caso del movimiento, una rotación más lenta se percibe más pesada, pero ofrece mayor fidelidad en la animación.
 
-<!-- TODO: Ilustrarlo con algún tipo de imagen o esquema -->
+## Comportamientos de dirección (*steering behaviours*){#sec-steering-behaviours}
 
-En este caso, el control usado generalmenta para la entrada de rotación queda disponible para otros usos.
-En muchos juegos en tercera persona se usa para el control de la cámara --por ejemplo, cuando se usa una cámara que orbita alrededor del personaje-- pero, si esta es fija o se mueve sobre railes, se puede emplear para que el jugador apunte de forma independiente en otras mecánicas del juego.
+El comportamiento anterior, donde el personaje se puede mover en cualquier dirección, independientemente de su orientación, ofrece mejor respuesta al jugador, pero no es realista.
+
+En la vida real, un personaje no suele moverse en cualquier dirección, sino que su movimiento está limitado por su orientación actual.
+Por lo que si bien, puede ser aceptable que el personaje del jugador se mueva de esa manera, no suele serlo que lo hagan los NPC, porque se percibe como poco realista.
+Tampoco lo suelen poder hacer la mayor parte de los vehículos ni los proyectiles.
+
+Los **comportamientos de dirección**[@Shiffman2024AutonomousAgents;@Bevilacqua2012SteeringBehaviors] --o ***steering behaviours***-- son algoritmos utilizados 
+para modelar movimientos realistas y para que los NPC parezcan inteligentes.
+Estos comportamientos permiten a los controladores calcular la dirección en la que deben mover a su agente para lograr objetivos específicos, como seguir a un jugador, huir de un enemigo, o navegar por un entorno lleno de obstáculos.
+
+Algunos ejemplos de **comportamientos de dirección** son:
+
+<!-- TODO: Añadir ejemplos de comportamientos de dirección mediante vídeos o animaciones -->
+
+![Comportamiento **seguir** (*seek*).](figures/steering-behaviours-seek.pdf){#fig-steering-behaviours-seek}
+
+* **Seguir (*Seek*)**:
+  El agente se mueve hacia un objetivo, como el jugador, de la forma más directa posible.
+  Esto se hace calculando una aceleración que lo impulse en la dirección del objetivo y ajustado su orientación hacia él.
+  
+  En la @fig-steering-behaviours-seek se ilustra un ejemplo de este comportamiento que se puede comparar con el de la @fig-tpp-movement-and-rotation
+
+  Este comportamiento es útil para enemigos que persiguen al jugador, para cohetes guiados o para aliados que siguen al líder del grupo.
+
+* **Huir (*Flee*)**:
+  Al contrario que en **seguir**, el agente se mueve alejándose de un objetivo de la forma más directa posible.
+  Para ello, se calcula una aceleración que lo impulse en la dirección opuesta al objetivo.
+
+  Este comportamiento es útil para enemigos que huyen del jugador o para aliados que huyen de un peligro.
+
+* **Perseguir (*Pursuit*)**:
+  De manera similar al comportamiento de **seguir**, el agente se mueve hacia un objetivo, pero anticipando su posición futura para interceptarlo.
+  Por tanto, también es útil para enemigos o proyectiles que deben seguir al jugador.
+
+  Obviamente, lo más complejo de este comportamiento es predecir la posición futura del objetivo, cuando está en movimiento.
+
+* **Evasión (*Evasion*)**:
+  Al contrario que en **perseguir**, en la **evasión** el agente busca alejarse de su perseguidor, prediciendo también su movimiento para evitar ser alcanzado.
+
+* **Llegada (*Arrival*)**:
+  De manera similar al comportamiento de **seguir**, el agente se mueve hacia un objetivo, pero reduce su velocidad a medida que se acerca para llegar suavemente y evitar sobrepasarlo.
+  Para ello, se calcula el tiempo que queda para llegar al objetivo y se ajusta la velocidad en consecuencia.
+
+* **Deambular (*Wander*)**:
+  Se trata de un comportamiento semi-aleatorio donde el agente se mueve de forma errática pero convincente, útil para crear patrones de movimiento para personajes que exploran o patrullan áreas sin un objetivo específico.
+
+* **Evitar de obstáculos (*Obstacle avoidance*)**:
+  El agente detecta y maniobra alrededor de obstáculos en su camino, manteniendo su dirección y velocidad tanto como sea posible.
+
+Otros comportamientos pero más útiles con multitudes, enjambres o grupos de agentes son **alineación (*alignment*)**, **cohesión (*cohesion*)** y **separación (*separation*)**.
+
+Todos estos comportamientos pueden combinarse para crear otros más complejos y adaptativos, como un enjambre de drones que evita obstáculos mientras mantienen una formación y sigue un lider.
 
 ## Implementaciones en motores de videojuegos
 
@@ -717,7 +841,7 @@ Obviamente, obtener un resultado similar usando *raycasts*, pero en este caso po
 
 # Puertas, plataformas y ascensores
 
-// TODO
+// TODO: Escribir intero
 
 ## Plataformas
 
@@ -732,6 +856,8 @@ https://www.google.com/search?q=character+charactermovementcomponent+elevator&sx
 
 # Armas
 
+## *Hitboxes*
+
 <!---
 
 https://gaming.stackexchange.com/questions/182350/what-do-hitbox-and-hurtbox-mean
@@ -743,20 +869,19 @@ https://forums.unrealengine.com/t/best-way-to-implement-hack-slash-attack-hitsca
 https://www.google.com/search?q=hitbox+block+or+overlap+unreal+engine&sxsrf=AJOqlzXmO3ejGy88NKtdAWSFvlz4TlRBWg%3A1677262229716&ei=lf34Y7aoK9qSkdUPi-GJ-AU&ved=0ahUKEwj2xpbb4K79AhVaSaQEHYtwAl8Q4dUDCA8&uact=5&oq=hitbox+block+or+overlap+unreal+engine&gs_lcp=Cgxnd3Mtd2l6LXNlcnAQAzIKCAAQ8QQQHhCiBDIFCAAQogQ6CggAEEcQ1gQQsAM6BQghEKABOgcIIRCgARAKOgQIIRAVSgQIQRgAUOEEWNIyYN4zaAJwAXgAgAGZAYgBhw6SAQQwLjE1mAEAoAEByAEFwAEB&sclient=gws-wiz-serp
 
 
-# Armas
-
-# *Hitboxes*
-
 **hutboxes**
 
 --->
 
-## Balas y proyectiles
+## Armas cuerpo a cuerpo
 
-Para implementar balas y otro tipo de proyectiles en juegos de acción, básicamente podemos usar *raycasts*, proyectiles balísticos o combinar de ambas opciones.
+## Armas a distancia: proyectiles
 
-En el caso del arma del jugador, en juegos en primera persona o en tercera con cámaras orbitales o sobre el hombro, lo más frecuente es «hacer el disparo» desde el centro de la cámara, aunque los efectos visuales correspondientes se emitan desde el arma.
-Esto se hacer porque así resulta mucho más cómodo para el jugador. 
+Para implementar armas a distancia en juegos de acción, como pistolas, rifles, cañones o lanzacohetes, es necesario implementar la lógica de los proyectiles que disparan.
+Esto se puede hacer usando *raycasts*, proyectiles o una combinación de ambas opciones, lanzados desde el personaje.
+
+En el caso del arma del jugador, en juegos en primera persona o en tercera --con cámaras orbitales o sobre el hombro-- lo más común es «hacer el disparo» desde el centro de la cámara, aunque los efectos visuales correspondientes se emitan desde el arma.
+Esto se hace porque así porque el jugador le resulta más sencillo apuntar. 
 
 ### Ray castings
 
@@ -775,53 +900,76 @@ Como contrapartida, el impacto es instantáneo, por lo que no hay manera de esqu
 Tampoco resulta realista en disparos a muy larga distancia, donde la gravedad, el viento y otros factores ambientales deberían tener efecto en la trayectoria del proyectil.
 Por tanto, el uso de *raycasts* no es la mejor opción si interesa crear una experiencia realista.
 
-### Proyectiles balísticos
+### Proyectiles
 
-La forma de conseguir una experiencia más realista e inmersiva es lanzar proyectiles.
-Es decir, crear objetos, impulsarlos en la dirección del disparo y simular su movimiento según su masa, velocidad, gravedad, dirección del viento o cualquier otra fuerza que pueda alterar la dirección del proyectil.
+La forma de conseguir una experiencia más realista e inmersiva es lanzar proyectiles al disparar.
+Es decir, crear objetos, impulsarlos en la dirección del disparo y simular su movimiento según su masa, velocidad, gravedad, dirección del viento, **comportamientos de dirección** (ver la @sec-steering-behaviours) o cualquier otro aspecto que pueda alterar la dirección del proyectil.
+Esto se puede implementar tanto usando controladores cinemáticos como dinámicos.
 
-Esto se puede implementar tanto usando un controlador cinemático como uno dinámico, que utilice las capacidades de un motor de físicas.
+Los proyectiles permiten añadir tipos de armas que difícilmente se pueden implementar mediante *raycasts*, como granadas o cohetes guiados.
+Pero también pueden enriquecer la experiencia de juego incorporando otros elementos. 
+Como la posibilidad de esquivar los disparos --al menos en grandes distancias o cuando se introducen efectos como el *bullet-time*, donde el tiempo se ralentiza temporalmente-- u obliga al jugador a prever el movimiento de los enemigos y del proyectil, para disparar allí donde cree que estará cuando el proyectil llegue.
 
-Esta solución permite que los proyectiles se puedan esquivar --al menos en disparos a grandes distancias o cuando se introducen efectos como el *bullet-time*, donde el tiempo se ralentiza temporalmente--.
-También obliga al jugador a prever el movimiento de los enemigos y del proyectil, para disparar allí donde cree que estará cuando el proyectil llegue.
-Y permite añadir tipos diferentes de armas que difícilmente se pueden implementar mediante *raycasts*, como granadas y lanzacohetes.
+#### Inconvenientes
 
-Como contrapartidas:
+Como contrapartida, el uso de proyectiles es bastante más costoso que los *raycasts*, porque crear decenas de objetos y simular su movimiento, no resulta barato.
+En este sentido, puede ser necesario considerar el uso de *pools* de objetos para reusar los objetos creados, reduciendo el coste de crearlos en el momento.
 
-* El uso de proyectiles es bastante más costoso que los *raycasts*, porque crear decenas de objetos y simular su movimiento, no resulta barato.
-  En este sentido, es necesario considerar el uso de *pools* de objetos para reusar los objetos creados, reduciendo el coste de crearlos en el momento.
+Además los proyectiles suponen un reto adicional en los juegos multijugador en red.
+Esto es debido a que, por lo general, cada cliente ejecuta su propia simulación de los proyectiles, cuya trayectoria se va corrigiendo periódicamente con la información que llega del servidor, que también ejecuta su propia simulación y que es la única fuente de información confiable.
+Por tanto, en juegos en red, esto implica tener decenas de objetos cuyo movimiento debe sincronizarse entre todos los clientes, para evitar crear inconsistencias en la experiencia de los distintos jugadores.
 
-* Los proyectiles suponen un reto adicional en los juegos multijugador en red.
-  Por lo general, cada cliente ejecuta su propia simulación de los proyectiles, cuya trayectoria se va corrigiendo periódicamente con la información que llega del servidor, que ejecuta su propia simulación y que es la única fuente de información confiable.
-  Por tanto, en juegos en red, esto implica tener decenas de objetos cuyo movimiento debe sincronizarse entre todos los clientes, para evitar crear inconsistencias en la experiencia de los distintos jugadores.
+Además, para que este mecanismo funcione correctamente, es necesario que el movimiento de los proyectiles sea determinista, es decir, que el movimiento de los proyectiles sea el mismo en todos los clientes y el servidor, cuando las condiciones son las mismas.
 
-Además, los cálculos del movimiento de los proyectiles presentan varios retos:
+Esto es sencillo de conseguir con controladores cinemáticos, pero puede ser más complicado con controladores dinámicos, porque estos últimos dependen de motor de fisicas y algunos motores de físicas no garantizan que la simulación sea determinista[Ver «Motor de física determinista» en @TorresD3DFisicas].
 
-* Como en el movimiento de los personajes en cada actualización la trayectoria suele aproximarse mediante segmentos rectilíneos.
+#### Tipos de control
+
+Como en el caso del control de personajes, el control de los proyectiles se puede implementar tanto usando un controlador dinámico como cinemático.
+
+En el primer caso, los proyectiles se mueven usando las capacidades del motor de físicas, utilizando las fuerzas e impulsos que se le apliquen para controlar su movimiento.
+Este tipo de control se puede usar para proyectiles sencillos, como granadas, balas, pelotas o piedras, en juegos donde el comportamiento físico es un factor determinante.
+
+En el segundo caso se puede implementar cualquier tipo de comportamiento que se quiera programar, porque el controlador cinemático ofrece más control, ya que no depende de las limitaciones de la simulación realista del motor de físicas.
+Esto permite implementar tanto proyectiles sencillos --gobernados bajo las ecuaciones de la mecánica cinemática-- como proyectiles con un comportamiento más complejo, como cohetes guiados, capaces de perseguir a un objetivo (ver «persecución y evasión» en la @sec-steering-behaviours).
+
+#### Consideraciones adicionales
+
+Además de lo comentado hasta el momento, los cálculos del movimiento de los proyectiles pueden presentar varios retos:
+
+* Como ocurre con elmovimiento de los personajes, en cada actualización la trayectoria suele aproximarse mediante segmentos rectilíneos.
   Para calcular una trayectoria más precisa, en cada *tick* se pueden usar múltiples subpasos rectilíneos (ver la @sec-substeps).
 
 * Puede ser importante considerar la frecuencia con la que se actualiza el movimiento de los proyectiles, porque si mueven muy rápido --cubriendo grandes distancia entre actualizaciones-- se puede dar el caso de que no se detecten algunas colisiones.
   Por eso es común que los cálculos se hagan con mayor frecuencia y de forma independiente a la tasa de refresco del *render*.
 
-  Con el objeto de evitar fallar en la detección de posibles obstáculos, puede ser necesario considerar algunas técnicas de detección continua de colisiones:
+Con el objeto de evitar fallar en la detección de posibles obstáculos, puede ser necesario considerar algunas técnicas de detección continua de colisiones:
 
-  * Si el motor lo soporta y el control es cinemático, se debe mover el proyectil usando *barrido* para detectar colisiones en la trayectoria.
-    Si el control es dinámico, se pueden activar las opciones de detección continua de colisiones[Ver *«Detección continua de colisiones»* en @TorresD3DFisicas].
+* Si el motor lo soporta y el control es cinemático, se debe mover el proyectil usando un *barrido* para detectar colisiones en la trayectoria.
+  Si el control es dinámico, se pueden activar las opciones de detección continua de colisiones[Ver *«Detección continua de colisiones»* en @TorresD3DFisicas] a cambio de un mayor coste.
 
-  * Otra opción es hacer que el objeto, en cada paso de simulación, lance un *raycast* en la dirección del movimiento para detectar objetos que podría atravesar en el intervalo del tiempo hasta el siguiente paso.
-    En caso de detectar alguno, se lanzan las acciones que simula la colisión.
+* Otra opción es hacer que el objeto, en cada paso de simulación, lance un *raycast* en la dirección del movimiento para detectar objetos que podría atravesar en el intervalo del tiempo hasta el siguiente paso.
+  En caso de detectar alguno, se lanzan las acciones que simula la colisión.
 
-  * Finalmente, se puede añadir al proyectil una cola invisible, aumentado el tamaño del objeto de forma imperceptible, para que se puede dectectar la colisión incluso aunque el proyectil se mueva muy rápido.
+* Finalmente, se puede añadir geometría de colisión que añáda al proyectil una cola invisible, aumentado el tamaño del objeto de forma imperceptible, para que se puede dectectar la colisión incluso aunque el proyectil se mueva muy rápido.
+
+#### *ProjectileMovementComponent* en Unreal Engine
+
+El {{< api ProjectileMovementComponent >}} es un componente de Unreal Engine diseñado para facilitar la implementación de proyectiles, proporcionando una simulación realista de la física, que incluye gravedad, fricción, flotabilidad y rebotes.
+
+Este componente hereda de **MovementComponent** --al igual que **PawnMovementComponent** y **CharacterMovementComponent**-- y permite especificar la velocidad inicial y dirección del proyectil al lanzarlo.
+A partir de ese momento, el **ProjectileMovementComponent** se encarga de actualizar la posición del proyectil en cada *tick* y de detectar colisiones con otros objetos, aplicando las acciones que se hayan configurado en el componente.
+
+**ProjectileMovementComponent** admite tanto el control cinemático como dinámico del proyectil, puesto que por defecto la implementación de la simulación es cinemática, pero si el proyectil tiene activada la **simulación física**, el componente solo establecerá la velocidad y la dirección inicial, dejando que el motor de físicas se encargue del resto. 
+
+Utilizando la interfaz del componente se puede modificar la trayectoria del proyectil en tiempo real, lo que es útil para la creación de proyectiles guiados o afectados por cambios ambientales.
+
+Además, incluye varias opciones para optimizar el rendimiento, como la desactivación de los cálculos cuando el proyectil se mueve muy despacio o limitar el número de subpasos en la simulación.
 
 ### Sistemas híbridos
 
 En muchos videojuegos se utilizan ambos tipos de soluciones.
 Esto da la opción de tener una gran cantidad de armas con diferentes características, de forma que en cada una se use la solución que ofrezca los mejores resultados.
-
-<!-- TODO: 
- - ProjectileMOvementComponent
- - Steering Behaviour
- - Fisica vs no fisica. -->
 
 ---
 

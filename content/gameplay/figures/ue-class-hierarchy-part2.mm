@@ -1,30 +1,19 @@
-classDiagram
-    UObject <|-- AActor
+classDiagram    
+    Actor <|-- PlayerController
+    PlayerController -- EnhancedPlayerInput
+    PlayerInput <|-- EnhancedPlayerInput
     
-    AActor <|-- AGameModeBase
-    AGameModeBase <|-- AGameMode
-    AActor <|-- APlayerController
-    AActor <|-- APawn
-    APawn <|-- ACharacter
-    ACharacter *-- UCharacterMovementComponent
-    AActor *-- UInputComponent    
+    Actor <|-- Pawn
+    Pawn <|-- Character
+    Character *-- CharacterMovementComponent
+    Actor *-- InputComponent    
 
-    UObject <|-- UActorComponent
+    ActorComponent <|-- InputComponent
+    InputComponent <|-- EnhancedInputComponent
 
-    UActorComponent <|-- UInputComponent
-    UInputComponent <|-- UEnhancedInputComponent
+    ActorComponent <|-- MovementComponent
 
-    UActorComponent <|-- USceneComponent
-    UActorComponent <|-- UMovementComponent
-
-    UMovementComponent <|-- UNavMovementComponent
-    UNavMovementComponent <|-- UPawnMovementComponent
-    UPawnMovementComponent <|-- UCharacterMovementComponent
-
-    USceneComponent <|-- UPrimitiveComponent
-    UPrimitiveComponent <|-- UStaticMeshComponent
-    
-    UObject <|-- UPlayerInput
-    UPlayerInput <|-- UEnhancedPlayerInput
-    
-    UObject <|-- UGameInstance
+    MovementComponent <|-- NavMovementComponent
+    NavMovementComponent <|-- PawnMovementComponent
+    PawnMovementComponent <|-- CharacterMovementComponent
+    MovementComponent <|-- ProjectileMovementComponent
