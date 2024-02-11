@@ -105,6 +105,12 @@ Organización de los recursos por característica en Unity.
 En este caso, es más probable que alguien que esté trabajando en una característica concreta tenga todo lo que necesita en una única rama de la jerarquía de recursos.
 Para eso es importante considerar la organización de los equipos involucrados en el proyecto.
 
+::: {.callout-tip}
+Para ayudar a localizar rápidamente diferentes tipos de *assets*, puede ser útil asignar diferentes colores a las carpetas, según su contenido.
+En Unreal Engine, por ejemplo, se pueden asignar colores usando la opción **Set Color** del menú contextual, que se abre al hacer clic con el botón derecho del ratón sobre la carpeta.
+Mientras que en Unity se suele recurrir a algún *plugin* del *Asset Store* que permita hacer lo mismo, como «Rainbow Folders 2»[@BorodarRainbowFolders].
+:::
+
 Por ejemplo, en proyectos grandes hay equipos de artistas ambientales que trabajan en `Environment`, mientras otros se dedican a los modelos y animaciones en `Characters` o `Weapons`, donde tienen todo lo necesario para completar sus tareas.
 También hay equipos de programadores de *gameplay*, para los que es más cómodo tener todo el código en `Blueprints` o `Scripts`, en lugar de moverse por la estructura de directorios para encontrar los *scripts* que tienen que modificar; lo que ocurriría si estos se guardan junto a las mallas de los objetos y personajes correspondientes.
 De igual forma, para músicos y diseñadores de sonido es preferible tener un directorio `Sounds` o `Audio` donde organizar su trabajo.
