@@ -16,4 +16,3 @@ classDiagram
     MovementComponent <|-- NavMovementComponent
     NavMovementComponent <|-- PawnMovementComponent
     PawnMovementComponent <|-- CharacterMovementComponent
-    MovementComponent <|-- ProjectileMovementComponent
