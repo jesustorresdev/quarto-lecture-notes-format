@@ -1,0 +1,41 @@
+---
+title: "Notas sobre Unreal Engine en C++"
+---
+
+{{< pagebreak >}}
+
+https://docs.unrealengine.com/4.27/en-US/Resources/SampleGames/ARPG/BalancingBlueprintAndCPP/
+
+UPROPERTY, UFUNCTION, DELEGADOS
+
+Lista de funciones
+
+Acciones con IA en C++
+Navmesh en IA (subsistemas)
+
+Widget, Animblueprint, Levelscript
+
+Soft ptr y su uso con primary assets para assets que no se cargan en el editor
+
+https://romeroblueprints.blogspot.com/p/table-of-contents-c.html
+https://nerivec.github.io/old-ue4-wiki/pages/fsm.html
+
+Subsistemas
+
+Reflexión
+Uclass
+
+Tips sobre funciones de depuración:
+https://gamedevbeginner.com/how-to-use-debug-log-in-unity-without-affecting-performance/
+
+Savegame C++
+ - Es defícil: https://www.reddit.com/r/Games/comments/1jmwtu/how_complicated_is_a_save_game_system/
+ - https://www.tomlooman.com/unreal-engine-cpp-save-system/
+ - https://docs.unrealengine.com/5.3/en-US/saving-and-loading-your-game-in-unreal-engine/
+
+https://forums.unrealengine.com/t/postinitializecomponents-vs-beginplay/62991
+
+Asserts
+
+Define your own log category
+https://docs.unrealengine.com/5.3/en-US/logging-in-unreal-engine/#defineyourownlogcategory
