@@ -201,7 +201,7 @@ De esta forma, la referencia del pulsador sería a la interfaz no a clase de la 
 
 Una alternativa mucho más interesante es utilizar eventos, de forma que el pulsador tenga un evento que notifique cuando es pulsado y la puerta se suscriba a él al ser creada.
 De esta forma, es más sencillo reutilizar el pulsador, pues puede utilizarlo cualquier actor que se suscriba al evento.
-Para que la puerta no tenga una dependencia con el pulsador para suscribirse, la conexión entre ambos se puede hacer en el nivel, en el **Level Blueprint**[Ver «Level Bluperint» en @TorresD3DGameplayFramework].
+Para que la puerta no tenga una dependencia con el pulsador para suscribirse, la conexión entre ambos se puede hacer en el nivel, en el **Level Blueprint**[Ver *«Level Bluperint»* en @TorresD3DGameplayFramework].
 
 Finalmente, el objeto puede tener que comunicar al personaje que ha sido accionado para que este se comporte de la forma que corresponda para mejorar la inmersión.
   Por ejemplo, para que el personaje ejecute una animación coherente con la acción, como que está recogiendo el objeto o pulsando el botón.

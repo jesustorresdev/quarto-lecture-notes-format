@@ -279,7 +279,7 @@ Para eso, el controlador verifica si hay suelo en la posición final y, en caso 
 En otros casos, solo en determinadas situaciones se espera que el personaje no pueda caer o, al menos, que sea más complicado que ocurra, como cuando cruza sobre una estructura estrecha donde hace equilibrio, como se ilustra en la @fig-thin-bridge.
 En ese caso, un *trigger* en la estructura puede activar un modo de deslizamiento especial, que evita que el personaje caiga o donde se aplica cierto grado de resistencia contra los movimientos en la dirección en la que puede caer el personaje.
 
-![Cruce sobre una escalera en «Death Stranding» (2019).](figures/thin-bridge.jpg){#fig-thin-bridge}
+![Cruce sobre una escalera en *«Death Stranding» (2019)*.](figures/thin-bridge.jpg){#fig-thin-bridge}
 
 ### Bajar rampas y escalones
 

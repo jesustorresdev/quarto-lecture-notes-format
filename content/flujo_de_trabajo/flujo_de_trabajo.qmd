@@ -39,7 +39,7 @@ El **arte conceptual** servirá como fuente de información y de inspiración pa
 Otras fuentes de inspiración son imágenes de referencia, que los artistas suelen buscar antes de ponerse a trabajar en una parte del juego.
 
 Para la creación del **arte conceptual** los artistas desarrollan múltiples alternativas, hasta que se seleccionan aquellas que encajan con el estilo artístico, la historia, etc.
-Si, por ejemplo, miramos el arte conceptual de «Sonic the Hedgehog»[@SonicRetroConceptArt], podemos observar cómo en algunos bocetos el personaje es completamente irreconocible --probablemente porque se hicieron en las primeras etapas de **conceptualización**-- mientras que en otros es bastante similar al Sonic que conocemos.
+Si, por ejemplo, miramos el arte conceptual de *«Sonic the Hedgehog» (1991)*[@SonicRetroConceptArt], podemos observar cómo en algunos bocetos el personaje es completamente irreconocible --probablemente porque se hicieron en las primeras etapas de **conceptualización**-- mientras que en otros es bastante similar al Sonic que conocemos.
 
 ### Prototipado de mecánicas y niveles {#sec-prototyping}
 
@@ -86,10 +86,10 @@ Por eso a estos prototipos se los denomina: ***blocking***, ***greyboxing***, **
 
 ![Zona B](figures/valorant-pearl-zoneb-final.jpg){#fig-valorant-zoneb-final}
 
-Prototipado del nivel «Pearl» de «Valorant».
+Prototipado del nivel *«Pearl»* de *«Valorant» (2020)*.
 :::
 
-Por ejemplo, en la @fig-valorant-greyboxing se muestran imágenes del ***greyboxing*** del nivel «Pearl» de «Valorant» --extraídas de un hilo del diseñador de niveles Pearl Hogbash en Twitter[@Hogbash2022Greyboxing]---.
+Por ejemplo, en la @fig-valorant-greyboxing se muestran imágenes del ***greyboxing*** del nivel *«Pearl»* de *«Valorant»* --extraídas de un hilo del diseñador de niveles Pearl Hogbash en Twitter[@Hogbash2022Greyboxing]---.
 Como se puede observar, el prototipo carece de detalles gráficos, usándose sencillos bloques rectangulares para definir la estructura del nivel, el espacio jugable[^1] y la distribución de los elementos.
 
 [^1]: En [@Schell2019ArtGameDesign] se define el *espacio jugable* o *espacio funcional* como aquel donde tienen lugar el juego, una vez se han eliminado todos los elementos superficiales.
@@ -172,7 +172,7 @@ En la @fig-apex-greyboxing se puede ver un ejemplo de este proceso en el juego "
 
 ![Nivel definitivo](figures/apex-storm-point-final.jpg){#fig-apex-storm-point-final}
 
-Prototipado del nivel «Storm Point» de «Apex Legends»[@Reece2022Greyboxing].
+Prototipado del nivel *«Storm Point»* de *«Apex Legends» (2019)*[@Reece2022Greyboxing].
 :::
 
 Respecto a la iluminación, los pasos a seguir pueden variar dependiendo del motor de juego y del equipo de desarrollo, pero en general se incluyen los siguientes:
@@ -320,11 +320,11 @@ Esta técnica surge de la necesidad de crear ambientes con gran nivel de detalle
 
 ::: {#fig-modular-design-burgess layout-nrow=2}
 
-![Kit modular de las «Ruinas Dwemer».](figures/modular-kit-zoo-joel-burgess-skyrim.jpg){#fig-modular-kit-joel-burgess}
+![Kit modular de las *«Ruinas Dwemer»*.](figures/modular-kit-zoo-joel-burgess-skyrim.jpg){#fig-modular-kit-joel-burgess}
 
 ![Ejemplo creado con el kit modular.](figures/dwemer-ruin-joel-burgess-skyrim.jpg){#fig-dungeon-joel-burgess}
 
-Ejemplo de diseño modular en «Skyrim»[@Burgess2013ModularLevelDesign].
+Ejemplo de diseño modular en *«Skyrim» (2011)*[@Burgess2013ModularLevelDesign].
 :::
 
 El **diseño modular** requiere que en *preprodución* se establezca una escala a la que implementar la modularidad y una rejilla. 
@@ -353,9 +353,9 @@ Si, por ejemplo, durante el *greyboxing* creamos las estancias usando porciones 
 Sin embargo, al hacerlo así puede resultar más complejo modificar la geometría de las estancias al iterar el diseño en el *greyboxing*, algo que previsiblemente tendremos que hacer muchas veces.
 Por eso es probable que en el *greyboxing* interese trabajar con modularidad diferente --o ninguna, según el caso y las preferencias de los diseñadores--.
 
-En la @fig-modular-kit-joel-burgess se muestra un kit modular usado para hacer el *greyboxing* de los niveles de «Skyrim», como los creados con el kit de la @fig-modular-kit-joel-burgess.
+En la @fig-modular-kit-joel-burgess se muestra un kit modular usado para hacer el *greyboxing* de los niveles de *«Skyrim»*, como los creados con el kit de la @fig-modular-kit-joel-burgess.
 
-![Kit modular para *greyboxing* en «Skyrim»[@Burgess2013ModularLevelDesign].](figures/modular-kit-blockout-joel-burgess-skyrim.png){#fig-modular-greyboxing-burgess}
+![Kit modular para *greyboxing* en *«Skyrim»*[@Burgess2013ModularLevelDesign].](figures/modular-kit-blockout-joel-burgess-skyrim.png){#fig-modular-greyboxing-burgess}
 
 La ventaja de usar este tipo de kits es que solo hace falta preocuparse de comprobar que se están usando las medidas correctas --según las reglas de diseño establecidas-- mientras se construye el kit modular.
 Después, componiendo los prototipos de los niveles mediante estos módulos, se asegura que esos prototipos cumplen dichas reglas.
@@ -474,7 +474,7 @@ Incluso puede ser buena idea hacer algunas capturas del nivel desde distintos á
 
 ![Definitivo](figures/lost-legacy-b-final.jpg){#fig-lost-legacy-b-final}
 
-Greyboxing de «Uncharted: The Lost Legacy»[@Barclay2021BlockoutsUnchartedLostLegacy].
+Greyboxing de *«Uncharted: The Lost Legacy» (2017)*[@Barclay2021BlockoutsUnchartedLostLegacy].
 :::
 
 En las primeras iteraciones del *greyboxing* se establece la distribución y se comienza a diseñar el flujo y el ritmo del nivel.
@@ -511,7 +511,7 @@ Patrones de distribución del espacio de juego[@Schell2019ArtGameDesign].
 * **Lineal**.
 El nivel se desarrolla en una dirección, como ocurre en muchos juegos de plataformas o en juegos de acción-aventura con una fuerte componente narrativa.
 En algunos juegos el jugador puede retroceder, puede que todo el nivel o solo hasta cierto punto.
-El nivel puede tener un principio y un final diferente o puede definirse en un bucle cerrado, como ocurre en muchos juegos de tablero, como el «Parchís» o el «Monopoly».
+El nivel puede tener un principio y un final diferente o puede definirse en un bucle cerrado, como ocurre en muchos juegos de tablero, como el *«Parchís»* o el *«Monopoly»*.
 
 * **Rejilla**.
 El nivel se desarrolla en una cuadrícula --como ocurre en el ajedrez-- lo que facilita mucho el desarrollo del juego.
@@ -531,7 +531,7 @@ Es el tipo de distribución que más se parece a un mapa real.
 Es muy común en juegos de estrategia y hoy en día es muy popular gracias a los juegos de mundo abierto.
 
 En un juego estos 5 patrones se pueden combina de muchas formas, ya sea en el mismo nivel o a diferentes escalas.
-Por ejemplo, en «Star Wars Jedi: Fallen Order» (2019) el jugador dispone de un mapa con el que puede desplazarse libremente al planeta de su elección, pero en cada uno le espera una misión que se desarrolla en un nivel lineal.
+Por ejemplo, en *«Star Wars Jedi: Fallen Order»* (2019) el jugador dispone de un mapa con el que puede desplazarse libremente al planeta de su elección, pero en cada uno le espera una misión que se desarrolla en un nivel lineal.
 Al superar la misión se desbloquea la posibilidad de volver a jugarla de forma algo más libre, pudiendo elegir diferentes caminos para acceder de forma más directa a las distintas zonas del nivel.
 
 ### Flujo
@@ -607,9 +607,9 @@ De forma menos sutil, un NPC amigo pude conducir al jugador a dónde es necesari
 
 ## Análisis: FPS multijugador
 
-En la @fig-valorant-perl-map se puede observar el mapa del nivel «Pearl» de «Valorant», del que pudimos ver el *greyboxing* en la @fig-valorant-greyboxing.
+En la @fig-valorant-perl-map se puede observar el mapa del nivel *«Pearl»* de *«Valorant»*, del que pudimos ver el *greyboxing* en la @fig-valorant-greyboxing.
 
-![Mapa del nivel «Pearl» de «Valorant»](figures/valorant-pearl-map.png){#fig-valorant-perl-map width=10cm}
+![Mapa del nivel *«Pearl»* de *«Valorant»*](figures/valorant-pearl-map.png){#fig-valorant-perl-map width=10cm}
 
 Defensores y atacantes aparecen al norte y al sur del mapa, respecitivamente.
 Por la distribución del mapa, los jugadores se ven obligados a viajar uno hacia el otro a través de las zonas A, B y Mid.
@@ -644,7 +644,7 @@ Y, obviamente, todas las áreas estan salpicadas de elementos que estan dispuest
 
 Se puede hacer *greyboxing* en cualquier herramienta de modelado 3D como Maya, 3ds Max o Sketchup.
 
-![Greybox en Sketchup de niveles de «A Plague Tale: Innocence» (2019)[@Arrow2021Greyboxing].](figures/blocking_sketchup.png)
+![Greybox en Sketchup de niveles de *«A Plague Tale: Innocence» (2019)*[@Arrow2021Greyboxing].](figures/blocking_sketchup.png)
 
 Sin embargo, eso implica no poder probar el *gameplay* o tener que exportar e importar los diseños de un programa a otro para probarlos.
 Así que, si el motor de videojuegos tiene un editor adecuado, es mejor hacer el *greyboxing* en él para ahorrar tiempo e iterar más rápido durante el diseño.
@@ -655,7 +655,7 @@ Unity trae de serie algunos objetos primitivos que se pueden usar para prototipa
 Sin embargo, es recomendable aprender a usar ProBuilder[@UnityProbuilder], que se distribuye como un paquete independiente.
 La @fig-greybox-shooty-squad es ejemplo sencillo de lo que ProBuilder permite hacer.
 
-![Greybox para «Shooty Squad»[@Dillon2018Greyboxing].](figures/blocking.jpg){#fig-greybox-shooty-squad}
+![Greybox para *«Shooty Squad»*[@Dillon2018Greyboxing].](figures/blocking.jpg){#fig-greybox-shooty-squad}
 
 ProBuilder trae algunas formas básicas que se pueden modificar mediante distintos modos de edición: **Vertex**, **Edge** y **Face**, para generar formas más complejas.
 En estos modos se pueden seleccionar vértices, aristas o caras, respectivamente, para transformarlos y operar sobre ellos, con el objeto de cambiar totalmente la forma de la geometría.
@@ -663,11 +663,11 @@ Una vez tenemos el objeto deseado, se pueden asignar colores a los vértices par
 También permite aplicar materiales y la edición de UV, de forma similar a otros programas de modelado 3D.
 De hecho, las mayas creadas con ProBuilder son iguales a las mayas estáticas que se importan en Unity desde programas externos.
 
-En la sección «Getting started with ProBuilder» de la página principal de Probuilder se enlazan varios tutoriales donde se explica cómo utilizarlo.
-Uno de ellos es «ProBuilder Greyboxing an Interior FPS Level»[@Unity2018Greyboxing], que muestra cómo hacer el *greyboxing* de un nivel para un FPS.
+En la sección *«Getting started with ProBuilder»* de la página principal de Probuilder se enlazan varios tutoriales donde se explica cómo utilizarlo.
+Uno de ellos es *«ProBuilder Greyboxing an Interior FPS Level»*[@Unity2018Greyboxing], que muestra cómo hacer el *greyboxing* de un nivel para un FPS.
 
 Otra tarea para la que se puede utilizar ProBuilder es para añadir la geometría de colisión del nivel para, por ejemplo, limitar las áreas por las que pueden desplazarse los personajes.
-En el vídeo «Simplify Collision Geometry in Unity, with ProBuilder»[@Williams2016Collisions] se muestra cómo se hace siguiendo un ejemplo muy sencillo.
+En el vídeo *«Simplify Collision Geometry in Unity, with ProBuilder»*[@Williams2016Collisions] se muestra cómo se hace siguiendo un ejemplo muy sencillo.
 
 Además de ProBuilder, en la Asset Store podemos encontrar herramientas algo más sencillas y claramente orientadas al *greyboxing*.
 Las más conocidas son SabreCSG[@SabresaurusLevelDesign] y RealtimeCSG[@PrenominalRealtimeCSG].
@@ -682,11 +682,11 @@ En Unreal Engine se pueden prototipar niveles usando:
 
 * Los actores **Geometry Brushes** y el modo **Brush Editing**, también incluidos en el editor.
 
-* O el **kit de diseño de niveles** del proyecto «Lyra Starter Game».
+* O el **kit de diseño de niveles** del proyecto *«Lyra Starter Game»*.
 
 Además de las herramientas que acompañan a Unreal Engine, en el {{< var unreal.marketplace >}} existen algunos complementos interesantes para prototipar.
-Entre ellos merece la pena destacar «Mesh Tool»[@NateMeshTool] y «Blockout Tools Plugin»[@KarpukhinBlockoutTools].
-Tambien son muy útiles los materiales con cuadrícula, como «Customizable Grid»[@ZaroaCustomizableGrid], pues ayudan a visualizar las escalas y a organizar el espacio.
+Entre ellos merece la pena destacar *«Mesh Tool»*[@NateMeshTool] y *«Blockout Tools Plugin»*[@KarpukhinBlockoutTools].
+Tambien son muy útiles los materiales con cuadrícula, como *«Customizable Grid»*[@ZaroaCustomizableGrid], pues ayudan a visualizar las escalas y a organizar el espacio.
 
 ### Modo de modelado
 
@@ -737,16 +737,16 @@ Las **Geometry Brushes** permiten crear formas básicas, como cajas, esferas, co
 También permiten operar con ellas, modificando sus propiedades o sumando y restando formas, para crear otras más complejas.
 Pero tenemos que tener encuenta que ninguna de estas herramientas crean mallas estáticas.
 
-El vídeo «HTF do I? Whiteboxing with BSP in Unreal Engine 4»[@Wadstein2015Whiteboxing] es un sencillo tutorial sobre el uso de **Geometry Brushes** en Unreal Engine 4.
+El vídeo *«HTF do I? Whiteboxing with BSP in Unreal Engine 4»*[@Wadstein2015Whiteboxing] es un sencillo tutorial sobre el uso de **Geometry Brushes** en Unreal Engine 4.
 Es interesante observar cómo el autor crea materiales para *greyboxing* con diferentes colores.
 Estos son útiles para destacar distintas zonas de juego, tipos de elementos o marcar nuestros cambios respecto a un diseño anterior, por ejemplo, para indicar su revisión al resto del equipo.
 
 Unreal Engine tiene además un modo de edición denominado **Brush Editing**, con el que se pueden modificar directamente las **Geometry Brushes** en el editor.
 El mismo autor del vídeo anterior tiene una interesante colección de tutoriales[@Wadstein2016GeometryEditing] sobre las operaciones de **Brush Editing**: **Edit**, **Pen**, **Lathe**, **Brush Clip** y **Extrude** en Unreal Engine 4.
 
-En el vídeo «UE5: Are There Still BSP Brushes and Where Can I Find Them?»[@Galuzin2022BSPInUE5] se explica cómo localizar las **Geometry Brushes** y el modo **Brush Editing** en Unreal Engine 5.
+En el vídeo *«UE5: Are There Still BSP Brushes and Where Can I Find Them?»*[@Galuzin2022BSPInUE5] se explica cómo localizar las **Geometry Brushes** y el modo **Brush Editing** en Unreal Engine 5.
 
-En la @fig-jedi-fallen-order-greyboxing se pueden ver algunos ejemplos de *greyboxing* en Unreal Engine con **Geometry Brushes** y el resultado final en «Star Wars Jedi: Fallen Order» (2019).
+En la @fig-jedi-fallen-order-greyboxing se pueden ver algunos ejemplos de *greyboxing* en Unreal Engine con **Geometry Brushes** y el resultado final en *«Star Wars Jedi: Fallen Order» (2019)*.
 
 ::: {#fig-jedi-fallen-order-greyboxing layout="[48,-4, 48]"}
 
@@ -762,10 +762,10 @@ En la @fig-jedi-fallen-order-greyboxing se pueden ver algunos ejemplos de *greyb
 
 ![Definitivo](figures/jedi-fallen-order-c-final.jpg){#fig-jedi-fallen-order-c-final}
 
-Greyboxing de «Star Wars Jedi: Fallen Order»[@Sergeev2020BlockoutsStarWars].
+Greyboxing de *«Star Wars Jedi: Fallen Order» (2019)*[@Sergeev2020BlockoutsStarWars].
 :::
 
-### Kit de diseño de niveles de «Lyra Starter Game»
+### Kit de diseño de niveles de *«Lyra Starter Game»*
 
 Uno de los problemas de los paquetes de *assets* para *greyboxing* que se venden es que, aunque vienen con una gran variedad de mallas estáticas con las que construir niveles, estas mallas no son fácilmente ajustables.
 Por ejemplo, en una pared con un hueco para una puerta podemos escalar el modelo como queramos --para hacerlo globalmente más grande o más pequeño-- pero no podemos cambiar solo el ancho del hueco sin usar una herramienta de modelado.
@@ -779,21 +779,22 @@ Ahora esto es posible en Unreal Engine 5, gracias a las **DynamicMesh** y a un p
 
 #### Lyra Geometry Tools
 
-Esta forma de crear kits para el diseño de niveles se ilustra perfectamente en el proyecto «Lyra Starter Game»[@EpicLyraStarterGame].
+Esta forma de crear kits para el diseño de niveles se ilustra perfectamente en el proyecto *«Lyra Starter Game»*[@EpicLyraStarterGame].
 El objetivo de este proyecto es servir como recurso de aprendizaje para entender el *framework* de Unreal Enigne 5 y mostrar como se pueden explotar las características del motor para hacer un videojuego de la manera recomendada por Epic Games.
 
-Para facilitar la creación de niveles en «Lyra Starter Game», optaron por crear un kit de módulos para el diseño de niveles.
+Para facilitar la creación de niveles en *«Lyra Starter Game»*, optaron por crear un kit de módulos para el diseño de niveles.
 Cada módulo es un actor Blueprint que usa **Geometry Script** parar ajustar su malla paramétricamente, según las opciones indicadas en la interfaz del editor.
 A estos actores Blueprint los han denominado **Blueprint Actor Tools** o, simplemente, **Tools**.
 
-Todos los detalles sobre el kit se explican en «Geometry Tools in Lyra»[@UnrealGeometryToolsLyra].
+Todos los detalles sobre el kit se explican en *«Geometry Tools in Lyra»*[@UnrealGeometryToolsLyra].
 El kit puede ser copiado facilmente y utilizado en nuestros proyectos.
 
 En la @fig-lyra-kit-advanced-window se puede ver un ejemplo de cómo se obtienen diferentes mallas con solo cambiar los parámetros de **B_Tool_AdvancedWindow**, que es la **Tool** que se usa para crear paredes con huecos para ventanas y puertas.
 
-![Mallas creadas ajustando parámetros de **B_Tool_AdvancedWindow** de «Lyra Starter Game».](figures/lyra-kit-advanced-window.jpg){#fig-lyra-kit-advanced-window}
+![Mallas creadas ajustando parámetros de **B_Tool_AdvancedWindow** de *«Lyra Starter Game»*.](figures/lyra-kit-advanced-window.jpg){#fig-lyra-kit-advanced-window}
 
 <!--- TODO: Imágenes con ejemplos propios para cada caso --->
+
 Las **Tools** incluidas en el kit permiten crear paneles, huecos para puertas y ventanas, arcos, tubos, escaleras y rampas.
 En función de la **Tool** que sea, se admiten encastres, bordes biselados o esquinas redondeadas.
 También hay una **Tool** que sirve para repetir un elemento múltiples veces a lo largo de un *spline*.
@@ -814,9 +815,9 @@ La forma de trabajar sería:
 
 Obviamente, no podemos borrar la **Tool** configurada porque entonces perderíamos la configuración, que nos podría resultar útil si tenemos que cambiarla y volver a generar la malla estática.
 Por eso se recomienda mantener las **Tools** configuradas en un punto no visible del mapa.
-Como se puede observar en la @fig-lyra-level-design, en «Lyra Starter Game», se hace poniendo las **Tools** debajo de la geometría con mallas estáticas del nivel.
+Como se puede observar en la @fig-lyra-level-design, en *«Lyra Starter Game»*, se hace poniendo las **Tools** debajo de la geometría con mallas estáticas del nivel.
 
-![Vista del nivel «L_Expanse» del proyecto «Lyra Starter Game».](figures/lyra-level-design.jpg){#fig-lyra-level-design}
+![Vista del nivel *«L_Expanse»* del proyecto *«Lyra Starter Game»*.](figures/lyra-level-design.jpg){#fig-lyra-level-design}
 
 Para facilitar el diseño, el kit viene acompañado de unas **Actor Action Utility**, que no son sino una forma que tiene Unreal Engine de permitirnos añadir acciones al menú contextual que aparece al pulsar con el botón derecho del ratón en el editor.
 Un de las acciones incluidas sirve para crear una malla estática a partir de una **Tool**, reemplazando a la segunda en su posición, al tiempo que la **Tool** se envía debajo del nivel.

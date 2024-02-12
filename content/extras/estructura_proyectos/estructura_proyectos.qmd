@@ -108,7 +108,7 @@ Para eso es importante considerar la organización de los equipos involucrados e
 ::: {.callout-tip}
 Para ayudar a localizar rápidamente diferentes tipos de *assets*, puede ser útil asignar diferentes colores a las carpetas, según su contenido.
 En Unreal Engine, por ejemplo, se pueden asignar colores usando la opción **Set Color** del menú contextual, que se abre al hacer clic con el botón derecho del ratón sobre la carpeta.
-Mientras que en Unity se suele recurrir a algún *plugin* del *Asset Store* que permita hacer lo mismo, como «Rainbow Folders 2»[@BorodarRainbowFolders].
+Mientras que en Unity se suele recurrir a algún *plugin* del *Asset Store* que permita hacer lo mismo, como *«Rainbow Folders 2»*[@BorodarRainbowFolders].
 :::
 
 Por ejemplo, en proyectos grandes hay equipos de artistas ambientales que trabajan en `Environment`, mientras otros se dedican a los modelos y animaciones en `Characters` o `Weapons`, donde tienen todo lo necesario para completar sus tareas.

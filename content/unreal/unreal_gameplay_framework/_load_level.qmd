@@ -9,11 +9,11 @@ Para implementar una pantalla de carga, existen principalmente dos opciones: str
 
 ## Streaming de niveles
 
-El streaming de niveles es una técnica que permite cargar y descargar partes de niveles de forma dinámica durante la ejecución del juego[Ver «Level streaming» en @TorresD3DLevelStreaming; y @UnrealLevelStreaming].
+El streaming de niveles es una técnica que permite cargar y descargar partes de niveles de forma dinámica durante la ejecución del juego[Ver *«Level streaming»* en @TorresD3DLevelStreaming; y @UnrealLevelStreaming].
 Concretamente, al comienzo de la partida se carga el nivel principal --llamando nivel persistente-- y a medida que el jugador avanza por el nivel, se van cargando los subniveles que se necesiten.
 
 Esta técnica permite que cuando los niveles son muy grandes para ser cargados en su totalidad, se puedan dividir en subniveles que se cargan y descargan según sea necesario.
-También se puede utilizar para facilitar la colaboración entre varios desarrolladores, ya que cada uno puede trabajar en un subnivel diferente[Ver «Colaborar con el VCS» en @TorresD3DProjectStructureTips].
+También se puede utilizar para facilitar la colaboración entre varios desarrolladores, ya que cada uno puede trabajar en un subnivel diferente[Ver *«Colaborar con el VCS»* en @TorresD3DProjectStructureTips].
 
 Utilizar esta funcionalidad para implementar una pantalla de carga implica que en todo momento lo que hay cargado es un nivel persistente vacío y que los niveles del juego son realmente subniveles que se cargan y descargan según sea necesario.
 Mientras esta carga ocurre, se puede instanciar y mostrar un *widget* en la interfaz de usuario con la pantalla de carga.

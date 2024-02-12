@@ -65,7 +65,7 @@ Por tanto, en juegos en red, esto implica tener decenas de objetos cuyo movimien
 
 Además, para que este mecanismo funcione correctamente, es necesario que el movimiento de los proyectiles sea determinista, es decir, que el movimiento de los proyectiles sea el mismo en todos los clientes y el servidor, cuando las condiciones son las mismas.
 
-Esto es sencillo de conseguir con controladores cinemáticos, pero puede ser más complicado con controladores dinámicos, porque estos últimos dependen de motor de fisicas y algunos motores de físicas no garantizan que la simulación sea determinista[Ver «Motor de física determinista» en @TorresD3DFisicas].
+Esto es sencillo de conseguir con controladores cinemáticos, pero puede ser más complicado con controladores dinámicos, porque estos últimos dependen de motor de fisicas y algunos motores de físicas no garantizan que la simulación sea determinista[Ver *«Motor de física determinista»* en @TorresD3DFisicas].
 
 #### Tipos de control
 
