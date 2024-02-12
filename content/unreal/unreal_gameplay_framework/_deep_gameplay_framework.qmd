@@ -29,7 +29,7 @@ Estos componentes no son guardados ni replicados y no reciben eventos como `Begi
 Algunos **ActorComponent** a veces se usan de esta manera, como **AudioComponent** cuando se crea con `SpawnSoundAtLocation()`.
 :::
 
-## *GameInstance*
+## *GameInstance* {#sec-gameinstance}
 
 Un {{< api GameInstance >}} es el principal objeto *manager* de un juego en Unreal Engine. 
 Se instancia al inicio del juego y se destruye al finalizar, por lo que suele usarse para alojar código y datos globales que deban persistir entre la carga de niveles, como los inventarios y las habilidades de los personales o la configuración general del juego.

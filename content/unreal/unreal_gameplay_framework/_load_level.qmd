@@ -5,7 +5,7 @@ En Unreal Engine la carga de un nuevo nivel se realiza usando el método {{< api
 ![Uso de **OpenLevel** para cargar un nivel.](figures/openlevel.png){#fig-openlevel}
 
 El problema es que durante la carga el juego se queda congelado, pese a que los jugadores esperan que se muestre una pantalla de carga.
-Para implementar una pantalla de carga, existen principalmente dos opciones: streaming de niveles o carga asíncrona de niveles.
+Para implementar una pantalla de carga, existen principalmente dos opciones: streaming de niveles, carga asíncrona de niveles o mediante el **MoviePlayer**.
 
 ## Streaming de niveles
 
@@ -79,3 +79,111 @@ Este argumento sirve para pasar información adicional al **GameMode** del nivel
 
 Esta cadena de consulta se recibe en el método `InitMode()` del **GameMode** del nivel de transición.
 La cadena se puede analizar con el método {{< api ParseOption >}} o se puede leer un valor concreto desde cualquier actor del nivel llamando a `GetWorld()->URL.GetOption()`.
+
+## *MoviePlayer*
+
+{{< api MoviePlayer >}} es un módulo que permite reproducir vídeos durante el juego, por ejemplo, durante la carga de un nivel.
+
+El **MoviePlayer** se ejecuta en su propio hilo, por lo que no se bloquea mientras el motor carga el nivel.
+Además, permite añadir *widgets* de interfaz de usuario sobre el reproductor de vídeo, lo que facilita ofrecer *feedback* al jugador durante la carga.
+Sin embargo, como el **MoviePlayer** se ejecuta en su propio hilo y no en el hilo de juego, no se pueden utilizar **UObject**, como los *widgets* UMG.
+En su lugar se deben utilizar *widgets* de Slate[@UnrealSlate], que son en los que se basa UMG.
+
+### Módulo *MoviePlayer*
+
+Para utilizar **MoviePlayer** en un proyecto de C++, primero se debe incluir el módulo `MoviePlayer` en el archivo `.Build.cs` del módulo del juego que lo vaya a utilizar:
+
+```csharp
+PublicDependencyModuleNames.AddRange(new string[] {
+    "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
+    "MoviePlayer"
+});
+```
+
+### *GameInstance* y *FCoreUbjectDelegates*
+
+El motor de Unreal Engine tiene una clase {{< api FCoreUbjectDelegates >}} que permite registrar funciones que se ejecutarán cuando se produzca un evento del motor.
+Entre esos eventos está **PreLoadMap** y **PostLoadMap** que se ejecutan antes y después de cargar un nivel, respectivamente.
+
+Por tanto, el objetivo es registrar un método que se ejecute cuando se produzca el evento **PreLoadMap** para mostrar la pantalla de carga y configurarla para que desaparezca cuando el nivel termine de cargarse.
+
+Opcionalmente, se puede registrar un método que se ejecute cuando se produzca el evento **PostLoadMap** para hacer cualquier tarea adicional que se necesite cuando el nivel termine de cargarse.
+
+Puesto que el objeto en el que se llamará a estos métodos debe existir mientras se cargan los niveles, es aconsejable utilizar **GameInstance** o un subsistema de **GameInstance** para implementar estos métodos.
+
+```cpp
+UCLASS()
+class MYPROJECT_API UMyGameInstance : public UGameInstance
+{
+    GENERATED_BODY()
+
+public:
+    virtual void Init() override;
+
+	UFUNCTION()
+	virtual void BeginLoadingScreen(const FString& MapName);
+
+    // ...
+};
+```
+
+Esta nueva clase **GameInstance** se debe configurar en el proyecto, como vimos en la @sec-gameinstance.
+
+### Configuración de la pantalla de carga
+
+Se puede utiliza el método `Init()` de **GameInstance** para registrar el método `BeginLoadingScreen()`, para que se ejecute cuando se produzca el evento **PreLoadMap**:
+
+```cpp
+void UMyGameInstance::Init()
+{
+    FCoreUbjectDelegates::PreLoadMap.AddUObject(this, &
+        UMyGameInstance::BeginLoadingScreen);
+}
+```
+
+En el método `BeginLoadingScreen()` se configura la pantalla de carga usando **MoviePlayer**, para lo que existe una estructura llamada {{< api FLoadingScreenAttributes >}} que contiene todos los atributos necesarios.
+Entre ellos, `bAutoCompleteWhenLoadingCompletes`, que indica si la pantalla de carga debe desaparecer cuando el nivel termine de cargarse, y `MoviePaths`, que contiene la ruta de los vídeos que se van a reproducir.
+
+```cpp
+void UMyGameInstance::BeginLoadingScreen(const FString& MapName)
+{
+    if (!IsRunningDedicatedServer())                            // <1>
+    {
+        FLoadingScreenAttributes LoadingScreen;
+        LoadingScreen.bAutoCompleteWhenLoadingCompletes = true; // <2>
+        LoadingScreen.MinimumLoadingScreenDisplayTime = 5.0f;   // <3>
+        LoadingScreen.MoviePaths.Add(
+            TEXT("LoadingScreen.mp4"));                         // <4>
+
+        GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);    // <5>
+    }
+}
+```
+1. Comprobar que el método no se está ejecutando en un servidor dedicado porque en ese caso no se mostrará la ventana de carga.
+2. Configurar la pantalla de carga para que desaparezca cuando el nivel termine de cargarse.
+3. Configurar el tiempo mínimo que se mostrará la pantalla de carga.
+4. Añadir la ruta del vídeo que se va a reproducir, relativa al directorio `Content/Movies`.
+5. Configurar y mostrar la pantalla de carga.
+
+### *Widget* de *loading*
+
+La estructura **FLoadingScreenAttributes** también permite añadir un *widget* de Slate a la pantalla de carga.
+
+Por lo general se crea un *widget* propio heredando de **SCompoundWidget** e implementando el método `Construct()`.
+Luego, en `BeginLoadingScreen()` el *widget* se instancia con `SNew()` y esta instancia se añade a la pantalla de carga a través del atributo `FLoadingScreenAttributes::WidgetLoadingScreen`.
+
+```cpp
+void UMyGameInstance::BeginLoadingScreen(const FString& MapName)
+{
+    if (!IsRunningDedicatedServer())
+    {
+        FLoadingScreenAttributes LoadingScreen;
+        LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
+        LoadingScreen.MinimumLoadingScreenDisplayTime = 5.0f;
+
+        LoadingScreen.WidgetLoadingScreen = SNew(SMyLoadingWidget);
+
+        GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+    }
+}
+```

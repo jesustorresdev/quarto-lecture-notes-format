@@ -439,6 +439,10 @@ Por ejemplo, la clase de los botiquines puede llamar a `EnableInput()` para colo
 Si el jugador pulsa el control para recoger el botiquín, el **InputComponent** del botiquín consumirá el evento de entrada, sin que llegue al **PlayerController**, siendo el propio botiquín el que se encargue de recogerse, restaurar la salud del jugador y desaparecer.
 Si el jugador se aleja del botiquín, este puede llamar a `DisableInput()` para quitar su **InputComponent** de la pila y que el **PlayerController** vuelva a ser el primero en recibir la entrada del jugador.
 
+Los actores **Pawn** y **PlayerController** también pueden llamar a `EnableInput()` y `DisableInput()` para activar o desactivar el procesado de la entrada del jugador en el **Pawn** y en el **PlayerController**, respectivamente.
+Por ejemplo, se puede llamar a `DisableInput()` para desactivar la entrada del jugador durante una cinemático o cuando su personaje ha muerto.
+Ambas clases tienen un método `InputEnabled()` para comprobar si el procesado de la entrada del jugador está activo en el actor.
+
 ## Datos del jugador y *PlayerState*
 
 El **PlayerController** tiene una propiedad que referencia a un actor {{< api PlayerState >}}, que contiene la información específica de cada jugador que deba ser accesible al resto de jugadores en juegos multijugador online, como la saluda o la puntuación.

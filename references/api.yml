@@ -404,10 +404,18 @@ FActorSpawnParameters:
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FActorSpawnParameters/index.html
+FCoreUbjectDelegates:
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/CoreUObject/UObject/FCoreUObjectDelegates/
 FDamageEvent:
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FDamageEvent/index.html
+FLoadingScreenAttributes:
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/MoviePlayer/FLoadingScreenAttributes/
 FPointDamageEvent:
   refs:
     - lang: C++
@@ -575,6 +583,10 @@ MovementComponent:
       url: https://docs.unrealengine.com/en-US/BlueprintAPI/Components/Movement/SetUpdatedComponent/
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UMovementComponent/index.html
+MoviePlayer:
+  refs:
+    - name: Clases
+      url: https://docs.unrealengine.com/en-US/API/Runtime/MoviePlayer/
 NavMovementComponent:
   extends: MovementComponent
   internal-name: UNavMovementComponent
@@ -973,6 +985,12 @@ UGameplayStatics:
           url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/SetGamePaused/
         - lang: C++
           url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/SetGamePaused/index.html
+    SetGlobalTimeDilation:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Time/SetGlobalTimeDilation/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/SetGlobalTimeDilation/index.html
     UnloadStreamLevel:
       refs:
         - name: Loading and Unloading Levels using Blueprints

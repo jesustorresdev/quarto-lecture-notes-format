@@ -116,7 +116,7 @@ Es decir, primero actualiza todos los actores y componentes en el grupo `TG_PreP
 Los *grupos de ticks* son particularmente útiles para manejar dependencias entre actores y componentes.
 Por ejemplo, si un actor depende del resultado del *tick* de otro actor, podemos asegurarnos de que el segundo sea actualizado primero asignando su *función de tick* primaria a un grupo anterior.
 
-### prerrequisitos
+### Prerrequisitos
 
 En ocasiones, no es suficiente con asignar un *grupo de tick* a una *función de tick* para asegurar que se ejecute en el momento adecuado, por lo que hace falta un mecanismo adicional que ofrezca más control.
 Por ello, las *funciones de tick* también pueden tener *prerrequisitos*, que deben cumplirse para que se ejecute el *tick*.
@@ -167,6 +167,20 @@ Un componente o actor puede ser invisible, pero aun así tener colisiones activa
 En Unreal Engine, los componentes que heredan de **PrimitiveComponent** son **SceneComponent** que tienen o general algún tipo de geometría, generalmente para renderizarla o para causar colisiones.
 Estos componentes tienen un método `SetCollisionEnabled()` que permite activar y desactivar las colisiones del componente.
 Mientras que los actores tienen un método {{< api SetActorEnableCollision >}} que permite activar y desactivar las colisiones de todos los componentes del actor.
+
+## Escalado de tiempo {#sec-time-scaling}
+
+El escalado de tiempo es una técnica que se utiliza para ralentizar o acelerar temporalmente el paso del tiempo, sin afectar a la lógica del juego.
+Por ejemplo, se puede usar para ralentizar el tiempo cuando el jugador está a punto de ser golpeado por un enemigo, o para acelerarlo cuando está viajando a través de un mapa muy grande.
+
+En Unreal Engine, la escala global de tiempo se guarda en una propiedad del **UWorld** que se puede modificar usando {{< api SetGlobalTimeDilation >}}.
+El valor por defecto es 1.0, que indica que el tiempo transcurre a velocidad normal, pero un valor de 0.5 ralentiza el tiempo a la mitad, mientras que un valor de 2.0 lo acelera al doble.
+Esto afecta a la velocidad a la que reciben *ticks* actores y componente, pero se debe tener en cuenta que no tiene efecto en la simulación del motor de física.
+Por tanto, el escalado de tiempo no afecta al movimiento de los componentes con la simulación de física activada.
+
+Además, cada actor tiene una propiedad **Custom Time Dilation** que permite escalar el tiempo para él y sus componentes de forma independiente.
+Este escalado se hace de forma relativa a la escala de tiempo global.
+Por ejemplo, se pueda crear la ilusión de que un personaje se mueve muy rápido, poniendo el juego globalmente en *slow motion* usando un **Global Time Dilation* de 0.1, pero poniendo el **Custom Time Dilation** del actor del personaje a 10.
 
 ## Pausa {#sec-pause}
 
