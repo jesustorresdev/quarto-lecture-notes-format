@@ -90,9 +90,9 @@ Prototipado del nivel *«Pearl»* de *«Valorant» (2020)*.
 :::
 
 Por ejemplo, en la @fig-valorant-greyboxing se muestran imágenes del ***greyboxing*** del nivel *«Pearl»* de *«Valorant»* --extraídas de un hilo del diseñador de niveles Pearl Hogbash en Twitter[@Hogbash2022Greyboxing]---.
-Como se puede observar, el prototipo carece de detalles gráficos, usándose sencillos bloques rectangulares para definir la estructura del nivel, el espacio jugable[^1] y la distribución de los elementos.
+Como se puede observar, el prototipo carece de detalles gráficos, usándose sencillos bloques rectangulares para definir la estructura del nivel, el espacio jugable[^espacio-jugable] y la distribución de los elementos.
 
-[^1]: En [@Schell2019ArtGameDesign] se define el *espacio jugable* o *espacio funcional* como aquel donde tienen lugar el juego, una vez se han eliminado todos los elementos superficiales.
+[^espacio-jugable]: En [@Schell2019ArtGameDesign] se define el *espacio jugable* o *espacio funcional* como aquel donde tienen lugar el juego, una vez se han eliminado todos los elementos superficiales.
 
 En la @fig-valorant-detail-greyboxing se observa que reutilizan un modelo de un pez espada --que nada tiene que ver con la temática del nivel-- para marcar un punto de interés.
 Probablemente, la incorporación de un detalle tan significativo no sea casual.
@@ -122,7 +122,8 @@ Durante la etapa de **producción** se crean los niveles y los elementos del jue
 
 ### Prototipado de niveles
 
-El trabajo de los artistas conceptuales no termina en la **preproducción**, dado que no es necesario bocetar y prototipar todo el juego antes de cambiar de etapa. Su trabajo continúa durante la **producción**, bocetando elementos del juego y niveles en desarrollo antes de su modelado y composición, cambios y elementos nuevos añadidos durante esta etapa y cinemáticas.
+El trabajo de los artistas conceptuales no termina en la **preproducción**, dado que no es necesario bocetar y prototipar todo el juego antes de cambiar de etapa.
+Su trabajo continúa durante la **producción**, bocetando elementos del juego y niveles en desarrollo antes de su modelado y composición, cambios y elementos nuevos añadidos durante esta etapa y cinemáticas.
 
 Igualmente, los niveles son prototipados y probados antes de su composición definitiva, para asegurar que el diseño es el adecuado y que no hay problemas de *gameplay*.
 Durante la etapa de **producción**, el ***greyboxing*** de los niveles es extremadamente útil, puesto que permite a los diseñadores explorar y probar el nivel con un *gameplay* más próximo a como serán en el producto final.
@@ -178,47 +179,47 @@ Prototipado del nivel *«Storm Point»* de *«Apex Legends» (2019)*[@Reece2022G
 Respecto a la iluminación, los pasos a seguir pueden variar dependiendo del motor de juego y del equipo de desarrollo, pero en general se incluyen los siguientes:
 
 1. **Analizar la escena**.
-Estudiar el diseño del nivel e identificar qué tipo de iluminación se necesita para crear la atmósfera deseada y qué elementos se quieren destacar y cuáles no.
-Durante el proceso, los artistas pueden usar como guía imágenes de referencia de la atmósfera deseada.
+   Estudiar el diseño del nivel e identificar qué tipo de iluminación se necesita para crear la atmósfera deseada y qué elementos se quieren destacar y cuáles no.
+   Durante el proceso, los artistas pueden usar como guía imágenes de referencia de la atmósfera deseada.
 
 1. **Emplazamiento de la iluminación**.
-Colocar las luces en el nivel usando las herramientas de iluminación del motor de videojuegos.
-El orden recomendado para el emplazamiento suele ser de luces más generales a luces más específicas:
+   Colocar las luces en el nivel usando las herramientas de iluminación del motor de videojuegos.
+   El orden recomendado para el emplazamiento suele ser de luces más generales a luces más específicas:
 
    1. **Luz ambiental**.
-   Es la luz que ilumina todo el nivel de manera general, como la luz del sol o de la luna.
-   Se suele utilizar para dar una sensación de día o de noche y para establecer el tono general de la iluminación.
-   Para fuentes de luz principales como el sol o la luna se suelen usar fuentes direccionales, que pueden complementarse con fuentes que reproducen efectos ambientales --como el *Sky Light* en Unreal Engine--.
+      Es la luz que ilumina todo el nivel de manera general, como la luz del sol o de la luna.
+      Se suele utilizar para dar una sensación de día o de noche y para establecer el tono general de la iluminación.
+      Para fuentes de luz principales como el sol o la luna se suelen usar fuentes direccionales, que pueden complementarse con fuentes que reproducen efectos ambientales --como el *Sky Light* en Unreal Engine--.
 
    1. **Luces primarias**.
-   Son las luces que iluminan las áreas principales del nivel, como las luces de una habitación, una calle o una plaza.
-   Se suelen utilizar focos, luces puntuales y rectangulares.
+      Son las luces que iluminan las áreas principales del nivel, como las luces de una habitación, una calle o una plaza.
+      Se suelen utilizar focos, luces puntuales y rectangulares.
 
    1. **Luces secundarias**.
-   Son las luces que iluminan detalles específicos del nivel o simulan ciertos efectos, como luces de señalización, luces de seguridad, farolas, pantallas, focos, fuegos, etc.
-   Estas luces deben ser colocadas de manera que complementen las luces principales y ayuden a establecer una sensación de profundidad y de realismo.
+      Son las luces que iluminan detalles específicos del nivel o simulan ciertos efectos, como luces de señalización, luces de seguridad, farolas, pantallas, focos, fuegos, etc.
+      Estas luces deben ser colocadas de manera que complementen las luces principales y ayuden a establecer una sensación de profundidad y de realismo.
    
    1. **Iluminación funcional**.
-   Es la iluminación dirigida a modular el *gameplay*, como la iluminación de puzzles, áreas a explorar, puntos de entrada de los enemigos o la señalización de posibles estrategias.
-   También se pueden iluminar salidas o incluso dar alguna indicación sobre la ruta de navegación, especialmente en niveles complejos.
+      Es la iluminación dirigida a modular el *gameplay*, como la iluminación de puzzles, áreas a explorar, puntos de entrada de los enemigos o la señalización de posibles estrategias.
+      También se pueden iluminar salidas o incluso dar alguna indicación sobre la ruta de navegación, especialmente en niveles complejos.
  
       Esta iluminación se puede incorporar ajustando las luces primarias y secundarias o añadiendo luces nuevas.
       En cualquier caso, es interesante definir una jerarquía.
       Los elementos más importantes deberían destacar más.
 
 1. **Probar y ajustar**.
-Como casi todas las tareas en el desarrollo de videojuegos, la iluminación del nivel es un proceso iterativo.
-Es necesario ajustar los parámetros de las luces, como intensidad, color, alcance, dirección, etc., probando hasta lograr el efecto deseado.
+   Como casi todas las tareas en el desarrollo de videojuegos, la iluminación del nivel es un proceso iterativo.
+   Es necesario ajustar los parámetros de las luces, como intensidad, color, alcance, dirección, etc., probando hasta lograr el efecto deseado.
 
 1. **Iluminación dinámica y efectos de iluminación**.
-Las luces dinámicas son aquellas que cambian de posición, color o intensidad, como las luces de un vehículo en movimiento o un fuego.
-También se incorporan sombras y reflejos y los efectos de posproceso, dado que afectan y se ven afectados por la iluminación.
-El objetivo es complementar a las luces principales y secundarias para crear una sensación de mayor realismo en el nivel.
+   Las luces dinámicas son aquellas que cambian de posición, color o intensidad, como las luces de un vehículo en movimiento o un fuego.
+   También se incorporan sombras y reflejos y los efectos de posproceso, dado que afectan y se ven afectados por la iluminación.
+   El objetivo es complementar a las luces principales y secundarias para crear una sensación de mayor realismo en el nivel.
 
 1. **Optimizar**.
-La iluminación es uno de los aspectos que más afecta al rendimiento de un videojuego.
-De hecho, el número máximo de luces puede estar limitado por el propio motor de videojuegos, en función de la técnica de render que utilice.
-Por eso es necesario dedicar tiempo a optimizar la iluminación, asegurando un rendimiento aceptable en las diferentes plataformas en las que se vaya a publicar el juego.
+   La iluminación es uno de los aspectos que más afecta al rendimiento de un videojuego.
+   De hecho, el número máximo de luces puede estar limitado por el propio motor de videojuegos, en función de la técnica de render que utilice.
+   Por eso es necesario dedicar tiempo a optimizar la iluminación, asegurando un rendimiento aceptable en las diferentes plataformas en las que se vaya a publicar el juego.
 
 La creación del nivel definitivo continua con iteraciones donde se añaden sonidos, código adicional, sistemas de partículas y otros efectos, se pulen los detalles y, finalmente, se optimiza de forma general su funcionamiento en las distintas plataformas.
 
@@ -227,40 +228,45 @@ La creación del nivel definitivo continua con iteraciones donde se añaden soni
 La idea del ***greyboxing*** es obtener un bosquejo aproximado --sin detalles ni texturas, usando figuras geométricas básicas-- de la distribución del nivel, para centrar la atención sobre sus características principales, como:
 
 * **Tamaño del nivel**.
-Es decir, sus dimensiones en el espacio y el tiempo para recorrerlo.
+  Es decir, sus dimensiones en el espacio y el tiempo para recorrerlo.
 
 * **Escala**.
-Se refiere a la relación entre el tamaño de los elementos en el juego y su tamaño real.
-Por ejemplo, una puerta en un juego podría ser más grande en relación con su tamaño real porque en función del punto de vista, esta puede ser la forma en la que da se obtiene una sensación más realista o porque realmente se quiere que se perciba como más grande que en la realidad.
+  Se refiere a la relación entre el tamaño de los elementos en el juego y su tamaño real.
+  Por ejemplo, una puerta en un juego podría ser más grande en relación con su tamaño real porque en función del punto de vista, esta puede ser la forma en la que da se obtiene una sensación más realista o porque realmente se quiere que se perciba como más grande que en la realidad.
 
 * **Estructura y distribución**.
-Se refiere a la forma en la que se distribuyen los elementos del nivel, como las habitaciones, las calles, las áreas de juego, puntos de interés, puntos de control, etc.
+  Se refiere a la forma en la que se distribuyen los elementos del nivel, como las habitaciones, las calles, las áreas de juego, puntos de interés, puntos de control, etc.
 
 * **Jugabilidad**.
-Se refiere a cómo se presentan los desafíos al jugador, cómo se desarrolla la acción y cómo se resuelven los problemas.
-La estructura del nivel influye notablemente en la jugabilidad, ya que determina la ubicación de los puntos de interés, puntos de control[^2], objetos y enemigos.
+  Se refiere a cómo se presentan los desafíos al jugador, cómo se desarrolla la acción y cómo se resuelven los problemas.
+  La estructura del nivel influye notablemente en la jugabilidad, ya que determina la ubicación de los puntos de interés, puntos de control, objetos y enemigos.
 
-[^2]: Los puntos de control son lugares en los que el jugador puede guardar su progreso y continuar jugando más tarde, mientras que los puntos de interés son elementos que proporcionan contexto, desafíos o misiones al juego y añaden profundidad y variedad al mundo del juego.
+::: {.callout-note}
+Los puntos de control son lugares en los que el jugador puede guardar su progreso y continuar jugando más tarde, mientras que los puntos de interés son elementos que proporcionan contexto, desafíos o misiones al juego y añaden profundidad y variedad al mundo del juego.
+:::
 
 Aunque el ***greyboxing*** se puede realizar en cualquier herramienta de modelado 3D, hacerlo en el propio motor de videojuegos abre la puerta a ir desarrollando y probando el código de *gameplay* y, al mismo tiempo, iterar probando la jugabilidad del diseño, refinando así aspectos como:
 
 * **Navegabilidad**.
-Es la facilidad que tiene el jugador para moverse por el nivel, evitando obstáculos y siguiendo la ruta de navegación.
+   Es la facilidad que tiene el jugador para moverse por el nivel, evitando obstáculos y siguiendo la ruta de navegación.
  
 * **Durabilidad**.
-Durabilidad es la cantidad de tiempo que un jugador puede pasar jugando el nivel antes de completarlo o dejar de jugar, por ejemplo, porque el nivel no es capaz de mantener la atención del jugador durante tiempo suficiente como para completarlo.
+   Durabilidad es la cantidad de tiempo que un jugador puede pasar jugando el nivel antes de completarlo o dejar de jugar, por ejemplo, porque el nivel no es capaz de mantener la atención del jugador durante tiempo suficiente como para completarlo.
 
 * **Ritmo**.
-El ritmo o *pacing* de un nivel es el orden general y la cadencia de las actividades y eventos del nivel. Por ejemplo, en los juegos de acción los niveles suelen combinar momentos de acción rápida y emocionante seguidos por momentos tranquilos para recoger objetos y contemplar el escenario e instantes impactantes por su belleza o dificultad[^3].
-Lo que buscan los diseñadores es contraste, haciendo que el jugador suba y baje a nivel emocional entre unas zonas del nivel y otras.
-Obviamente, el *pacing* está influido porque el género del juego, ya que se suele esperar que los juegos de acción tengan un ritmo más rápido que los juegos de aventura o de estrategia.
+  El ritmo o *pacing* de un nivel es el orden general y la cadencia de las actividades y eventos del nivel.
+  Por ejemplo, en los juegos de acción los niveles suelen combinar momentos de acción rápida y emocionante seguidos por momentos tranquilos para recoger objetos y contemplar el escenario e instantes impactantes por su belleza o dificultad[^set-pieces].
+   
+  Lo que buscan los diseñadores es contraste, haciendo que el jugador suba y baje a nivel emocional entre unas zonas del nivel y otras.
+  
+  Obviamente, el *pacing* está influido porque el género del juego, ya que se suele esperar que los juegos de acción tengan un ritmo más rápido que los juegos de aventura o de estrategia.
 
-[^3]: Estos instantes impactantes se denominan *set pieces*.
+[^set-pieces]: Estos instantes impactantes se denominan *set pieces*.
 Son escenas o momentos clave diseñados para causar una fuerte impresión en el jugador, ya sea por tener una dificultad especialmente elevada, los acontecimientos narrados o el aspecto del nivel.
 
 * **Flujo**.
-En diseño de niveles el *flow* es cómo se siente el jugador al moverse por el nivel.
-Es decir, ¿el recorrido se siente complejo o sencillo?, ¿parece peligroso o seguro?, ¿qué tipos de movimientos se le piden al jugador?, ¿hay muchos obstáculos, curvas o es en línea recta?, ¿el desplazamiento se siente rápido o lento?, etc.
+  En diseño de niveles el *flow* es cómo se siente el jugador al moverse por el nivel.
+  Es decir, ¿el recorrido se siente complejo o sencillo?, ¿parece peligroso o seguro?, ¿qué tipos de movimientos se le piden al jugador?, ¿hay muchos obstáculos, curvas o es en línea recta?, ¿el desplazamiento se siente rápido o lento?, etc.
 
 ::: {.callout-note}
 En diseño de videojuegos, también se usa el término *flow* para referirse a cómo el juego hace que el jugador se sienta inmerso y concentrado en el juego.
@@ -377,13 +383,15 @@ Esta cápsula suele ser más grande que la malla del personaje porque así es m�
 | **Motor**           | **Cápsula de colisión**     | **Altura de la cámara** |
 |---------------------|-----------------------------|-------------------------|
 | **Unity**           | $1.0⨯1.8$ m. o $1.0⨯2.0$ m. | 1.5 m. -- 1.7 m.        |
-| **Unreal Engine**   | $60⨯176$ cm.[^5]            | 152 cm.                 | 
+| **Unreal Engine**   | $60⨯176$ cm.                | 152 cm.                 | 
 | **Humano promedio** | $50⨯175$ cm.                | 170 cm.                 |
 
 : Medidas de personaje más comunes en distintos motores de videojuegos. {#tbl-common-player-sizes}
 
-[^5]: Mientras que en Unity se configura la altura total de la cápsula de colisión, en Unreal Engine el tamaño se ajusta indicando la altura media de la cápsula, que por defecto es de 88 cm.
+::: {.callout-note}
+Mientras que en Unity se configura la altura total de la cápsula de colisión, en Unreal Engine el tamaño se ajusta indicando la altura media de la cápsula, que por defecto es de 88 cm.
 Por defecto, la altura de la cámara es de 64 cm. respecto al centro de dicha cápsula de colisión.
+:::
 
 El resto de las medidas se van estableciendo a partir de las anteriores, según el tipo de arquitectura que se pretende imitar.
 Por ejemplo, estas son algunas dimensiones y recomendaciones típicas cuando se crean entornos con arquitectura moderna[@LDBBasicMetrics]:
@@ -509,29 +517,33 @@ Patrones de distribución del espacio de juego[@Schell2019ArtGameDesign].
 :::
 
 * **Lineal**.
-El nivel se desarrolla en una dirección, como ocurre en muchos juegos de plataformas o en juegos de acción-aventura con una fuerte componente narrativa.
-En algunos juegos el jugador puede retroceder, puede que todo el nivel o solo hasta cierto punto.
-El nivel puede tener un principio y un final diferente o puede definirse en un bucle cerrado, como ocurre en muchos juegos de tablero, como el *«Parchís»* o el *«Monopoly»*.
+  El nivel se desarrolla en una dirección, como ocurre en muchos juegos de plataformas o en juegos de acción-aventura con una fuerte componente narrativa.
+
+  En algunos juegos el jugador puede retroceder, puede que todo el nivel o solo hasta cierto punto.
+  
+  El nivel puede tener un principio y un final diferente o puede definirse en un bucle cerrado, como ocurre en muchos juegos de tablero, como el *«Parchís»* o el *«Monopoly»*.
 
 * **Rejilla**.
-El nivel se desarrolla en una cuadrícula --como ocurre en el ajedrez-- lo que facilita mucho el desarrollo del juego.
-Esa una distribución típica de los juegos de estrategia y en algunos RPG y juegos de acción-aventura en 2D.
+  El nivel se desarrolla en una cuadrícula --como ocurre en el ajedrez-- lo que facilita mucho el desarrollo del juego.
+  Esa una distribución típica de los juegos de estrategia y en algunos RPG y juegos de acción-aventura en 2D.
 
 * **Web**.
-El nivel se desarrolla colocando puntos de interés en un mapa y conectándolos con caminos, de forma que el jugador tiene varios puntos que visitar, pero puede elegir diferentes caminos para hacerlo.
-En ocasiones hay una ruta principal recomendada, hacia la que se guía al jugador, pero este puede elegir otros caminos que le ofrezcan otras recompensas.
-En algunos juegos cada nivel se juega la primera vez de forma lineal, pero al completarlo se puede volver a jugar con mayor libertad, pudiendo elegir diferentes caminos que la primera vez estaban bloqueados.
+  El nivel se desarrolla colocando puntos de interés en un mapa y conectándolos con caminos, de forma que el jugador tiene varios puntos que visitar, pero puede elegir diferentes caminos para hacerlo.
+  
+  En ocasiones hay una ruta principal recomendada, hacia la que se guía al jugador, pero este puede elegir otros caminos que le ofrezcan otras recompensas.
+  
+  En algunos juegos cada nivel se juega la primera vez de forma lineal, pero al completarlo se puede volver a jugar con mayor libertad, pudiendo elegir diferentes caminos que la primera vez estaban bloqueados.
 
 * **Puntos en el espacio**.
-En algunos casos el juego ofrece la posibilidad de que el jugador se traslade libremente a una zona de juego de su elección.
-Por ejemplo, RPG como Final Fantasy VII tienen un mapa del mundo que permite al jugador desplazarse a una zona --como una ciudad, un bosque o una montaña-- para jugar diferentes misiones.
+  En algunos casos el juego ofrece la posibilidad de que el jugador se traslade libremente a una zona de juego de su elección.
+  Por ejemplo, RPG como Final Fantasy VII tienen un mapa del mundo que permite al jugador desplazarse a una zona --como una ciudad, un bosque o una montaña-- para jugar diferentes misiones.
 
 * **Espacio dividido**.
-Es el tipo de distribución que más se parece a un mapa real.
-Es muy común en juegos de estrategia y hoy en día es muy popular gracias a los juegos de mundo abierto.
+  Es el tipo de distribución que más se parece a un mapa real.
+  Es muy común en juegos de estrategia y hoy en día es muy popular gracias a los juegos de mundo abierto.
 
 En un juego estos 5 patrones se pueden combina de muchas formas, ya sea en el mismo nivel o a diferentes escalas.
-Por ejemplo, en *«Star Wars Jedi: Fallen Order»* (2019) el jugador dispone de un mapa con el que puede desplazarse libremente al planeta de su elección, pero en cada uno le espera una misión que se desarrolla en un nivel lineal.
+Por ejemplo, en *«Star Wars Jedi: Fallen Order» (2019)* el jugador dispone de un mapa con el que puede desplazarse libremente al planeta de su elección, pero en cada uno le espera una misión que se desarrolla en un nivel lineal.
 Al superar la misión se desbloquea la posibilidad de volver a jugarla de forma algo más libre, pudiendo elegir diferentes caminos para acceder de forma más directa a las distintas zonas del nivel.
 
 ### Flujo
@@ -540,37 +552,37 @@ El diseño del *flow* del nivel consiste en definir cómo se siente el jugador a
 Obviamente, existen múltiples factores que pueden afectar al flujo:
 
 * **Tamaños y escalas**.
-Las distancias de las mecánicas que usa el jugador para desplazarse, el tamaño del personaje y de los elementos del entorno, sobre los que ya discutimos en la @sec-metrics.
+  Las distancias de las mecánicas que usa el jugador para desplazarse, el tamaño del personaje y de los elementos del entorno, sobre los que ya discutimos en la @sec-metrics.
 
 * **Velocidad**.
-¿El jugador siente que moverse por el nivel es rápido o lento?
+  ¿El jugador siente que moverse por el nivel es rápido o lento?
 
 * **Dirección**.
-La ruta por el nivel ¿tiene cambios bruscos de dirección? ¿Hay interrupciones en la ruta? ¿Es continua y suave?.
+  La ruta por el nivel ¿tiene cambios bruscos de dirección? ¿Hay interrupciones en la ruta? ¿Es continua y suave?.
 
 * ***Wayfinding***.
-¿El jugador sabe ubicarse y encontrar una ruta por el nivel? ¿Es la ruta difícil de identificar o resulta obvia? ¿Qué información se le proporciona al jugador para que encuentre una ruta?
+  ¿El jugador sabe ubicarse y encontrar una ruta por el nivel? ¿Es la ruta difícil de identificar o resulta obvia? ¿Qué información se le proporciona al jugador para que encuentre una ruta?
 
 Para diseñar el *flow* considerando los factores anteriores, existen múltiples técnicas:
 
 * **Sendas deseadas**.
-Son los caminos que el jugador considera más naturales para recorrer el nivel, generalmente porque son más cortos.
+  Son los caminos que el jugador considera más naturales para recorrer el nivel, generalmente porque son más cortos.
 
-   Esta técnica consiste en imaginar --o detectar mediante *playtesting*-- las **sendas deseadas** dentro de un área y compararlas con el camino que el jugador realmente puede tomar --por ejemplo, por limitación de las mecánicas--.
+  Esta técnica consiste en imaginar --o detectar mediante *playtesting*-- las **sendas deseadas** dentro de un área y compararlas con el camino que el jugador realmente puede tomar --por ejemplo, por limitación de las mecánicas--.
 
-   A veces interesa modificar aspectos del diseño para optimizar el camino que el jugador puede hacer, acercándolo a la **senda deseada**, mientras que en otros casos es preferible que no sea así --por ejemplo, para animar a la exploración--.
+  A veces interesa modificar aspectos del diseño para optimizar el camino que el jugador puede hacer, acercándolo a la **senda deseada**, mientras que en otros casos es preferible que no sea así --por ejemplo, para animar a la exploración--.
 
 * **Camino crítico**.
-Es la ruta más corta para completar un nivel.
-Es importante analizarla para asegurar que en ella está incluido el contenido más importante que se quiere que el jugador experimente obligatoriamente.
+  Es la ruta más corta para completar un nivel.
+  Es importante analizarla para asegurar que en ella está incluido el contenido más importante que se quiere que el jugador experimente obligatoriamente.
 
-   El **camino crítico** se utiliza para evaluar la longitud y el desafío que representa el nivel para el jugador, y para identificar y solucionar problemas que puedan dificultar u obstaculizar el progreso del jugador a lo largo de ese camino.
+  El **camino crítico** se utiliza para evaluar la longitud y el desafío que representa el nivel para el jugador, y para identificar y solucionar problemas que puedan dificultar u obstaculizar el progreso del jugador a lo largo de ese camino.
 
 * **Circulación**.
-En arquitectura, la **circulación** es la forma en la que las personas se mueven por los espacios, usando las vías que conectar las distintas áreas.
+  En arquitectura, la **circulación** es la forma en la que las personas se mueven por los espacios, usando las vías que conectar las distintas áreas.
 
-   El análisis de la **circulación** es útil en juegos mutijugador, dónde el espacio del nivel se organiza en áreas conectadas por un sistema de espacios de circulación.
-   Los espacios de circulación principales pueden llevar rápidamente al combate, mientras que las vías secundarias pueden ofrecer otras recompensas u oportunidades.
+  El análisis de la **circulación** es útil en juegos mutijugador, dónde el espacio del nivel se organiza en áreas conectadas por un sistema de espacios de circulación.
+  Los espacios de circulación principales pueden llevar rápidamente al combate, mientras que las vías secundarias pueden ofrecer otras recompensas u oportunidades.
 
 #### Wayfinding
 
@@ -582,28 +594,29 @@ Obviamente, después el jugador puede decidir si lo sigue o si explora otros cam
 Las formas de ayudar al ***wayfinding*** pueden ser muy diversas, según el tipo de juego y de experiencia que se esté diseñando:
 
 * **Puntos de referencia**.
-Se pueden colocar construcciones u otros elementos visibles desde múltiples puntos del nivel a modo de puntos de referencia.
+  Se pueden colocar construcciones u otros elementos visibles desde múltiples puntos del nivel a modo de puntos de referencia.
 
 * **Materiales**.
-En diferentes áreas se pueden usar distintos materiales, lo que facilita al jugador conocer su ubicación en el nivel.
-Por otro lado, en muchos juegos de acción-aventura es común marcar las zonas que el personaje puede escalar, por las que puede correr o los bordes a los que puede agarrarse.
-Así el jugador puede reconocer rápidamente la ruta que debe seguir para seguir progresando.
+  En diferentes áreas se pueden usar distintos materiales, lo que facilita al jugador conocer su ubicación en el nivel.
+  
+  Por otro lado, en muchos juegos de acción-aventura es común marcar las zonas que el personaje puede escalar, por las que puede correr o los bordes a los que puede agarrarse.
+  Así el jugador puede reconocer rápidamente la ruta que debe seguir para seguir progresando.
 
 * **Recursos y coleccionables**.
-Se puede llamar la atención de jugador en una determinada dirección colocando objetos coleccionables, recursos o mejoras que sean visibles en la distancia.
+  Se puede llamar la atención de jugador en una determinada dirección colocando objetos coleccionables, recursos o mejoras que sean visibles en la distancia.
 
 * **Iluminación y color**.
-La iluminación y el uso del contraste de colores es una forma de señalar un camino o las vías de entrada y de salida de un área.
+  La iluminación y el uso del contraste de colores es una forma de señalar un camino o las vías de entrada y de salida de un área.
 
 * **Sonido**.
-Es frecuente utilizar los sonidos o la música para advertir de que nos acercamos a una zona peligrosa.
+  Es frecuente utilizar los sonidos o la música para advertir de que nos acercamos a una zona peligrosa.
 
 * **HUD**.
-En algunos juegos el personaje puede activar, durante un breve periodo de tiempo, un modo de visión especial que le ofrece pistas para saber a dónde puede ir o sobre qué objetos puede interactuar.
+  En algunos juegos el personaje puede activar, durante un breve periodo de tiempo, un modo de visión especial que le ofrece pistas para saber a dónde puede ir o sobre qué objetos puede interactuar.
 
 * **NPC**.
-Cuando los NPC enemigos atacan al jugador, están indicando que seguramente por allí siga el camino.
-De forma menos sutil, un NPC amigo pude conducir al jugador a dónde es necesario que vaya para continuar.
+  Cuando los NPC enemigos atacan al jugador, están indicando que seguramente por allí siga el camino.
+  De forma menos sutil, un NPC amigo pude conducir al jugador a dónde es necesario que vaya para continuar.
 
 ## Análisis: FPS multijugador
 
@@ -693,24 +706,24 @@ Tambien son muy útiles los materiales con cuadrícula, como *«Customizable Gri
 El **modo de modelado**[@UnrealModelingMode] --o **Modeling Mode**-- es un modo del editor que ofrece algunas herramientas para crear mallas 3D, de manera similar a otras herramientas de modelado, aunque con algunas diferencias y limitaciones:
 
 * Como en Unreal Engine todos los modelos son mallas conformadas por triángulos --dado que es la representación más portable entre distintas plataformas-- el nivel más básico de operaciones del **modo de modelado** solo trabaja sobre vértices y triángulos.
-Sin embargo, la herramienta permite agrupar triángulos en **PolyGroups** para operar de una sola vez sobre conjuntos de triángulos de forma más cómoda.
+  Sin embargo, la herramienta permite agrupar triángulos en **PolyGroups** para operar de una sola vez sobre conjuntos de triángulos de forma más cómoda.
 
 * Al editar una malla no se edita la instancia individual del actor en la escena, sino el *asset* de la malla estática en la carpeta `Content`.
-Eso significa que todos los actores con instancias del mismo *asset* se verán modificados.
+  Eso significa que todos los actores con instancias del mismo *asset* se verán modificados.
 
-   Si se crea un modelo nuevo directamente en el **modo de modelado**, lo que ocurre es que se crea el correspondiente *asset* en `Maps/_GENERATED`, dentro de la carpeta `Content`.
-   Por tanto, todas las instancias de ese mismo *asset* se veran afectadas por los cambios.
+  Si se crea un modelo nuevo directamente en el **modo de modelado**, lo que ocurre es que se crea el correspondiente *asset* en `Maps/_GENERATED`, dentro de la carpeta `Content`.
+  Por tanto, todas las instancias de ese mismo *asset* se veran afectadas por los cambios.
 
 * Al editar una malla en el **modo de modelado** el editor nos da la opción de aceptar o cancelar los cambios, como se puede observar en la @fig-ue-modeling-editing-asset.
-Mientras estamos editando --antes de elegir cualquiera de las dos opciones-- podemos deshacer las modificaciones realizadas paso a paso.
-Al aceptar las modificaciones, el editor las tratará por defecto como una única operación sobre el modelo, de forma que si se intenta deshacer, se revertirán todos las modificaciones.
+  Mientras estamos editando --antes de elegir cualquiera de las dos opciones-- podemos deshacer las modificaciones realizadas paso a paso.
+  Al aceptar las modificaciones, el editor las tratará por defecto como una única operación sobre el modelo, de forma que si se intenta deshacer, se revertirán todos las modificaciones.
 
-   El motivo es que al tratar de editar una malla, la herramienta crea un **DynamicMesh** inicializado con los datos de la malla estática.
-   Los **DynamicMesh** permiten crear y modificar geometría mediante código, lo que los hace útiles para la generación procedural.
+  El motivo es que al tratar de editar una malla, la herramienta crea un **DynamicMesh** inicializado con los datos de la malla estática.
+  Los **DynamicMesh** permiten crear y modificar geometría mediante código, lo que los hace útiles para la generación procedural.
 
-   Lo cambios se aplican en la malla dinámica, lo que permite previsualizar el resultado en tiempo real.
-   Si se cancela la edición, los cambios se pierden y la malla original queda inalterada.
-   Si se aceptan los cambios, la malla modificada sobreescribe el *asset* de la malla estática original.
+  Lo cambios se aplican en la malla dinámica, lo que permite previsualizar el resultado en tiempo real.
+  Si se cancela la edición, los cambios se pierden y la malla original queda inalterada.
+  Si se aceptan los cambios, la malla modificada sobreescribe el *asset* de la malla estática original.
 
 ![Editando en **Modeling Mode** en Unreal Engine.](figures/ue-modeling-editing-asset.jpg){#fig-ue-modeling-editing-asset}
 
