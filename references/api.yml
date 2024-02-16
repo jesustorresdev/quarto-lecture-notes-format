@@ -320,6 +320,15 @@ ChaosVehicleMovementComponent:
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Plugins/ChaosVehicles/UChaosVehicleMovementComponent/
+ChaosVehicleWheel:
+  extends: UObject
+  internal-name: UChaosVehicleWheel
+  refs:
+    - name: How to Set up Vehicles
+      order: 1
+      url: https://docs.unrealengine.com/en-US/how-to-set-up-vehicles-in-unreal-engine/
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Plugins/ChaosVehicles/UChaosVehicleWheel/
 ChaosWheeledVehicleMovementComponent:
   extends: ChaosVehicleMovementComponent
   internal-name: ChaosWheeledVehicleMovementComponent
@@ -706,6 +715,14 @@ PhysicalSurface:
       url: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Enum/LiteralenumEPhysicalSurface/
     - lang: C++
       url: https://docs.unrealengine.com/5.1/en-US/API/Runtime/PhysicsCore/Chaos/EPhysicalSurface/
+PhysicsControlComponent:
+  extends: USceneComponent
+  internal-name: UPhysicsControlComponent
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/BlueprintAPI/PhysicsControl/
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Physics/UPhysicsControlComponent/index.html
 PlayerCameraManager:
   extends: Actor
   internal-name: APlayerCameraManager
@@ -782,6 +799,19 @@ PlayerState:
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/APlayerState/index.html
+PrimitiveComponent:
+  extends: SceneComponent
+  internal-name: UPrimitiveComponent
+  members:
+    SetSimulatePhysics:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Physics/SetSimulatePhysics/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UPrimitiveComponent/SetSimulatePhysics/index.html
+  refs:
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/UPrimitiveComponent/index.html
 ProjectileMovementComponent:
   extends: MovementComponent
   internal-name: UProjectileMovementComponent
@@ -863,6 +893,27 @@ SceneComponent:
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/USceneComponent/index.html
+SkeletalMeshComponent:
+  extends: MeshComponent
+  internal-name: USkeletalMeshComponent
+  members:
+    SetAllBodiesBelowPhysicsBlendWeight:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/4.27/en-US/BlueprintAPI/Components/SkeletalMesh/SetAllBodiesPhysicsBlendWeight/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/USkeletalMeshComponent/SetAllBodiesBelo-_1/
+    SetAllBodiesBelowSimulatePhysics:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/4.27/en-US/BlueprintAPI/Components/SkeletalMesh/SetAllBodiesBelowSimulatePhysics/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/USkeletalMeshComponent/SetAllBodiesBelo-_2/
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/BlueprintAPI/Components/SkeletalMesh/
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/USkeletalMeshComponent/index.html
 UCameraAnimationCameraModifier:
   extends: UCameraModifier
   refs:

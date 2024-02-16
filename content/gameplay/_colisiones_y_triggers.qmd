@@ -191,7 +191,7 @@ Para implementar esto, tenemos varias opciones:
   De hecho, Unreal Engine tiene un tipo {{< api PhysicalSurface >}} donde se puede asignar cualquiera de los tipos de superficies que se pueden configurar globalmente para el proyecto en **Project Settings... / Physics / Physical Surface Category**.
 
 * Para los proyectos más complejos podemos usar los **materiales físicos**.
-  En general, estos materiales se asignan a las **colisiones** y sirven para ajustar ciertas propiedades físicas de las superficies, que solo entran en juego si los objetos tienen activada la **simulación física**[@TorresD3DFisicas].
+  En general, estos materiales se asignan a las **colisiones** y sirven para ajustar ciertas propiedades físicas de las superficies, que solo entran en juego si los objetos tienen activada la **simulación física**[Ver «Materiales físicos» en @TorresD3DFisicas].
   Pero en este caso no hablamos de usarlos para eso, sino utilizar el **materiales físico** asignado a la **colisión** como identificador del tipo de superficie, para así poder generar los efectos adecuados.
 
   Esto, por ejemplo, permite tener varios actores de la clase `Floor` en la escena pero con **materiales físicos** diferentes, como `PM_Concrete`, `PM_Wood` o `PM_Grass`.

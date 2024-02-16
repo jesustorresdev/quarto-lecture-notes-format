@@ -12,7 +12,9 @@ Una vez hemos visto elementos básicos de *gameplay* y como se usan --como las c
 {{< include _control_de_personajes.qmd >}}
 {{< include _entrada_del_jugador.qmd > >}}
 
+# Plataformas y ascensores
 
+Por lo general, se dice que 
 
 # Puertas, plataformas y ascensores
 

@@ -12,7 +12,7 @@ Generalmente, estos compomnentes deben extendidos para implementar los modos de 
 # Control de movimiento {#sec-control-de-movimiento}
 
 La entrada del control de movimiento son las acciones de movimiento indicadas por el jugador o por la IA --por ejemplo, «accelera hacia la derecha», «salta» o «camina agachado»-- y la salida es la nueva posición del personaje, ajustada a las restricciones físicas del mundo.
-Es responsabilidad del controlador implementar la física del personaje --aunque, como veremos más adelante, eso no significa necesariamente que usen motor y simulación física[Ver *«Colisiones, *triggers* y cinemáticos»* en @TorresD3DFisicas]-- haciendo que se mueva sin atravesar muros o suelos, que salte y caiga, que pueda subir y bajar pendientes y escaleras o escalar muros.
+Es responsabilidad del controlador implementar la física del personaje --aunque, como veremos más adelante, eso no significa necesariamente que usen motor y simulación física[Ver *«Colisión y simulación»* en @TorresD3DFisicas]-- haciendo que se mueva sin atravesar muros o suelos, que salte y caiga, que pueda subir y bajar pendientes y escaleras o escalar muros.
 
 ## Cápsula del personaje
 

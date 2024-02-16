@@ -1,1 +1,0 @@
-:fn-middleware: pass:n[Se conoce por _middleware_ al software que sirve de soporte a una aplicación para comunicarse con otras aplicaciones, con el sistema operativo o para acceder al hardware. Puede esta formado por una o varias librerías, uno o varios programas o ambas cosas.​]

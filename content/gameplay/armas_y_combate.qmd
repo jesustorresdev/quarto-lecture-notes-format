@@ -81,7 +81,7 @@ Esto permite implementar tanto proyectiles sencillos --gobernados bajo las ecuac
 
 Además de lo comentado hasta el momento, los cálculos del movimiento de los proyectiles pueden presentar varios retos:
 
-* Como ocurre con elmovimiento de los personajes, en cada actualización la trayectoria suele aproximarse mediante segmentos rectilíneos.
+* Como ocurre con el movimiento de los personajes, en cada actualización la trayectoria suele aproximarse mediante segmentos rectilíneos.
   Para calcular una trayectoria más precisa, en cada *tick* se pueden usar múltiples subpasos rectilíneos (ver la @sec-substeps).
 
 * Puede ser importante considerar la frecuencia con la que se actualiza el movimiento de los proyectiles, porque si mueven muy rápido --cubriendo grandes distancia entre actualizaciones-- se puede dar el caso de que no se detecten algunas colisiones.
@@ -95,7 +95,7 @@ Con el objeto de evitar fallar en la detección de posibles obstáculos, puede s
 * Otra opción es hacer que el objeto, en cada paso de simulación, lance un *raycast* en la dirección del movimiento para detectar objetos que podría atravesar en el intervalo del tiempo hasta el siguiente paso.
   En caso de detectar alguno, se lanzan las acciones que simula la colisión.
 
-* Finalmente, se puede añadir geometría de colisión que añáda al proyectil una cola invisible, aumentado el tamaño del objeto de forma imperceptible, para que se puede dectectar la colisión incluso aunque el proyectil se mueva muy rápido.
+* Finalmente, se puede añadir geometría de colisión que dote al proyectil una cola invisible, aumentado el tamaño del objeto de forma imperceptible, para que se puede dectectar la colisión incluso aunque el proyectil se mueva muy rápido.
 
 #### *ProjectileMovementComponent* en Unreal Engine
 

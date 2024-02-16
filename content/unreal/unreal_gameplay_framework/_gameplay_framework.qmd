@@ -610,7 +610,7 @@ El *gameplay framework* incluye las siguientes clases que heredan de **Pawn**:
 * El {{< api WheeledVehiclePawn >}} extiende **Pawn** para implementar la clase base de vehículo con ruedas.
 
   Esta clase de actor incluye por defecto un componente {{< api ChaosWheeledVehicleMovementComponent >}} que implementa la simulación del movimiento del vehículo, usando el motor de físicas Chaos[@TorresD3DFisicas] de Unreal Engine.
-  Este componente se puede sustituir fácilmente[Más sobre CDO en @TorresD3DUnrealCpp] por cualquier componente que herede de {{< api ChaosVehicleMovementComponent >}}, cuando se quiere usar una simulación diferente.
+  Este componente se puede sustituir fácilmente por cualquier componente que herede de {{< api ChaosVehicleMovementComponent >}}, cuando se quiere usar una simulación diferente[Más sobre CDO en @TorresD3DUnrealCpp].
 
 * El {{< api Character >}} extiende **Pawn** para añadir todo lo que necesita un personaje tradicional humanoide, como el que se usa en muchos juegos de acción en primera o tercera persona: una cápsula de colisión, un **SkeletalMeshComponent** --es decir, una malla que puede ser animada mediante el sistema de animación de Unreal Engine-- y un **CharacterMovementComponent**, que implementa modos de movimiento típicos como: caminar, correr, saltar, nadar, incluso, volar.
 
