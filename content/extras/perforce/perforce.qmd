@@ -194,7 +194,14 @@ Al terminar, cada *changelists* se consolidan en una revisión diferente mediant
 
 ## Operaciones comunes {#_operaciones_comunes}
 
-En el vídeo-tutorial *«Uso básico de Perforce»* se explica cómo conectar a un servidor de Perforce y se repasan brevemente las acciones más básicas[@Torres2021Perforce].
+::: {#vid-uso-básico-perforce}
+
+{{< video  https://www.youtube.com/watch?v=myyR_XuqWaw >}}
+
+Uso básico de Perforce.
+:::
+
+En el @vid-uso-básico-perforce se explica cómo conectar a un servidor de Perforce y se repasan brevemente las acciones más básicas.
 Para conocer más del VCS de Perforce, lo recomendable es consultar el manual de P4V[@PerforceP4VUserGuide].
 
 ![Hoja de referencia rápida de P4V.](figures/perforce_helix_cheatsheet.png){#fig-perforce-helix-cheatsheet}
