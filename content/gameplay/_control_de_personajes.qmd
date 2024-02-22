@@ -223,7 +223,7 @@ while (RemainingTime > EPSILON) {
 ```
 1. Se divide `DeltaTime` en `MaxSubsteps` pasos, pero el tiempo de cada uno nunca puede ser inferior a `MinTickTime` para evitar problemas cuando el tiempo es muy pequeño o prácticamente 0.0
 
-## Controladores cinemáticos
+## Controladores cinemáticos {#sec-controladores-cinematicos}
 
 Los controladores de movimiento de personajes pueden ser **cinemáticos** o **dinámicos**.
 
@@ -524,7 +524,7 @@ Sin embargo, no incluye ningún tipo de control de movimiento, sino que su funci
 Extender directamente {{< api PawnMovementComponent >}} para implementar un control de movimiento desde 0, pero no es lo más habitual.
 En ese caso, se puede elegir como interpretar la entrada de la IA o del jugador --como desplazamiento, velocidad o aceleración-- y como implementar la física del movimiento.
 
-La {{< api UFloatingPawnMovement >}} extiende **PawnMovementComponment** para proporcionar un control de movimiento simple en 3D.
+La {{< api FloatingPawnMovement >}} extiende **PawnMovementComponment** para proporcionar un control de movimiento simple en 3D.
 Se trata de un controlador cinemático que recibe como entrada la aceleración.
 Permite establecer de límites de velocidad y aceleración, pero no implementa el efecto de la gravedad.
 

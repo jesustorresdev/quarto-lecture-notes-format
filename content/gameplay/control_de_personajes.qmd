@@ -10,26 +10,8 @@ title-meta: "Programación de *gameplay* (II): Control de personajes"
 Una vez hemos visto elementos básicos de *gameplay* y como se usan --como las colisiones o  la detección de la ubicación de objetos en el espacio-- vamos a ver como se utilizan para el control de los personajes.
 
 {{< include _control_de_personajes.qmd >}}
-{{< include _entrada_del_jugador.qmd > >}}
-
-# Plataformas y ascensores
-
-Por lo general, se dice que 
-
-# Puertas, plataformas y ascensores
-
-// TODO: Escribir intero
-
-## Plataformas
-
-<!---
-
-Ojo que a veces son transiciones y aveces se mueve el mundo y no la plataforma.
-
-https://www.google.com/search?q=character+charactermovementcomponent+elevator&sxsrf=AJOqlzWhlNfVGoJWgKhBSVWZUHvpVGx8ew%3A1678912839197&ei=Ry0SZKrOC7qbkdUPx7KPIA&ved=0ahUKEwjqjY7b5d79AhW6TaQEHUfZAwQQ4dUDCA8&uact=5&oq=character+charactermovementcomponent+elevator&gs_lcp=Cgxnd3Mtd2l6LXNlcnAQAzIFCCEQoAEyBQghEKABMgUIIRCgAToFCAAQkQI6CAguENQCEJECOgQIABBDOgUIABCABDoLCC4QgAQQxwEQ0QM6BAgjECc6BAguEEM6CAguEIAEENQCOgcILhDUAhBDOggILhDUAhCABDoICAAQgAQQywE6BwgAEIAEEAo6BwgAEIAEEA06CAgAEAgQHhANOgUIABCGAzoFCAAQogQ6BwghEKABEAo6BgghEA0QFUoECEEYAFAAWM47YIs9aAFwAXgAgAHeAYgBu0SSAQcwLjMxLjE0mAEAoAEBwAEB&sclient=gws-wiz-serp
-
-¿Código en el plataforma o en el personaje?
---->
+{{< include _entrada_del_jugador.qmd >}}
+{{< include _plataformas.qmd >}}
 
 ---
 

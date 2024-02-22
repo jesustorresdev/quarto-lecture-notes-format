@@ -338,6 +338,35 @@ ChaosWheeledVehicleMovementComponent:
 Character:
   extends: Pawn
   internal-name: ACharacter
+  members:
+    Crouch:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Character/Crouch/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/ACharacter/Crouch/index.html
+    Jump:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Character/Jump/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/ACharacter/Jump/index.html
+    OnMovementModeChanged:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/ACharacter/OnMovementModeChanged/index.html
+    StopJumping:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Character/StopJumping/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/ACharacter/StopJumping/index.html
+    UnCrouch:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Character/UnCrouch/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/ACharacter/UnCrouch/index.html
   refs:
     - lang: Blueprint
       url: https://docs.unrealengine.com/en-US/BlueprintAPI/Character/index.html
@@ -346,6 +375,17 @@ Character:
 CharacterMovementComponent:
   extends: PawnMovementComponent
   internal-name: UCharacterMovementComponent
+  members:
+    PhysCustom:
+      refs:
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UCharacterMovementComponent/PhysCustom/
+    SetMovementMode:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Pawn/Components/CharacterMovement/SetMovementMode/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UCharacterMovementComponent/SetMovementMode/index.html
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UCharacterMovementComponent/index.html
@@ -727,6 +767,18 @@ PlayerCameraManager:
   extends: Actor
   internal-name: APlayerCameraManager
   members:
+    GetCameraLocation:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Camera/GetCameraLocation/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/APlayerCameraManager/GetCameraLocation/index.html
+    GetCameraRotation:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Camera/GetCameraRotation/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Camera/APlayerCameraManager/GetCameraRotation/index.html
     SetManualCameraFade:
       refs:
         - lang: Blueprint
@@ -993,6 +1045,12 @@ UGameplayStatics:
           url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetGameInstance/
         - lang: C++
           url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/GetGameInstance/index.html
+    GetPlayerCameraManager:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetPlayerCameraManager/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/GetPlayerCameraManager/index.html
     GetStreamingLevel:
       refs:
         - lang: Blueprint
@@ -1052,6 +1110,20 @@ UGameplayStatics:
   refs:
     - lang: C++
       url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/
+UKismetMathLibrary:
+  extends: UObject
+  members:
+    FindLookAtRotation:
+      refs:
+        - lang: Blueprint
+          url: https://docs.unrealengine.com/en-US/BlueprintAPI/Math/Rotator/FindLookatRotation/
+        - lang: C++
+          url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UKismetMathLibrary/FindLookAtRotation/
+  refs:
+    - lang: Blueprint
+      url: https://docs.unrealengine.com/en-US/BlueprintAPI/Math/
+    - lang: C++
+      url: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UKismetMathLibrary/index.html
 UNavigationSystem:
   extends: UObject
   refs:

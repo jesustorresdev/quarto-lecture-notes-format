@@ -91,7 +91,7 @@ En la @fig-control-rotation-input se ve como los valores de la acción **IA_Loco
 
 ### Personaje en tercera persona con cámara orbital
 
-Cuando el jugador maneja algún tipo de personaje humanoide se suele utilizar el actor {{< api Character >}} que incluye el componente de movimiento {{< api CharacterMovementCompoment >}}.
+Cuando el jugador maneja algún tipo de personaje humanoide se suele utilizar el actor {{< api Character >}} que incluye el componente de movimiento {{< api CharacterMovementComponent >}}.
 Este componente tiene la opción **Orient Rotation to Movement** para activar la orientación del personaje en la dirección del movimiento, con una velocidad configurable en la propiedad **Rotation Rate**, como se observa en la @fig-orient-rotation-to-movement.
 
 ![Opción para orientar el personaje en la dirección del movimiento.](figures/orient-rotation-to-movement.png){#fig-orient-rotation-to-movement}
@@ -152,7 +152,7 @@ Es una práctica recomendada definir una intefaz --o varias, si es compleja y se
 Un caso de uso típico en cualquier videojuego es hacer que cuando el jugador esté cerca de un objeto pueda cogerlo o accionarlo.
 Esto es algo muy común con armas, botiquines, puertas, interruptores, objetos que podemos agarrar para empujar, etc.
 
-Todo empieza porque el objeto tenga un ***trigger** que permita saber cuándo estamos cerca de él.
+Todo empieza porque el objeto tenga un ***trigger*** que permita saber cuándo estamos cerca de él.
 Sin embargo, tanto el personaje como el objeto pueden ser informados del momento en el que eso ocurre, por lo que podríamos implementar el código de esta funcionalidad tanto en el actor del objeto como en el del personaje.
 
 Si solo el personaje tuviera acceso a la entrada del jugador, probablemente la segunda sería la mejor o, quizás, la única opción.

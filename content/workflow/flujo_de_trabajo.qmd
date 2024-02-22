@@ -6,6 +6,8 @@ title: "Flujo de trabajo en videojuegos 3D"
 
 # Proceso de creación de niveles
 
+<!-- TODO: Arrancar del  historia, las mecánicas o las emciones -->
+
 Como ya hemos visto en otras asignaturas, el ciclo de vida del desarrollo de un videojuego se puede dividir en distintas etapas.
 Aunque obviamente estas etapas pueden variar entre proyectos y estudios, en general el proceso siempre es muy similar al de la @fig-gamedev-cycle.
 
@@ -260,6 +262,8 @@ Aunque el ***greyboxing*** se puede realizar en cualquier herramienta de modelad
   Lo que buscan los diseñadores es contraste, haciendo que el jugador suba y baje a nivel emocional entre unas zonas del nivel y otras.
   
   Obviamente, el *pacing* está influido porque el género del juego, ya que se suele esperar que los juegos de acción tengan un ritmo más rápido que los juegos de aventura o de estrategia.
+
+<!-- TODO: Momento `Wow' -->
 
 [^set-pieces]: Estos instantes impactantes se denominan *set pieces*.
 Son escenas o momentos clave diseñados para causar una fuerte impresión en el jugador, ya sea por tener una dificultad especialmente elevada, los acontecimientos narrados o el aspecto del nivel.
