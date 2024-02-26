@@ -13,7 +13,7 @@ Es decir, a una forma de animación programática en la que se ejecuta una simul
 Sin embargo, buena parte de estas simulaciones utilizan ecuaciones de la mecánica cinemática, donde no se consideran ni masas ni fuerzas.
 Por ejemplo, para simular el movimiento de un personaje, se suelen usar ecuaciones cinemáticas para calcular la siguiente posición de la cápsula del personaje, en función de la velocidad actual y la aceleración deseada[@TorresD3DGameplay02]. 
 
-En cambio, motor de físicas es un componente de los motores de videojuegos desarrollado para realizar simulaciones de la dinámica de sistemas físicos con el objeto de modelar de forma más precisa el mundo real.
+En cambio, el motor de físicas es un componente de los motores de videojuegos desarrollado para realizar simulaciones de la dinámica de sistemas físicos con el objeto de modelar de forma más precisa el mundo real.
 Es decir, que se encarga de simular el comportamiento físico de los objetos en el juego, considerando la gravedad y otras fuerzas aplicadas, la fricción, las colisiones, la deformación o rotura de los objetos, etc.
 
 Sin embargo, es importante tener en cuenta que por las limitaciones impuestas por el tiempo real, los motores utilizados en videojuegos generalmente solo simulan sistemas relativamente simples y lo hacen de forma aproximada, lo que puede generar todo tipo de problemas inesperados y aleatorios.
@@ -148,9 +148,9 @@ En estas circunstancias, para que todos los jugadores vean lo mismo, la simulaci
 
 En los juegos en red, cuando se tiene que utilizar un motor de físicas no determinista, es importante asegurar que los efectos físicos no afecten al *gameplay*.
 Es decir, solo deben usarse con fines cosméticos, de forma que no importe que puedan ser diferentes en cada cliente.
-Si alguna simulación tiene efecto en el *gameplay* se debe valorar implementarla de otra manera, por ejemplo, simulado directamente las ecuaciones cinemáticas, cuyos resultados se puede ir sincronizando periódicamente a través de la red.
+Si alguna simulación tiene algún efecto en el *gameplay* se debe valorar implementarla de otra manera, por ejemplo, simulando directamente las ecuaciones cinemáticas, cuyos resultados se puede ir sincronizando periódicamente a través de la red.
 
-Actualmente, Havok ofrece física determinista entre clientes que se ejecutan en la misma arquitectura de CPU.
+Actualmente, Havok ofrece físicas deterministas entre clientes que se ejecutan en la misma arquitectura de CPU.
 Mientras que Unity se ha propuesto que su nuevo Unity Physics para DOTS sea determinista incluso entre plataformas diferentes[@UnityForumGoalsUnityPhysics].
 
 # Simulación en procesadores de uso específicos
@@ -164,7 +164,7 @@ Finalmente, AGEIA fue adquirida por NVIDIA, que adaptó PhysX para que funcionar
 En la actualidad, el motor de físicas se ejecuta en la CPU, incluso en los motores de videojuegos que usan PhysX.
 A fin de cuentas, es mucho más conveniente reservar la potencia de GPU para los gráficos.
 
-# Colisión y simulación {#sec-colisiones-y-simulación}
+# Colisión y simulación {#sec-colisiones-y-simulacion}
 
 El motor de físicas maneja dos conceptos de forma independiente:
 
@@ -194,7 +194,7 @@ En la @fig-ue-collision-presets se puede observar esta opción bajo el nombre de
 
 ::: {.callout-note}
 En Unreal Engine los objetos puede tener una colisión compleja[Ver *«Colisiones simples y complejas»* en @TorresD3DGameplay01] similar a utilizar un componente **MeshCollider** en Unity.
-En ambos motores, no se puede activar la simulación física en objetos con colisión compleja, ya que el motor de física necesita almacenar y actualizar la velocidad y otra información en cada vértice del *collider* y esto es muy costoso para este tipo de geometría por el gran número de vertices que genera.
+En ambos motores, no se puede activar la simulación física en objetos con colisión compleja, ya que el motor de físicas necesita almacenar y actualizar la velocidad y otra información en cada vértice del *collider* y esto es muy costoso para este tipo de geometría por el gran número de vértices que genera.
 :::
 
 Los objetos con la simulación física activada no respetan la transformación relativa respecto al objeto padre, puesto que su transformación en el espacio y su movimiento son determinados libremente por el motor de físicas.
@@ -216,7 +216,7 @@ Desde el punto del motor de física, los objetos de una escena pueden ser estát
   Es decir, que el motor de físicas no controla su movimiento, por lo que puede colisionar y alterar a otros objetos físicos, pero no se ve directamente alterado por ellos --aunque siempre podemos programar manualmente algún tipo de efecto--.
  
 El motor de físicas realiza ciertas optimizaciones, sabiendo que los objetos estáticos no se mueven ni cambian de tamaño ni van a aparecer o desaparecer.
-Por lo tanto, si se altera de alguna forma un objeto estático, se obliga al motor de física a rehacer ciertos cálculos internos, afectando al rendimiento del juego.
+Por lo tanto, si se altera de alguna forma un objeto estático, se obliga al motor de físicas a rehacer ciertos cálculos internos, afectando al rendimiento del juego.
 
 En Unity son objetos estáticos todos aquellos que tengan un *collider* pero no un **RigidBody**, porque son los objetos con los que el motor de físicas puede detectar colisiones, pero no los puede mover.
 Sin embargo, se debe tener cuidado, puesto que los podemos mover de otras maneras, disparando los cálculos internos del motor de físicas.
@@ -259,7 +259,7 @@ Sin embargo, no se recomienda que en un mismo actor se activen ambos tipos de ev
 Esto es debido a que por la forma en la que se implementa la detección de colisiones, un objeto que se desplace muy rápido puede penetrar levemente en el otro, aunque estén configurados para bloquearse.
 Si **Generate Overlap Events** está activo, este hecho hará que se emita un evento de *overlap*.
 
-En Unity reciben evento de colisión los objetos con componente **RigidBody**.
+En Unity, reciben eventos de colisión los objetos con componente **RigidBody**.
 Eso significa que los objetos estáticos no pueden recibir este tipo de eventos por no tener **RigidBody**.
 Mientras que reciben evento de *trigger* los objetos con un *collider* en modo *trigger*.
 
@@ -351,7 +351,7 @@ Por ejemplo, al implementar una puerta se usa *uniones* para conectar las hojas 
 Estas *uniones* se configuran como bisagras, es decir, que solo permiten el movimiento de rotación en el eje vertical y este movimiento está restringido a un cierto rango.
 Además, se puede hacer que si la puerta recibe un golpe muy fuerte, las bisagras se rompan, desarmando así la puerta.
 
-Como comentamos en la @sec-colisiones-y-simulación, los objetos con la simulación física activada no ven restringido su movimiento por su padre, sino que se pueden mover libremente.
+Como comentamos en la @sec-colisiones-y-simulacion, los objetos con la simulación física activada no ven restringido su movimiento por su padre, sino que se pueden mover libremente.
 Las **uniones** permiten construir una jerarquía alternativa en la que restringir el movimiento de los objetos físicos de forma relativa a otros objeto, sean físicos o no.
 
 ## Motores
@@ -362,7 +362,7 @@ El motor puede ser lineal, para desplazar los objetos unidos a lo largo de algun
 En el caso del motor angular, se suelen soportar los modos **SLERP** y **Twist and Swing**[@ChouSwingTwist].
 El primero opera interpolando entre los cuaterniones de la orientación actual y la objetivo, de forma que el objeto gire de forma suave por el camino más corto.
 Como se puede ver en la @fig-twist-and-swing, el segundo separa el movimiento de rotación en dos partes que se pueden controlar de forma independiente, una de giro sobre sí mismo --el eje X de la *unión*-- y otra de balanceo en un cono --los ejes Z e Y--.
-Según el caso, puede dar mejor resultado usar un modo o el otro.
+Según el caso, puede dar mejor resultado usar un modo u otro.
 
 ![Movimiento de rotación en el modo **Twist and Swing**.](figures/twist_and_swing.pdf){#fig-twist-and-swing}
 
@@ -401,7 +401,7 @@ El objeto no queda unido al actor que lo «coge», sino que este último debe ir
 
 ## Unity
 
-En Unity uno de los dos objetos debe tener el componente **RigidBody**, pues de otra forma el movimiento del objeto no estaría bajo el control del motor de física.
+En Unity, uno de los dos objetos debe tener el componente **RigidBody**, pues de otra forma el movimiento del objeto no estaría bajo el control del motor de física.
 
 Los tipos de uniones soportadas son:
 
@@ -467,7 +467,7 @@ A este respecto, Unity proporciona un componente **WheelCollider**[@UnityWheelCo
 En cada uno de estos ***colliders*** se pueden configurar propiedades como la fricción de los neumáticos y la suspensión, al tiempo que permite controlar cada una de las ruedas independientemente indicando su ángulo de dirección y el torque aplicado.
 Unity ofrece un tutorial muy completo donde se detalla cómo usarlo e incluye algunos consejos[@UnityWheelColliderTutorial].
 
-En Unreal Engine se puede trabajar de forma similar mediante el *Chaos Vehicles Plugin*, que ofrece:
+En Unreal Engine, se puede trabajar de forma similar mediante el *Chaos Vehicles Plugin*, que ofrece:
 
 * La clase {{< api ChaosVehicleWheel >}} para las ruedas.
   Se puede hereder de esta clase en Blueprint para configurar sus propiedades.
@@ -509,12 +509,12 @@ Sin embargo, la **animación física** no es solo útil para crear situaciones c
 Por ejemplo, se puede utilizar para crear un efecto más cinematográfico en la muerte de un personaje, al permitir cambiar de simulación basada en *keyframes* a simulación física de forma progresiva, en el momento de la muerte.
 Y es muy interesante en VR, donde el jugador puede interactuar libremente con todo tipo de objetos, por lo que un comportamiento físicamente realista mejora mucho la inmersión.
 
-En los contenidos del GDC se pueden encontrar charlas sobre cómo se implementó esta técnica en los juegos de *«Uncharted 4: A Thief's End» (2016)*[@Mach2017PhysicsAnimation] y *«Star Wars Jedi: Fallen Order» (2020)*[@Waszak2020PhysicsAnimation].
+En los contenidos del GDC se pueden encontrar charlas sobre cómo se implementó esta técnica en los juegos de *«Uncharted 4: A Thief's End» (2016)*[@Mach2017PhysicsAnimation] y *«Star Wars Jedi: Fallen Order» (2020)*[@Waszak2019PhysicsAnimation].
 Así como una de EA en GDC 2018[@Sachania2018PhysicsAnimation] más centrada en los juegos de deportes.
 
 ## Unreal Engine
 
-En Unreal Engine estos *Physical Bodies* y las *constraints* de las articulaciones se configuran en el **Physics Asset Editor**[@UnrealPhysicsAssetEditor].
+En Unreal Engine, estos *Physical Bodies* y las *constraints* de las articulaciones se configuran en el **Physics Asset Editor**[@UnrealPhysicsAssetEditor].
 
 ::: {#vid-uncharted-hang-climbing}
 
@@ -576,7 +576,7 @@ Por ejemplo, se puede:
 
 El soporte para simular tejidos se basa en lo que puede hacer NVIDIA Cloth, tanto en Unreal Engine 4 como en Unity.
 Eso significa que el flujo de trabajo y las limitaciones son muy similares.
-En Unreal Engine 5 el motor de físicas Chaos incluye su propia solución para simular tejidos.
+En Unreal Engine 5, el motor de físicas Chaos incluye su propia solución para simular tejidos.
 
 La simulación de tejidos solo funciona con mallas esqueletales, como las que se usan con los personajes para poder animarlos.
 De hecho, la herramienta está especialmente diseñada para personajes.
@@ -588,22 +588,22 @@ No es posible que ocurra al revés.
 
 Tanto en Unity como en Unreal Engine, la forma de activar el soporte para la simulación de tejidos es muy similar.
 
-En Unity se añade el componente **Cloth** al objeto con el **SkinnedMeshRenderer** con la porción de malla que se quiere simular como tejido --por ejemplo, una capa-- y se configura según las características del tejido a simular.
+En Unity, se añade el componente **Cloth** al objeto con el **SkinnedMeshRenderer** con la porción de malla que se quiere simular como tejido --por ejemplo, una capa-- y se configura según las características del tejido a simular.
 Diferentes tejidos deberán estar en diferentes *GameObjects* con sus componentes **Cloth** y su **SkinnedMeshRenderer**[@UnityCloth].
 
-En Unreal Engine tiene que estar activos los *plugins* de **Chaos Cloth** y **Chaos Cloth Editor**.
+En Unreal Engine, tiene que estar activos los *plugins* de **Chaos Cloth** y **Chaos Cloth Editor**.
 En el editor de **Skeletal Mesh** se selecciona la parte de la malla que interesa, se elige crear un **Clothing Asset** a partir de la selección y se configuran en el *asset* las características del tejido.
 Unreal Engine permite seleccionar diferentes partes de la malla y crear un *asset* de este tipo para cada una[@UnrealCloth].
 
 ## Detección de colisión
 
 El tejido debe reaccionar ante las interacciones con otros cuerpos físicos, pero no lo puede hacer con cualquier cuerpo de la escena, porque eso generaría problemas de rendimiento.
-Por eso es necesario decirle de qué otros cuerpos debe estar atento.
+Por eso es necesario decirle de que otros cuerpos debe estar atento.
 
-En Unreal Engine se le indica al **Clothing Asset** el **Physical Asset** del personaje que lleva la prenda.
+En Unreal Engine, se le indica al **Clothing Asset** el **Physical Asset** del personaje que lleva la prenda.
 El **Physical Asset** tiene los cuerpos rígidos que describen la física del personaje.
 
-En Unity hay que configurar en el componente **Cloth** los ***colliders*** del personaje con los que se quiere simular la colisión.
+En Unity, hay que configurar en el componente **Cloth** los ***colliders*** del personaje con los que se quiere simular la colisión.
 Por ejemplo, los ***colliders*** de las extremidades.
 
 ## Nivel de influencia de la simulación
@@ -682,7 +682,7 @@ En este modo también se puede configurar como se rompe el objeto, definiendo la
 
 Obviamente, todo este proceso está descrito en la documentación de Unreal Engine 5[@UnrealChaosDestructionQuickStart].
 
-La destrucción del objeto se puede disparar instanciando cerca un actor **Field System**, que genere tensión en el actor **Geometry Collection**, para fracturalo, y aplique fuerza radial para disperzar los fragmentos.
+La destrucción del objeto se puede disparar instanciando cerca un actor **Field System**, que genere tensión en el actor **Geometry Collection**, para fracturalo, y que aplique fuerza radial para disperzar los fragmentos.
 Para fracturar el objeto con un disparo, simplemente hay que detectar el punto de impacto del proyectil o del*raycast* e instanciando allí el actor **Field System** configurado.
 
 ---
