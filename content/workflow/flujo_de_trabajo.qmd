@@ -7,6 +7,7 @@ title: "Flujo de trabajo en videojuegos 3D"
 # Proceso de creación de niveles
 
 <!-- TODO: Arrancar del  historia, las mecánicas o las emciones -->
+<!-- TODO: Meter el problema de las puertas? -->
 
 Como ya hemos visto en otras asignaturas, el ciclo de vida del desarrollo de un videojuego se puede dividir en distintas etapas.
 Aunque obviamente estas etapas pueden variar entre proyectos y estudios, en general el proceso siempre es muy similar al de la @fig-gamedev-cycle.

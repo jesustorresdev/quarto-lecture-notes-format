@@ -196,7 +196,7 @@ Para implementar esto, tenemos varias opciones:
 
   Esto, por ejemplo, permite tener varios actores de la clase `Floor` en la escena pero con **materiales físicos** diferentes, como `PM_Concrete`, `PM_Wood` o `PM_Grass`.
 
-En Unreal Engine los **Physical Material**[@UnrealPhysicalMaterials] son un tipo de *asset* se pueden aplicar a materiales, **Material Instance**, mallas estáticas y **Physics Assets** --que son quienes determinan las colisiones de las mallas esqueletales--.
+En Unreal Engine los **Physical Material**[@UnrealPhysicalMaterials] son un tipo de *asset* que se puede aplicar a materiales, **Material Instance**, mallas estáticas y **Physics Assets** --que son quienes determinan las colisiones de las mallas esqueletales--.
 
 La ventaja de asignar el **material físico** directamente en los materiales y **Material Instance** es que así el **Physical Material** tiene efecto en todos los modelos que usan el mismo material de render.
 Luego el **Physical Material** se puede sobrescribir individualmente en cada instancia en la escena.
@@ -229,14 +229,14 @@ O para cambiar como se interpreta la entrada del jugador.
 Por ejemplo, delante de una puerta o alrededor de un recolectable puede ponerse un ***trigger*** que haga que el botón para «Usar» abra la puerta o recoja el objeto si el jugador lo acciona estando dentro del ***trigger***.
 Es típico que mientras el personaje esté en el ***trigger***, se le indique que tiene esa posibilidad a través de la interfaz de usuario.
 
-Obviamente los ***trigger*** se usan en todo tipo de armas.
+Obviamente, los ***trigger*** se usan en todo tipo de armas.
 Pueden usarse con espadas o proyectiles, para saber cuándo impactan con algo.
-En algunos juegos se usan varios ***trigger*** en una misma arma y en diferentes partes del cuerpo de los personajes, así se pueden aplicar diferentes niveles de daño, según la zona del arma y el área golpeada.
+En algunos juegos se usan varios ***triggers*** en una misma arma y en diferentes partes del cuerpo de los personajes, así se pueden aplicar diferentes niveles de daño, según la zona del arma y el área golpeada.
 
 Se pueden poner ***triggers*** sobre el fuego o un área con el aire envenenado, para dañar al jugador y hacer vibrar la cámara si se acerca demasiado.
 O se puede poner en un arbusto o en una zona de hierba alta, de forma que si el personaje está agachado, la lógica de *gameplay* tiene que hacer que parezca invisible.
 
-Además los ***triggers*** tienen múltiples usos ajenos al *gameplay*.
+Además, los ***triggers*** tienen múltiples usos ajenos al *gameplay*.
 Por ejemplo, no es raro que se usen para activar efectos de posproceso por zonas --como ajustar la coloración de la imagen o los parámetros de autoexposición de la cámara-- cambiar parámetros de la iluminación o activar y desactivar grupos de actores --incluso porciones completas del nivel-- en función de dónde este el jugador, con el objeto de optimizar el rendimiento.
 
 Cualquier juego está lleno de ***triggers***, porque buena parte de la lógica de muchos juegos está dirigida por eventos, que muchas veces disparan los ***triggers*** o las colisiones.

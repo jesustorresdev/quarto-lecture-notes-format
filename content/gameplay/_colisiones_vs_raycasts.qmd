@@ -23,8 +23,8 @@ En general, debemos utilizar estos recursos de forma inteligente:
   En muchos casos no hace falta lanzar ***raycasts** en cada frame,
   sino que se pueden utilizar temporizadores para lanzarlos con menos frecuencia.
 
-  Además, en ocasiones se pueden hacer comprobaciones previas que nos dirán si merece la pena hacer el ***raycasts** o no.
-  Por ejemplo, al disparar un arma implementada mediante ***raycasts***, podemos comprobar si el enemigo está lo suficientemente cerca y el arma le están apuntando --por el ángulo respecto a la dirección frontal del personaje-- antes de lanzar el ***raycasts**.
+  Además, en ocasiones se pueden hacer comprobaciones previas que nos dirán si merece la pena hacer el ***raycasts*** o no.
+  Por ejemplo, al disparar un arma implementada mediante ***raycasts***, podemos comprobar si el enemigo está lo suficientemente cerca y el arma le están apuntando --por el ángulo respecto a la dirección frontal del personaje-- antes de hacer el ***raycasts**.
 
 ## Considerando el proyecto
 

@@ -5,8 +5,8 @@ title-meta: "Motores de videojuegos"
 
 {{< pagebreak >}}
 
-Durante la etapa de **preproducción** en el desarrollo de un videojuego se definen las características técnicas del proyecto.
-Entre ellas, el motor de videojuegos y las herramientas externas e internas a utilizar durante el desarrollo.
+Durante la etapa de **preproducción** en el desarrollo de un videojuego, se definen las características técnicas del proyecto.
+Entre ellas, el motor de videojuegos y las herramientas externas e internas a utilizar.
 
 ```{mermaid}
 %%| label: fig-gamedev-cycle
@@ -19,12 +19,12 @@ Por eso merece la pena que nos detengamos un momento a analizar las diferentes o
 
 # El triángulo de oro {#sec-golden-triangle}
 
-Antes de entrar en las cuestiones más técnicas es importante considerar el **triángulo de oro** y sus implicaciones a la hora de escoger la tecnología de nuestro proyecto porque, en función de nuestro caso, quizás no haya nada más que considerar.
+Antes de entrar en las cuestiones más técnicas, es importante considerar el **triángulo de oro** y sus implicaciones a la hora de escoger la tecnología de nuestro proyecto porque, en función de nuestro caso, quizás no haya nada más que considerar.
 
-![Triángulo de oro: Personas, procesos y tecnología.](figures/golden_triangle.pdf)
+![Triángulo de oro: Personas, procesos y tecnología.](figures/golden_triangle.pdf){#fig-golden-triangle width=50%}
 
 El **triángulo de oro** se popularizó en 1999 en el mundo de la seguridad, de la mano de Bruce Schneier, aunque es posible encontrar referencias anteriores --a mediados de los 80-- en los pilares fundamentales de ITIL (*(Information Technology Infrastructure Library*).
-La idea principal es que las personas, los procesos y la tecnología deben colaborar para que una implementación tecnológica tenga éxito:
+Como se ilustra en la @fig-golden-triangle, la idea principal es que las personas, los procesos y la tecnología deben colaborar para que una implementación tecnológica tenga éxito:
 
 * **Personas**.
   Es importante tener un buen equipo, con la actitud adecuada y la experiencia y cualificación correctas.
@@ -148,7 +148,7 @@ El uso de un motor propio presenta algunas ventajas importantes:
   Por ejemplo, muchos estudios utilizan Blink Video[@BlinkVideo], el *codec* de vídeo de Epic Games --antes RAD Video Tools-- especialmente diseñado para videojuegos.
   Pero a principios de 2021 Epic Games anunciaba la adquisición de RAD ¿qué pasaría si Epic Games decidiera que la tecnología de RAD es en exclusiva para Unreal Engine?.
 
-  En realidad Epic Games anunció que RAD seguiría vendiendo sus productos libremente y, además, no es tan complicado sustituir un *codec*, pero da una idea lo que implica depender del motor de otra compañía y un buen día tener que dejar de usarlo.
+  En realidad, Epic Games anunció que RAD seguiría vendiendo sus productos libremente y, además, no es tan complicado sustituir un *codec*, pero da una idea lo que implica depender del motor de otra compañía y un buen día tener que dejar de usarlo.
 
 * **Inversión**.
   Desarrollar tecnología propia es una inversión que puede aportar valor a la compañía.
@@ -207,7 +207,7 @@ Otros usos bastante comunes son la generación procedural de contenidos, *riggin
 En simuladores o juego estilo RPG --con árboles de habilidad complejos, armas, armaduras, ataques y diferentes tipos de mejoras-- es frecuente que los diseñadores trabajen en hojas de cálculo, simulando en ellas distintos aspectos del *gameplay* y ajustándolo.
 Luego estas hojas se importan en el motor de videojuegos y se prueba el *gameplay*.
 Se itera cambiando los valores y probando, pero al mismo tiempo es necesario mantener actualizadas las hojas de cálculo para que los diseñadores puedan seguir trabajando.
-Con mucha frecuencia ambas fuentes de información --los datos cargados en el motor y los de las hojas de cálculo-- acaban divergiendo, lo que obliga a dedicar tiempo a examinar los datos y volver a sincronizarlos.
+Con mucha frecuencia, ambas fuentes de información --los datos cargados en el motor y los de las hojas de cálculo-- acaban divergiendo, lo que obliga a dedicar tiempo a examinar los datos y volver a sincronizarlos.
 Es entonces cuando resulta interesante tener una herramienta a medida que facilite en lo posible este trabajo.
 
 ## El caso de Guerrilla Games
@@ -219,7 +219,7 @@ Sin embargo, estaban muy lejos de la comodidad y funcionalidad de los típicos e
 Decima necesita los datos del juego en un formato llamado CoreText, así que crearon un editor de CoreText para crear y configurar estos archivos.
 Usaban Maya como editor de escenas, por lo que importaban en el programa los recursos, componían el entorno, iluminaban la escena y finalmente exportaban a CoreText.
 Así que tuvieron que desarrollar un *plugin* de Maya para poder visualizar el *render* de Decima en Maya y para exportar los datos de las escenas a archivos CoreText.
-Y además tuvieron que desarrollar otras muchas herramientas, como un editor de máquinas de estado.
+Y además, tuvieron que desarrollar otras muchas herramientas, como un editor de máquinas de estado.
 
 ::: {#vid-creating-tools-pipeline}
 
@@ -380,11 +380,11 @@ Mientras que los desarrollos con Unreal Engine difícilmente bajan de 30 MiB, y 
 
 El coste de estos productos es algo importante a considerar, especialmente en estudios pequeños.
 
-Unity es gratuito mientras los ingresos no superen los 100 000 $, en cuyo caso se pueden adquirir licencias Pro, que cuestan 1800 $ al año por puesto.
+Unity es gratuito mientras los ingresos no superen los 100 000 \$, en cuyo caso se pueden adquirir licencias Pro, que cuestan 1800 \$ al año por puesto.
 
 Por el contrario, Unreal Engine no tiene un coste fijo, sino que piden un 5% de los ingresos de cada proyecto.
 Por fortuna han puesto un margen bastante generoso antes de comenzar a cobrar, puesto que el primer millón de ingresos del proyecto está libre de *royalties*.
-Esto significa que en un juego de 20 $, Epic Game se llevaría 1 $ a partir del momento en que se vendan más de 50 000 copias.
+Esto significa que en un juego de 20 \$, Epic Game se llevaría 1 \$ a partir del momento en que se vendan más de 50 000 copias.
 
 ::: {.callout-note}
 Un detalle importante es que ese 5% está incluido en el 12% que se lleva Epic Games por cada copia vendida en su Epic Store.

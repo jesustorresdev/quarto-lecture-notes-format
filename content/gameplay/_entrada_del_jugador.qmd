@@ -1,6 +1,6 @@
 # Entrada del jugador
 
-Como hemos comentado, el control de personaje recibe la entrada del jugador para determinar el movimiento y las acciones que realiza el personaje.
+Como hemos mencionado anteriormente, el control de personaje recibe la entrada del jugador para determinar el movimiento y las acciones que realiza el personaje.
 El detalle de como se lee la entrada del jugador depende de cada motor.
 
 En Unreal Engine, el sistema de entrada permite configurar acciones de entrada a través de unos *assets* llamados **Input Action**.
@@ -63,7 +63,7 @@ Esto significa que la lectura del raton se puede acumular directamente en la *ro
 
 Por ejemplo, en la @fig-camera-input-stick-imc-config se puede observar un ejemplo de esta configuración dónde se mapea el ratón a la acción **IA_Locok**, simplemente añádiendo un modificar para escalar el valor de la entrada con el objeto de poder ajustar la sensbilidad.
 
-Sin embargo teclados y *sticks* devuelve valores entre 1.0 y -1.0.
+Sin embargo, teclados y *sticks* devuelve valores entre 1.0 y -1.0.
 Si se acumulan directamente sus valores en la *rotación de control*, la velocidad de rotación depende de los FPS a los que se ejecute el juego.
 Por ejemplo, cuando la activación es máxima, en cada actualización se aplicaría sistemáticamente un 1.0 grado.
 A más FPS, más grados por segundo se aplican.

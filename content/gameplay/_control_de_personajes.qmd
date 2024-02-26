@@ -7,7 +7,7 @@ En los juegos de acción, el controlador de personaje suele ser una de las parte
 Por eso, es frecuente que se implemente a traves de varios componentes, cada uno especializado en un aspecto del control del personaje.
 
 Motores de videojuegos como Unreal Engine o Unity ofrecen componentes para ayudar implementar el controlador de personajes, pero debe tenerse en cuenta que fundamentalmente se encargan del movimiento de personaje que, por otro lado, es uno de los aspectos más complejos.
-Generalmente, estos compomnentes deben extendidos para implementar los modos de movimiento que necesite el proyecto y, además, es frecuente que se necesiten otros componentes para implementar el resto de mecánicas de interacción con el entorno. 
+Generalmente, estos compomnentes deben ser extendidos para implementar los modos de movimiento que necesite el proyecto y, además, es frecuente que se necesiten otros componentes para implementar el resto de mecánicas de interacción con el entorno. 
 
 # Control de movimiento {#sec-control-de-movimiento}
 
@@ -121,7 +121,7 @@ Si el personaje está cayendo, sumar la velocidad de caída en dirección al sue
 Una mejor aproximación es usar la velocidad calculada a partir de la aceleración de la gravedad.
 
 En este caso, se puede ignorar el valor de `InputVelocity` si el personaje esta en el aire y se supone que no tiene ningún control sobre su movimiento.
-En los juegos donde el personaje puede maniobrar en el aire, se usa `InputVelocity` para calcular el movimiento de personaje, pero se limita la velocidad y aceleación máximas, de forma que el control del personaje está más limitado:
+En los juegos donde el personaje puede maniobrar en el aire, se usa `InputVelocity` para calcular el movimiento del personaje, pero se limita la velocidad y aceleación máxima, de forma que se restringe el control del personaje:
 
 ```cpp
 // Cálcular la velocidad de caida.
@@ -202,7 +202,7 @@ Idealmente, un personaje controlado con un control de segundo o tercer orden deb
 Sin embargo, en la práctica, en cada *tick* se calcula la ubicación en la trayectoria en base al tiempo trascurrido desde la actualización anterior, para luego desplazar al personaje hasta allí en línea recta.
 Esto quiere decir, que el personaje realmente se mueven en una aproximación de la curva realizada con segmentos de recta.
 
-Como se puede ver en la @fig-movement-substeps Si el personaje se mueve a una velocidad muy alta o el tiempo entre actualizaciones es muy grande, el personaje podría moverse en una trayectoria muy diferente a la esperada.
+Como se puede ver en la @fig-movement-substeps, el personaje podría moverse en una trayectoria muy diferente a la esperada se lo hace a una velocidad muy alta o el tiempo entre actualizaciones es muy grande.
 Esto puede dar lugar, por ejemplo, a que se detecten colisiones con objetos que no deberían estar en la trayectoria del personaje.
 
 ![Aproximar una trayectoria en cada *tick* vs. en cada *subpaso*.](figures/movement-substeps.pdf){#fig-movement-substeps}
@@ -240,7 +240,7 @@ En cada frame, los **controladores cinemáticos**:
 1. Intentan mover al personaje hasta dicha ubicación, comprobando si la ubicación es válida.
    Por ejemplo, detectando colisiones en el camino.
 
-1. En caso de colisión, se busca la posición viable --sin superposición con colisiones-- más cercana a la posición deseada y, finalmente, el personaje es movido hasta ese punto.
+1. En caso de colisión, se busca la posición viable --sin superposición con colisiones-- más cercana a la posición deseada y, finalmente, el personaje es trasladado hasta ese punto.
 
 Al algoritmo descrito se lo denomina ***collide and slide***, porque es frecuente que se implemente haciendo que si el personaje colisiona con otro objeto al actualizar su posición, el resto del desplazamiento lo haga deslizando el personaje paralelamente a la superficie del objeto.
 
@@ -263,7 +263,7 @@ Para ilustrar el algoritmo de ***collide and slide***, vamos a ver como se suele
 ### Deslizamiento
 
 Caminar por un suelo plano implica, simplemente, deslizar el personaje en el plano XY, manteniendo la distancia con el suelo.
-Para hacerlo, el controlador toma la entrada de movimiento para calcular la posición final del personaje, manteniendo la altura Z, e intenta moverlo hasta dicha ubicación, mientras detecta colisiones.
+Para hacerlo, el controlador toma la entrada de movimiento para calcular la posición final del personaje, manteniendo la altura Z, e intentar moverlo hasta dicha ubicación, mientras detecta colisiones.
 
 Por lo general, el personaje se mueve ligeramente por encima del suelo --de forma imperceptible-- para evitar que al moverse se detecte una colisión con el propio suelo.
 Por eso, uno de los primeros pasos del algoritmo, antes de desplazar la cápsula del personaje, es hacer un *raycast* hacia abajo para detectar la distancia al suelo y ajustar la posición en altura del personaje en consecuencia, asegurando que la distancia al suelo esté siempre por debajo de un máximo y por encima de un mínimo preestablecido.
@@ -284,7 +284,7 @@ En ese caso, un *trigger* en la estructura puede activar un modo de deslizamient
 ### Bajar rampas y escalones
 
 El *raycast* hacia el suelo comentado anteriormente, facilita implementar el descenso de escalones y rampas.
-Básicamente, el controlador debe tener configurada una *altura máxima de escalón*, de forma que si el suelo se detecta más cerca que dicha altura, el personaje es bajado hasta que la distancia al suelo esté dentro del rango permitido.
+Básicamente, el controlador debe tener configurada una *altura máxima de escalón*, de forma que si el suelo se detecta más cerca que dicha altura, el personaje desciende hasta que la distancia al suelo esté dentro del rango permitido.
 
 En la @fig-collide-and-slide-stepdown y @fig-collide-and-slide-rampdown se ilustra como el resultado es que así el personaje puede descender por rampas y escalones.
 
@@ -294,7 +294,7 @@ En la @fig-collide-and-slide-stepdown y @fig-collide-and-slide-rampdown se ilust
 ![Descenso de rampas.](figures/collide-and-slide-rampdown.pdf){#fig-collide-and-slide-rampdown}
 :::
 
-En este caso, cada vez que el personaje avanza queda en el aire, por lo que el controlado baja automáticamente el personaje hasta el suelo para ajustar la distancia con respecto a este, haciendo que descienda.
+En este caso, cada vez que el personaje avanza queda en el aire, por lo que el controlador baja automáticamente el personaje hasta el suelo para ajustar la distancia con respecto a este, haciendo que descienda.
 
 ### Caída y aterrizaje
 
@@ -422,7 +422,7 @@ Esto permite un tipo de juego muy rápido, al poder apuntar / mirar y correr / e
 
 En otros juegos, la dirección de movimiento y la orientación del personaje del jugador están acopladas, porque el personaje es orientado por el controlador en la dirección en la que se mueve.
 En ese caso, el control usado para la entrada de rotación queda disponible para otros usos, como el control de la cámara --como cuando se usa para el control de una cámara que orbita alrededor del personaje--.
-Si la cámara está es fija o se mueve sobre railes, este control se puede utilizar para que el jugador apunte de forma independiente al movimiento o para otras mecánicas del juego.
+Si la cámara es fija o se mueve sobre railes, este control se puede utilizar para que el jugador apunte de forma independiente al movimiento o para otras mecánicas del juego.
 
 Lo descrito en el párrafo anterior es común en muchos juegos de acción en tercera persona, donde:
 
@@ -440,7 +440,7 @@ Lo descrito en el párrafo anterior es común en muchos juegos de acción en ter
   En cada proyecto se debe ponderar la importacia que se le da a la fidelidad de la animación frente a tener un control más ligero.
   Un control más ligero favorece una forma de jugar más dinámica, mientras que con un control más pesado --es decir, cuando el personaje responde más lento-- la animación puede encajar mejor con el movimiento, evitando, por ejemplo, que los pies de personaje se deslicen sobre el suelo de manera incoherente con el movimiento del personaje.
 
-  En algunos juegos se opta por un control más lijero, pero se minimizan los problemas con la animación limitando el ángulo y la posición de la cámara para que prácticamente nunca se puedan ver los pies del personaje sobre el suelo.
+  En algunos juegos se opta por un control más ligero, pero se minimizan los problemas con la animación limitando el ángulo y la posición de la cámara para que prácticamente nunca se puedan ver los pies del personaje sobre el suelo.
 
 * El control de movimiento actualiza la orientación del personaje hacia la dirección del movimiento del personaje.
   Como se puede ver en la @fig-tpp-movement-and-rotation, esta rotación se interpola a lo largo de varios frames, evitando que el personaje cambie de orientación instantaneamente.
@@ -511,7 +511,7 @@ En Unity, el **CharacterController** incluido es un controlador muy simple[@Unit
 Se trata de un controlador cinemático que permite mover el personaje sobre una superficie, con pendientes y escalones, indicando directamente un vector desplazamiento o velocidad.
 Otras acciones, como pueden ser: salto, caer, maniobrar en el aire o agacharse; deben implementarse aparte, aunque no resulta complicado con la información proporcionada por el controlador.
 
-Unity proprcional en sus paquetes *«Starter Assets»*[@UnityStarterAssetsFP;@UnityStarterAssetsTP] un controlador de personaje más completo y modular --aunque basado en el **CharacterController**-- que incluye los modos de movimiento más comunes en los juegos de acción en primera y tercera persona.
+Unity proprciona en sus paquetes *«Starter Assets»*[@UnityStarterAssetsFP;@UnityStarterAssetsTP] un controlador de personaje más completo y modular --aunque basado en el **CharacterController**-- que incluye los modos de movimiento más comunes en los juegos de acción en primera y tercera persona.
 Por su modularidad, este componente puede ser usado fácilmente como base para crear controladores adaptados a cualquier tipo de juego.
 
 Finalmente, Unity ofrece otro **CharacterController** para utilizar con proyectos DOTS/ECS en el paquete *«Character Controller»*[@UnityCharacterControllerPackage].
@@ -562,7 +562,7 @@ Este evento es interesante cuando se va a implementar un modo de movimiento pers
 Para implementar los *modos de movimiento personalizados*[Ver *«Using Custom Movement Modes»* en @UnrealCharacterMovementComponent] en C++, se puede heredar de **CharacterMovementComponent** en C++ y sobrescribir {{< api PhysCustom >}}, que es el método invocado cuando el modo de movimiento es **Custom**.
 A través de la propiedad **CustomMovementMode** del **CharacterMovementComponent** se puede obtener el entero que identifica el sub-modo --especificado en `SetMovementMode()` al activar el modo **Custom**-- de forma que se pueden implementar diferentes modos de movimiento en `PhysCustom()`, en función del valor de esta variable.
 
-Una de las tareas que realizar el `PhysCustom` por defecto, es llamar al evento **UpdateCustomMovement** del **Character** (ver la @fig-update-custom-movement).
+Una de las tareas que realiza el `PhysCustom` por defecto, es llamar al evento **UpdateCustomMovement** del **Character** (ver la @fig-update-custom-movement).
 Como el **CharacterMovementComponent** no es directamente heredable en Blueprint, este evento, apoyado por `OnMovementModeChanged()` sería el lugar para implementar movimientos personalizados directamente en Blueprint.
 
 ![Evento para actualizar el movimiento en el modo personalizado.](figures/update-custom-movement.png){#fig-update-custom-movement}

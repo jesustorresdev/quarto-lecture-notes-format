@@ -1,6 +1,6 @@
 # Ascensores y plataformas
 
-Los ascensores y, en general, cualquier plataforma móvil se suelen considerar elementos más difíciles de implementar en videojuegos de lo que pudiera parece.
+Los ascensores y, en general, cualquier plataforma móvil se suelen considerar elementos más difíciles de implementar en videojuegos de lo que pudiera parecer.
 A continuación vamos a ver que retos presentan y cómo se pueden resolver.
 
 ## Falsos ascensores
