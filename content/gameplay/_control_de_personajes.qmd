@@ -386,7 +386,8 @@ Por eso, suele ser mucho más sencillo y estable implementar directamente el com
 
 ## Uso de máquinas de estados
 
-Cuando el control del movimiento es complejo, con múltiples modos diferentes, las máquinas de estados son un buen patrón que suele emplear en su implementación, como se ilustra en la @fig-movement-controller.
+Cuando el control del movimiento es complejo, con múltiples modos diferentes, puede ser necesario utilizar algún patrón de diseño que ayude a organizar el código.
+Un ejemplo muy común es el uso de máquinas de estados, como se ilustra en la @fig-movement-controller.
 
 ```{mermaid}
 %%| label: fig-movement-controller
@@ -408,7 +409,12 @@ Una para los modos de movimiento y otra para el control de la animación, según
 En algunos casos, puede ser necesario utilizar otras máquinas de estados en otros componentes del controlador de personaje.
 Por ejemplo, si en el juego tiene mucho peso el combate cuerpo a cuerpo, este tipo de combate suele seguir unas reglas que también pueden implementarse en su propia máquina de estados.
 
-También es común usar máquinas de estado para implementar el cerebro de los NPC, estableciendo las reglas de comportamiento a alto nivel, que luego se traducen en acciones de movimiento, combate y animación.
+En proyectos complejos, puede ser necesario utilizar varias máquinas de estados en paralelo, que se comunican entre sí, estableciendo dependencias entre los estados de unas y otras, lo que complica la gestión de los estados.
+En esos casos se puede valor la implementación de algún tipo de *ability system* para la gestión de estados del *gameplay*.
+
+<!-- TODO: Referencia a algún tipo de contenido al respecto -->
+
+También es común usar máquinas de estado --junto a otras técnicas, como *behaviour trees* o *utility AI*-- para implementar el cerebro de los NPC, estableciendo las reglas de comportamiento a alto nivel, que luego se traducen en acciones de movimiento, combate y animación.
 
 ## Control de rotación
 
