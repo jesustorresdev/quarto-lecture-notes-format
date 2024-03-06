@@ -27,14 +27,17 @@ https://www.google.com/search?q=hitbox+block+or+overlap+unreal+engine&sxsrf=AJOq
 Para implementar armas a distancia en juegos de acción, como pistolas, rifles, cañones o lanzacohetes, es necesario implementar la lógica de los proyectiles que disparan.
 Esto se puede hacer usando *raycasts*, proyectiles o una combinación de ambas opciones, lanzados desde el personaje.
 
-En el caso del arma del jugador, en juegos en primera persona o en tercera --con cámaras orbitales o sobre el hombro-- lo más común es «hacer el disparo» desde el centro de la cámara, aunque los efectos visuales correspondientes se emitan desde el arma.
-Esto se hace porque así porque el jugador le resulta más sencillo apuntar. 
-
 ## Ray castings
 
 El uso de *raycasts* es, con diferencia, la opción más sencilla.
-Al disparar, se lanza un rayo para descubrir si algún objeto es alcanzado en la trayectoria.
-Si es así, se le aplica dañó.
+Al disparar, se lanza un *raycast* para descubrir si algún objeto es alcanzado en la trayectoria.
+Si es así, se le aplica daño.
+
+En el caso del arma del jugador, en juegos en primera o tercera persona, con cámaras orbitales o sobre el hombro, lo más común es lanzar el *raycast* desde el centro de la cámara, porque así al jugador le resulta más sencillo apuntar.
+Los efectos visuales del disparo, como el destello del arma, el humo o el sonido, se emiten desde el arma hacia el centro de la perspectiva de la cámara.
+Si se ha detectado un objeto, se pueden corregir la dirección para que coincida con el punto de impacto del objeto alcanzado por el *raycast*.
+
+<!-- TODO: imagen de raycast desde la cámara y de laser desde el arma -->
 
 El *raycast* puede limitarse a una distancia máxima, si el arma tiene un alcance limitado.
 También se pueden detectar múltiples objetos en la trayectoria, simulando que el arma tiene una gran capacidad de penetración.
@@ -62,12 +65,25 @@ Como la posibilidad de esquivar los disparos --al menos en grandes distancias o 
 Como contrapartida, el uso de proyectiles es bastante más costoso que los *raycasts*, porque crear decenas de objetos y simular su movimiento, no resulta barato.
 En este sentido, puede ser necesario considerar el uso de *pools* de objetos para reusar los objetos creados, reduciendo el coste de crearlos en el momento.
 
-Además los proyectiles suponen un reto adicional en los juegos multijugador en red.
+Además, igual que con los *raycasts*, en el caso del arma del jugador en juegos en primera o en tercera persona, lo mejor es que el jugador pueda apuntar desde el centro de la cámara.
+El problema es que lanzar el proyectil desde esa posición puede resultar en una experiencia de juego poco realista, porque el proyectil no saldría desde el arma.
+Por ese motivo:
+
+* Es común hacer primero un *raycast* desde el centro de la cámara, para ver si se alcanza algún objeto.
+  Luego se lanza el proyectil desde el arma hacia el punto de impacto del *raycast*.
+
+* Si no se detecta otro objeto, simplemente se lanza el proyectil desde el arma hacia el centro de la perspectiva de la cámara.
+
+En cualquier caso, solo se causa daño si el proyectil lanzado colisiona con otro objeto, sin importar si el *raycast* ha detectado un objeto en la trayectoria.
+En el caso de granadas y otras armas arrojadizas, es común hacer una predicción de la trayectoria del proyectil, para señalar al jugador la posible zona de impacto.
+
+<!-- TODO: imagen de raycast desde la cámara y de laser desde el arma -->
+
+Finalmente, el uso de proyectiles supone un reto adicional en los juegos multijugador en red.
 Esto es debido a que, por lo general, cada cliente ejecuta su propia simulación de los proyectiles, cuya trayectoria se va corrigiendo periódicamente con la información que llega del servidor, que también ejecuta su propia simulación y que es la única fuente de información confiable.
 Por tanto, en juegos en red, esto implica tener decenas de objetos cuyo movimiento debe sincronizarse entre todos los clientes, para evitar crear inconsistencias en la experiencia de los distintos jugadores.
 
-Además, para que este mecanismo funcione correctamente, es necesario que el movimiento de los proyectiles sea determinista, es decir, que el movimiento de los proyectiles sea el mismo en todos los clientes y el servidor, cuando las condiciones son las mismas.
-
+Para que esto funcione correctamente, es necesario que el movimiento de los proyectiles sea determinista, es decir, que el movimiento de los proyectiles sea el mismo en todos los clientes y el servidor, cuando las condiciones son las mismas.
 Esto es sencillo de conseguir con controladores cinemáticos, pero puede ser más complicado con controladores dinámicos, porque estos últimos dependen de motor de fisicas y algunos motores de físicas no garantizan que la simulación sea determinista[Ver *«Motor de física determinista»* en @TorresD3DFisicas].
 
 ### Tipos de control

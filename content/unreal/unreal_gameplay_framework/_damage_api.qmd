@@ -102,7 +102,7 @@ El Damage API define dos subclases de **FDamageEvent** para indicar dos tipos de
 En el caso de recibir un evento de daño de tipo **FPointDamageEvent**, el método `TakeDamage()`:
 
 1. Llama al método {{< api InternalTakePointDamage >}}, pasándole los argumentos recibidos.
-   Por defecto, este método retorna el *daño base* indicado en `DamageAmount`, para la idea es que se sobreescriba en las clases hijas de **Actor** para que calcule el *daño efectivo* en base a la información sobre el tipo de daño.
+   Por defecto, este método retorna el *daño base* indicado en `DamageAmount`, pero la idea es que se sobreescriba en las clases hijas de **Actor** para que calcule el *daño efectivo* en base a la información sobre el tipo de daño.
 
 1. Llama al método {{< api ReceivePointDamage >}}, con información extraída del evento de daño recibido y con el *daño efectivo* calculado en el paso anterior.
    El objetivo es que el actor procese el daño recibido, actualizando su salud, aplicando efectos visuales, etc.
