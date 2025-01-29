@@ -10,31 +10,35 @@ env:
   ACADEMIC_YEAR: 20XX-20XY
 
 jobs:
-  build-and-publish:
+  build-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-
     - name: Obtener el proyecto
       uses: actions/checkout@v4
-      with:
-        persist-credentials: false
 
-    - name: Generar la documentación
-      uses: devcontainers/ci@v0.3
+    - name: Configurar Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+
+    - name: Publicar en GitHub Pages
+      uses: quarto-dev/quarto-actions/publish@v2
       with:
-        runCmd: quarto render --to pdf
+        target: gh-pages
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Empaquetar la documentación
-      run: find _output/ -type f -iname '*.pdf' | zip -j  _output/desarrollo3d.zip -@
+      run: cd _book && zip -r ../desarrollo3d.zip *
 
     - name: Publicar en 'Releases'
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: _output/{**/*.pdf,desarrollo3d.zip}
-        file_glob: true
+        file: desarrollo3d.zip
         body: "Apuntes de Desarrollo de Videojuegos 3D del curso ${{ env.ACADEMIC_YEAR }}."
         release_name: "Curso ${{ env.ACADEMIC_YEAR }}"
         prerelease: true
         overwrite: true
+    

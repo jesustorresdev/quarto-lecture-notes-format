@@ -47,3 +47,7 @@ format:
     anchor-sections: true
     smooth-scroll: true
     html-math-method: katex
+    include-in-header: 
+      text: '<meta name="robots" content="noindex, nofollow" />'
+    resources:
+      - robots.txt
