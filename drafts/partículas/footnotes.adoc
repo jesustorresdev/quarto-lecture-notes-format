@@ -1,2 +1,0 @@
-:fn-cuadrangulo: pass:n[Un cuadrángulo es un polígono de cuatro lados.]
-:fn-csharp-job-system: pass:n[El _C# Job System_ permite ejecutar tareas distribuyéndolas entre varios núcleo para mejorar el rendimiento.]

@@ -1,3 +1,0 @@
-:unity-srp: https://docs.unity3d.com/Manual/ScriptableRenderPipeline.html
-:unity-visual-effect-graph: https://docs.unity3d.com/Manual/VFXGraph.html
-:unity-class-particlesystem: https://docs.unity3d.com/Manual/class-ParticleSystem.html

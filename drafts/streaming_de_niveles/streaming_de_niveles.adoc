@@ -1,0 +1,439 @@
+= Desarrollo de Videojuegos 3D: Streaming de niveles
+Jesús Torres <jmtorres@ull.es>
+:academic-year: 20XX-20XY
+Curso {academic-year}
+:doctype: article
+:nofooter:
+// Separador de miles
+:K: &#x2009;
+// Símbolo de producto
+:x: &#215;
+// Elipsis
+:dots: &#8230;
+// Mucho menos
+:ll: &#8810;
+// Letras griegas
+:alpha: &#945;
+:tau: &#964;
+:Delta: &#916;
+// Configuración del idioma.
+:lang: es
+// This directory provides translations for all built-in attributes in Asciidoctor that emit translatable strings.
+// See http://asciidoctor.org/docs/user-manual/#customizing-labels to learn how to apply this file.
+//
+// If you're introducing a new translation, create a file named attributes-<iana-subtag>.adoc, where <iana-subtag> is the IANA subtag for the language.
+// Next, assign a translation for each attribute, using attributes-en.adoc as a reference.
+//
+// IMPORTANT: Do not include any blank lines in the translation file.
+//
+// NOTE: Please wrap the listing-caption and preface-title entries in a preprocessor conditional directive.
+// These attributes should only be updated if set explicitly by the user.
+// Spanish translation, courtesy of Eddú Meléndez <eddu.melendez@gmail.com>
+:appendix-caption: Apéndice
+:appendix-refsig: {appendix-caption}
+:caution-caption: Precaución
+:chapter-label: Capítulo
+:chapter-refsig: {chapter-label}
+:example-caption: Ejemplo
+:figure-caption: Figura
+:important-caption: Importante
+:last-update-label: Última actualización
+//:manname-title: NOMBRE
+:multipage-nav-home-label: Inicio
+:multipage-nav-next-label: Siguiente
+:multipage-nav-previous-label: Anterior
+:multipage-nav-up-label: Subir
+:note-caption: Nota
+:part-signifier: Parte
+:part-refsig: {part-signifier}
+:section-refsig: Apartado
+:table-caption: Tabla
+:tip-caption: Sugerencia
+:toc-title: Tabla de Contenido
+:untitled-label: Sin título
+:version-label: Versión
+:video-caption: Vídeo
+:warning-caption: Aviso
+// Rutas a las imágenes
+:imagesdir: media
+:imagesoutdir: {outdir}/{imagesdir}
+// Activar las referencias de texto completo con: etiqueta, número y título.
+:sectnums:
+:xrefstyle: short
+// Activar el enlace permanente en los encabezados
+:sectanchors:
+// Usar Font Awesome para los iconos.
+:icons: font
+// Activar el coloreado de sintaxis.
+:source-highlighter: rouge
+// Activar las fórmulas matemáticas.
+:stem:
+// Activar las macros de interfaz de usuario, como kbd o menu.
+:experimental:
+// Incluir la tabla de contenidos.
+:toc: left
+// Configuración del backend HTML5
+// Archivo de configuración específica del backend HTML5.
+//
+// Localización de los archivos docinfo.
+:docinfodir: {basedir}/config/html5
+:docinfo: shared-head,shared-footer
+// Configuración del backend PDF
+:unity-loadsceneasync: https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.LoadSceneAsync.html[`SceneManager.LoadSceneAsync()`]
+:unity-unloadsceneasync: https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.UnloadSceneAsync.html[`SceneManager.UnloadSceneAsync()`]
+:physx-originshift: https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/guide/Manual/OriginShift.html[`PxScene::shiftOrigin()`]
+:fn-unity-dots: pass:n[_Data-Oriented Technology Stack_ (DOTS) es una combinación de tecnologías que promueven el diseño orientado a datos en Unity. En este tipo de diseño de software se separa el código de los datos, lo que usado adecuadamente nos permite aprovechar mejor las ventajas de los procesadores multinúcleo, mejorando el rendimiento de las aplicaciones.]
+:fn-lod: pass:n[La técnica LOD permite reducir el número de triángulos que se renderizan usando modelos con menor nivel de detalle según la distancia de la cámara al objeto.]
+:document-characters: 16857
+:document-words: 3244
+:document-paragraphs: 43
+:document-reading-time: 16 minutos
+:s01-characters: 2651
+:s01-words: 543
+:s01-paragraphs: 8
+:s01-reading-time: 3 minutos
+:s02-characters: 738
+:s02-words: 143
+:s02-paragraphs: 3
+:s02-reading-time: 1 minuto
+:s03-characters: 1771
+:s03-words: 340
+:s03-paragraphs: 3
+:s03-reading-time: 2 minutos
+:s04-characters: 630
+:s04-words: 111
+:s04-paragraphs: 2
+:s04-reading-time: 1 minuto
+:s05-characters: 1406
+:s05-words: 306
+:s05-paragraphs: 5
+:s05-reading-time: 2 minutos
+:s06-characters: 4728
+:s06-words: 933
+:s06-paragraphs: 13
+:s06-reading-time: 5 minutos
+:s07-characters: 1443
+:s07-words: 325
+:s07-paragraphs: 5
+:s07-reading-time: 2 minutos
+
+[TIME]
+====
+*Tiempo de lectura:* {document-reading-time}
+====
+
+Los motores utilizan diferentes estrategias para optimizar recursos y permitirnos explorar niveles relativamente grandes.
+Lo hacen especialmente bien en lo que respecta a optimizar el _render_ para el máximo aprovechamiento de la GPU.
+Por ejemplo, un paso estándar en las etapas de _render_ es excluir los objetos fuera del ángulo de visión de la cámara —lo que se denomina _frustum culling_—.
+Otra técnica disponible comúnmente es el _occlusion culling_, con la que durante la compilación se genera una estructura de datos que el motor puede consultar rápidamente en tiempo de ejecución, para saber qué objetos son visibles para el punto de vista actual de la cámara, siendo estos los únicos enviados al _render_.
+
+En cuanto al _gameplay_, la responsabilidad cae más bien de nuestro lado.
+Podemos considerar los objetos que deben estar activos en cada momento del juego y mantener desactivados el resto hasta que son necesarios, evitando que el código que los controla consuma recursos inútilmente.
+Usando _triggers_ dispuestos adecuadamente en la escena, podemos hacer que los objetos se activen cuando sea necesario —mientras otros que ya no lo son, son desactivados—.
+
+Sin embargo, pese a todo el cuidado que le pongamos, puede llegar un momento en que el nivel que queremos desarrollar no quepa en la memoria.
+Especialmente si hablamos de consolas o plataformas móviles, donde estos recursos están mucho más limitados que en PC.
+
+== Streaming de niveles
+
+Cuando el nivel o el mundo —en los juegos de mundo abierto— que queremos desarrollar es demasiado extenso como para cargarlo de una sola vez, estamos obligados a dividirlo en diferentes mapas o escenas, cargándose y descargándose bajo demanda según se desarrolla el juego.
+Esto, indudablemente, condiciona el diseño del nivel.
+
+Por ejemplo, en un caso extremo está lo que ocurría en los primeros juegos de la saga Resident Evil, donde abrir cualquier puerta, escalera o ascensor reproducía una cinemática durante la que se cargaba la siguiente escena.
+Obviamente, tenía que ser así por las limitaciones del hardware de la época.
+
+[[video-load-scene-re, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Vídeo de la pantalla de carga al salir de la habitación en Resident Evil HD.
+video::TeoukguIk_8[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
+
+Hoy en día estas transiciones no destacan tanto.
+Para disimular la carga de la siguiente parte del nivel, se colocan ascensores, túneles bajo el agua o pasadizos estrechos en los que apenas se puede ver lo que hay delante.
+
+[[video-pasadizo-jedi-fallen-order, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Video de pasadizo en el _gamaplay_ de «Star Wars Jedi: Fallen Order» mostrado en el EA Play 2019.
+video::GtzLWZ0LCNs[youtube, opts="autoplay,loop,muted,nocontrols", width=854, height=480]
+
+En mundos abiertos en exteriores, se puede dividir el nivel en varios pedazos, para ir cargándose dinámicamente cuando el jugador se aproxima, al tiempo que se descargan los pedazos más alejados que el jugador ya no puede ver.
+Para limitar el alcance de la visión del jugador, se juega con la ubicación de las barreras visuales, como montañas o edificios.
+
+[[fig-world-chunk-loading]]
+.Esquema de la división del mundo en subniveles cargándose y descargándose a demanda.
+[ditaa, format="png", shadows=false]
+....
++-=--------------+----------------+-=--------------+
+|                |cCFF            |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |  Cargando...   |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
++-=--------------+----------------+-=--------------+
+|                |c1AB            |                |
+|                | +--------+     |                |
+|                | |        |     |                |
+|                | +--------+     |                |
+|                |     +--->      |                |
+|                |     |          |                |
+|                |     | Jugador  |                |
+|                |     |          |                |
+|                |     |          |                |
+|                |     :          |                |
+|                |     |          |                |
++-=--------------+----------------+----------------+
+|                |cCCC |          |                |
+|                |     |          |                |
+|                |     :          |                |
+|                |     |          |                |
+|                |                |                |
+|                | Descargando... |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
+|                |                |                |
++-=--------------+----------------+-=--------------+
+....
+
+En mapas extensos sin barreras visuales, donde el jugador puede ver durante gran parte del tiempo hasta el horizonte, se pueden usar *impostores* para aproximar con menor nivel de detalle las regiones no cargadas del mapa.
+Los *impostores* consisten en mallas muy simples —como un plano cuadrado o una figura polinomial básica— que siempre se orientan de cara a la cámara.
+El objeto o la escena suplantada es renderizado desde varios ángulos y cada imagen se almacena en un atlas de textura, de tal forma que después, durante el juego, el *impostor* muestra la textura más adecuada para el ángulo de visión de la cámara.
+En el caso más extremo, el *impostor* se puede implementar como un sencillo plano rectangular de cara a la cámara con una única textura —tradicionalmente llamado *billboard*—.
+
+// Referencias:
+// https://philliphamlyn.wordpress.com/2013/04/03/billboards-imposters-and-meshes/
+// https://wiki.amplify.pt/index.php?title=Unity_Products:Amplify_Impostors/Manual
+
+En cualquier caso, hay que tener en cuenta que nunca se renderiza nada más allá de la distancia máxima configurada en la cámara —a veces llamada _far clipping plane_—.
+
+[[video-spiderman-level-streaming, {video-caption} {counter:video-number}]]
+.{video-caption} {video-number}. Conferencia «Marvel's Spider-Man: A Technical Postmortem» en GDC 2019.
+video::KDhKyIZd3O8[youtube, opts="modest", start="891", width=854, height=480]
+
+En Marvel's Spider-Man (2018), las calles de Manhattan atraviesan la ciudad de extremo a extremo, por lo que el jugador debe poder ver amplias porciones del mapa.
+Adicionalmente, el personaje se puede mover muy rápidamente por la ciudad, lo que representa un reto para cargar lo bastante rápido las porciones que puede alcanzar.
+
+En el <<video-spiderman-level-streaming>> se explica que optaron por dividir el mapa en regiones hexagonales, puesto que así solo es necesario tener cargadas 6 regiones alrededor de la actual —y no 8, como ocurre si se divide el mapa en cuadrados—.
+Más allá de esas regiones se usan impostores, para que el jugador no vea que el resto de la ciudad no está cargada.
+
+== Level streaming en Unreal Engine
+
+La solución de Unreal Engine 4 para este problema se llama *Level Streaming*<<UE-Level-Streaming>> que, como suele ocurrir con este motor, prácticamente viene lista para ser usada.
+
+En Level Streaming existen 3 elementos:
+
+* *Persistent Level*. Es el nivel de la escena completa.
+Su función es gestionar los subniveles que se van a ir cargando y descargando según sea necesario.
+Puede tener actores que van a ser permanentes, como el cielo o exteriores que se ven en la distancia.
+
+* *Streaming Levels*.
+Son los subniveles que se van a ir cargando y descargando en lugares concretos del *Persistent Level*.
+
+* *Level Streaming Volumes*.
+Son volúmenes que cargan o descargan los *Streaming Levels* que se le indiquen cuando el jugador entra en el volumen.
+
+Obviamente el motor provee funciones para cargar y descargar *Streaming Levels* desde código, por si queremos programar un comportamiento diferente para nuestro juego.
+
+== Word Composition en Unreal Engine
+
+Unreal Engine 4 también soporta una versión de *Level Streaming* en la que no se usan volúmenes para activar la carga y descarga de los niveles, sino que esta ocurre basándose en la distancia del jugador al nivel.
+Esto permite dividir el mundo en varios *Streaming Levels*, distribuidos en una rejilla 2D, que se van cargando y descargando según se acerca o se aleja el jugador.
+
+.Ventana de *Word Composition* donde se observa la disposición de los distintos niveles en la escena.
+image::world_layout.jpg[]
+
+En el *Word Composition*<<UE-Word-Composition>> el nivel persistente no contiene información sobre los *Streaming Levels*, sino que estos se descubren buscando en una carpeta de contenidos.
+Cada *Streaming Level* contiene la información de su ubicación y la distancia a la que debe estar el jugador para cargar el nivel.
+De esta forma, tanto el nivel persistente como los *Streaming Levels* son realmente independientes, permitiendo que varios desarrolladores trabajen al mismo tiempo en distintas ubicaciones del mundo.
+Lo que es especialmente importante en juegos de mundo abierto, donde los mapas suelen ser enormes.
+
+TIP: Los *Streaming Levels* también se pueden marcar como *Always Streaming* para cargarlos automáticamente al cargar el nivel persistente.
+Esto es útil para facilitar la colaboración, al permitir que múltiples desarrolladores trabajen en el mismo nivel al mismo tiempo, solo que en diferentes subniveles<<UE-Collaborate-Sublevels>> entre los que reparten diferentes elementos del nivel: entorno, iluminación, _gameplay_, etc.
+
+Unreal Engine también permite mostrar representaciones de los *Streaming Levels* con menor nivel de detalle (LOD{blank}footnote:[{fn-lod}]) cuando el usuario está a mayor distancia que la distancia de carga del nivel.
+Esto permite ahorra recursos al no tener que cargar el *Streaming Level* completo hasta que el usuario no está lo bastante cerca como para ver los detalles.
+
+TIP: Aunque Unreal Engine no es un motor muy utilizado para juegos 2D, lo cierto es que es posible utilizarlo mediante Paper2D.
+En ese caso, se puede usar *Word Composition* para tener niveles muy grandes que se van cargando a demanda, como suele ser necesario en los juegos del género metroidvania.
+
+== Streaming de niveles en Unity
+
+En Unity las soluciones son las mismas que las comentadas anteriormente para Unreal Engine, pero no vienen implementadas en el motor.
+Como es habitual, tendremos que hacerlo nosotros mismos o adquirir alguna solución de la _Asset Store_<<Unity-World-Streamer>>.
+
+Para hacerlo nosotros mismos necesitaremos usar los métodos {unity-loadsceneasync} —en modo aditivo— y {unity-unloadsceneasync} para cargar y descargar las escenas.
+En cualquier caso, no es nada complejo y nos da mucha flexibilidad para hacerlo como queramos o para darle otros usos a las escenas —como, por ejemplo, para descomponer los niveles para facilitar la colaboración—.
+
+NOTE: Es importante utilizar las versiones «Async» para no detener el juego mientras se cargan las escenas.
+
+== Limitaciones del punto flotante
+
+Tanto Unreal Engine como Unity utilizan números de punto flotante de 32 bits —o de precisión simple—.
+
+Algunos motivos para esta decisión podrían ser:
+
+* Si hubieran optado por números de punto flotantes de 64 bits, necesitarían más memoria, se aprovecharían peor las memorias caché y el ancho de banda de la memoria, porque cada número ocuparía el doble de lo que ocupan ahora.
+
+* Aunque ya no es tan común, han existido arquitecturas sin soporte para números de punto flotante de 64 bits.
+Esto es algo a tener en cuenta si se quiere desarrollar un motor que sea portable a diferentes arquitecturas.
+
+* Las GPU suele ofrece peor rendimiento trabajando con punto flotante de 64 bits, lo que obliga a usar el truco de transformar las coordenadas de los vértices para que sean relativas a la posición de la cámara, de forma que puedan almacenarse en punto flotante de 32 bits durante el _render_.
+
+El problema es que la precisión de los números de punto flotante no es fija.
+Como se puede ver en la <<fig-ieee754-precision>>, a mayor sea el valor que almacenan, peor es la precisión.
+
+[[fig-ieee754-precision]]
+.Precisión de los números de punto flotante.
+image::ieee754_precision.png[]
+
+Así que a 50 km del origen la precisión es de 1 cm —sin importar que la unidad por defecto en Unreal Engine sea el centímetro mientras que la de Unity es el metro—.
+
+Aunque no lo parezca, esto puede generar efectos indeseables, en función del tipo de juego.
+Un jugador a poco más de 2 km del origen podría comenzar a notar comportamientos raros en las físicas, en las animaciones o en el movimiento de los objetos, si está lo bastante cerca.
+Porque aunque los cálculos señalen que algo debe ir en cierto sitio, la precisión a esa distancia hará que la ubicación se redondee al flotante posible más cercano.
+
+== Traslación del origen
+
+Para resolver el problema de la limitación de la precisión de flotantes lo que se puede hacer es reubicar cerca del jugador el origen del sistema de referencia del mundo, según este se aleja.
+O, para ser más exactos, mover todos los actores para que el jugador y lo que el jugador tiene más cerca estén próximos al origen.
+
+.Esquema ilustrativo de la traslación del origen.
+image::traslación_del_origen.svg[]
+
+=== En Unreal Engine
+
+Nuevamente, en Unreal Engine ya viene implementado, permitiendo crear mundos de hasta 20{x}20 km sin problemas de precisión.
+Tan solo hay que activar la opción _Enable World Origin Rebasing_.
+
+NOTE: Los detalles de cómo lo hace se pueden leer en el foro de Unreal Engine<<UE-Forums-Origin-Shifting>> y en el correspondiente _pull request_ en GitHub<<UE-Github-PR-Origin-Shifting>>.
+
+Sin embargo, Unreal Engine no soporta actualmente la traslación del origen en juegos multijugador en red.
+Así que los estudios que lo necesitan deben implementar su propia solución en el lado del servidor del juego.
+Algunas opciones son:
+
+. Implementar un servidor de juego con tecnología propia con toda la lógica del _gameplay_ —probablemente usando flotantes de 64 bits— que se comunique on el Unreal Engine de los clientes para recibir la entrada del jugador, el _render_ y otras cuestiones cosméticas.
+
+. Ejecutar múltiples servidores de Unreal Engine con diferentes porciones del mundo y desarrollar una capa entre los clientes y servidores para enrutar los clientes al servidor adecuado según la zona donde el cliente haya trasladado su origen.
+Así los clientes pueden usar traslación del origen, mientras el nivel en el servidor se reparte entre múltiples instancias del juego.
+
+=== En Unity
+
+En Unity, como es más común, tendremos que tirar de la _Asset Store_ o hacerlo nosotros mismos:
+
+. Iterar sobre todos los _GameObject_ de cada escena para desplazarlos, de tal forma que el jugador vuelva a estar cerca del origen del sistema de referencia.
+
+. Hay que tener cuidado con tener muchos _collider_ estáticos —aquellos en _GameObjects_ sin un component _Rigidbody_— porque moverlos tiene un gran impacto en el motor de físicas, ya que le obliga a recalcular ciertas estructuras de datos internas, haciendo que se pierdan _frames_ o provocando problemas con el sonido.
+En cualquier caso para evitar problemas con el motor de físicas, el mejor sitio para mover los objetos es `FixedUpdate()`.
+
+. No se puede usar _static batching_ porque los _GameObjects_ incluidos en un _static batch_ son bloqueados por Unity, ya que son combinados con otros _GameObjects_ en una malla común.
+En caso necesario, podemos implementar nuestra propia solución de _static batching_ o combinar las mallas manualmente.
+
+. Otros componentes y recursos de la _Asset Store_ que usen coordenadas globales estáticas también pueden dar problemas.
+Por ejemplo, si se usa _Nav Mesh_, es necesario recalcularlos tras el desplazamiento.
+Mientras que no se puede utilizar _Global Illumination_, porque la información de iluminación se ha precalculado para objetos estáticos en posiciones concretas del mundo, lo que obliga a usar técnicas alternativas que puedan proporcionar resultados similares —como, por ejemplo, _Ambient Occlusion_—.
+
+Por suerte, existen soluciones en la _Asset Store_ que ofrecen en Unity funcionalidades muy similares a las de Unreal Engine<<Unity-World-Streamer>><<Unity-Floating-Origin-Ultimate>>.
+
+==== Renderizado relativo a la cámara
+
+El nuevo _render_ HDRP tiene una opción llamada _Camera-relative rendering_.
+Al activarla, durante el _render_ las posiciones de los _GameObjects_ se usan relativas a la cámara y no al origen de la escena.
+Esto puede ayudar a reducir defectos en la imagen renderizada debido a los problemas de precisión con los números de punto flotante.
+
+==== Con otro motor de físicas
+
+Como el principal coste se debe a mover objetos con _colliders_ estáticos, otra idea interesante es utilizar otra implementación del motor de físicas donde no exista este problema.
+
+Por ejemplo, en los foros de Unity apareció un _plugin_ para añadir soporte de NVIDIA PhysX 4.0 en Unity<<Unity-Forums-PhysX-Plugin>>, antes de que el equipo de Unity lo hiciera oficialmente —lo hizo en Unity 2019.3—.
+Básicamente ofrece sus propios componentes _collider_ y _rigid body_, pero implementados sobre otra versión de la librería NVIDIA PhysX.
+Lo interesante es que en el foro se discute que esa implementación alternativa, al ser propia, podría ofrecer acceso a la función {physx-originshift} de NVIDIA PhysX, para reubicar de una sola vez los _colliders_ con un poco menos de coste.
+
+En resumen, si hiciera falta, sería posible hacer una implementación propia de los componentes del motor de física, sea con NVIDIA PhysX o con otro motor, como Havok.
+
+==== El problema en los foros de Unity
+
+Unity no es un motor diseñado para crear mundos abiertos, pero no por eso algunos se han resistido a intentarlo.
+
+En caso de que tengamos que enfrentarnos a ese problema, un buen lugar para extraer ideas son los foros de Unity.
+Los hilos <<Unity-Forums-Thread01>>, <<Unity-Forums-Thread02>> y <<Unity-Forums-Thread03>> son muy interesantes, aunque un poco antiguos.
+También es interesante la documentación de <<Unity-World-Streamer>> y los hilos del foro relativos a ese paquete.
+
+En algunos mensajes se hace referencia a este script <<Unity-Wiki-Floating-Origin>> para trasladar todos los objetos de la escena, aunque hay que tener en cuenta que se puede optimizar muchísimo.
+Por ejemplo, usando `FixedUpdate()` en lugar de `LateUpdate()`, para lanzar la acción, o evitando el uso de `FindObjectOfType()` para localizar los objetos, haciendo que estos se registren previamente en algún _array_ o lista.
+Entre los mensajes del foro hay bastantes sugerencias de optimización y hasta alguna implementación mucho mejor que la anterior.
+
+// TODO: Actualizar esto cuando se sepa más.
+Unity ha anunciado varias veces que está trabajando en facilitar la traslación del origen en proyectos con DOTS{blank}footnote:[{fn-unity-dots}], pero por el momento no se conocen más detalles.
+
+== ¿Y si cambiamos la escala?
+
+Ya hemos comentado que Unreal Engine y Unity usan como unidad el centímetro y el metro, respectivamente, sin que eso tenga ningún efecto en obtener más precisión.
+
+Eso es así porque ninguno de los dos motores aprovecha de la mejor manera posible el intervalo más preciso de los números de punto flotante, que está entre -1 y 1.
+Sin embargo, no hay nada que lo impida, porque realmente la unidad de medida en el motor es, más que nada, una convención.
+La unidad espacial puede ser la que nosotros queramos que sea, según el tipo de proyecto en el que estemos trabajando.
+
+Así que si sabemos que el intervalo más preciso es el [-1, 1] y tenemos pensado desarrollar un juego de mundo abierto de 100{x}100 km de extensión total, nada nos impide decir que nuestra unidad son 50 km
+Es decir, que cada cuadrado de 1{x}1 en el editor representa 50{x}50 km en el juego, de forma que 4 cuadrados está contenido todo el espacio del nivel.
+
+Si observamos la <<fig-ieee754-precision>> y consideramos que 1 son 50 km, es fácil determinar que la precisión en el extremo del mundo será de 0.25 cm; que es 4 veces mejor que la que obtendríamos trabajando con la convención estándar de ambos motores.
+
+Sin embargo, debemos considerar varios inconvenientes:
+
+. Los modelos importados deberán haber sido escalados para ser coherentes con la convención que hemos elegido para nuestro proyecto.
+En Maya, por ejemplo, 1 unidad es un centímetro.
+Así que si no tenemos esto en cuenta, los modelos importados serán enormes.
+
+. Las unidades si son relevantes para el motor de físicas.
+Por ejemplo, en Unity, si la gravedad vale 9.8 quiere decir 9.8 m/s^2^.
+Si en un proyecto la unidad es 50 km y no 1 m, la gravedad debería ser —si queremos que sea realista— 0.000196.
+
+[stem]
+++++
+g = 9.8 cdot frac{1}{50 cdot 10^3} = 0.000196
+++++
+
+[bibliography]
+== Referencias
+
+* [[[UE-Level-Streaming,1]]]
+Epic Games, Inc. Level Streaming. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/BuildingWorlds/LevelStreaming/index.html
+
+* [[[UE-Word-Composition,2]]]
+Epic Games, Inc. World Composition User Guide. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/BuildingWorlds/LevelStreaming/WorldBrowser/index.html
+
+* [[[UE-Collaborate-Sublevels,3]]]
+Epic Games, Inc. Collaborate with Sublevels. _Unreal Engine 4 Documentation_. https://docs.unrealengine.com/en-US/Basics/Levels/CollaborateWithSublevels/index.html
+
+* [[[Unity-World-Streamer,4]]]
+NatureManufacture. _World Streamer 2_. Unity Asset Store.
+https://assetstore.unity.com/packages/tools/terrain/world-streamer-2-176482
+
+* [[[UE-Forums-Origin-Shifting,5]]]
+Nikolaev, M. [27059-nkey]. (2016, 5 de enero). _[PLUGIN] Pull Request - World Origin Shifting in MP_. Unreal Engine Forums. https://forums.unrealengine.com/community/work-in-progress/81424-pull-request-world-origin-shifting-in-mp
+
+* [[[UE-Github-PR-Origin-Shifting,6]]]
+Nikolaev, M. [michail-nikolaev]. (2016, 5 de mayo). _UE-13079: World Origin Shifting for Multiplayer #2359_ [Pull request en _Unreal Engine_]. GitHub. https://github.com/EpicGames/UnrealEngine/pull/2359
+
+* [[[Unity-Floating-Origin-Ultimate,7]]]
+Twoloop, _Floating Origin Ultimate - Infinite Multiplayer World Solution_. Unity Asset Store.
+https://assetstore.unity.com/packages/tools/network/floating-origin-ultimate-infinite-multiplayer-world-solution-204179
+
+* [[[Unity-Forums-PhysX-Plugin,8]]]
+HerrVR. (2019, 29 de marzo). _NVIDIA PhysX plugin - preview_. Unity Forums. https://forum.unity.com/threads/nvidia-physx-plugin-preview.645004/
+
+* [[[Unity-Forums-Thread01,9]]]
+Marcos-Elias. (2019, 9 de mayo). _How to handle truly open world maps with Unity, due to floating point limitations?_ Unity Forums. https://forum.unity.com/threads/how-to-handle-truly-open-world-maps-with-unity-due-to-floating-point-limitations.530575/
+
+* [[[Unity-Forums-Thread02,10]]]
+Marcos-Elias. (2019, 22 de marzo). _Feature request: a native origin shifter integrated with physics like on UE_. Unity Forums. https://forum.unity.com/threads/feature-request-a-native-origin-shifter-integrated-with-physics-like-on-ue.648736/
+
+* [[[Unity-Forums-Thread03,11]]]
+Phelan-Simpson. (2018, 15 de abril). _Floating Point Errors and Large Scale Worlds_. Unity Forums. https://forum.unity.com/threads/floating-point-errors-and-large-scale-worlds.526807/
+
+* [[[Unity-Wiki-Floating-Origin,12]]]
+Floating Origin. En _Unity Community_. http://wiki.unity3d.com/index.php?title=Floating_Origin&_ga=2.158366650.1017864420.1581032515-2049087233.1564526278

@@ -1,1 +1,0 @@
-:fn-decal: pass:n[Un _decal_ es una textura que se pone sobre otra para, por ejemplo, marcar zonas de impacto, crear manchas o pisadas y otros efectos similares.]
