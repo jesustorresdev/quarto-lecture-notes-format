@@ -1,11 +1,14 @@
 ---
-title: "Animación: Motion matching"
-title-meta: "Animación: Motion matching"
+abstract: "El **motion matching** es una técnica de animación que se basa en la selección de *keyframes* de animación en función del estado del personaje y de su entorno, para crear animaciones fluidas y realistas. En este artículo se describen los principales componentes y características de esta técnica." 
 ---
 
-{{< pagebreak >}}
+::: {.callout-note appearance="simple"}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
 
-# Introducción
+# Motion matching
+
+## Introducción
 
 Una de las técnicas más comunes para animar personajes en tiempo real, es el uso de varios *clips* de animación por *keyframes* y una máquina de estados que se encarga de seleccionar el *clip* de animación que se debe reproducir en cada momento.
 
@@ -19,30 +22,30 @@ El motor de videojuegos se encarga de interpolar entre estos *keyframes*, inclus
 
 Esta técnica es muy flexible y permite crear animaciones complejas, pero cuanto más realista se quiere que sea la animación del personaje, más complejo y difícil de mantener se vuelve la máquina de estados de animación.
 
-Una de las alternativas a esta técnica más tradicional es el uso de ***motion matching***, que ha ido ganado popularidad desde que juegos como *«For Honor» (2016)*[@Cooper2016MotionMatching], *«EA Sports UFC 3» (2019)*, *«The Last Of Us Part II» (2020)*, *«Half-Life: Alyx» (2020)*[@VandenHeuvel2021MMHalfLifeAlyx; @VandenHeuvel2020MMHalfLifeAlyx], *«eFootball PES» (2021)* y *«FIFA 22» (2022)* la adoptaron.
+Una de las alternativas a esta técnica más tradicional es el uso de ***motion matching***, que ha ido ganado popularidad desde que juegos como *«For Honor» (2016)* [@Cooper2016MotionMatching], *«EA Sports UFC 3» (2019)*, *«The Last Of Us Part II» (2020)*, *«Half-Life: Alyx» (2020)* [@VandenHeuvel2021MMHalfLifeAlyx; @VandenHeuvel2020MMHalfLifeAlyx], *«eFootball PES» (2021)* y *«FIFA 22» (2022)* la adoptaron.
 
-El ***motion matching***[@Büttner2016MotionMatching; @Clavet2016MotionMatching] se basa en la idea de que, en lugar de seleccionar un *clip* de animación, se selecciona un *keyframe* de un *clip* de animación, en función del estado del personaje, y se reproduce el *clip* desde ese *keyframe* en adelante.
+El ***motion matching*** [@Büttner2016MotionMatching; @Clavet2016MotionMatching] se basa en la idea de que, en lugar de seleccionar un *clip* de animación, se selecciona un *keyframe* de un *clip* de animación, en función del estado del personaje, y se reproduce el *clip* desde ese *keyframe* en adelante.
 Esta selección se hace varias veces por segundo y el motor de videojuegos se encarga de saltar y mezclar los *clips*, sintetizando la animación del personaje.
 
 Esta técnica evita crear una máquina de estados compleja.
 En su lugar, se trata de una técnica de animación dirigida por datos, donde la mejor secuencia se escoge de forma automática, en función del estado del personaje y de su entorno, de una enorme base de *clips* de animación pregrabados.
 
-# *Motion matching*
+## *Motion matching*
 
 En los próximos apartados veremos los principales componentes y carcterísticas de esta técnica.
 
-## Base de datos de movimiento
+### Base de datos de movimiento
 
 Para animar un personaje usando ***motion matching***, se necesita una librería de *clips* de animación, donde el personaje realiza distintas acciones, como caminar despacio, correr, hacer giros bruscos y suaves, acelerar y desacelerar en diferentes direcciones, saltar, caer, etc.
 Es decir, se necesita una gran cantidad de *clips* de animación para que haya uno para cada posible situación del personaje.
 
-En la charla *«Animation Bootcamp: Motion Matching»* de la GDC 2016[@Zadziuk2016MotionMatching] se muestra como se lleva a acabo el proceso, empezado por la creación de un conjunto de *dance cards*.
+En la charla *«Animation Bootcamp: Motion Matching»* de la GDC 2016 [@Zadziuk2016MotionMatching] se muestra como se lleva a acabo el proceso, empezado por la creación de un conjunto de *dance cards*.
 Estas *dance cards* describen los caminos que los actores deben seguir en un estudio de captura de movimiento para capturar el rango completo de movimientos posibles para obtener los mejores resultados con esta técnica.
 
 Esta colección de *clips* de animación es la **base de datos de movimiento**.
 
-En el vídeo *«'Dance Card' Breakdown»*[@Zadziuk2016DanceCardBreakdown] se muestra cómo se usan las *dance cards* y cómo se captura el movimiento de los actores.
-Mientras que en *«Stumble & Impact Tests»*[@Zadziuk2016ImpactTest] se puede observar cómo hicieron capturas adicionales para animar impactos y caídas.
+En el vídeo *«'Dance Card' Breakdown»* [@Zadziuk2016DanceCardBreakdown] se muestra cómo se usan las *dance cards* y cómo se captura el movimiento de los actores.
+Mientras que en *«Stumble & Impact Tests»* [@Zadziuk2016ImpactTest] se puede observar cómo hicieron capturas adicionales para animar impactos y caídas.
 
 En general, lo más importante, es que los movimientos que se capturen encajen con el modelo de movimiento deseado.
 Por ejemplo, si el personaje se va a mover a lo largo de curvas, las *dance cards* deben incluir movimientos que sigan curvas.
@@ -53,7 +56,7 @@ Incluyen trayectorias largas, con diferentes tipos de movimiento, para capturar 
 Sin embargo, esto no es un requisito de la técnica.
 Se pueden hacer capturas más cortas de movimientos, de movimientos individuales, para incluirlas en la **base de datos de movimiento**.
 
-## Propiedades del movimiento
+### Propiedades del movimiento
 
 Para poder seleccionar el *keyframe* de animación más adecuado para cada situación, se necesita una forma de comparar los *keyframes*, de los diferentes *clips* de animación, de la base de datos con el estado actual del personaje y la intención del jugador, de forma que el resultado sea una animación fluida y realista, sin saltos bruscos.
 La forma de hacer esta búsqueda es mediante la comparación de propiedades extraídas en cada *keyframe* de los datos de los *clips* de animación.
@@ -76,7 +79,7 @@ De esta forma, la búsqueda es invariante a la localización y orientación real
 
 ![Trayectoria general.](figures/feature-trajectory.png){#fig-feature-trajectory}
 
-Ejemplos de propiedades de movimiento en Open 3D Engine[@Jillich2022MotionMatching].
+Ejemplos de propiedades de movimiento en Open 3D Engine [@Jillich2022MotionMatching].
 :::
 
 Como se puede ver en la @fig-motion-matching-properties, se pueden extraer otras propiedades, como la velocidad lineal o angular de algunas articulaciones; por ejemplo, las de las rodillas.
@@ -96,7 +99,7 @@ Obviamente, se puede asignar diferentes pesos a cada propiedad, de forma que se 
 Por lo general, uno de los aspectos que consumen más tiempo de desarrollo es la selección de las propiedades más adecuadas para la búsqueda, dado que estas dependen de las características y objetivos del proyecto, por lo que es necesario experimentar con diferentes opciones.
 Cuantas mas propiedades se usen, mayores son las probabilidades de que el *keyframe* seleccionado sea el más adecuado, pero también se incrementa el tiempo de búsqueda y el consumo de memoria.
 
-## Algoritmo de *motion matching*
+### Algoritmo de *motion matching*
 
 En resumen, el algoritmo de ***motion matching*** se puede dividir en varias etapas:
 
@@ -113,7 +116,7 @@ Mientras tanto se reproduce el *clip* de animación seleccionado en la última e
   
   1. En caso contrario, se reproduce el *clip* de animación a partir del *keyframe* seleccionado.
 
-## Control del personaje
+### Control del personaje
 
 Para que el algoritmo descrito anteriormente no solo seleccione el mejor *keyframe* para la situación actual, sino que también considere la trayectoria que va a seguir el personaje y, por tanto, la intención del jugador o de la IA; es interesante introducir en las propiedades la trayectoria del personaje, tanto pasada como futura.
 
@@ -132,27 +135,27 @@ En el caso de un NPC se pueden generar puntos de la trayectoria a partir de la p
 Mientras que para el personaje del jugador, es necesario predecir la intención del usuario.
 
 En Open 3D Engine, por ejemplo, se predice la trayectoria creando una curva exponencial.
-Esta parte de la posición y orientación actual del personaje, pero se curva hacia la posición final considerando la dirección de la entrada actual del jugador[@Jillich2022MotionMatching].
+Esta parte de la posición y orientación actual del personaje, pero se curva hacia la posición final considerando la dirección de la entrada actual del jugador [@Jillich2022MotionMatching].
 
 Si la trayectoria es compleja de predecir, se puede intentar mejorar la predicción interpolando entre la trayectoria estimada a partir de la entrada del jugador y la trayectoria de la secuencia de *keyframes* actualmente seleccionada, que ha sido capturada de personas reales.
 Por lo general, esta interpolación se ajusta para que los puntos más próximos en tiempo se acerquen más a la trayectoria de la secuencia actual, mientras que en los más alejados solo se use la estimación a partir de la entrada del jugador.
 
-## Compatibilidad con otros sistemas
+### Compatibilidad con otros sistemas
 
 La técnica de ***motion matching*** es perfectamente compatible con otras técnicas y sistemas de animación.
 Por ejemplo, se puede ejecutar como un nodo dentro de una máquina de estados de animación, lo que permite transicionar entre ***motion matching*** y *clips* seleccionados de forma tradicional o *blend spaces*.
 También se pueden introducir etapas posteriores para ajustar la animación de forma procedural, usando *cinemática inversa* o *simulación física*.
 
-# Consumo de memoria
+## Consumo de memoria
 
 La principal limitación de esta técnica está en su elevado consumo de memoria, seguida, en mucha menor medida, por el tiempo de búsqueda.
 
-Por ejemplo, en un trabajo de Ubisoft[@Holden2020LearnedMotionMatching] se muestra que su implementación necesita 52.1 MB de memoria para un base de datos con 894480 *keyframes* de animación y 27 características.
-Mientras que en otro artículo sobre el ***motion matching*** en Open 3D Engine[@Jillich2022MotionMatching] se estima que 108000 *keyframes* con 59 características necesitan 24.3 MB de memoria. 
+Por ejemplo, en un trabajo de Ubisoft [@Holden2020LearnedMotionMatching] se muestra que su implementación necesita 52.1 MB de memoria para un base de datos con 894480 *keyframes* de animación y 27 características.
+Mientras que en otro artículo sobre el ***motion matching*** en Open 3D Engine [@Jillich2022MotionMatching] se estima que 108000 *keyframes* con 59 características necesitan 24.3 MB de memoria. 
 
-# *Learn motion matching*
+## *Learn motion matching*
 
-En el artículo *«Learned Motion Matching»*[@Holden2020LearnedMotionMatching], investigadores de Ubisoft y de la Universidad de Canadá proponen una técnica para reducir el consumo de memoria del ***motion matching*** mediante el uso de redes neuronales.
+En el artículo *«Learned Motion Matching»* [@Holden2020LearnedMotionMatching], investigadores de Ubisoft y de la Universidad de Canadá proponen una técnica para reducir el consumo de memoria del ***motion matching*** mediante el uso de redes neuronales.
 
 Para lograrlo se utilizan 3 redes neuronales, una para cada una de las etapas del algoritmo de ***motion matching***:
 
@@ -170,18 +173,18 @@ Para lograrlo se utilizan 3 redes neuronales, una para cada una de las etapas de
 
 En la @fig-learned-motion-matching se ilustra la técnica descrita en un diagrama de bloques.
 
-![Diagrama de bloques de *learned motion matching*.](figures/learned-motion-matching.pdf){#fig-learned-motion-matching}
+![Diagrama de bloques de *learned motion matching*.](figures/learned-motion-matching.png){#fig-learned-motion-matching}
 
-# Soporte en motores de videojuegos
+## Soporte en motores de videojuegos
 
 El ***motion matching*** es una técnica relativamente nueva.
 Por tanto, no es una característica incluida de serie en todos ellos, aunque hace tiempo que se puede usar mediante desarrollos propios o *plugins* de terceros.
 
-Por ejemplo, en el motor de videojuegos Open 3D Engine, que es de código abierto, se incluyó soporte para ***motion matching*** de forma experimental en la versión 22.05[@O3DEMotionMatching].
-En Unreal Engine, por otro lado, se incluyó, también de forma experimental, desde la versión 5.1[@UnrealMotionMatching].
-Mientras que en Unity, se puede usar ***motion matching*** mediante *plugins* de terceros, como *«Motion Matching for Unity»*[@AnimationUprisingMotionMatchingForUnity], que se puede adquirir en la *Asset Store* de Unity.
+Por ejemplo, en el motor de videojuegos Open 3D Engine, que es de código abierto, se incluyó soporte para ***motion matching*** de forma experimental en la versión 22.05 [@O3DEMotionMatching].
+En Unreal Engine, por otro lado, se incluyó, también de forma experimental, desde la versión 5.1 [@UnrealMotionMatching].
+Mientras que en Unity, se puede usar ***motion matching*** mediante *plugins* de terceros, como *«Motion Matching for Unity»* [@AnimationUprisingMotionMatchingForUnity], que se puede adquirir en la *Asset Store* de Unity.
 
-# Referencias {.unnumbered}
+## Referencias {.unnumbered}
 
 ::: {#refs}
 :::

@@ -1,6 +1,5 @@
-/content/**/*_files
 /.quarto/
-/_output/
+/_book/
 .vscode/
 *~
 /.luarc.json

@@ -1,74 +1,38 @@
 project:
-  output-dir: _output
-  render:
-    - content/animación/motion_matching.qmd
-    - content/extras/perforce/perforce.qmd
-    - content/extras/estructura_proyectos/estructura_proyectos.qmd
-    - content/físicas/físicas.qmd
-    - content/gameplay/colisiones_y_triggers.qmd
-    - content/gameplay/control_de_personajes.qmd
-    - content/gameplay/armas_y_combate.qmd
-    - content/unreal/unreal_gameplay_framework/unreal_gameplay_framework.qmd
-    - content/workflow/flujo_de_trabajo.qmd
-    - content/workflow/motores.qmd
+  type: book
 
-subtitle: Desarrollo de Videojuegos 3D (20XX/20XY)
-institute: Master Universitario en Desarrollo de Videojuegos de la Universidad de La Laguna
-author:   
-  - name: Jesús Torres
-    email: jmtorres@ull.es
-author-meta: Jesús Torres <jmtorres@ull.es>
-copyright:
+book:
+  title: Desarrollo de Videojuegos 3D
+  subtitle: Master Universitario en Desarrollo de Videojuegos de la Universidad de La Laguna (Cursos 20XX/20XY)
+  date: today
+  author:
+    - name: Jesús Torres
+      email: jmtorres@ull.es
+  publisher: Universidad de La Laguna
   license: Este trabajo está bajo una licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es).
-
-abstract: |
-  ::: {.callout-caution appearance="simple"}
-  El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
-  :::
+  page-footer: "Este trabajo está bajo una licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es)." 
+  # abstract: 
+  chapters: 
+    - index.qmd
+    - part: Workflow
+    - part: Animación
+      chapters:
+        - content/animación/motion_matching.qmd
+  # appendices:
 
 lang: es
-abstract-title: Resumen
 toc-title: Contenidos
-toc: true
-number-sections: true
 crossref:
-  title-delim: period
+  title-delim: ":"
   custom:
     - kind: float
       reference-prefix: Video
       key: vid
-      latex-env: video
 
-suppress-bibliography: false
 bibliography: references/references.bib
-csl: references/chicago-fullnote-bibliography-short-title-subsequent.csl
+csl: references/acm-sig-proceedings.csl
 api-reference: 
   path: references/api.yml
-
-hyphenation:
-  - In-terp-To-Mo-ve-ment-Com-po-nent
-  - Add-Con-tro-ller-Yaw-In-put
-  - Pla-yer-Ca-me-ra-Ma-na-ger
-  - Set-Com-po-nent-Tick-E-na-bled
-  - Cha-os-Whee-led-Ve-hi-cle-Mo-ve-ment-Com-po-nent
-  - Cha-os-Ve-hi-cle-Mo-ve-ment-Com-po-nent
-  - Up-da-te-Vi-ew-Tar-get-In-ter-nal
-  - Blu-e-print-Up-da-te-Ca-me-ra
-  - In-ter-nal-Ta-ke-Ra-di-al-Da-ma-ge
-  - Cha-rac-ter-Move-ment-Com-po-nent
-  - Pawn-Move-ment-Com-po-nent
-  - Get-Con-trol-Ro-ta-tion
-  - Add-Pitch-In-put
-  - Over-lap-Block-ing-Test-By-Chan-nel
-  - Over-lap-Block-ing-Test-By-Pro-file
-  - Line-Trace-Sin-gle-By-Ob-ject-Type
-  - Line-Trace-Multi-By-Ob-ject-Type
-  - Line-Trace-Test-By-Ob-ject-Type
-  - Add-Ac-tor-World-Off-set
-  - Set-Ac-tor-Trans-form
-  - Set-World-Trans-form
-  - Set-Ac-tor-Rel-a-tive-Trans-form
-  - Set-Rel-a-tive-Lo-ca-tion-And-Ro-ta-tion
 
 filters:
   - reading-time
@@ -76,11 +40,10 @@ filters:
   - api-reference
 
 format:
-  pdf:
-    # keep-tex: true
-    documentclass: scrartcl
-    classoption: numbers=endperiod
-    papersize: a4
-    template-partials:
-      - partials/title.tex
-      - partials/before-body.tex
+  html:
+    css: styles.css
+    number-sections: true
+    number-depth: 3
+    anchor-sections: true
+    smooth-scroll: true
+    html-math-method: katex

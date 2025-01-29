@@ -1,0 +1,31 @@
+/* Punto después del número de sección */
+
+.header-section-number {
+  margin-right: 5px;
+}
+
+.header-section-number::after {
+  content: ".";
+}
+
+.title .chapter-number::after {
+  content: ".";
+}
+
+.sidebar-item .chapter-number::after {
+  content: ".";
+}
+
+/* Estilo de las partes en el sidebar */
+
+.sidebar-item-section .text-start {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* Estilo del título de la tabla de contenidos */
+
+#toc-title {
+  text-transform: uppercase;
+  font-weight: bold;
+}

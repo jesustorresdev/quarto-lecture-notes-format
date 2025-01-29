@@ -6,9 +6,7 @@
 	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
 	"features": {
 		"ghcr.io/rocker-org/devcontainer-features/quarto-cli:latest": {
-			"installChromium": true,
-			"installTinyTex": true,
-			// "version": "1.4.528"
+			"version": "latest"
 		}
 	},
 
@@ -19,7 +17,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": ".devcontainer/postCreateCommand.sh",
+	// "postCreateCommand": ".devcontainer/postCreateCommand.sh",
 
 	// Configure tool-specific properties.
 	"customizations": {

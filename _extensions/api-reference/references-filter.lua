@@ -1,10 +1,12 @@
 -- shortcodes for create links to api references
 
 local apiref = require "api-reference"
-local fontawesome = require "fontawesome"
+-- local fontawesome = require "fontawesome"
 
-local faArrow = fontawesome.fontAwesome("arrow-circle-right", nil, "small")
-local faCube = fontawesome.fontAwesome("cube", nil, "small")
+-- local faArrow = fontawesome.fontAwesome("arrow-circle-right", nil, "small")
+local faArrow = pandoc.Str("→")
+-- local faCube = fontawesome.fontAwesome("cube", nil, "small")
+local faCube = pandoc.Str("▢")
 
 local BulletList = pandoc.BulletList
 local DefinitionList = pandoc.DefinitionList

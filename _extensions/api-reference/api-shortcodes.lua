@@ -1,9 +1,10 @@
 -- shortcodes for create links to api references
 
 local apiref = require "api-reference"
-local fontawesome = require "fontawesome"
+-- local fontawesome = require "fontawesome"
 
-local faLink = fontawesome.fontAwesome("external-link-alt", nil, "tiny")
+-- local faLink = fontawesome.fontAwesome("external-link-alt", nil, "tiny")
+local faLink = pandoc.Str("↗")
 
 local stringify = pandoc.utils.stringify
 local Code = pandoc.Code
