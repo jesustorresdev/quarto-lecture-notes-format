@@ -1,9 +1,14 @@
 ---
-title: "Motores de videojuegos"
-title-meta: "Motores de videojuegos"
+abstract: Este artículo analiza los motores de videojuegos, un componente fundamental en el desarrollo de videojuegos. Se revisan los criterios para elegir entre desarrollar un motor propio o usar uno comercial, y se comparan las principales alternativas disponibles, con especial atención a Unity y Unreal Engine.
 ---
 
-{{< pagebreak >}}
+::: {.callout-note appearance="simple"}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
+# Motores de videojuegos
+
+## Introducción
 
 Durante la etapa de **preproducción** en el desarrollo de un videojuego, se definen las características técnicas del proyecto.
 Entre ellas, el motor de videojuegos y las herramientas externas e internas a utilizar.
@@ -17,7 +22,7 @@ Entre ellas, el motor de videojuegos y las herramientas externas e internas a ut
 
 Por eso merece la pena que nos detengamos un momento a analizar las diferentes opciones, con sus principales características y los criterios que podríamos utilizar para seleccionar una u otra.
 
-# El triángulo de oro {#sec-golden-triangle}
+## El triángulo de oro {#sec-golden-triangle}
 
 Antes de entrar en las cuestiones más técnicas, es importante considerar el **triángulo de oro** y sus implicaciones a la hora de escoger la tecnología de nuestro proyecto porque, en función de nuestro caso, quizás no haya nada más que considerar.
 
@@ -44,12 +49,12 @@ Para que el proyecto tenga éxito no es necesario que los 3 aspectos estén madu
 Esto nos advierte de invertir recursos en adoptar la mejor tecnología --o en nuestro caso, el mejor motor de videojuegos-- para el proyecto.
 Si no tenemos un equipo bien consolidado o no conoce bien el tipo de proyecto al que va a hacer frente, quizás deberíamos ser más conservadores al escoger la tecnología.
 
-# Motor propio o comercial
+## Motor propio o comercial
 
 Es evidente que aparentemente existe poca justificación para empezar un proyecto desarrollando un motor propio.
 Sin embargo, no está de más plantearnos las ventajas de esta aproximación, así como comentar algunos casos recientes donde se ha hecho de esta manera.
 
-## Orígenes
+### Orígenes
 
 Los videojuegos son programas informáticos y como tales su desarrollo ha evolucionado con el avance de la ingeniería de software y la tecnología.
 El concepto de motor de videojuegos, como ese conjunto de componentes de software de un videojuego reutilizables entre proyectos diferentes, surge fundamentalmente de la mano de los FPS en 3D de mediados de los 90.
@@ -68,7 +73,7 @@ Si comparamos esos primeros motores con los actuales, veríamos que más que mot
 Es decir, que prácticamente solo implementaban los componentes relacionados con el *render*; dejando fuera sistemas de animación, partículas, IA o simulación física, que hoy en día sí incluyen muchos motores de videojuegos.
 
 Los estudios --como Epic Games, id Software, Bioware, CryTek-- hacían los motores para sus propios juegos, aunque después los licenciaran a otros estudios.
-Sin embargo, los motores de videojuegos se volvieron cada vez más costosos de hacer al incluir cada vez más funcionalidades, por lo que comenzaron a aparecer empresas especializadas exclusivamente en crear motores --como Gamebryo[@WikipediaGamebryo], Unigine[@WikipediaUnigine] o Unity-- y a ser más común el desarrollar videojuegos con motores licenciados a otras compañías.
+Sin embargo, los motores de videojuegos se volvieron cada vez más costosos de hacer al incluir cada vez más funcionalidades, por lo que comenzaron a aparecer empresas especializadas exclusivamente en crear motores --como Gamebryo [@WikipediaGamebryo], Unigine [@WikipediaUnigine] o Unity-- y a ser más común el desarrollar videojuegos con motores licenciados a otras compañías.
 
 ::: {.callout-tip}
 Al desarrollar un motor de videojuegos es preferible hacerlo a la par que el desarrollo de un juego.
@@ -76,32 +81,32 @@ Después se pueden reusar sus componentes en proyectos posteriores y seguir evol
 Así es más sencillo controlar el alcance del proyecto.
 :::
 
-## Uso de motores propios
+### Uso de motores propios
 
 Los motores son componentes complejos y lleva mucho tiempo desarrollarlos, por lo que algunos estudios optaron por licenciar motores de otras compañías, aunque con los años han acabado desarrollando tecnología propia que evoluciona según avanzan las necesidades de sus títulos.
 Por ejemplo:
 
 * CD Projekt licenció Aurora Engine a Bioware para desarrollar *«The Witcher» (2008)*, pero para *«The Witcher 2» (2011)* creó el motor RED Engine[Ver *«RED Engine»* en @WikipediaCDProjekt], con el que ha seguido trabajando en todas sus producciones posteriores, hasta el reciente *«Cyberpunk 2077» (2020)*.
 
-* Rockstar usaba RenderWare[@WikipediaRenderWare] en los primeros juegos de la franquicia de *«Grand Theft Auto» (2001-2006)* y *«Max Payne 2» (2003)*, entre otros[@WikipediaRenderWareGames], pero desde *«Grand Theft Auto IV» (2008)* usa en todas sus producciones su propio motor, llamado RAGE[@WikipediaRAGE].
+* Rockstar usaba RenderWare [@WikipediaRenderWare] en los primeros juegos de la franquicia de *«Grand Theft Auto» (2001-2006)* y *«Max Payne 2» (2003)*, entre otros [@WikipediaRenderWareGames], pero desde *«Grand Theft Auto IV» (2008)* usa en todas sus producciones su propio motor, llamado RAGE [@WikipediaRAGE].
 
-* Ubisoft uso Unreal Engine para las sagas *«Tom Clancy's Splinter Cell» (2002-2013)*[@WikipediaSplinterCell] y *«Rainbow Six» (2002-2008)*[@WikipediaUnrealEngineGames], modificado para adaptarse a las necesidades de cada título.
+* Ubisoft uso Unreal Engine para las sagas *«Tom Clancy's Splinter Cell» (2002-2013)* [@WikipediaSplinterCell] y *«Rainbow Six» (2002-2008)* [@WikipediaUnrealEngineGames], modificado para adaptarse a las necesidades de cada título.
   A partir de ahí han venido desarrollando diferentes motores adaptados a diferentes proyectos:
 
-  * En 2007 publicaron *«Assassin's Creed»*, desarrollado sobre Anvil[@WikipediaUbisoftAnvil], un motor creado expresamente para ese título y que han venido usando en el resto de la misma franquicia y en otros juegos de acción, como: la serie *«Príncipe de Persia» (2008-2021)* y posteriores, *«Tom Clancy's Rainbow Six Siege» (2015)*, *«Ghost Recon» (2017 y 2019)*, *«For Honor» (2017)*, *«Hyper Scape» (2020)* e *«Immortals Fenyx Rising» (2020)*.
+  * En 2007 publicaron *«Assassin's Creed»*, desarrollado sobre Anvil [@WikipediaUbisoftAnvil], un motor creado expresamente para ese título y que han venido usando en el resto de la misma franquicia y en otros juegos de acción, como: la serie *«Príncipe de Persia» (2008-2021)* y posteriores, *«Tom Clancy's Rainbow Six Siege» (2015)*, *«Ghost Recon» (2017 y 2019)*, *«For Honor» (2017)*, *«Hyper Scape» (2020)* e *«Immortals Fenyx Rising» (2020)*.
   También se ha usado en juegos deportivos como *«Steep» (2016)*.
 
   * Para la franquicia *«Watch Dog»* usan un motor diferente, llamado Disrupt y creado *ex profeso* para estos juegos[Ver *«Disrupt»* en @WikipediaUbisoftAnvil»].
 
   * Para la serie *«Far Cry»* utilizan Dunia Engine --originalmente una versión modificada de CryEngine, con el que se desarrolló el primer *«Far Cry (2004)»*--.
 
-  * Y para Tom Clancy's The Division utilizan Snowdrop[@WikipediaSnowdrop].
+  * Y para Tom Clancy's The Division utilizan Snowdrop [@WikipediaSnowdrop].
 
 En general, las grandes compañías con múltiples estudios optan por crear sus propios motores, porque les ofrece control, independencia respecto a terceros y evita la pérdida de ingresos por *royalties* --especialmente cuando los *royalties* del motor licenciado son un porcentaje de los ingresos, ya que estas compañías desarrollan proyectos de gran presupuesto y, por tanto, esperan grandes ingresos--.
 
 ![God of War se desarrolló sobre un motor creado por SIE Santa Mónica Studios *ex profeso* para el juego.](figures/god_of_war.jpg)
 
-Entre los estudios de tamaño medio, muchas compañías han optado por motores comerciales, como Unreal Engine, pero bastantes estudios de éxito siguen optando por usar los suyos propios[@SantamariaCustomGameEngines].
+Entre los estudios de tamaño medio, muchas compañías han optado por motores comerciales, como Unreal Engine, pero bastantes estudios de éxito siguen optando por usar los suyos propios [@SantamariaCustomGameEngines].
 Obviamente, donde más se observa el uso de motores comerciales es en las producciones *indie* de los estudios de menor tamaño, donde los costes, el tiempo y el tamaño de los equipos no suelen permitir afrontar la creación de un motor propio --especialmente si es un motor 3D--.
 
 Como siempre, hay algunas excepciones, que conviene analizar para conocer mejor qué lleva a desarrollar un motor propio y qué implicaciones tiene.
@@ -111,13 +116,13 @@ Lo cierto es que The Witness necesitó 7 años de desarrollo y un presupuesto qu
 Hello Games también creó su propio motor para *«No Man's Sky» (2016)*, lo que tiene mucho sentido al tratarse de un universo que en su mayoría se genera proceduralmente.
 Y el premiado *«Hades» (2019)* fue creado por Supergiant Games --un estudio de aproximadamente 20 empleados-- usando un motor propio desarrollado sobre MonoGame y usando también en sus dos juegos anteriores --desde *«Transistor» (2014)* y *«Pyre» (2017)*--.
 
-En el otro extremo, algunas grandes compañías sorprendentemente han optado por Unreal Engine para algunos de sus títulos[@SantamariaCustomGameEngines].
+En el otro extremo, algunas grandes compañías sorprendentemente han optado por Unreal Engine para algunos de sus títulos [@SantamariaCustomGameEngines].
 Es el caso de Capcom --con Street Fighter V-- Bandai Namco --con Jump Force, Dragon Ball Fighter Z, Dragon Ball Z: Kakarot y Tales of Arise-- Square Enix --con Dragon Quest XI, Kingdom Hearts III y Final Fantasy VII Remake--.
 Mientras que Riot Games usó Unreal Engine para su *shooter* táctico multijugador *«Valorant» (2020)* y Unity para *«Legends of Runeterra» (2020)*, aunque para *«League of Legends» (2009)* utiliza un motor propio.
 
 ¿Significa esto que veremos cada vez más el uso de motores comerciales entre las grandes compañías? Lo que sí es evidente que han ayudado democratizar el acceso al desarrollo de videojuegos, por lo que es difícil que vayan a dejar de crecer entre los estudios de tamaño medio y pequeño.
 
-## Ventajas e inconvenientes
+### Ventajas e inconvenientes
 
 El uso de un motor propio presenta algunas ventajas importantes:
 
@@ -145,7 +150,7 @@ El uso de un motor propio presenta algunas ventajas importantes:
 
 * **Independencia**.
   La independencia tecnológica es otro factor importante, al menos para las compañías de tamaño medio o grande.
-  Por ejemplo, muchos estudios utilizan Blink Video[@BlinkVideo], el *codec* de vídeo de Epic Games --antes RAD Video Tools-- especialmente diseñado para videojuegos.
+  Por ejemplo, muchos estudios utilizan Blink Video [@BlinkVideo], el *codec* de vídeo de Epic Games --antes RAD Video Tools-- especialmente diseñado para videojuegos.
   Pero a principios de 2021 Epic Games anunciaba la adquisición de RAD ¿qué pasaría si Epic Games decidiera que la tecnología de RAD es en exclusiva para Unreal Engine?.
 
   En realidad, Epic Games anunció que RAD seguiría vendiendo sus productos libremente y, además, no es tan complicado sustituir un *codec*, pero da una idea lo que implica depender del motor de otra compañía y un buen día tener que dejar de usarlo.
@@ -161,7 +166,7 @@ En algunos casos, son más que nada un conjunto de componentes que se reutilizan
 
 También hemos de tener presente que generalmente los motores no se programan enteramente desde cero.
 Generalmente se utiliza *middleware*[^middleware] que reduce considerablemente el trabajo que es necesario realizar.
-Por ejemplo, si miramos el listado de juegos 2D en *«CUSTOM GAME ENGINES: A Small Study»*[@SantamariaCustomGameEngines], comprobaremos que muchos se basan en MonoGame o SDL y seguramente, aquellos que necesiten un motor de físicas, usaran uno como Box2D, en lugar de implementar el suyo propio.
+Por ejemplo, si miramos el listado de juegos 2D en *«CUSTOM GAME ENGINES: A Small Study»* [@SantamariaCustomGameEngines], comprobaremos que muchos se basan en MonoGame o SDL y seguramente, aquellos que necesiten un motor de físicas, usaran uno como Box2D, en lugar de implementar el suyo propio.
 Obviamente es posible conseguir otros componentes para hacer un motor de videojuegos 3D, tanto con licencias libres como comerciales: librerías matemáticas, *renders*, motores de físicas, librerías y motores de sonido, librerías de red, serialización y compresión, etc.
 
 [^middleware]: Se conoce por *middleware* al software que sirve de soporte a una aplicación para comunicarse con otras aplicaciones, con el sistema operativo o para acceder al hardware.
@@ -170,7 +175,7 @@ Puede estar formado por una o varias librerías, uno o varios programas o ambas 
 Finalmente, debemos considerar que no es suficiente con desarrollar el motor, sino que también es necesario crear herramientas para importar los recursos, crear los niveles y configurar los distintos aspectos del juego.
 Así que los estudios deben crear sus propias herramientas para sus propios motores.
 
-## Herramientas de desarrollo
+### Herramientas de desarrollo
 
 Gran parte del trabajo se hace en iteraciones donde se añaden cosas, se prueban y se vuelven a modificar.
 Cuanto más adecuadas sean las herramientas, menos interrupciones habrá en el flujo de trabajo y menos tiempo consumirá cada iteración durante el desarrollo.
@@ -189,7 +194,7 @@ Algo bastante común es utilizar aplicaciones gráficas 3D como Maya, 3ds Max o 
 Como estas aplicaciones gráficas no tienen las características necesarias, ya que se han diseñado para modelar y animar, suele ser necesario utilizar de forma «creativa» algunas de sus características para obtener la funcionalidad deseada.
 Por ejemplo, se pueden establecer ciertas convenciones en los nombres de grupos de objetos y materiales para señalar propiedades, como si es: una geometría de colisión, una malla visible estática o una superficie por la que no se puede caminar.
 Estas herramientas también permiten añadir atributos personalizados a los materiales.
-Y en Maya, particularmente, se puede almacenar información adicional personalizada en los polígonos[@MayaBlindData].
+Y en Maya, particularmente, se puede almacenar información adicional personalizada en los polígonos [@MayaBlindData].
 
 Aprovechando adecuadamente todas estas funcionalidades se pueden definir características útiles para el motor del juego.
 Solo necesitamos que al exportar los recursos esta información se mapee adecuadamente en el formato utilizado con el motor.
@@ -210,9 +215,9 @@ Se itera cambiando los valores y probando, pero al mismo tiempo es necesario man
 Con mucha frecuencia, ambas fuentes de información --los datos cargados en el motor y los de las hojas de cálculo-- acaban divergiendo, lo que obliga a dedicar tiempo a examinar los datos y volver a sincronizarlos.
 Es entonces cuando resulta interesante tener una herramienta a medida que facilite en lo posible este trabajo.
 
-## El caso de Guerrilla Games
+### El caso de Guerrilla Games
 
-Guerrilla Games utiliza para su desarrollo un motor propio llamado Decima[@WikipediaDecima].
+Guerrilla Games utiliza para su desarrollo un motor propio llamado Decima [@WikipediaDecima].
 Se utilizó por primera vez para desarrollar *«Killzone Shadow Fall» (2013)* y, como hemos comentado, aparte del motor tuvieron que desarrollar una serie de herramientas.
 Sin embargo, estaban muy lejos de la comodidad y funcionalidad de los típicos editores de los motores comerciales.
 
@@ -222,7 +227,6 @@ Así que tuvieron que desarrollar un *plugin* de Maya para poder visualizar el *
 Y además, tuvieron que desarrollar otras muchas herramientas, como un editor de máquinas de estado.
 
 ::: {#vid-creating-tools-pipeline}
-
 {{< video https://www.youtube.com/watch?v=KRJkBxKv1VM >}}
 
 Conferencia *«Creating a Tools Pipeline for Horizon: Zero Dawn»* en GDC 2017.
@@ -231,14 +235,14 @@ Conferencia *«Creating a Tools Pipeline for Horizon: Zero Dawn»* en GDC 2017.
 En el @vid-creating-tools-pipeline podemos ver una ponencia sobre la evolución de estas herramientas, desde cómo eran cuando las que usaron originalmente para desarrollar Killzone Shadow Fall al editor que crearon durante la producción de *«Horizon: Zero Dawn» (2017)*.
 Obviamente el objetivo es tener un futuro todo integrado en un único editor, como ocurre con los editores de los motores comerciales.
 
-# Motores de videojuegos 3D
+## Motores de videojuegos 3D
 
-Si consideramos los motores comerciales, los motores libres, en repositorios como GitHub, y los motores desarrollados por los propios estudios, la lista de opciones es inmensa[@WikipediaListOfGameEngines].
+Si consideramos los motores comerciales, los motores libres, en repositorios como GitHub, y los motores desarrollados por los propios estudios, la lista de opciones es inmensa [@WikipediaListOfGameEngines].
 Sin embargo, a menos que trabajemos en un estudio grande con un buen presupuesto, es complicado que tengamos acceso a uno de esos motores propios.
 Y entre los proyectos libres, sobre todo hay componentes que podemos usar como *middleware* para crear nuestro propio motor y herramientas.
 Así que vamos a quedarnos con una selección de los motores 3D que podríamos optar a utilizar en un hipotético futuro proyecto y comentar muy brevemente algunas de sus características.
 
-## CryEngine.
+### CryEngine.
 
 CryEngine es el famoso motor de videojuegos creado para *«Far Cry» (2004)* y la saga *«Crysis» (2007-2020)*.
 Estos juegos han servido para que CryTek mostrara las capacidades de su motor, que siempre ha ofrecido una gran calidad visual, especialmente en exteriores.
@@ -250,7 +254,7 @@ Por lo que solo parece la opción adecuada en títulos AAA, cuando se quiere la 
 CryTek ofrece CryEngine gratis para proyectos por debajo de 5000 € de ingreso anual.
 Por encima exigen un 5% de los ingresos brutos.
 
-## Godot
+### Godot
   
 Es un motor multiplataforma con licencia libre de 2D y 3D.
 Trae un editor sencillo similar al de Unity y en cierta forma la manera de trabajar es similar.
@@ -258,7 +262,7 @@ Trae un editor sencillo similar al de Unity y en cierta forma la manera de traba
 Las principales diferencias son que el *gameplay* se puede programar en multitud de lenguajes --incluido uno propio llamado GDScript-- y que está más orientado a juegos 2D que a 3D.
 De hecho, las herramientas para hacer juegos 3D son bastante limitadas.
 
-## Open 3D Engine (O3DE)
+### Open 3D Engine (O3DE)
 
 Amazon licenció CryEngine a CryTek para tener su propio motor de videojuegos, al que llamó Amazon Lumberyard.
 El motor era gratuito y se distribuía con el código fuente y un editor, pero en julio de 2021 Amazon lo liberó con licencia Apache 2.0 bajo el nombre de Open 3D Engine.
@@ -266,13 +270,13 @@ El motor era gratuito y se distribuía con el código fuente y un editor, pero e
 Pese a estar basado en CryEngine, buena parte del motor ha sido reescrita y modernizada y se han incluido componentes nuevos para facilitar su integración con Twitch y con AWS.
 Esto hace que sea una opción muy interesante para crear juegos multijugador, donde el servidor vaya a ejecutarse en los servidores de Amazon.
 
-## Unigine
+### Unigine
 
 Es un motor cuya principal característica es soportar entornos realmente grandes, de escala planetaria.
 No se ha utilizado muchos juegos, pero si tiene un hueco importante el desarrollo de simuladores y de experiencias de realidad virtual.
 Es gratuito para proyectos con unos ingresos por debajo de 100 000 $ anuales.
 
-## Unity
+### Unity
 
 Es un motor multiplataforma de código cerrado para 2D y 3D.
 Tradicionalmente se le ha caracterizado por tener menor curva de aprendizaje que los típicos motores AAA para videojuegos, por el gran número de plataformas que soporta --siendo uno de los favoritos para juegos móviles-- y por su *marketplace*, donde es posible adquirir fácilmente todo tipo de recursos y *plugins* para nuestros juegos.
@@ -280,7 +284,7 @@ Tradicionalmente se le ha caracterizado por tener menor curva de aprendizaje que
 A diferencia de otros motores, cuyo coste viene determinado por los ingresos del proyecto, Unity se adquiere mediante una suscripción anual fija por puesto.
 Es gratuito para uso personal o comercial, si los ingresos se mantienen por debajo de los 100 000 $ anuales.
 
-## Unreal Engine
+### Unreal Engine
 
 Es un motor multiplataforma para juegos 3D y 2D, aunque uso en juegos 2D no es muy común.
 El código es abierto y va acompañado de un editor más cómodo y con más funcionalidad que el de otros motores profesionales, como CryEngine o O3DE.
@@ -290,7 +294,7 @@ Unreal Engine es gratuito para uso interno, proyectos gratuitos o proyectos come
 En otro caso exigen un 5% de los ingresos.
 Los estudios de tamaño medio o grande que lo utilizan negocian otras condiciones, donde se incluye soporte *premium*, formación y acceso directo a nuevas versiones y parches.
 
-# Unreal Engine frente a Unity
+## Unreal Engine frente a Unity
 
 En juegos 2D es factible decidir optar por desarrollar un motor propio sobre alguna librería --como SDL, MonoGame, Phaser (si es web) o SFML--.
 Pero en juegos 3D, lo más común es limitar las opciones de la lista anterior a Unity o Unreal Engine.
@@ -302,7 +306,7 @@ Así que no está de más hacer un repaso a sus diferencias y a los aspectos que
 En cualquier caso, lo que no se debe perder de vista es que la tecnología no es lo único a considerar al elegir un motor de videojuegos.
 A veces la mejor alternativa tecnológica no es la mejor opción, según el equipo y otros condicionantes del proyecto (ver la @sec-golden-triangle).
 
-## Calidad gráfica
+### Calidad gráfica
 
 Si se quiere crear una obra maestra a nivel gráfico, seguramente la mejor opción sea Unreal Engine.
 Unreal Engine puede manejar más polígonos y más efectos de partículas, permite utilizar *shaders* más complejos y avanzados y viene de serie con mejores herramientas.
@@ -319,7 +323,7 @@ Fundamentalmente se debe a la configuración por defecto de posprocesado, que en
 En móviles --o en la web-- donde la potencia gráfica es una fracción de la disponible en otras plataformas, no se notan tanto estas diferencias y se valoran más otras características.
 Generalmente, Unity ofrece mejor soporte 2D y mejores herramientas para desarrollar en estas plataformas.
 
-## Curva de aprendizaje
+### Curva de aprendizaje
 
 La comparación de la curva de aprendizaje es un asunto complejo porque se puede ver desde diversos puntos de vista.
 
@@ -339,7 +343,7 @@ Mientras que en Unreal Engine la documentación es bastante extensa en lo que re
 
 Sin embargo, como veremos en la @sec-estructura, el asunto de quién tiene mejor curva de aprendizaje cambia cuando, una vez superadas las primeras fases del aprendizaje, se quiere hacer frente a proyectos más realistas.
 
-## Estructura {#sec-estructura}
+### Estructura {#sec-estructura}
 
 Unity es un motor de videojuegos que de serie trae lo básico.
 Con eso debemos entender que tiene característica como: simulación física, *render*, sonido, gestión de la entrada, animación, efectos de partículas y muchas cosas más, que podemos usar como queramos; pero que no trae otras abstracciones de mayor nivel, muy en comunes en videojuegos, como: *game managers*, *level managers*, controlador de personajes, controlador de IA, sistemas de salud o de daño, o ayuda a la animación de apuntado del arma.
@@ -354,7 +358,7 @@ Por el contrario, las dificultades se pueden incrementar notablemente si pretend
 En todo caso, el *game framework* de Unreal Engine puede ser una buena guía de referencia para aprender a diseñar la arquitectura de nuestros videojuegos.
 Ese conocimiento luego se puede utilizar en otros proyectos, con ese mismo u otros motores, como Unity.
 
-## Herramientas {#sec-herramientas}
+### Herramientas {#sec-herramientas}
 
 Unreal Engine trae un conjunto completo de herramientas, con casi todo lo que se puede necesitar.
 Mientras que, como hemos comentado anteriormente, el editor de Unity es mucho más simple y limitado en opciones, por lo que frecuentemente es necesario recurrir al *marketplace* para conseguir las funcionalidades que faltan, o que las desarrolle el propio equipo.
@@ -369,14 +373,14 @@ Aunque adquirir estos componentes es la vía más rápida y es fantástico tener
 Es decir, que no solo dependemos del equipo de desarrollo de Unity, sino también del de las extensiones de la *Asset Store* que usemos.
 
 En todo caso, como ya hemos comentado, es conveniente señalar que en lo que respecta al desarrollo de videojuegos 2D y móvil, Unity ofrece por defecto un mejor conjunto herramientas.
-También permite crear aplicaciones más pequeñas y posiblemente tengan una ligera ventaja en el consumo de batería[@Nilsson2019].
+También permite crear aplicaciones más pequeñas y posiblemente tengan una ligera ventaja en el consumo de batería [@Nilsson2019].
 
 La diferencia en el tamaño no es demasiado relevante en juegos 3D con cientos de MiB de contenido, ya que apenas es significativa.
 Pero si lo es en pequeños juegos 2D, donde ajustando las opciones de Unity adecuadamente se puede llegar a generar paquetes por debajo de 10 MiB.
 En Android, eso significa que la aplicación es compatible con Google Play Instant, por lo que los usuarios pueden jugar sin instalarla.
-Mientras que los desarrollos con Unreal Engine difícilmente bajan de 30 MiB, y solo después de jugar bastante con los ajustes de configuración[@Nowakowski2018;@UnrealForumMobilePackageSize].
+Mientras que los desarrollos con Unreal Engine difícilmente bajan de 30 MiB, y solo después de jugar bastante con los ajustes de configuración [@Nowakowski2018;@UnrealForumMobilePackageSize].
 
-## Estructura de costes
+### Estructura de costes
 
 El coste de estos productos es algo importante a considerar, especialmente en estudios pequeños.
 
@@ -390,9 +394,3 @@ Esto significa que en un juego de 20 \$, Epic Game se llevaría 1 \$ a parti
 Un detalle importante es que ese 5% está incluido en el 12% que se lleva Epic Games por cada copia vendida en su Epic Store.
 :::
 ​
----
-
-# Referencias {.unnumbered}
-
-::: {#refs}
-:::

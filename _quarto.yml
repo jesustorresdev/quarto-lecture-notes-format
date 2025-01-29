@@ -15,6 +15,8 @@ book:
   chapters: 
     - index.qmd
     - part: Workflow
+      chapters: 
+        - content/workflow/motores.qmd
     - part: Animación
       chapters:
         - content/animación/motion_matching.qmd
