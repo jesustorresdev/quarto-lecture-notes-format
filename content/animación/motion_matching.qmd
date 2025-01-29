@@ -184,7 +184,5 @@ Por ejemplo, en el motor de videojuegos Open 3D Engine, que es de código abiert
 En Unreal Engine, por otro lado, se incluyó, también de forma experimental, desde la versión 5.1 [@UnrealMotionMatching].
 Mientras que en Unity, se puede usar ***motion matching*** mediante *plugins* de terceros, como *«Motion Matching for Unity»* [@AnimationUprisingMotionMatchingForUnity], que se puede adquirir en la *Asset Store* de Unity.
 
-## Referencias {.unnumbered}
-
-::: {#refs}
+::: {.sectionrefs}
 :::

@@ -31,6 +31,7 @@ crossref:
 
 bibliography: references/references.bib
 csl: references/acm-sig-proceedings.csl
+reference-section-title: Referencias
 api-reference: 
   path: references/api.yml
 
@@ -38,6 +39,7 @@ filters:
   - reading-time
   - quarto
   - api-reference
+  - section-bibliographies
 
 format:
   html:
