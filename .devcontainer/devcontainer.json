@@ -8,7 +8,7 @@
 		"ghcr.io/rocker-org/devcontainer-features/quarto-cli:latest": {
 			"installChromium": true,
 			"installTinyTex": true,
-			"version": "1.4.528"
+			// "version": "1.4.528"
 		}
 	},
 
