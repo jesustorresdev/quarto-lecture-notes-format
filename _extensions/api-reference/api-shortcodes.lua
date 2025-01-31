@@ -22,7 +22,7 @@ local function apiShortcode(args, kwargs, meta)
   end
 
   if not apiref.isInitialized() then
-    local path = stringify(meta['api-reference']['path'])
+    local path = stringify(opts['path'])
     apiref.initializeReferences(path)
   end
 

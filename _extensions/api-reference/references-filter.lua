@@ -113,14 +113,16 @@ return {
   Pandoc = function(doc)
     opts = apiref.getOptions(doc.meta) 
     -- insert references section at the end of the document
-    local section = {
-      Header(1, opts['reference-section-title'], {id="toc-apirefs"}),
-      create_section_references(opts)
-    }
-    local newSection = pandoc.structure.make_sections(section, {number_sections=false})
-    -- usar extend para agregar los bloques al documento
-    for _, block in pairs(newSection) do
-      table.insert(doc.blocks, block)
+    if apiref.isInitialized() then
+      local section = {
+        Header(1, opts['reference-section-title'], {id="toc-apirefs"}),
+        create_section_references(opts)
+      }
+      local newSection = pandoc.structure.make_sections(section, {number_sections=false})
+      -- usar extend para agregar los bloques al documento
+      for _, block in pairs(newSection) do
+        table.insert(doc.blocks, block)
+      end
     end
     return doc
   end,
