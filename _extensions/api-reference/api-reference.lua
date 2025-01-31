@@ -177,6 +177,26 @@ local function findEntry(entry_ref, parent_ref)
   return found
 end
 
+local function getOptions(meta)
+  local opts = meta['api-reference'] or {}
+  local suppressShowMarkers = opts['suppress-ref-marker'] and stringify(opts['suppress-ref-marker']):lower() or "0"
+  if suppressShowMarkers == "true" or suppressShowMarkers == "1" then
+      opts['suppress-ref-marker'] = true
+  else
+    opts['suppress-ref-marker'] = false
+  end
+  opts['ref-show-marker'] = opts['ref-show-marker']and true or opts['ref-show-marker']
+  opts['markers'] = opts['markers'] or {}
+  opts['reference-section-title'] = opts['reference-section-title'] or "API References"
+  -- merge the default markers
+  for key, value in pairs(DEFAULT_MARKERS) do
+    if not opts['markers'][key] then
+      opts['markers'][key] = value
+    end
+  end
+  return opts
+end
+
 return {
   ENTITY_TYPES = ENTITY_TYPES,
   initializeReferences = function(path)
@@ -192,16 +212,5 @@ return {
   referencesIterator = function()
     return pairs(globalReferences)
   end,
-  getOptions = function(meta)
-    local opts = meta['api-reference'] or {}
-    opts['markers'] = opts['markers'] or {}
-    opts['reference-section-title'] = opts['reference-section-title'] or "API References"
-    -- merge the default markers
-    for key, value in pairs(DEFAULT_MARKERS) do
-      if not opts['markers'][key] then
-        opts['markers'][key] = value
-      end
-    end
-    return opts
-  end,
+  getOptions = getOptions,
 }
