@@ -1,17 +1,12 @@
 -- shortcodes for create links to api references
 
 local apiref = require "api-reference"
--- local fontawesome = require "fontawesome"
-
--- local faLink = fontawesome.fontAwesome("external-link-alt", nil, "tiny")
-local faLink = pandoc.Str("↗")
 
 local stringify = pandoc.utils.stringify
 local Code = pandoc.Code
 local Link = pandoc.Link
-local Plain = pandoc.Plain
+local Span = pandoc.Span
 local Strong = pandoc.Strong
-local Superscript = pandoc.Superscript
 
 local function splitCrossref(crossref)
   local parts = {}
@@ -22,7 +17,8 @@ local function splitCrossref(crossref)
 end
 
 local function apiShortcode(args, kwargs, meta)
-  if not (meta['api-reference'] and meta['api-reference']['path']) then
+  local opts = apiref.getOptions(meta)
+  if not (opts and opts['path']) then
     return Strong("?api:")
   end
 
@@ -48,21 +44,22 @@ local function apiShortcode(args, kwargs, meta)
   
   local entry = found.entry
   local parent = found.parent
-
+  
   if not entry then
-      return Strong("?api:" .. crossref)
+    return Strong("?api:" .. crossref)
   end
 
   entry.used = true
   if parent then
-      parent.used = true
+    parent.used = true
   end
-  
-  reftext = isFull and parent.label .. "::" .. entry.label or entry.label 
-  return Plain({
-    entry.type == apiref.ENTITY_TYPES.func and Code(reftext) or Strong(reftext),
-    Superscript(Link(faLink, "#" .. entry.refname))
-  })
+
+  local reftext = isFull and parent.label .. "::" .. entry.label or entry.label
+  reftextSuffix = entry.type == apiref.ENTITY_TYPES.func and "()" or ""
+  return Span({
+    Link(reftext, "#" .. entry.refname, nil, {role="apiref"}),
+    reftextSuffix
+  }, {class="apirefs-ref " .."apirefs-ref-" .. entry.type})
 end
 
 return {

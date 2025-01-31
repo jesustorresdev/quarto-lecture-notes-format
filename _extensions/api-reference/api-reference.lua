@@ -1,6 +1,6 @@
 -- api-reference-filter.lua
 
-local CROSSREF_PREFIX = "api"
+local CROSSREF_PREFIX = "apiref"
 local CROSSREF_SEP = "-"
 
 local ENTITY_TYPES = {
@@ -26,6 +26,12 @@ local LANG_MAPPING = {
   cpp = KNOWN_LANGUAGES.cpp,
   blueprint = KNOWN_LANGUAGES.blueprint,
   ["bp"] = KNOWN_LANGUAGES.blueprint,
+}
+
+local DEFAULT_MARKERS = {
+  ["function"] = pandoc.Str("ƒ()"),
+  ["method"] = pandoc.Str("ƒ()"),
+  ["class"] = pandoc.Str("C{}"),
 }
 
 local stringify = pandoc.utils.stringify
@@ -89,7 +95,7 @@ local function intializeReference(item, parent)
   entry.type = item.type and stringify(item.type)
     or parent and ENTITY_TYPES.func or ENTITY_TYPES.class
   entry.label = item.label and stringify(item.label)
-    or entry.type == ENTITY_TYPES.func and item.id .. "()" or item.id
+    or item.id
   entry.refname = table.concat({
     parent and parent.refname or CROSSREF_PREFIX,
     entry.id
@@ -183,5 +189,17 @@ return {
   findEntry = findEntry,
   referencesIterator = function()
     return pairs(globalReferences)
+  end,
+  getOptions = function(meta)
+    local opts = meta['api-reference'] or {}
+    opts['markers'] = opts['markers'] or {}
+    opts['reference-section-title'] = opts['reference-section-title'] or "API References"
+    -- merge the default markers
+    for key, value in pairs(DEFAULT_MARKERS) do
+      if not opts['markers'][key] then
+        opts['markers'][key] = value
+      end
+    end
+    return opts
   end,
 }

@@ -34,8 +34,13 @@ crossref:
 bibliography: references/references.bib
 csl: references/acm-sig-proceedings.csl
 reference-section-title: Referencias
-api-reference: 
+api-reference:
   path: references/api.yml
+  reference-section-title: Referencias a la API
+  markers:
+    class: "{{< iconify tabler square-letter-c-filled >}}"
+    function: "{{< iconify tabler circle-letter-f-filled >}}"
+    method: "{{< iconify tabler circle-letter-m-filled >}}"
 
 filters:
   - reading-time

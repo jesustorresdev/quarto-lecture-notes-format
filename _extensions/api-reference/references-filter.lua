@@ -1,18 +1,13 @@
 -- shortcodes for create links to api references
 
 local apiref = require "api-reference"
--- local fontawesome = require "fontawesome"
-
--- local faArrow = fontawesome.fontAwesome("arrow-circle-right", nil, "small")
-local faArrow = pandoc.Str("→")
--- local faCube = fontawesome.fontAwesome("cube", nil, "small")
-local faCube = pandoc.Str("▢")
 
 local BulletList = pandoc.BulletList
 local DefinitionList = pandoc.DefinitionList
 local Code = pandoc.Code
 local Div = pandoc.Div
 local Emph = pandoc.Emph
+local Header = pandoc.Header
 local RawInline = pandoc.RawInline
 local Space = pandoc.Space
 local Span = pandoc.Span
@@ -24,95 +19,117 @@ local TYPE_MAPPING = {
   ["method"] = "método"
 }
 
-local function processEntry(entry, parent)
-  local term = Span({
-    entry.type == apiref.ENTITY_TYPES.func and faArrow or faCube,
-    Space(),
-    pandoc.Str(entry.label)
-  }, {id=entry.refname, sortBy=entry.label})
-  local descriptionParagraph = {}
-  local refsList = {}
-
+local function processEntry(opts, entry, parent)
+  local marker = pandoc.Nil
+  local properties = pandoc.List()
+  local refsList = pandoc.List()
+  
   -- internal name
   if entry['internal-name'] then
-    table.insert(descriptionParagraph, Str("{"))
-    table.insert(descriptionParagraph, Code(entry['internal-name']))
-    table.insert(descriptionParagraph, Str("}"))
-    table.insert(descriptionParagraph, Space())
+    properties:insert(Str("|"))
+    properties:insert(Code(entry['internal-name']))
+    properties:insert(Str("|"))
+    properties:insert(Space())
   end
-
+  
   -- type marker
   if entry.type == apiref.ENTITY_TYPES.class then
-    table.insert(descriptionParagraph, Emph("«" .. TYPE_MAPPING.class .. "»"))
+    marker = opts['markers']["class"]
+    properties:insert(Emph("«" .. TYPE_MAPPING.class .. "»"))
   elseif parent and parent.type == apiref.ENTITY_TYPES.class then
-    table.insert(descriptionParagraph, Emph("«" .. TYPE_MAPPING.method .. "»"))
+    marker = opts['markers']["method"]
+    properties:insert(Emph("«" .. TYPE_MAPPING.method .. "»"))
   else
-    table.insert(descriptionParagraph, Emph("«" .. TYPE_MAPPING.func .. "»"))
+    marker = opts['markers']["function"]
+    properties:insert(Emph("«" .. TYPE_MAPPING.func .. "»"))
   end
+  -- quarto.log.output(marker)
 
   if entry.type == apiref.ENTITY_TYPES.class and entry.extends then
-    table.insert(descriptionParagraph, RawInline("latex", "~:~"))
-    table.insert(descriptionParagraph, Emph(entry.extends))
+    if quarto.doc.is_format("html") then
+      properties:insert(RawInline("html", "&nbsp;:&nbsp;"))
+    elseif quarto.doc.is_format("pdf") then
+      properties:insert(RawInline("latex", "~:~"))
+    else
+      properties:insert(Str(" : "))
+    end
+    properties:insert(Emph(entry.extends))
   end
 
   -- reference list
   if entry.refs then
     for _, ref in pairs(entry.refs) do
       -- quarto.log.output(ref.label)
-      table.insert(refsList, ref.richLabel)
+      refsList:insert(ref.richLabel)
     end
   end
-
-  return {term = term, description = {descriptionParagraph, BulletList(refsList)}}
+  
+  return Div({
+      Span(marker, {class="apirefs-entry-marker"}),
+      Span({entry.label}, {id=entry.refname, class="apirefs-entry-label"}),
+      Span(properties, {class="apirefs-entry-properties"}),
+      Div({BulletList(refsList)}, {class="apirefs-entry-refs"})
+    }, {class="apirefs-entry"})
 end
 
-local function Block(el)
-  if el.identifier ~= 'api-refs' or not apiref.isInitialized() then
-    return nil
-  end
-
-  local definitions = {}
+local function create_section_references(opts)
+  -- filter references
+  local references = pandoc.List()
   for _, entry in apiref.referencesIterator() do
     if not entry.used then goto continue end
-    local definition = processEntry(entry)
 
+    local membersList = pandoc.List()
     if entry.members then
-      local membersList = {}
       for _, member in pairs(entry.members) do
         if not member.used then goto continueMember end
-
-        local memberDefinition = processEntry(member, entry)
-        table.insert(membersList, {memberDefinition.term, memberDefinition.description})
+        table.insert(membersList, member)
         ::continueMember::
       end
 
       if membersList then
         table.sort(membersList, function(left, right)
-          return left[1].attr.attributes.sortBy < right[1].attr.attributes.sortBy end)
-        table.insert(definition.description, DefinitionList(membersList))
+          return left.label < right.label end)
       end
     end
 
-    table.insert(definitions, {
-      definition.term,
-      pandoc.Blocks(definition.description)
-    })
+    table.insert(references, {entry, membersList})
     ::continue::
   end
 
-  if definitions then
-    table.sort(definitions, function(left, right)
-      return left[1].attr.attributes.sortBy < right[1].attr.attributes.sortBy end)
-    return Div({
-      RawInline("latex", "\\begin{flushleft}"),
-      DefinitionList(definitions),
-      RawInline("latex", "\\end{flushleft}")
-    }) 
-  else
-    return pandoc.Null()
+  if #references == 0 then
+    return pandoc.Nil
   end
+
+  table.sort(references, function(left, right)
+      return left[1].label < right[1].label  
+    end)
+  
+  return Div({BulletList(references:map(function(ref)
+      local refBlock = processEntry(opts, ref[1])
+      if #ref[2] > 0 then
+        local membersList = Div({BulletList(ref[2]:map(function(memberRef)
+            return processEntry(opts, memberRef, ref[1])
+          -- return 
+          end))}, {class="apirefs-list apirefs-entry-members-list"})
+        refBlock.content:insert(membersList)
+      end
+      return refBlock
+    end))}, {class="apirefs-list"})
 end
 
 return {
-    Block = Block
+  Pandoc = function(doc)
+    opts = apiref.getOptions(doc.meta) 
+    -- insert references section at the end of the document
+    local section = {
+      Header(1, opts['reference-section-title'], {id="toc-apirefs"}),
+      create_section_references(opts)
+    }
+    local newSection = pandoc.structure.make_sections(section, {number_sections=false})
+    -- usar extend para agregar los bloques al documento
+    for _, block in pairs(newSection) do
+      table.insert(doc.blocks, block)
+    end
+    return doc
+  end,
 }
