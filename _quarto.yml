@@ -32,7 +32,7 @@ crossref:
       key: vid
 
 bibliography: references/references.bib
-csl: references/acm-sig-proceedings.csl
+csl: references/elsevier-with-titles.csl
 reference-section-title: Referencias
 api-reference:
   path: references/api.yml
@@ -57,6 +57,6 @@ format:
     smooth-scroll: true
     html-math-method: katex
     include-in-header: 
-      text: '<meta name="robots" content="noindex, nofollow" />'
+      text: '<meta name="robots" content="noindex, nofollow">'
     resources:
       - robots.txt
