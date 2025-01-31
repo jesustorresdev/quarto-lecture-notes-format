@@ -1,11 +1,13 @@
 -- api-reference-filter.lua
 
-local CROSSREF_PREFIX = "apiref"
+local CROSSREF_PREFIX = "apiref-"
 local CROSSREF_SEP = "-"
 
 local ENTITY_TYPES = {
   class = "class",
   func = "function",
+  method = "method",
+  event = "event",
 }
 
 local KNOWN_LANGUAGES = {
@@ -29,9 +31,10 @@ local LANG_MAPPING = {
 }
 
 local DEFAULT_MARKERS = {
+  ["class"] = pandoc.Str("C{}"),
+  ["event"] = pandoc.Str("E→"),
   ["function"] = pandoc.Str("ƒ()"),
   ["method"] = pandoc.Str("ƒ()"),
-  ["class"] = pandoc.Str("C{}"),
 }
 
 local stringify = pandoc.utils.stringify
@@ -93,9 +96,8 @@ local function intializeReference(item, parent)
   entry.id = item.id
   entry.used = false
   entry.type = item.type and stringify(item.type)
-    or parent and ENTITY_TYPES.func or ENTITY_TYPES.class
-  entry.label = item.label and stringify(item.label)
-    or item.id
+    or parent and ENTITY_TYPES.method or ENTITY_TYPES.class
+  entry.label = item.label and stringify(item.label) or item.id
   entry.refname = table.concat({
     parent and parent.refname or CROSSREF_PREFIX,
     entry.id

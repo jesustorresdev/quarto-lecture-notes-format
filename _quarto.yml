@@ -39,6 +39,7 @@ api-reference:
   reference-section-title: Referencias a la API
   markers:
     class: "{{< iconify tabler square-letter-c-filled >}}"
+    event: "{{< iconify tabler circle-letter-e-filled >}}"
     function: "{{< iconify tabler circle-letter-f-filled >}}"
     method: "{{< iconify tabler circle-letter-m-filled >}}"
 

@@ -15,7 +15,7 @@ local Str = pandoc.Str
 
 local TYPE_MAPPING = {
   ["class"] = "clase",
-  ["func"] = "función",
+  ["function"] = "función",
   ["method"] = "método"
 }
 
@@ -24,6 +24,10 @@ local function processEntry(opts, entry, parent)
   local properties = pandoc.List()
   local refsList = pandoc.List()
   
+  -- type marker
+  marker = opts['markers'][entry.type]
+  properties:insert(Emph("«" .. TYPE_MAPPING[entry.type] .. "»"))
+
   -- internal name
   if entry['internal-name'] then
     properties:insert(Str("|"))
@@ -31,20 +35,8 @@ local function processEntry(opts, entry, parent)
     properties:insert(Str("|"))
     properties:insert(Space())
   end
-  
-  -- type marker
-  if entry.type == apiref.ENTITY_TYPES.class then
-    marker = opts['markers']["class"]
-    properties:insert(Emph("«" .. TYPE_MAPPING.class .. "»"))
-  elseif parent and parent.type == apiref.ENTITY_TYPES.class then
-    marker = opts['markers']["method"]
-    properties:insert(Emph("«" .. TYPE_MAPPING.method .. "»"))
-  else
-    marker = opts['markers']["function"]
-    properties:insert(Emph("«" .. TYPE_MAPPING.func .. "»"))
-  end
-  -- quarto.log.output(marker)
 
+  -- derived class
   if entry.type == apiref.ENTITY_TYPES.class and entry.extends then
     if quarto.doc.is_format("html") then
       properties:insert(RawInline("html", "&nbsp;:&nbsp;"))
