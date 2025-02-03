@@ -7,7 +7,7 @@ on:
       - '*'
 
 env:
-  ACADEMIC_YEAR: 20XX-20XY
+  ACADEMIC_YEAR: 2024-2025
 
 jobs:
   build-deploy:
