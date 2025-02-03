@@ -9,8 +9,10 @@ book:
     - name: Jesús Torres
       email: jmtorres@ull.es
   publisher: Universidad de La Laguna
-  license: Este trabajo está bajo una licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es).
-  page-footer: "Este trabajo está bajo una licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es)." 
+  page-footer: |
+    Este trabajo está bajo una licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es)
+    <img style="height:16px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="">
+    <img style="height:16px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""></a> 
   # abstract: 
   chapters: 
     - index.qmd
@@ -24,6 +26,7 @@ book:
 
 lang: es
 toc-title: Contenidos
+callout-appearance: simple
 crossref:
   title-delim: ":"
   custom:
@@ -34,6 +37,7 @@ crossref:
 bibliography: references/references.bib
 csl: references/elsevier-with-titles.csl
 reference-section-title: Referencias
+
 api-reference:
   path: references/api.yml
   reference-section-title: Referencias a la API
@@ -57,6 +61,8 @@ format:
     anchor-sections: true
     smooth-scroll: true
     html-math-method: katex
+    mermaid:
+      theme: default
     include-in-header: 
       text: '<meta name="robots" content="noindex, nofollow">'
     resources:
