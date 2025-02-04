@@ -171,9 +171,13 @@ Para lograrlo se utilizan 3 redes neuronales, una para cada una de las etapas de
   Pero como en el ***learned motion matching*** se usan redes neuronales para codificar las propiedades de los *keyframes* de la base de datos de movimiento, no se puede avanzar por la secuencia del *clip* de animación, ya que no se tiene acceso a los *keyframes* siguientes.
   Por eso, se usa una red neuronal para calcular las propiedades del siguiente *keyframe* a partir de las propiedades del *keyframe* actual.
 
-En la @fig-learned-motion-matching se ilustra la técnica descrita en un diagrama de bloques.
+En el @vid-learned-motion-matching se ilustra la técnica descrita en un diagrama de bloques.
 
-![Diagrama de bloques de *learned motion matching*.](/assets/motion-matching/learned-motion-matching.png){#fig-learned-motion-matching}
+::: {#vid-learned-motion-matching}
+{{< video /assets/motion-matching/learned-motion-matching.mp4 >}}
+
+Diagrama de bloques de *learned motion matching*.
+:::
 
 ## Soporte en motores de videojuegos
 
