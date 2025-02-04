@@ -2,6 +2,8 @@
 abstract: Este artículo analiza los motores de videojuegos, un componente fundamental en el desarrollo de videojuegos. Se revisan los criterios para elegir entre desarrollar un motor propio o usar uno comercial, y se comparan las principales alternativas disponibles, con especial atención a Unity y Unreal Engine.
 ---
 
+{{< audio file="/assets/motores.mp3" caption="Podcast autogenerado del capítulo." download_link="true" >}}
+
 ::: {.callout-note}
 El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
 :::
@@ -17,7 +19,7 @@ Durante la etapa de **preproducción** en el desarrollo de un videojuego, una de
 Pero con más de 100 motores disponibles en el mercado [@WikipediaListOfGameEngines], cada uno con sus propias características, rendimiento, licencias y costes, seleccionar el motor adecuado para un proyecto específico puede ser un desafío considerable.
 Por ello, es importante analizar cuidadosamente las diferentes opciones y los criterios que deberíamos considerar para esta selección.
 
-![Etapas del desarrollo de un videojuego.](figures/gamedev_cycle.png){#fig-gamedev-cycle}
+![Etapas del desarrollo de un videojuego.](/assets/motores/gamedev_cycle.png){#fig-gamedev-cycle}
 
 Además, usar un motor comercial no es la única opción.
 Históricamente, antes de que los motores se popularizaran, los estudios desarrollaban sus juegos sin una clara separación entre componentes comunes y específicos.
@@ -28,7 +30,7 @@ Actualmente, muchos estudios siguen optando por desarrollar y evolucionar sus pr
 
 Antes de entrar en las cuestiones más técnicas, es importante considerar el **triángulo de oro** y sus implicaciones a la hora de escoger la tecnología de nuestro proyecto porque, en función de nuestro caso, quizás no haya nada que considerar.
 
-![Triángulo de oro: Personas, procesos y tecnología.](figures/golden_triangle.png){#fig-golden-triangle width=50%}
+![Triángulo de oro: Personas, procesos y tecnología.](/assets/motores/golden_triangle.png){#fig-golden-triangle width=50%}
 
 El **triángulo de oro** se popularizó en 1999 en el mundo de la seguridad, de la mano de Bruce Schneier, aunque es posible encontrar referencias anteriores --a mediados de los 80-- en los pilares fundamentales de ITIL (*Information Technology Infrastructure Library*).
 Como se ilustra en la @fig-golden-triangle, la idea principal es que las personas, los procesos y la tecnología deben colaborar para que una implementación tecnológica tenga éxito:
@@ -81,7 +83,7 @@ Esta estructura permite consultar rápidamente dónde hay paredes y obstáculos 
 El editor de Unreal Engine que se muestra en la @fig-unrealed servía para construir este árbol BSP usando pinceles --o *brushes*-- BSP. Estos pinceles tenían formas básicas como cubos, cilindros o esferas, que se podían combinar entre sí para crear espacios complejos.
 La definición del espacio resultante se usaba para actualizar el árbol BSP del nivel.
 
-![Primera versión de Unreal Editor --- [Game Developer](https://www.gamedeveloper.com/design/classic-tools-retrospective-tim-sweeney-on-the-first-version-of-the-unreal-editor)](figures/unrealed.png){#fig-unrealed}
+![Primera versión de Unreal Editor --- [Game Developer](https://www.gamedeveloper.com/design/classic-tools-retrospective-tim-sweeney-on-the-first-version-of-the-unreal-editor)](/assets/motores/unrealed.png){#fig-unrealed}
 
 Si comparamos esos primeros motores con los actuales, veríamos que más que motores de videojuegos eran motores gráficos.
 Es decir, que prácticamente solo implementaban los componentes relacionados con el *render*; dejando fuera sistemas de animación, partículas, IA o simulación física, que hoy en día sí incluyen muchos motores de videojuegos.
@@ -115,7 +117,7 @@ El motor expone su funcionalidad a través de una API bien definida --la interfa
 ```{mermaid}
 %%| label: fig-engine-component-diagram
 %%| fig-cap: Diagrama de componentes de un motor de videojuegos.
-%%| file: figures/engine-component-diagram.mmd
+%%| file: diagrams/engine-component-diagram.mmd
 ```
 
 Por herramientas de desarrollo nos referimos a todas las herramientas utilizadas para desarrollar un juego, como editores de personajes, habilidades, niveles o de configuración.
@@ -125,7 +127,7 @@ Finalmente, las utilidades definen componentes adicionales, no específicos del 
 La arquitectura interna de un motor de videojuegos se organiza típicamente en componentes o sistemas especializados que colaboran entre sí.
 En la @fig-engine-architecture se muestra un diagrama de arquitectura de un motor de videojuegos genérico, que ilustra solo los componentes más importantes.
 
-![Arquitectura de un motor de videojuegos genérico.](figures/engine-architecture.png){#fig-engine-architecture}
+![Arquitectura de un motor de videojuegos genérico.](/assets/motores/engine-architecture.png){#fig-engine-architecture}
 
 Estos componentes incluyen varios subsistemas fundamentales, comúnmente llamados gestores --o *managers*-- o incluso motores, según el caso.
 Como por ejemplo, el gestor de físicas, el gestor de entrada, el gestor de interfaz gráfica de usuario, el motor de *render* o el gestor de escena.
@@ -174,7 +176,7 @@ Por ejemplo:
 
 En general, las grandes compañías con múltiples estudios optan por crear sus propios motores, porque les ofrece control, independencia respecto a terceros y evita la pérdida de ingresos por *royalties* --especialmente cuando los *royalties* del motor licenciado son un porcentaje de los ingresos, ya que estas compañías desarrollan proyectos de gran presupuesto y, por tanto, esperan grandes ingresos--.
 
-![God of War se desarrolló sobre un motor creado por SIE Santa Mónica Studios *ex profeso* para el juego.](figures/god_of_war.jpg)
+![God of War se desarrolló sobre un motor creado por SIE Santa Mónica Studios *ex profeso* para el juego.](/assets/motores/god_of_war.jpg)
 
 Entre los estudios de tamaño medio, muchas compañías han optado por motores comerciales, como Unreal Engine, pero bastantes estudios de éxito siguen optando por usar los suyos propios [@SantamariaCustomGameEngines].
 Obviamente, donde más se observa el uso de motores comerciales es en las producciones *indie* de los estudios de menor tamaño, donde los costes, el tiempo y el tamaño de los equipos no suelen permitir afrontar la creación de un motor propio.
@@ -394,7 +396,7 @@ Gran parte del trabajo de desarrollo tienen lugar en iteraciones donde se añade
 Cuanto más adecuadas sean las herramientas, menos interrupciones habrá en el flujo de trabajo y menos tiempo consumirá cada iteración durante el desarrollo.
 Por eso una de las grandes ventajas de los motores comerciales como Unreal Engine y Unity es que ofrecen editores muy completos, que además son fácilmente extensibles.
 
-![Editor del motor Frostbite --- [EA DICE](https://twitter.com/EA_DICE/status/1052901003182399488)](figures/frosted.jpg)
+![Editor del motor Frostbite --- [EA DICE](https://twitter.com/EA_DICE/status/1052901003182399488)](/assets/motores/frosted.jpg)
 
 Los estudios que desarrollan sus propios motores pueden tener un equipo dedicado al desarrollo de herramientas, pero en muchos casos se basan en archivos de texto --en formatos como JSON o XML-- o en bases de datos.
 Esto quiere decir que los artistas y diseñadores deben aprender a hacer su trabajo en iteraciones que consisten en: modificar los archivos, ejecutar las herramientas, probar el resultado y, si este no es satisfactorio, volver a repetir.
@@ -675,7 +677,7 @@ Unreal Engine puede manejar más polígonos y más efectos de partículas, permi
 Sin embargo, debemos tener en cuenta que esto solo nos debe preocupar si pretendemos obtener el máximo en el apartado gráfico.
 No significa que no se pueden conseguir grandes resultados visuales con Unity, ni que la elección de Unreal Engine garantice que el juego vaya a lucir mejor, sino que probablemente se pueden conseguir mejores resultados con el segundo si dispone del suficiente presupuesto como para exprimirlo al máximo.
 
-![Rust por Facepunch Studios en Unity.](figures/rust.jpg)
+![Rust por Facepunch Studios en Unity.](/assets/motores/rust.jpg)
 
 ::: {.callout-note}
 Unreal Engine viene con una configuración por defecto con la que en un primer vistazo las escenas se ven mejor que en Unity.
@@ -725,7 +727,7 @@ Ese conocimiento luego se puede utilizar en otros proyectos, con ese mismo u otr
 Unreal Engine trae un conjunto completo de herramientas, con casi todo lo que se puede necesitar.
 Mientras que, como hemos comentado anteriormente, el editor de Unity es mucho más simple y limitado en opciones, por lo que frecuentemente es necesario recurrir al *marketplace* para conseguir las funcionalidades que faltan, o que las desarrolle el propio equipo.
 
-![Opciones del **Character Controller** de Unity.](figures/character-controller.png)
+![Opciones del **Character Controller** de Unity.](/assets/motores/character-controller.png)
 
 Un ejemplo lo podemos ver en el **Character Controller** de Unity, que está mucho más limitado que el de Unreal Engine.
 Por lo que, con mucha frecuencia, es necesario desarrollar un controlador propio o adquirirlo de la *Asset Store*.
@@ -766,9 +768,5 @@ También existen las licencias Enterprise e Industry.
 
 Por el contrario, Unreal Engine no tiene un coste fijo, sino que piden un 5% de los ingresos de cada proyecto.
 Por fortuna han puesto un margen bastante generoso antes de comenzar a cobrar, puesto que el primer millón de ingresos del proyecto está libre de *royalties*.
-Esto significa que en un juego de 20 \$, Epic Game se llevaría 1 \$ a partir del momento en que se vendan más de 50 000 copias.
-
-::: {.callout-note}
-Un detalle importante es que los ingresos generados por las ventas en la Epic Store no pagan *royalties*.
-:::
+Esto significa que en un juego de 20 \$, Epic Game se llevaría 1 \$ a partir del momento en que se vendan más de 50 000 copias, con la salvedad de que los ingresos generados por las ventas en la Epic Store no pagarían *royalties*.
 ​

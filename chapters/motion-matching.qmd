@@ -73,11 +73,11 @@ De esta forma, la búsqueda es invariante a la localización y orientación real
 
 :::{#fig-motion-matching-properties layout="[10, -1, 10, -1, 10]"}
 
-![Posición de los pies.](figures/feature-position.png){#fig-feature-position}
+![Posición de los pies.](/assets/motion-matching/feature-position.png){#fig-feature-position}
 
-![Velocidad articulaciones.](figures/feature-velocity.png){#fig-join-velocity}
+![Velocidad articulaciones.](/assets/motion-matching/feature-velocity.png){#fig-join-velocity}
 
-![Trayectoria general.](figures/feature-trajectory.png){#fig-feature-trajectory}
+![Trayectoria general.](/assets/motion-matching/feature-trajectory.png){#fig-feature-trajectory}
 
 Ejemplos de propiedades de movimiento en Open 3D Engine [@Jillich2022MotionMatching].
 :::
@@ -173,7 +173,7 @@ Para lograrlo se utilizan 3 redes neuronales, una para cada una de las etapas de
 
 En la @fig-learned-motion-matching se ilustra la técnica descrita en un diagrama de bloques.
 
-![Diagrama de bloques de *learned motion matching*.](figures/learned-motion-matching.png){#fig-learned-motion-matching}
+![Diagrama de bloques de *learned motion matching*.](/assets/motion-matching/learned-motion-matching.png){#fig-learned-motion-matching}
 
 ## Soporte en motores de videojuegos
 

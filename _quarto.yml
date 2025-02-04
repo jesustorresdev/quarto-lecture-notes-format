@@ -1,5 +1,7 @@
 project:
   type: book
+  resources: 
+    - assets/*
 
 book:
   title: Desarrollo de Videojuegos 3D
@@ -18,10 +20,10 @@ book:
     - index.qmd
     - part: Workflow
       chapters: 
-        - content/workflow/motores.qmd
+        - chapters/motores.qmd
     - part: Animación
       chapters:
-        - content/animación/motion_matching.qmd
+        - chapters/motion-matching.qmd
   # appendices:
 
 lang: es
@@ -31,7 +33,7 @@ crossref:
   title-delim: ":"
   custom:
     - kind: float
-      reference-prefix: Video
+      reference-prefix: Vídeo
       key: vid
 
 bibliography: references/references.bib
