@@ -4,6 +4,9 @@ Añadir espacios al citar
 Que tippy también haga tooltip de los enlaces a la documentación
 Requiere crear código JS para buscar las entradas con ese rol y seleccionar el entrada en las referencias. Hay que mirar el código de quarto para ver como usa tippy.
 
+Quitar Title a las imágenes con iconify.
+Mejor un walk y quitar title de todos los descendientes
+
 Blueprint en mayusculas sin cursiva
 Revisar el formato de las enumeraciones
 --- -> --

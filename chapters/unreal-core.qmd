@@ -1,6 +1,6 @@
-# Antes del Gameplay Framework
+# Componentes fundamentales
 
-Antes de hablar del *gameplay framework* de Unreal Engine, vamos a discutir los componentes básicos del motor, sobre los que se implementa el *framework*.
+Antes de hablar del *gameplay framework* de Unreal Engine en el @sec-unreal-gameplay-framework, vamos a discutir los componentes básicos del motor, sobre los que se implementa dicho *framework*.
 
 ## *UObject*
 
@@ -12,7 +12,7 @@ Por ejemplo, gestión automática de memoria, mediante el uso de un recolector d
 Un {{< api UWorld >}} es la clase del objeto de Unreal Engine que representa el mundo del juego y contiene todos los objetos que existen en él.
 Por tanto, por lo general, solo existe una instancia de **UWorld** al mismo tiempo, excepto cuando tiene lugar una transición fluida entre niveles, en cuyo caso existen dos instancias de **UWorld** simultáneamente: la del nivel que se está descargando y la del que se está cargando.
 
-La clase **UWorld**, por ejemplo, contiene los métodos para instanciar objetos en el nivel y para consultar la geometría del nivel mediante *raycasts* y barridos de formas[Ver @TorresD3DGameplay01].
+La clase **UWorld**, por ejemplo, contiene los métodos para instanciar objetos en el nivel y para consultar la geometría del nivel mediante *raycasts* y barridos de formas (ver el @sec-gameplay).
 
 ## *Actor* y *ActorComponent*
 
@@ -36,12 +36,12 @@ Se instancia al inicio del juego y se destruye al finalizar, por lo que suele us
 
 Para personalizarlo se hereda de la clase **GameInstance**, se le añaden las propiedades y el código necesario y, finalmente, se indica la nueva clase heredada en **Project Settings... / Project - Maps & Modes / Game Instance Class**, como se ilustra en la @fig-gameinstance.
 
-![Configurar la clase **GameInstance** del proyecto.](figures/setup-gameinstance.png){#fig-gameinstance}
+![Configurar la clase **GameInstance** del proyecto.](/assets/unreal-core/setup-gameinstance.png){#fig-gameinstance}
 
-En proyectos grandes, para respetar el *principio de responsabilidad única*[@WikipediaSRP] y evitar que la clase **GameInstance** se convierta en un *objeto todopoderoso*[@WikipediaGodObject], se suele dividir la funcionalidad en diferentes clases heredadas de **UObject**, que se instancian y referencian en propiedades del **GameInstance**.
+En proyectos grandes, para respetar el *principio de responsabilidad única* [@WikipediaSRP] y evitar que la clase **GameInstance** se convierta en un *objeto todopoderoso* [@WikipediaGodObject], se suele dividir la funcionalidad en diferentes clases heredadas de **UObject**, que se instancian y referencian en propiedades del **GameInstance**.
 De esta forma, son fácilmente localizables para el resto de componentes del juego a través del objeto **GameInstance**, que se puede obtener mediante la función {{< api short UGameplayStatics::GetGameInstance >}}.
 
-Sin embargo, desde Unreal Engine 4.22, se recomienda usar *subsistemas* para implementar funcionalidades globales del juego, que antes se implementaban en **GameInstance**[Más sobre *subsistemas* en @TorresD3DUnrealCpp].
+Sin embargo, desde Unreal Engine 4.22, se recomienda usar *subsistemas* para implementar funcionalidades globales del juego, que antes se implementaban en **GameInstance** (más sobre *subsistemas* en el @sec-unreal-cpp).
 
 ## *UEngine*
 

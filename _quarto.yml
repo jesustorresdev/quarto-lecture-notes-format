@@ -12,7 +12,7 @@ book:
       email: jmtorres@ull.es
   publisher: Universidad de La Laguna
   page-footer: |
-    Este trabajo está bajo una licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es)
+    Este trabajo está bajo licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es)
     <img style="height:16px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="">
     <img style="height:16px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""></a> 
   # abstract: 
@@ -24,6 +24,10 @@ book:
     - part: Animación
       chapters:
         - chapters/motion-matching.qmd
+    - part: Unreal Engine
+      chapters:
+        - chapters/unreal-core.qmd
+        - chapters/unreal-gameplay-framework.qmd
   # appendices:
 
 lang: es
@@ -44,10 +48,13 @@ api-reference:
   path: references/api.yml
   reference-section-title: Referencias a la API
   markers:
-    class: "{{< iconify tabler square-letter-c-filled >}}"
-    event: "{{< iconify tabler circle-letter-e-filled >}}"
-    function: "{{< iconify tabler circle-letter-f-filled >}}"
-    method: "{{< iconify tabler circle-letter-m-filled >}}"
+    class: "{{< iconify ph cube-bold >}}"
+    event: "{{< iconify ph lightning-bold >}}"
+    function: "{{< iconify ph function-bold >}}"
+    method: "{{< iconify ph function-bold >}}"
+    static: "{{< iconify ph function-square-bold >}}"
+    cpp: "{{< iconify devicon-plain cplusplus >}}"
+    bp: "{{< iconify simple-icons blueprint >}}"
 
 filters:
   - reading-time

@@ -1,7 +1,16 @@
-# Gameplay Framework
+# Unreal Gameplay Framework {#sec-unreal-gameplay-framework}
 
-Con los componentes básicos comentados hasta el momento se puede implementar un juego, pero no es lo más sencillo.
-Por eso Unreal Engine incluye *gameplay framework*, prescribiendo ciertas decisiones sobre la arquitectura software y facilitando la implementación de los juegos.
+Los motores de videojuegos ofrecen componentes y servicios comunes que pueden necesitar cualquier aplicación multimedia interactiva: *render*, iluminación, lectura de la entrada y creación de interfaces de usuario, simulación física, efectos visuales, sistemas de animación, gestión de recursos, carga y almacenamiento de datos, etc.
+Sin embargo, desde el punto de vista del desarrollo, esto no es suficiente para hacer un videojuego.
+
+Sobre los componentes y sistemas proporcionados por el motor se suele implementar una arquitectura software adecuada para el tipo de juego que se quiere desarrollar, a veces denominada *gameplay framework*.
+El objetivo de estos componentes es facilitar la implementación de las mecánicas del juego, de forma que el código sea fácil de mantener y extender.
+Este *framework* se suelen desarrollar a lo largo de diferentes proyectos de un mismo estudio, de forma que se van mejorando y adaptando a las necesidades de cada uno, y ayuda a reducir el tiempo de desarrollo.
+
+Por lo general, los motores de videojuegos generalistas no ofrecen un *gameplay framework* predefinido, sino que cada estudio desarrolla el suyo propio, adaptado a sus necesidades, al tipo de juegos que desarrolla y a las caracteristicas del entorno de desarrollo de motor.
+Sin embargo, el Unreal Engine sí ofrece un *gameplay framework* [@UnrealGameplayFramework], aunque muy orientado al tipo de juegos que hace Epic Games --es decir, videojuegos de acción competitivos en primera o tercera persona--.
+
+En esta parte veremos la arquitectura de este *gameplay framework*, puesto que se trata de un buen ejemplo de cómo organizar el código de un videojuego y nos puede ofrecer ideas que podemos trasladar a otros motores --como Unity o Godot-- o a otro tipo de juegos.
 
 ## *GameMode* y *GameState*
 
@@ -18,7 +27,7 @@ El actor **GameMode** es el primer actor que recibe el evento `BeginPlay()` tras
 
 La clase **GameMode** por defecto del proyecto se indica en las propiedades del proyecto, en **Project Settings... / Project - Maps & Modes / Game Mode Override**, pero se puede cambiar en cada nivel, en la propiedad **World Settings / Game Mode Override**, como se muestra en la @fig-world-override-game-mode.
 
-![Configurar la clase **GameMode** del nivel.](figures/world-settings-override-game-mode.png){#fig-world-override-game-mode}
+![Configurar la clase **GameMode** del nivel.](/assets/unreal-gameplay-framework/world-settings-override-game-mode.png){#fig-world-override-game-mode}
 
 Por tanto, es posible y recomendable tener diferentes clases **GameMode** para cada nivel si hay diferentes modos de juego, en lugar de una única clase para todo el juego.
 Probablemente, heredando de una clase base común para todos los niveles, que implemente la funcionalidad común a todos ellos.
@@ -42,7 +51,7 @@ En la @fig-gamemode-inheritance se puede ver un ejemplo de jerarquía de herenci
 ```{mermaid}
 %%| label: fig-gamemode-inheritance
 %%| fig-cap: "Ejemplo de posible jerarquía de herencia de **GameMode**."
-%%| file: figures/gamemode-inheritance.mm
+%%| file: diagrams/gamemode-inheritance.mmd
 %%| fig-width: 15cm
 ```
 
@@ -93,7 +102,7 @@ Como no se sincroniza la información entre ellos --puesto que el **GameInstance
 
 Como se puede observar en la @fig-gamemode-properties, entre las propiedades que trae **GameMode** por defecto están otras clases de actores del *gameplay framework* que se van a instanciar para implementar diferentes aspectos del juego:
 
-![Propiedades de la clase **GameMode**.](figures/gamemode-properties.png){#fig-gamemode-properties}
+![Propiedades de la clase **GameMode**.](/assets/unreal-gameplay-framework/gamemode-properties.png){#fig-gamemode-properties}
 
 * **Game State Class**. 
   Clase del actor que almacena el estado de la partida.
@@ -150,7 +159,7 @@ Para que un actor pueda ser poseído por un **Controller** debe heredar de la cl
 Para poseerlo se usa el método {{< api Possess >}} del {{< api Controller >}}, indicando el **Pawn** que se quiere controlar.
 Mientras que para desposeerlo se usa el método {{< api UnPossess >}}.
 
-![Nodos de los **Controller** para poseer y desposeer un **Pawn**.](figures/possess-nodes.png)
+![Nodos de los **Controller** para poseer y desposeer un **Pawn**.](/assets/unreal-gameplay-framework/possess-nodes.png)
 
 Si un **Controller** posee a un **Pawn** que ya estaba siendo controlado por otro **Controller**, este último deja de controlarlo y pasa a ser controlado por el nuevo **Controller**.
 Igualmente, si un **Controller** ya posee a un **Pawn** y se le indica que posea a otro, deja de controlar al primero y pasa a controlar al segundo.
@@ -158,9 +167,9 @@ Igualmente, si un **Controller** ya posee a un **Pawn** y se le indica que posea
 En todos los casos tanto el **Controller** como el **Pawn** son notificados.
 El {{< api Controller >}} recibe los eventos {{< api OnPossess >}} o {{< api OnUnPossess >}} y el {{< api Pawn >}} recibe los eventos {{< api Possessed >}} o {{< api UnPossessed >}}.
 
-![Nodos de evento de posesión de **Controller**.](figures/controller-possess-events.png)
+![Nodos de evento de posesión de **Controller**.](/assets/unreal-gameplay-framework/controller-possess-events.png)
 
-![Nodos de evento de posesión de **Pawn**.](figures/pawn-possess-events.png)
+![Nodos de evento de posesión de **Pawn**.](/assets/unreal-gameplay-framework/pawn-possess-events.png)
 
 Estos eventos son útiles.
 Por ejemplo, si un personaje está poseído por un **AIController** y el jugador lo posee, el **AIController** dejará de controlar al personaje.
@@ -173,7 +182,7 @@ Además de usar los métodos `Possess()` y `UnPossess()`, los **Pawn** se puede 
 
 * Si un **Pawn** se configura con la propiedad **Auto Possess AI**, es poseído automáticamente por el **AIController** indicado.
 
-![Configuración **Auto Possess** de la clase **Pawn**.](figures/pawn-auto-possess.png){#fig-pawn-auto-possess}
+![Configuración **Auto Possess** de la clase **Pawn**.](/assets/unreal-gameplay-framework/pawn-auto-possess.png){#fig-pawn-auto-possess}
 
 ### Control de actores {#sec-controller-control}
 
@@ -186,14 +195,14 @@ Por ejemplo, en la @fig-pawn-control se ilustra un posible caso donde nuestro **
 ```{mermaid}
 %%| label: fig-pawn-control
 %%| fig-cap: "Ejemplo de interfaz para el control del **Pawn** del jugador."
-%%| file: figures/pawn-control.mm
+%%| file: diagrams/pawn-control.mmd
 %%| fig-width: 15cm
 ```
 
 Este **Pawn** es teledirigido por el controlador.
 Puede dirigir su movimiento usando el método {{< api AddMovementInput >}} (ver la @fig-pawn-addmovementinput) de la clase **Pawn** o indicar otras acciones utilizando la implementación en **MyPlayerPawn** de la interfaz **MyPlayerPawnInterface** que contiene acciones del personaje especificas para este juego.
 
-![Función `AddMovementInput()` de **Pawn**.](figures/pawn-addmovementinput.png){#fig-pawn-addmovementinput}
+![Función `AddMovementInput()` de **Pawn**.](/assets/unreal-gameplay-framework/pawn-addmovementinput.png){#fig-pawn-addmovementinput}
 
 #### Movimiento del actor
 
@@ -204,7 +213,7 @@ Sin embargo, lo más habitual es que el **Controller** indique al **Pawn** que s
 En la @fig-pawn-movement-input se puede observar cómo se lee la acción de entrada *Move*, para luego llamar a `AddMovementInput` con sus valores para actualizar el movimiento del **Pawn**.
 En este ejemplo la lectura de la acción se hace desde el propio **Pawn**, no desde el **Controller**.
 
-![Uso de la entrada para el movimiento desde el **Pawn**.](figures/pawn-movement-input.png){#fig-pawn-movement-input}
+![Uso de la entrada para el movimiento desde el **Pawn**.](/assets/unreal-gameplay-framework/pawn-movement-input.png){#fig-pawn-movement-input}
 
 La clase **Pawn** acumula las direcciones indicadas a través `AddMovementInput()` en una variable interna de tipo vector, llamada `ControlInputVector`.
 Cómo se debe interpretar este vector --si es un desplazamiento, una velocidad o una aceleración-- dependen de la implementación de la lógica de movimiento.
@@ -218,7 +227,7 @@ Es en el método `TickComponent()` de este componente de movimiento del actor, d
 ```{mermaid}
 %%| label: fig-controller-pawn-movement-sequence
 %%| fig-cap: "Ejemplo de control de movimiento de un **Pawn**."
-%%| file: figures/pawn-movement-sequence.mm
+%%| file: diagrams/pawn-movement-sequence.mmd
 %%| fig-width: 15cm
 ```
 
@@ -237,7 +246,7 @@ En la @fig-controller-character-movement-sequence se puede ver un diagrama de se
 ```{mermaid}
 %%| label: fig-controller-character-movement-sequence
 %%| fig-cap: "Ejemplo de control de movimiento de un **Character**."
-%%| file: figures/character-movement-sequence.mm
+%%| file: diagrams/character-movement-sequence.mmd
 %%| fig-width: 15cm
 ```
 
@@ -266,7 +275,7 @@ Para ello, el **Controller** tiene una variable interna de tipo {{< api Rotator 
 
 La clase {{< api PlayerController >}} derivada de **Controller** añade los métodos {{< api AddPitchInput >}}, {{< api AddYawInput >}} y {{< api AddRollInput >}} para acumular fácilmente ángulos de rotación en `ControlRotation`, en cualquiera de los 3 ángulos de Euler (ver la @fig-ue-euler-angles).
 
-![Ángulos de Euler en Unreal Engine.](figures/euler_angles.png){#fig-ue-euler-angles}
+![Ángulos de Euler en Unreal Engine.](/assets/unreal-gameplay-framework/euler-angles.png){#fig-ue-euler-angles}
 
 Los valores indicados al invocar estas funciones son multiplicados por las propiedades **Input Pitch Scale**, **Input Yaw Scale** y **Input Roll Scale** del **PlayerController**, antes de ser acumulados.
 Como en el caso del movimiento, los valores se acumulan en la variable interna `RotationInput`, para luego procesarla y actualizar `ControlRotation` convenientemente en el método `Tick()`.
@@ -278,7 +287,7 @@ Además, la clase **Pawn** también incluye tres funciones por conveniencia: {{<
 
 En la @fig-pawn-control-rotation-input se puede observar un ejemplo dónde se recibe la acción de entrada *Look* en el **Pawn** y se usan estas funciones para cambiar la *rotación de control* en el **Controller**.
 
-![Uso de la entrada para actualizar la *rotación de control* desde el **Pawn**.](figures/pawn-control-rotation-input.png){#fig-pawn-control-rotation-input}
+![Uso de la entrada para actualizar la *rotación de control* desde el **Pawn**.](/assets/unreal-gameplay-framework/pawn-control-rotation-input.png){#fig-pawn-control-rotation-input}
 
 Igualmente, la clase **Pawn** tiene la función {{< api GetViewRotation >}}, que sirve para leer directamente la *rotación de control* del **Controller** desde el **Pawn**.
 
@@ -287,9 +296,9 @@ Gracias a que **Controller** y **Pawn** tiene una interfaz bien definida para ge
 Por ejemplo, en la @fig-pawn-control-rotation se pueden ver las opciones de configuración de la *rotación de control* en la clase **Pawn**, que pemite sincronizar automáticamente la rotación del **Pawn** con la *rotación de control* en su controlador.
 Mientras que en la @fig-camera-control-rotation se pueden observar una opción similar en el componente de cámara **CameraComponent**.
 
-![Configuración de uso de la **rotación de control** en la clase **Pawn**.](figures/pawn-control-rotation.png){#fig-pawn-control-rotation}
+![Configuración de uso de la **rotación de control** en la clase **Pawn**.](/assets/unreal-gameplay-framework/pawn-control-rotation.png){#fig-pawn-control-rotation}
 
-![Configuración de uso de la **rotación de control** en la clase **CameraComponent**.](figures/camera-control-rotation.png){#fig-camera-control-rotation}
+![Configuración de uso de la **rotación de control** en la clase **CameraComponent**.](/assets/unreal-gameplay-framework/camera-control-rotation.png){#fig-camera-control-rotation}
 
 #### Punto de vista del jugador {#sec-controller-pov}
 
@@ -321,7 +330,7 @@ En este apartado veremos los componentes del *gameplay framework* que se encarga
 En Unreal Engine 4 se usaba un sistema donde la entrada de los controles de los dispositivos del jugador se mapeaba en acciones configurando las opciones en **Project Settings / Input** (ver la @fig-input-legacy-setup).
 El código de *gameplay* de nuestro juego podía leer estas acciones, principalmente, a través de la clase **InputComponent**.
 
-![Configuración de las acciones de entrada en Unreal Engine 4.](figures/input-legacy-setup.png){#fig-input-legacy-setup}
+![Configuración de las acciones de entrada en Unreal Engine 4.](/assets/unreal-gameplay-framework/input-legacy-setup.png){#fig-input-legacy-setup}
 
 En Unreal Engine 5 este sistema pasó a considerase *legacy*, para ser sustituido por un nuevo sistema llamado **Enhanced Input**.
 
@@ -366,11 +375,11 @@ Es decir, lo podemos usar en el actor del **PlayerController** para controlar el
 Con **InputComponent** podemos conectar el código de *gameplay* del actor a las acciones de entrada definidas en el juego.
 Esto se puede hacer usando eventos, para que el **InputComponent** ejecute nuestro código cuando llegue cierta entrada del jugador, como se puede observar en la @fig-ue-input-action-event.
 
-::: {#fig-ue-input-action layout="[[1], [-1], [1]]}
+::: {#fig-ue-input-action layout="[[1], [-1], [1]]"}
 
-![Evento de **Input Action**.](figures/ue-input-action-event.png){#fig-ue-input-action-event}
+![Evento de **Input Action**.](/assets/unreal-gameplay-framework/ue-input-action-event.png){#fig-ue-input-action-event}
 
-![Lectura del valor de la **Input Action** en un *tick*.](figures/ue-input-action-polling.png){#fig-ue-input-action-polling}
+![Lectura del valor de la **Input Action** en un *tick*.](/assets/unreal-gameplay-framework/ue-input-action-polling.png){#fig-ue-input-action-polling}
 
 Modos de acceso a las acciones de entrada del jugador.
 :::
@@ -419,7 +428,7 @@ Para gestionar la entrada del jugador, el **PlayerController** tiene un objeto *
 El **PlayerInput** emite los eventos de entrada y los entrega a los **InputComponent** en el orden determinado por la pila.
 Como se esquematiza en @fig-input-component-stack, según va pasando por los **InputComponent**, cada uno de ellos puede elegir «consumir» el evento de entrada, haciendo que no alcance a componentes posteriores en la pila.
 
-![La pila de **InputComponent** en el **PlayerController**.](figures/input_component_stack.pdf){#fig-input-component-stack}
+![La pila de **InputComponent** en el **PlayerController**.](/assets/unreal-gameplay-framework/input_component_stack.pdf){#fig-input-component-stack}
 
 El **PlayerController** es un actor, por lo que tiene un **InputComponent**.
 Este **InputComponent** es, generalmente, el primero de la pila.
@@ -482,7 +491,7 @@ En la @fig-ai-controller se puede ver un diagrama de clases simplificado del act
 ```{mermaid}
 %%| label: fig-ai-controller
 %%| fig-cap: "Diagrama de clases de **AIController** y sus componentes."
-%%| file: figures/aicontroller-classes.mm
+%%| file: diagrams/aicontroller-classes.mmd
 %%| fig-width: 15cm
 ```
 
@@ -512,12 +521,12 @@ El propietario de las tareas es el **AIController**, pero son planificadas y eje
 Una pieza fundamental de la IA es el sistema de navegación, que permite a los NPC moverse por el mundo del juego.
 
 Unreal Engine proporciona un sistema de navegación basado en *NavMesh* a través del subsistema **NavigationSystem**.
-Este subsistema se puede consultar directamente en C++ a través de los métodos de clase {{< api UNavigationSystem >}}[@TorresD3DUnrealCpp], pero también se puede utilizar indirectamente a través de los métodos de **AIController** y el componente **PathFollowingComponent** de este.
+Este subsistema se puede consultar directamente en C++ a través de los métodos de clase {{< api UNavigationSystem >}} (ver el @sec-unreal-cpp), pero también se puede utilizar indirectamente a través de los métodos de **AIController** y el componente **PathFollowingComponent** de este.
 
 La clase **AIController** proporcionar los métodos {{< api MoveToLocation >}} y {{< api MoveToActor >}}  para indicar que se quiere mover el **Pawn** poseído a una ubicación determinada o para perseguir a otro actor, respectivamente.
 El nodo de Blueprint **AI MoveTo** (ver la @fig-ai-moveto) y la tarea de árbol de comportamiento **AITask MoveTo**, también se implementa utilizan estos métodos.
 
-![Nodo de Blueprint **AI MoveTo** para mover un **Pawn** a un punto o seguir a un actor.](figures/ai-moveto.png){#fig-ai-moveto}
+![Nodo de Blueprint **AI MoveTo** para mover un **Pawn** a un punto o seguir a un actor.](/assets/unreal-gameplay-framework/ai-moveto.png){#fig-ai-moveto}
 
 Ambos métodos se apoyan en el componente {{< api PathFollowingComponent >}}, que implementa la lógica necesaria para calcular la ruta y dar las órdenes al **Pawn** necesarias para que se mueva a lo largo de ella.
 Si al llamar a los métodos `MoveToLocation()` o `MoveToActor()` se indica `UsePathfinding` como `true`, **PathfollowingComponent** utilizará el **NavigationSystem** para calcular la ruta más eficiente para llegar al destino.
@@ -527,7 +536,7 @@ Para controlar al **Pawn**, **PathFollowingComponent** necesita que el **Pawn** 
 
 ```{mermaid}
 %%| label: fig-ue-character-movement-hierarchy
-%%| file: figures/ue-character-movement-hierarchy.mm
+%%| file: diagrams/ue-character-movement-hierarchy.mmd
 %%| fig-width: 15cm
 %%| fig-cap: Diagrama de clases involucradas en el control de NPC.
 ```
@@ -575,9 +584,9 @@ En cada *tick* el **AIController** actualiza la *rotación de control* en la dir
 
 ### Percepción
 
-Por lo general, la percepción de los NPC --que pueden ver u oír-- se implementa utilizando *raycasts* o *triggers*[@TorresD3DGameplay01].
+Por lo general, la percepción de los NPC --que pueden ver u oír-- se implementa utilizando *raycasts* o *triggers* (ver el @sec-gameplay).
 Sin embargo, Unreal Engine implementa un sistema de percepción que permite a los NPC detectar a los jugadores y otros objetos de forma más avanzada, así como saber cuándo están siendo dañados por algo.
-Este sistema se basa en el componente **AIPerceptionComponent** y en los *estímulos* que emiten los objetos[@UnrealAIPerception].
+Este sistema se basa en el componente **AIPerceptionComponent** y en los *estímulos* que emiten los objetos [@UnrealAIPerception].
 
 También existe un componente *legacy* alternativo a **AIPerceptionComponent** que se denomina **PawnSensingComponent** y que se añade al **Pawn** de un NPC, en lugar de al **AIController**.
 Este componente es más sencillo de utilizar, pero es menos flexible y ofrece peor rendimiento.
@@ -609,8 +618,8 @@ El *gameplay framework* incluye las siguientes clases que heredan de **Pawn**:
 
 * El {{< api WheeledVehiclePawn >}} extiende **Pawn** para implementar la clase base de vehículo con ruedas.
 
-  Esta clase de actor incluye por defecto un componente {{< api ChaosWheeledVehicleMovementComponent >}} que implementa la simulación del movimiento del vehículo, usando el motor de físicas Chaos[@TorresD3DFisicas] de Unreal Engine.
-  Este componente se puede sustituir fácilmente por cualquier componente que herede de {{< api ChaosVehicleMovementComponent >}}, cuando se quiere usar una simulación diferente[Más sobre CDO en @TorresD3DUnrealCpp].
+  Esta clase de actor incluye por defecto un componente {{< api ChaosWheeledVehicleMovementComponent >}} que implementa la simulación del movimiento del vehículo, usando el motor de físicas Chaos de Unreal Engine (ver el @sec-físicas).
+  Este componente se puede sustituir fácilmente por cualquier componente que herede de {{< api ChaosVehicleMovementComponent >}}, cuando se quiere usar una simulación diferente (más sobre CDO en el @sec-unreal-cpp).
 
 * El {{< api Character >}} extiende **Pawn** para añadir todo lo que necesita un personaje tradicional humanoide, como el que se usa en muchos juegos de acción en primera o tercera persona: una cápsula de colisión, un **SkeletalMeshComponent** --es decir, una malla que puede ser animada mediante el sistema de animación de Unreal Engine-- y un **CharacterMovementComponent**, que implementa modos de movimiento típicos como: caminar, correr, saltar, nadar, incluso, volar.
 
@@ -668,7 +677,7 @@ Como hemos comentado anteriormente, cada **PlayerController** crea y gestiona su
 
 El {{< api PlayerCameraManager >}} se puede modificar derivando de dicha clase e indicando la nueva clase en las propiedades del **PlayerController**, como se puede observar en la @fig-playercontroller-camera-manager.
 
-![Configuración del **PlayerCameraManager** en el **PlayerController**.](figures/playercontroller-camera-manager.png){#fig-playercontroller-camera-manager}
+![Configuración del **PlayerCameraManager** en el **PlayerController**.](/assets/unreal-gameplay-framework/playercontroller-camera-manager.png){#fig-playercontroller-camera-manager}
 
 En cada *tick* el **PlayerController** llama al método `UpdateCamera()` de su **PlayerCameraManager** para que actualice las propiedades con el POV deseado más reciente.
 El motor accede a estas propiedades a través del **LocalPlayer**, que utiliza al **PlayerController** y al **PlayerCámeraManager** para recopilar la información.
@@ -681,7 +690,7 @@ Sin embargo, la implementación por defecto que ofrece Unreal Engine en el **Pla
 La implementación del **PlayerCameraManager** se basa en el concepto de *view target*, que es el actor que va a determinar el punto de vista del jugador.
 Este actor se puede obtener y cambiar manualmente en el **PlayerController**, mediante los métodos {{< api GetViewTarget >}}, {{< api SetViewTarget >}} y {{< api SetViewTargetWithBlend >}} (ver la @fig-playercontroller-view-target), aunque realmente esta configuración se almacena en el **PlayerCameraManager**.
 
-![Nodos para obtener y cambiar el *view target* en el **PlayerController**.](figures/playercontroller-view-target.png){#fig-playercontroller-view-target}
+![Nodos para obtener y cambiar el *view target* en el **PlayerController**.](/assets/unreal-gameplay-framework/playercontroller-view-target.png){#fig-playercontroller-view-target}
 
 Además, la asignación del *view target* puede ocurrir automáticamente, activando la opción **Auto Manage Active Camera Target** del **PlayerController** (ver la @fig-playercontroller-camera-manager).
 En ese caso el **PlayerController**:
@@ -689,7 +698,7 @@ En ese caso el **PlayerController**:
 1. Busca un actor **CameraActor** con la opción **Auto Activate for Player** configurada con el jugador del **PlayerController** (ver la propiedad en la @fig-cameraactor-auto-activate).
    Si lo encuentra, asigna ese actor {{< api CameraActor >}} como *view target*.
 
-![Configuración de **CameraActor** para que sea el *view target* del jugador 3.](figures/cameraactor-auto-activate.png){#fig-cameraactor-auto-activate}
+![Configuración de **CameraActor** para que sea el *view target* del jugador 3.](/assets/unreal-gameplay-framework/cameraactor-auto-activate.png){#fig-cameraactor-auto-activate}
 
 1. En otro caso, utiliza el **Pawn** poseído en cada momento por el **PlayerController**.
 
@@ -760,10 +769,10 @@ En el método `UpdateViewTarget()` recibe el *view target* y para obtener el POV
 1. Si el **view target** indicado es un actor **CameraActor**, obtiene el POV directamente del **CameraActor**.
 
 1. En caso contrario, comprueba si se ha activado un estilo de cámara válido en la variable miembro `CameraStyle` --solo en C++-- del **PlayerCameraManager**.
-   Si así fuera, calcula directamente el POV del jugador según el estilo indicado[^camera-style].
+   Si así fuera, calcula directamente el POV del jugador según el estilo indicado.
 
-[^camera-style]: `UpdateViewTarget()` incluye implementaciones de ejemplo para unos pocos estilos: **Fixed**, **ThirdPerson**, **FirstPerson**, **FreeCam** y **FreeCam_Default**.
-Obviamente, se puede sobreescribir el método para hacer implementaciones propias o añadir nuevos estilos, pero esta no es la forma más común de implementar el control de cámara, en la actualidad.
+  `UpdateViewTarget()` incluye implementaciones de ejemplo para unos pocos estilos: **Fixed**, **ThirdPerson**, **FirstPerson**, **FreeCam** y **FreeCam_Default**.
+  Obviamente, se puede sobreescribir el método para implementar estilos propios o añadir nuevos, pero en la actualidad esta no es la forma más común de implementar nuestro propio control de cámara.
 
 1. En otro caso, llama a `UpdateViewTargetInternal()` que, a su vez, llama al `CalcCamera()` del **view target**.
    Luego llama `BlueprintUpdateCamera()`, para que pueda modificar el POV devuelto por dicho actor.
@@ -788,17 +797,17 @@ O para modificar completamente el control del cámara.
 Al finalizar, `DoUpdateCamera()` almacena el POV resultante en **PlayerCameraManager** para su uso durante el render.
 También actualiza el fundido de cámara y de audio, si está activo --ver {{< api StartCameraFade >}}, {{< api StopCameraFade >}} y {{< api SetManualCameraFade >}} de **PlayerCameraManager** en la @fig-playercameramanager-fade-- y aplica otros efectos.
 
-![Nodos de **PlayerCameraManager** para el control del fundido de cámara.](figures/playercameramanager-fade.png){#fig-playercameramanager-fade}
+![Nodos de **PlayerCameraManager** para el control del fundido de cámara.](/assets/unreal-gameplay-framework/playercameramanager-fade.png){#fig-playercameramanager-fade}
 
 En la @fig-update-camera se puede ver un esquema de la cadena de responsabilidad que se sigue para obtener el POV del jugador para el render.
 
-![Esquema de actualización del POV del jugador.](figures/update-camera-sequence.pdf){#fig-update-camera}
+![Esquema de actualización del POV del jugador.](/assets/unreal-gameplay-framework/update-camera-sequence.pdf){#fig-update-camera}
 
 ### Modificadores de cámara {#sec-camera-modifiers}
 
 El **PlayerCameraManager** soporta modificadores de cámara que pueden añadir y eliminar mediante los métodos `AddNewCameraModifier()` y `RemoveCameraModifier()`, respectivamente (ver la @fig-playercameramanager-camera-modifiers) o en las propiedades de la clase en el editor.
 
-![Nodos de **PlayerCameraManager** para añadir y eliminar modificadores de cámara.](figures/playercameramanager-camera-modifiers.png){#fig-playercameramanager-camera-modifiers}
+![Nodos de **PlayerCameraManager** para añadir y eliminar modificadores de cámara.](/assets/unreal-gameplay-framework/playercameramanager-camera-modifiers.png){#fig-playercameramanager-camera-modifiers}
 
 Estos modificadores puede afectar a:
 
@@ -815,7 +824,7 @@ Los modificadores se aplican al final del método `UpdateViewTarget()`, durante 
 
 Una vez se ha añadido un modificador, se puede activar y desactivar, según el estado del juego, a través de los métodos `EnableModifier()`, `DisableModifier()` y `ToggleModifier()`, de la clase {{< api CameraModifier >}}, que se pueden ver en la @fig-cameramodifier-activation.
 
-![Nodos de **CameraModifier** para activar y desactivar el modificador.](figures/cameramodifier-activation.png){#fig-cameramodifier-activation}
+![Nodos de **CameraModifier** para activar y desactivar el modificador.](/assets/unreal-gameplay-framework/cameramodifier-activation.png){#fig-cameramodifier-activation}
 
 Por ejemplo, se puede añadir un modificador `UCameraModifier_CameraShake` para sacudir la cámara cuando el jugador recibe daño, activándolo y desactivándolo durante un tiempo cuando se da el caso.
 
@@ -837,7 +846,7 @@ Algunos de los modificadores de cámara predefinidos de Unreal Engine son:
   Sacude la cámara para crear sensación de impacto o agitación, lo que es útil con explosiones o al recibir daño.
 
   El efecto se configura añadiendo al modificador uno o varios objetos de tipo {{< api CameraShakeBase >}}.
-  Cada uno contiene un *patrón de movimiento* que es el objeto que realmente contiene la lógica que dirige el movimiento de la cámara[@UnrealCameraShakes]. 
+  Cada uno contiene un *patrón de movimiento* que es el objeto que realmente contiene la lógica que dirige el movimiento de la cámara [@UnrealCameraShakes]. 
 
 * {{< api UCameraAnimationCameraModifier >}}.
   Aplica una secuencia de animación a la cámara.
@@ -866,7 +875,7 @@ Esto sirve, por ejemplo, para que un modificador de cámara activo pueda limitar
 
 En todo caso, para establecer limitaciones a la *rotación de control* del jugador de forma generalizada, se pueden usar las propiedades **View Pitch Min**, **View Pitch Max**, **View Yaw Min**, **View Yaw Max**, **View Roll Min** y **View Roll Max** que trae de serie **PlayerCameraManager**, como se puede ver en la @fig-playercameramanager-view-limits.
 
-![Propiedades de **PlayerCameraManager** para limitar la *rotación de control* del jugador.](figures/playercameramanager-view-limits.png){#fig-playercameramanager-view-limits}
+![Propiedades de **PlayerCameraManager** para limitar la *rotación de control* del jugador.](/assets/unreal-gameplay-framework/playercameramanager-view-limits.png){#fig-playercameramanager-view-limits}
 
 ## Gameplay Framework
 
@@ -875,7 +884,7 @@ En la @fig-ue-gameplay-framework se puede observar un esquema del *gameplay fram
 ```{mermaid}
 %%| label: fig-ue-gameplay-framework
 %%| fig-cap: "Esquema del *gameplay framework* de Unreal Engine."
-%%| file: figures/ue-gameplay-framework.mm
+%%| file: diagrams/ue-gameplay-framework.mmd
 %%| fig-width: 15cm
 ```
 

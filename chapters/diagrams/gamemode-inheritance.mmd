@@ -2,7 +2,7 @@ classDiagram
     GameModeBase <|-- LevelGameModeBase
     GameModeBase <|-- MainMenuGameMode
 
-    %%namespace Gameplay {
+    namespace Gameplay {
         class MainMenuGameMode
         class LevelGameModeBase {
             AchievementsSubsystem
@@ -15,7 +15,7 @@ classDiagram
             TutorialSubsystem
         }
         class RaceGameMode
-    %%}
+    }
 
     LevelGameModeBase <|-- RaceGameMode
     LevelGameModeBase <|-- StoryGameMode
