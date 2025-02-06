@@ -38,7 +38,7 @@ local function processEntry(opts, entry, parent)
 
   -- name
   local labelSuffix = entry.isFunc and "()" or ""
-  header:insert(Span({entry.label, labelSuffix}, {id=entry.refname, class="apirefs-entry-label"}))  
+  header:insert(Span({entry.label, labelSuffix}, {class="apirefs-entry-label"}))  
 
   -- type
   -- header::insert(Span("«" .. TYPE_MAPPING[entry.type] .. "»"))
@@ -92,7 +92,7 @@ local function processEntry(opts, entry, parent)
   return Div({
       pandoc.Inlines(header),
       otherRefsList
-    }, {class="apirefs-entry " .. "apirefs-ref-" .. entry.type})
+    }, {id=entry.refname, class="apirefs-entry " .. "apirefs-ref-" .. entry.type})
 end
 
 local function create_section_references(opts)

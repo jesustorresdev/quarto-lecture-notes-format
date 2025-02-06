@@ -58,7 +58,7 @@ local function apiShortcode(args, kwargs, meta)
   reftextSuffix = entry.isFunc and "()" or ""
   return Span({
     Span(marker, {class="apirefs-ref-marker"}),
-    Link(reftext, "#" .. entry.refname, nil, {role="apiref"}),
+    Link(reftext, "#" .. entry.refname, nil, {role="apiref", class="quarto-xref"}),
     Span({reftextSuffix}, {class="apirefs-ref-suffix"}),
   }, {class="apirefs-ref " .. "apirefs-ref-" .. entry.type})
 end
