@@ -8,26 +8,7 @@ local ENTITY_TYPES = {
   func = "function",
   method = "method",
   event = "event",
-}
-
-local KNOWN_LANGUAGES = {
-  ["cpp"] = {
-    id = "cpp",
-    -- reftitle = "C++ API Reference",
-    reftitle = "C++ API",
-  },
-  blueprint = {
-    id = "blueprint",
-    -- reftitle = "Blueprint API Reference",
-    reftitle = "Blueprint API",
-  },
-}
-
-local LANG_MAPPING = {
-  ["c++"] = KNOWN_LANGUAGES.cpp,
-  cpp = KNOWN_LANGUAGES.cpp,
-  blueprint = KNOWN_LANGUAGES.blueprint,
-  ["bp"] = KNOWN_LANGUAGES.blueprint,
+  static = "static",
 }
 
 local DEFAULT_MARKERS = {
@@ -35,6 +16,9 @@ local DEFAULT_MARKERS = {
   ["event"] = pandoc.Str("E→"),
   ["function"] = pandoc.Str("ƒ()"),
   ["method"] = pandoc.Str("ƒ()"),
+  ["static"] = pandoc.Str("ƒ()"),
+  ["cpp"] = pandoc.Str("C++"),
+  ["bp"] = pandoc.Str("BP"),
 }
 
 local stringify = pandoc.utils.stringify
@@ -42,6 +26,14 @@ local Link = pandoc.Link
 local Span = pandoc.Span
 
 local globalReferences
+
+local function ensureHtmlDeps()
+  quarto.doc.add_html_dependency({
+    name = 'api-reference',
+    version = '0.1.0',
+    stylesheets = {'assets/css/all.css'}
+  })
+end
 
 local function readYamlFile(filename)
   local file = io.open(filename, 'r')
@@ -69,26 +61,8 @@ local function refsSorting(left, right)
   elseif right.order then
     return false
   else
-    return left.label < right.label
+    return left.title < right.title
   end
-end
-
-local function buildRefLabel(ref)
-  -- quarto.log.output(ref)
-  local label = Link(ref.url, ref.url)
-  if (ref.label) then
-    label = Link(ref.label, ref.url)
-  elseif ref.lang then
-    label = KNOWN_LANGUAGES[ref.lang].reftitle
-    if ref.name then
-      label = Span({label, ": ", Link(ref.name, ref.url)})
-    else
-      label = Link(label, ref.url)
-    end
-  elseif ref.name then
-    label = Link(ref.name, ref.url)
-  end
-  return label
 end
 
 local function intializeReference(item, parent)
@@ -97,6 +71,9 @@ local function intializeReference(item, parent)
   entry.used = false
   entry.type = item.type and stringify(item.type)
     or parent and ENTITY_TYPES.method or ENTITY_TYPES.class
+  entry.isFunc = entry.type == ENTITY_TYPES.func
+    or entry.type == ENTITY_TYPES.method
+    or entry.type == ENTITY_TYPES.static
   entry.label = item.label and stringify(item.label) or item.id
   entry.refname = table.concat({
     parent and parent.refname or CROSSREF_PREFIX,
@@ -110,28 +87,32 @@ local function intializeReference(item, parent)
   end
   if item.refs then
     entry.refs = {}
-    for _, refItem in ipairs(item.refs) do
+    for refLang, refUrl in pairs(item.refs) do
+      entry.refs[stringify(refLang)] = stringify(refUrl)
+    end
+  end
+  if item['other-refs'] then
+    entry['other-refs'] = {}
+    for _, refItem in ipairs(item['other-refs']) do
       local ref = {}
       if not refItem.url then
         quarto.log.warning("api-reference: ignoring an '" .. entry.label .. "' reference because the URL is missing.")
         goto continue
       end
 
-      ref.url = stringify(refItem.url)
-      ref.label = refItem.label and stringify(refItem.label)
-      ref.name = refItem.name and stringify(refItem.name)
-      ref.order = refItem.order and stringify(refItem.order)
-      if refItem.lang then
-        local lang = LANG_MAPPING[stringify(refItem.lang):lower()].id
-        if lang then ref.lang = lang end
+      if not refItem.title then
+        quarto.log.warning("api-reference: ignoring an '" .. entry.label .. "' reference because the Title is missing.")
+        goto continue
       end
-    
-      ref.richLabel = buildRefLabel(ref)
-      ref.label = stringify(ref.richLabel)
-      table.insert(entry.refs, ref)
+
+      table.insert(entry['other-refs'], {
+        url = stringify(refItem.url),
+        title = stringify(refItem.title),
+        order = refItem.order and stringify(refItem.order)
+      })
       ::continue::
     end
-    table.sort(entry.refs, refsSorting)
+    table.sort(entry['other-refs'], refsSorting)
   end
 
   return entry
@@ -201,6 +182,7 @@ return {
   ENTITY_TYPES = ENTITY_TYPES,
   initializeReferences = function(path)
     if not globalReferences then
+      ensureHtmlDeps()
       local metadata = readYamlFile(path)
       globalReferences = initializeReferences(metadata)
     end

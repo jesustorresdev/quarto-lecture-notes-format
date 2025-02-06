@@ -3,65 +3,97 @@
 local apiref = require "api-reference"
 
 local BulletList = pandoc.BulletList
-local DefinitionList = pandoc.DefinitionList
 local Code = pandoc.Code
 local Div = pandoc.Div
-local Emph = pandoc.Emph
 local Header = pandoc.Header
+local Link = pandoc.Link
 local RawInline = pandoc.RawInline
 local Space = pandoc.Space
 local Span = pandoc.Span
-local Str = pandoc.Str
 
 local TYPE_MAPPING = {
   ["class"] = "clase",
   ["function"] = "función",
-  ["method"] = "método"
+  ["method"] = "método",
+  ["event"] = "evento",
+  ["static"] = "static",
+}
+
+local LANG_MAPPING = {
+  ["cpp"] = "C++",
+  ["bp"] = "Blueprint",
 }
 
 local function processEntry(opts, entry, parent)
-  local marker = pandoc.Nil
-  local properties = pandoc.List()
-  local refsList = pandoc.List()
+  local header = pandoc.List()
+  local headerEnd = pandoc.List()
+  local otherRefsList = pandoc.Nil
   
   -- type marker
-  marker = opts['markers'][entry.type]
-  properties:insert(Emph("«" .. TYPE_MAPPING[entry.type] .. "»"))
+  local marker = opts['markers'][entry.type]
+  if marker then
+    header:insert(Span(marker, {class="apirefs-entry-marker"}))
+    header:insert(RawInline("html", "&nbsp;"))
+  end
+
+  -- name
+  local labelSuffix = entry.isFunc and "()" or ""
+  header:insert(Span({entry.label, labelSuffix}, {id=entry.refname, class="apirefs-entry-label"}))  
+
+  -- type
+  -- header::insert(Span("«" .. TYPE_MAPPING[entry.type] .. "»"))
+  header:insert(Space())
+  header:insert(Span(TYPE_MAPPING[entry.type], {class="apirefs-entry-type"}))
 
   -- internal name
   if entry['internal-name'] then
-    properties:insert(Str("|"))
-    properties:insert(Code(entry['internal-name']))
-    properties:insert(Str("|"))
-    properties:insert(Space())
+    header:insert(Space())
+    header:insert(Span({"|", Code(entry['internal-name']), "|"}, {class="apirefs-entry-internal-name"}))
   end
 
   -- derived class
   if entry.type == apiref.ENTITY_TYPES.class and entry.extends then
-    if quarto.doc.is_format("html") then
-      properties:insert(RawInline("html", "&nbsp;:&nbsp;"))
-    elseif quarto.doc.is_format("pdf") then
-      properties:insert(RawInline("latex", "~:~"))
-    else
-      properties:insert(Str(" : "))
+    headerEnd:insert(": ")
+    headerEnd:insert(Span(entry.extends, {class="apirefs-entry-extends"}))
+  end
+  
+  -- references
+  if entry.refs then
+    local refList = pandoc.List()
+    local firstRef = true
+    for lang, url in pairs(entry.refs) do
+      -- only add space at the beginning if it's needed
+      if #headerEnd > 0 or not firstRef then
+        refList:insert(Space())
+      end
+      local langIcon = opts['markers'][lang]
+      refList:insert(Link(langIcon or lang, url, LANG_MAPPING[lang],
+      {class="apirefs-entry-ref " .. "apirefs-entry-ref-" .. lang}))
+      firstRef = false
     end
-    properties:insert(Emph(entry.extends))
+    headerEnd:insert(Span(refList, {class="apirefs-entry-refs"}))
+  end
+  
+  -- we use headerEnd to avoid breaking the line for the end of the header
+  if #headerEnd > 0 then
+    header:insert(Space())
+    header:insert(Span(headerEnd, {class="apirefs-entry-nobrk"}))
   end
 
-  -- reference list
-  if entry.refs then
-    for _, ref in pairs(entry.refs) do
-      -- quarto.log.output(ref.label)
-      refsList:insert(ref.richLabel)
+  -- other reference list
+  if entry['other-refs'] then
+    local refList = pandoc.List()
+    for _, ref in ipairs(entry['other-refs']) do
+      refList:insert(Link(ref.title, ref.url, nil,
+        {class="apirefs-entry-otherref"}))
     end
+    otherRefsList = Div(BulletList(refList), {class="apirefs-entry-otherrefs"})
   end
   
   return Div({
-      Span(marker, {class="apirefs-entry-marker"}),
-      Span({entry.label}, {id=entry.refname, class="apirefs-entry-label"}),
-      Span(properties, {class="apirefs-entry-properties"}),
-      Div({BulletList(refsList)}, {class="apirefs-entry-refs"})
-    }, {class="apirefs-entry"})
+      pandoc.Inlines(header),
+      otherRefsList
+    }, {class="apirefs-entry " .. "apirefs-ref-" .. entry.type})
 end
 
 local function create_section_references(opts)
@@ -106,7 +138,7 @@ local function create_section_references(opts)
         refBlock.content:insert(membersList)
       end
       return refBlock
-    end))}, {class="apirefs-list"})
+    end))}, {class="apirefs-list apirefs-top-list"})
 end
 
 return {

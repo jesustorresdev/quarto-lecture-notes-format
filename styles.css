@@ -18,7 +18,7 @@
 
 /* Estilo de las partes en el sidebar */
 
-.sidebar-item-section .text-start {
+#quarto-sidebar .sidebar-item-section > div:first-child .sidebar-item-text {
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -37,25 +37,4 @@
   font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
   font-size: 0.875em;
   font-weight: 400;
-}
-
-.apirefs-ref-marker {
-  vertical-align: -0.08rem;
-}
-
-.apirefs-entry-label {
-  font-weight: bold;
-}
-
-.apirefs-list > ul {
-  list-style-type: none;
-  padding-left: 0rem;
-}
-
-.apirefs-entry-members-list > ul {
-  padding-left: 2rem;
-}
-
-.apirefs-list .apirefs-entry-refs > ul {
-  padding-left: 3.5rem;
 }
