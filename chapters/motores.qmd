@@ -19,7 +19,7 @@ Durante la etapa de **preproducción** en el desarrollo de un videojuego, una de
 Pero con más de 100 motores disponibles en el mercado [@WikipediaListOfGameEngines], cada uno con sus propias características, rendimiento, licencias y costes, seleccionar el motor adecuado para un proyecto específico puede ser un desafío considerable.
 Por ello, es importante analizar cuidadosamente las diferentes opciones y los criterios que deberíamos considerar para esta selección.
 
-![Etapas del desarrollo de un videojuego.](/assets/motores/gamedev_cycle.png){#fig-gamedev-cycle}
+![Etapas del desarrollo de un videojuego.](/assets/motores/gamedev-cycle.png){#fig-gamedev-cycle}
 
 Además, usar un motor comercial no es la única opción.
 Históricamente, antes de que los motores se popularizaran, los estudios desarrollaban sus juegos sin una clara separación entre componentes comunes y específicos.
@@ -30,7 +30,7 @@ Actualmente, muchos estudios siguen optando por desarrollar y evolucionar sus pr
 
 Antes de entrar en las cuestiones más técnicas, es importante considerar el **triángulo de oro** y sus implicaciones a la hora de escoger la tecnología de nuestro proyecto porque, en función de nuestro caso, quizás no haya nada que considerar.
 
-![Triángulo de oro: Personas, procesos y tecnología.](/assets/motores/golden_triangle.png){#fig-golden-triangle width=50%}
+![Triángulo de oro: Personas, procesos y tecnología.](/assets/motores/golden-triangle.png){#fig-golden-triangle width=50%}
 
 El **triángulo de oro** se popularizó en 1999 en el mundo de la seguridad, de la mano de Bruce Schneier, aunque es posible encontrar referencias anteriores --a mediados de los 80-- en los pilares fundamentales de ITIL (*Information Technology Infrastructure Library*).
 Como se ilustra en la @fig-golden-triangle, la idea principal es que las personas, los procesos y la tecnología deben colaborar para que una implementación tecnológica tenga éxito:
@@ -176,7 +176,7 @@ Por ejemplo:
 
 En general, las grandes compañías con múltiples estudios optan por crear sus propios motores, porque les ofrece control, independencia respecto a terceros y evita la pérdida de ingresos por *royalties* --especialmente cuando los *royalties* del motor licenciado son un porcentaje de los ingresos, ya que estas compañías desarrollan proyectos de gran presupuesto y, por tanto, esperan grandes ingresos--.
 
-![God of War se desarrolló sobre un motor creado por SIE Santa Mónica Studios *ex profeso* para el juego.](/assets/motores/god_of_war.jpg)
+![God of War se desarrolló sobre un motor creado por SIE Santa Mónica Studios *ex profeso* para el juego.](/assets/motores/god-of-war.jpg)
 
 Entre los estudios de tamaño medio, muchas compañías han optado por motores comerciales, como Unreal Engine, pero bastantes estudios de éxito siguen optando por usar los suyos propios [@SantamariaCustomGameEngines].
 Obviamente, donde más se observa el uso de motores comerciales es en las producciones *indie* de los estudios de menor tamaño, donde los costes, el tiempo y el tamaño de los equipos no suelen permitir afrontar la creación de un motor propio.
