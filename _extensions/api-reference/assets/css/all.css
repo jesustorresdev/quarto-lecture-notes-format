@@ -6,19 +6,19 @@
   font-weight: bold;
 }
 
-.apirefs-list .apirefs-entry-extends {
+.apirefs-entry-extends {
   font-style: italic;
 }
 
-.apirefs-list .apirefs-entry-type {
+.apirefs-entry-type {
   font-style: italic;
 }
 
-.apirefs-list .apirefs-entry-type:after {
+.apirefs-entry-type:after {
   content: "»";
 }
 
-.apirefs-list .apirefs-entry-type:before {
+.apirefs-entry-type:before {
   content: "«";
 }
 
@@ -37,6 +37,7 @@
 
 .apirefs-entry-otherrefs > ul {
   text-indent: 0;
+  margin-bottom: 0;
 }
 
 .apirefs-entry-refs .apirefs-entry-ref {
