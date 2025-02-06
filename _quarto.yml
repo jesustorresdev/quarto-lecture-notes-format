@@ -53,8 +53,8 @@ api-reference:
     function: "{{< iconify ph function-bold >}}"
     method: "{{< iconify ph function-bold >}}"
     static: "{{< iconify ph function-square-bold >}}"
-    cpp: "{{< iconify devicon-plain cplusplus >}}"
-    bp: "{{< iconify simple-icons blueprint >}}"
+    cpp: "{{< iconify devicon-plain cplusplus title='C++' >}}"
+    bp: "{{< iconify simple-icons blueprint title='Blueprint' >}}"
 
 filters:
   - reading-time

@@ -66,8 +66,7 @@ local function processEntry(opts, entry, parent)
       if #headerEnd > 0 or not firstRef then
         refList:insert(Space())
       end
-      local langIcon = opts['markers'][lang]
-      refList:insert(Link(langIcon or lang, url, LANG_MAPPING[lang],
+      refList:insert(Link(opts['markers'][lang] or lang, url, LANG_MAPPING[lang],
       {class="apirefs-entry-ref " .. "apirefs-entry-ref-" .. lang}))
       firstRef = false
     end
