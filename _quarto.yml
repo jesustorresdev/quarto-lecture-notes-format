@@ -28,7 +28,8 @@ book:
       chapters:
         - chapters/unreal-core.qmd
         - chapters/unreal-gameplay-framework.qmd
-  # appendices:
+  appendices:
+    - chapters/perforce.qmd
 
 lang: es
 toc-title: Contenidos
