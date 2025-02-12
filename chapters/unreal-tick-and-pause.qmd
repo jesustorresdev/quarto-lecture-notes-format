@@ -28,7 +28,7 @@ Igualmente, todo componente tiene una *función de tick* de tipo **FPrimaryCompo
 Ambas variables se suelen configurar durante la construcción del actor o componente y se registran en el nivel al iniciar su ejecución en el juego.
 También se pueden configurar en el editor de Unreal Engine, en la sección **Actor Tick** o **Component Tick** de las propiedades del actor o componente (ver la @fig-actor-tick-properties).
 
-![Propiedades de la sección **Actor Tick** de un actor.](figures/actor-tick-properties.png){#fig-actor-tick-properties}
+![Propiedades de la sección **Actor Tick** de un actor.](/assets/unreal-tick-and-pause/actor-tick-properties.png){#fig-actor-tick-properties}
 
 Este sistema permite que los actores y componentes puedan tener múltiples funciones de *tick* diferentes, cada una con sus propias características.
 
@@ -106,7 +106,7 @@ void AMyNewActor::RegisterActorTickFunctions(bool bRegister)
 ### Grupos de *ticks*
 
 Unreal Engine define varios *grupos de ticks*, como `TG_PrePhysics`, `TG_DuringPhysics`, `TG_PostPhysics` o `TG_PostUpdateWork`.
-Cada uno de estos grupos representa un punto específico en el ciclo de ejecución del juego, que se suceden en el orden anterior indicado[@UnrealActorTicking].
+Cada uno de estos grupos representa un punto específico en el ciclo de ejecución del juego, que se suceden en el orden anterior indicado [@UnrealActorTicking].
 
 Las *funciones de tick* comentadas se pueden asignar a un *grupo de tick* determinado mediante la propiedad **Tick Group** de la clase de la *función de tick*.
 
@@ -119,7 +119,7 @@ Por ejemplo, si un actor depende del resultado del *tick* de otro actor, podemos
 ### Prerrequisitos
 
 En ocasiones, no es suficiente con asignar un *grupo de tick* a una *función de tick* para asegurar que se ejecute en el momento adecuado, por lo que hace falta un mecanismo adicional que ofrezca más control.
-Por ello, las *funciones de tick* también pueden tener *prerrequisitos*, que deben cumplirse para que se ejecute el *tick*.
+Por ello, las *funciones de tick* también pueden tener *prerrequisitos*, que el motor asegura que se cumplen antes de ejecutar el *tick*.
 
 Los *prerrequisitos* son otras *funciones de tick* que deben ejecutarse antes de que se ejecute la *función de tick* que los tiene como *prerrequisito*.
 Por ejemplo, si una *función de tick* tiene como *prerrequisito* a otra que se ejecuta en el grupo `TG_PrePhysics`, **UWorld** ejecutará la primera después de que se ejecute la segunda.
@@ -131,14 +131,14 @@ Como la mayor parte de los actores y componentes solo tienen una *función de ti
 * {{< api Actor::AddTickPrerequisiteActor >}}
 * {{< api Actor::AddTickPrerequisiteComponent >}}
 * {{< api ActorComponent::AddTickPrerequisiteActor >}}
-* {{< api ActorComponent::AddTickPrerequisiteComponent >}}.
+* {{< api ActorComponent::AddTickPrerequisiteComponent >}}
 
 Así como los métodos para eliminarlos:
 
 * {{< api Actor::RemoveTickPrerequisiteActor >}}
 * {{< api Actor::RemoveTickPrerequisiteComponent >}}
 * {{< api ActorComponent::RemoveTickPrerequisiteActor >}}
-* {{< api ActorComponent::RemoveTickPrerequisiteComponent >}}.
+* {{< api ActorComponent::RemoveTickPrerequisiteComponent >}}
 
 ## Activación y desactivación de actores y componentes
 
@@ -147,7 +147,7 @@ Es muy común en cualquier proyecto tener que activar y desactivar entidades tem
 En Unreal Engine, los actores y componentes se pueden activar y desactivar en cualquier momento, pero los diferentes aspectos de su influencia en el mundo se controlan por separado.
 Es decir, que debemos activar y desactivar su visibilidad, colisiones, actualización, etc. de forma independiente.
 
-### Actualización
+### Actualización {#sec-tick-activation}
 
 Las *funciones de tick* se puede activar y desactivar individualmente usando el método {{< api SetTickFunctionEnable >}} de la clase **FTickFunction**.
 
@@ -175,19 +175,19 @@ Por ejemplo, se puede usar para ralentizar el tiempo cuando el jugador está a p
 
 En Unreal Engine, la escala global de tiempo se guarda en una propiedad del **UWorld** que se puede modificar usando {{< api SetGlobalTimeDilation >}}.
 El valor por defecto es 1.0, que indica que el tiempo transcurre a velocidad normal, pero un valor de 0.5 ralentiza el tiempo a la mitad, mientras que un valor de 2.0 lo acelera al doble.
-Esto afecta a la velocidad a la que reciben *ticks* actores y componente, pero se debe tener en cuenta que no tiene efecto en la simulación del motor de física.
+Esto afecta a la velocidad a la que reciben *ticks* actores y componentes, pero se debe tener en cuenta que no tiene efecto en la simulación del motor de física.
 Por tanto, el escalado de tiempo no afecta al movimiento de los componentes con la simulación de física activada.
 
 Además, cada actor tiene una propiedad **Custom Time Dilation** que permite escalar el tiempo para él y sus componentes de forma independiente.
 Este escalado se hace de forma relativa a la escala de tiempo global.
-Por ejemplo, se pueda crear la ilusión de que un personaje se mueve muy rápido, poniendo el juego globalmente en *slow motion* usando un **Global Time Dilation* de 0.1, pero poniendo el **Custom Time Dilation** del actor del personaje a 10.
+Por ejemplo, se puede crear la ilusión de que un personaje se mueve muy rápido, poniendo el juego globalmente en *slow motion* usando un **Global Time Dilation* de 0.1, pero poniendo el **Custom Time Dilation** del actor del personaje a 10.
 
 ## Pausa {#sec-pause}
 
 La pausa es un estado del juego en el que se detiene el paso del tiempo, pero el jugador puede seguir interactuando con el juego.
 
 Para que un nivel se pueda poner en pausa, el **GameMode** asociado debe tener la propiedad **Pauseable** activada.
-Esto permite marcar los niveles que se utilizan para mostrar menús o pantallas de carga, como no pauseables.
+Esto permite marcar los niveles que se utilizan para mostrar menús o pantallas de carga, como no pausables.
 
 Cuando se activa la pausa, **UWorld** deja de hacer *tick* a los actores y componentes, excepto a aquellos cuyas *funciones de tick* tienen la propiedad **Tick Even When Paused** activada.
 Esto es lo que permite que jugador pueda seguir interactuando con partes del juego, mientras el resto de actores y componentes permanecen inactivos.

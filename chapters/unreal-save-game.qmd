@@ -1,0 +1,220 @@
+# Salvado de la partida {#sec-savegame}
+
+El sistema de **UObject** de Unreal Engine permite disponer en C++ de características presentes en lenguajes de programación gestionados, como Java o C#.
+Una de estas características es la serialización de objetos, que permite guardar y cargar objetos de forma sencilla.
+
+Todos los objetos que heredan de **UObject** tienen un método `Serialize()` que se llama cuando se va a guardar o cargar el objeto.
+Este método recibe un objeto de tipo **FArchive**, que representa el almacén de datos donde se va a guardar o cargar el objeto.
+
+Sin embargo, Unreal Engine ofrece una solución más sencilla para guardar y cargar el estado de la partida, que es utilizando la clase **SaveGame**.
+
+## Uso de *SaveGame*
+
+La clase {{< api SaveGame >}} es una clase que hereda de **UObject** y que puede ser utilizada para guardar y cargar el estado del juego [@UnrealSavingLoading].
+
+La forma de utilizar esta clase es muy sencilla:
+
+1. Crear una clase que herede de **SaveGame** y añadirle las propiedades adecuadas para almacenar los datos del estado del juego que se quieren preservar.
+   Para este ejemplo, vamos a suponer que la clase se llama **MySaveGame**.
+
+1. Llamar a {{< api CreateSaveGameObject >}} para crear un objeto de la clase **MySaveGame**.
+
+1. Copiar en las propiedades del objeto **MySaveGame** los datos del estado del juego que se quieren preservar.
+
+1. Llamar a {{< api SaveGameToSlot >}} o {{< api AsyncSaveGameToSlot >}} para guardar el objeto **MySaveGame** en un *slot* de partida guardada (ver la @fig-save-game-to-slot).
+   El *slot* donde guardar la partida se indica mediante un *nombre de slot*, que se puede escoger libremente y que debe ser diferente para cada *slot*, y el *índice de usuario*, para identificar al usuario que está salvando la partida.
+
+:::{.callout-tip}
+Es recomendable utilizar `AsyncSaveGameToSlot()` en lugar de `SaveGameToSlot()` para guardar la partida, ya que la primera permite que el salvado ocurra en un hilo de ejecución diferente al principal, evitando que el juego se quede congelado mientras se guarda la partida.
+Sin embargo, si se guarda desde un menú o pantalla de pausa, dónde el juego ya está congelado, se puede utilizar `SaveGameToSlot()` sin problemas.
+:::
+
+![Nodos para el salvado de un objeto **SaveGame**.](/assets/unreal-save-game/save-game-to-slot.png){#fig-save-game-to-slot}
+
+Para realizar la carga de los datos de la partida, se tiene que realizar el mismo proceso, pero se llama a {{< api LoadGameFromSlot >}} --o a {{< api AsyncLoadGameFromSlot >}}-- para cargar los datos en el objeto **MySaveGame** (ver la @fig-load-game-from-slot).
+
+![Nodos para la carga de un objeto **SaveGame**.](/assets/unreal-save-game/load-game-from-slot.png){#fig-load-game-from-slot}
+
+Luego, se pueden copiar los datos de las propiedades del objeto **MySaveGame** a las propiedades de los otros objetos del juego, para restablecer el estado de la partida.
+
+En cualquier momento se puede saber si hay una partida guardada en un *slot* concreto llamando a {{< api DoesSaveGameExist >}}.
+
+## Desarrollo de un sistema de salvado
+
+El uso descrito de la clase **SaveGame** es muy sencillo, pero seguir directamente los pasos indicados realmente no son suficientes para implementar un sistema de salvado de partida completo, excepto en proyectos muy simples.
+
+Para implementar un sistema de salvado de partida más completo, es conveniente seguir algunas recomendaciones.
+
+### Sistema de salvado
+
+Idealmente, buena parte de la lógica de salvado y carga de la partida debería estar encapsulada en un sistema de salvado que se encargue de estas tareas.
+Este sistema debe tener métodos para lanzar el proceso de guardado y cargar de la partida y para gestionar los *slots* de partida guardada, así como eventos para notificar al resto del juego cuando se está guardado o cargado una partida.
+Este sistema puede implementarse como un subsistema de Unreal Engine (ver la @sec-unreal-subsystem), en el **GameInstance** o en el **GameMode** del nivel actual.
+
+Por lo general, al salvar la partida es necesario almacenar el estado de múltiples objetos.
+Entre la información guardada probablemente se deba incluir el nivel actual, la posición del jugador, el inventario o las habilidades, pero también puede ser necesario guardar el estado de muchos otros actores, como enemigos u objetos en la escena.
+Además, puede ser buena idea incluir un número de versión, para poder detectar si la partida guardada es compatible con la versión actual del juego o, incluso, para realizar conversiones automáticas de partidas guardadas en versiones anteriores.
+
+Por tanto, necesitamos un sistema de salvado que se encargue recoger la información salvable de todos estos sistemas y de cada actor y guardarla en un objeto **SaveGame**, que luego se guardará en un *slot*, tal y como se ha descrito anteriormente.
+
+En el otro extremo, al recuperar la partida, el sistema debe cargar el objeto **SaveGame** del *slot* y restablecer el estado de los actores en el nivel actual:
+
+1. Si una de las propiedades del objeto **SaveGame** es el nivel de la partida guardada, se puede cargar dicho nivel llamando a {{< api OpenLevel >}}.
+En ese sentido, se puede utilizar la técnica descrita en la @sec-async-load-level para cargar el nivel de forma asíncrona, de tal forma que el juego no se quede congelado mientras se carga el nivel.
+
+1. Como la carga del nivel se realiza con los valores por defecto, es necesario restablecer las propiedades guardadas en el objeto **SaveGame** en el nivel cargado.
+
+   Esto se puede hacer desde el **GameMode** del nivel cargado, en métodos como `BeginPlay()` o `InitGame()`, antes de que el resto de actores inicien su ejecución.
+
+   Para que el **GameMode** sepa que tiene que cargar los datos de una partida salvada, se puede utilizar el argumento **Options** de `OpenLevel()`, como se muestra en la @fig-openlevel-options.
+
+1. Al igual que para al guardar, para restablecer las propiedades guardadas en el objeto **SaveGame** se deben buscar los actores salvados en el nivel y sobreescribir sus propiedades con los valores guardados.
+
+En la siguientes secciones se describirá cómo se puede implementar un sistema para localizar los actores y guardar o restablecer su estado.
+
+### Interfaz para actores salvables
+
+Cuando tenemos muchos actores en el nivel, es buena idea delegar en cada actor la responsabilidad de guardar y cargar su propio estado de la forma que sea más adecuada en cada caso.
+Para eso, es conveniente definir una interfaz específica que, por un lado, permita al sistema del salvado encontrar fácilmente los actores que deben guardar y cargar, y por otro, tenga métodos a través de los cuales el sistema de salvado pueda indicar a los actores que es el momento de guardar o cargar su estado y dónde deben hacerlo.
+
+Por ejemplo, la siguiente interfaz `ISavableActorInterface` define los métodos `SaveActorState()` y `LoadActorState()` para guardar y cargar el estado del actor, respectivamente, en una estructura de datos que hemos llamado `FActorSaveData`.
+
+```cpp
+UINTERFACE(MinimalAPI, Blueprintable)
+class USavableActorInterface : public UInterface
+{
+    GENERATED_BODY()
+};
+
+class ISavableActorInterface
+{
+   GENERATED_BODY()
+   
+    // ...
+
+public:
+    virtual void OnActorLoaded();
+
+    virtual void SaveActorState(FActorSaveData& OutSavedData);
+    virtual void LoadActorState(const FActorSaveData& SavedData);
+
+    // ...
+};
+```
+
+El sistema de salvado debe buscar todos los actores que implementan esta interfaz, crear un objeto `FActorSaveData` para cada actor y almacenarlo en una lista en un objeto **SaveGame**, que será el que finalmente se guarde en un *slot*.
+Antes de guardar el objeto **SaveGame**, el sistema de salvado debe llamar a `SaveActorState()` en cada actor para que guarde su estado en su objeto `FActorSaveData`.
+
+La estructura `FActorSaveData` puede ser una estructura de datos simple, que contenga las propiedades que se quieren guardar de cualquier actor, o contener un `TArray` o un `TMap` de propiedades para tener una estructura más flexible.
+En cualquier caso, siempre será necesario que la estructura contenga alguna propiedad que identifique al actor, como su nombre, para poder localizarlo al cargar la partida guardada.
+
+Al cargar una partida el proceso sería el inverso.
+El sistema de salvado debe cargar el objeto **SaveGame** del *slot*, recorrer la lista de actores salvables y llamar a `LoadActorState()` en cada actor para que restablezca su estado desde su objeto `FActorSaveData`.
+
+También puede ser conveniente que la interfaz tenga un método que se llame tras restablecer las propiedades del actor desde la partida guardada, de forma que el actor pueda realizar ajustes adicionales o cambios visuales con los nuevos valores de sus propiedades.
+Por ejemplo, si el actor es una caja que puede ser abierta, es probable que tenga una propiedad que indique si ya ha sido abierta por el jugador, y que cuando se restablezca el estado del actor desde la partida guardada, queramos que el actor use esta propiedad para cambiar su aspecto visual y mostrar la caja abierta.
+En la interfaz propuesta, este método se llama `OnActorLoaded()` y los actores lo implementarían para realizar estos ajustes.
+
+Como hemos comentado, el uso de una interfaz permite al sistema de salvado localizar fácilmente a los actores que se pueden guardar y cargar, ya que solo tiene que buscar los actores que implementan la interfaz usando {{< api GetAllActorsWithInterface >}}.
+Este tipo de búsquedas pueden llevar algo de tiempo, pero eso no suele ser un problema, mientras no se haga en una función que se llame cada frame, como `Tick()` o `TickComponent()`.
+En todo caso, si esto se convierte en un problema, se puede descargar la tarea en un hilo diferente o utilizar un sistema de registro de actores salvables.
+En este último caso, cada actor que se quiera preservar su estado se añadiría al instanciarse --por ejemplo, en su `BeginPlay()`-- en una lista en el sistema de salvado, de forma que dicho sistema solo tiene que recorrer este registro para localizar a los actores.
+
+### Serialización y uso del especificador *SaveGame*
+
+Como hemos comentado, el trabajo de la función `SaveActorState()` de la interfaz propuesta, es copiar el estado del actor en propiedades de la estructura de datos `FActorSaveData`, para que luego sea almacenada.
+No todas las propiedades de un actor deben ser guardadas, ya que algunas de ellas pueden ser temporales o no tener sentido en el contexto de una partida guardada, pero, aun así, en actores complejos, la cantidad de propiedades a guardar puede ser muy grande, complicando el desarrollo y la mantenibilidad de los métodos de guardado y carga.
+
+Para facilitar el trabajo de guardar y cargar el estado de los actores, Unreal Engine ofrece el especificador de propiedad **SaveGame**, que se puede utilizar tanto en C++ como en el editor, para indicar que una propiedad debe ser guardada y cargada cuando se serializa el actor.
+
+Por ejemplo, un actor puede tener una propiedad `bIsActivated` marcada con **SaveGame**.
+
+```cpp
+UCLASS()
+class MYPROJECT_API AMyActor : public AActor, public ISavableActorInterface
+{
+    // ...
+
+protected:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool bIsActivated;
+
+    // ...
+};
+```
+
+En la @fig-savegame-specifier se puede ver el mismo especificador **SaveGame** pero en el editor de Unreal Engine.
+
+![Propiedad **bIsActivated** marcada con el especificador **SaveGame**.](/assets/unreal-save-game/savegame-specifier.png){#fig-savegame-specifier}
+
+Para aprovechar el especificador **SaveGame** en la implementación de la interfaz `ISavableActorInterface`, se pueden utilizar objetos {{< api FArchive >}} para serializar y deserializar los datos del actor.
+Por defecto, las clases derivadas de `FArchive` serializan todas las propiedades de un objeto, pero si el objeto `FArchive` tiene a `true` su propiedad **ArIsSaveGame**, solo se incluirán las propiedades del actor marcadas con el especificador **SaveGame**, como la propiedad `bIsActivated` del ejemplo.
+
+Tipicamente, la implementación de `SaveActorState()` del actor utiliza un objeto {{< api FMemoryWriter >}} --clase derivada de `FArchive`-- para serializar el estado del actor, almacenando los datos codificados en un `TArray<uint8>` en la memoria.
+Este `TArray<uint8>` se puede copiar en la estructura `FActorSaveData`.
+
+Por otro lado, la implementación de `LoadActorState()` del actor utiliza un objeto {{< api FMemoryReader >}} para deserializar el estado del actor desde los datos codificados en un `TArray<uint8>` guardados en la estructura `FActorSaveData`.
+
+A continuación se muestra un ejemplo de cómo se podría implementar `SaveActorState()` y `LoadActorState()` usando clases `FArchive` para serializar y deserializar el estado del actor guardando solo las propiedades marcadas con el especificador **SaveGame**.
+Como se puede observar, no solo se guardan las propiedades marcadas con **SaveGame**, sino que también se guarda el nombre del actor, para poder localizarlo al cargar la partida guardada, y su posición y rotación.
+
+```cpp
+USTRUCT()
+struct FActorSaveData
+{
+   GENERATED_BODY()
+
+   UPROPERTY()
+   FString ActorName;
+   UPROPERTY()
+   FTransform Transform;
+   UPROPERTY()
+   TArray<uint8> Data;
+};
+
+void AMyActor::LoadActorState(const FActorSaveData& SavedData)
+{
+   SetActorTransform(SavedData.Transform);                    
+
+   FMemoryReader MemoryReader(SavedData.Data, true);                
+   FObjectAndNameAsStringProxyArchive Ar(MemoryReader, true);
+   Ar.ArIsSaveGame = true;                                    
+
+   Serialize(Ar);
+}
+
+void AMyActor::SaveActorState(FActorSaveData& OutSavedData)
+{
+   OutSavedData.ActorName = GetName();                         // <1>
+   OutSavedData.Transform = GetActorTransform();               // <1>
+
+   FMemoryWriter MemoryWriter(OutSavedData.Data, true);        // <2>
+   FObjectAndNameAsStringProxyArchive Ar(MemoryWriter, true);  // <3>
+   Ar.ArIsSaveGame = true;                                     // <4>
+
+   Serialize(Ar);                                              // <5>
+}
+```
+1. Guardar el nombre, la posición y la rotación del actor.
+2. Serializar guardando los datos en `FActorSaveData::Data`.
+3. Convertir las referencias a objetos y `FName` del actor a cadenas antes de serializar.
+4. Indicar que solo se deben serializar las propiedades marcadas con **SaveGame**.
+5. Ejecutar la serialización de las propiedades del actor.
+
+{{< api FObjectAndNameAsStringProxyArchive >}} es una clase derivada de {{< api FArchive >}} que convierte las referencias a objetos y `FName` en cadenas antes de llamar al serializador que se le pasa como argumento.
+Esto es necesario porque `FMemoryWriter` serializa en un formato binario, donde las referencias a objetos se guardan como punteros binarios, que puedan dar problemas en sesiones y plataformas diferentes, y los `FName` se guardan como índices, que pueden no ser consistentes entre diferentes sesiones.
+
+### Actores instanciados y destruidos en tiempo de ejecución 
+
+Cuando se guarda una partida, es posible que algunos actores que estaban en el nivel inicialmente, ya no lo estén.
+Por ejemplo, puede ser el caso de los enemigos que han sido derrotados o de los objetos que han sido consumidos o destruidos.
+
+En estos casos, parece necesario almacenar de alguna forma que ya no están en el nivel, para volver a destruirlos al cargar la partida, tras cargar el nivel en su estado inicial.
+Sin embargo, el sistema de salvado no puede recurrir a estos actores para que guarden su estado, ya que no existen.
+
+En general, en lugar de colocar este tipo de actores en el nivel, es mejor utilizar un sistema de **spawners** que instancie los actores en tiempo de ejecución cuando sea necesario.
+Estos **spawners** guardan el estado de sí ya se ha instanciado un actor, o no, y si ha sido destruido en el momento de guardar la partida.
+Por tanto, son ideales para implementar la interfaz `ISavableActorInterface` para hacerse cargo de guardar y cargar el estado de los actores que instancian.
+
+Aparte de este uso, los **spawners** también pueden ser útiles para gestionar la cantidad de actores instanciados en el nivel, evitando que el rendimiento del juego se vea afectado.
+Por ejemplo, los **spawners** pueden detectar cuando el jugador se acerca a una zona, para empezar a instanciar los enemigos que aparecerán en una oleada, y cuando el jugador se aleja, pausar (ver la @sec-tick-activation) o destruir los enemigos que ya no son necesarios.

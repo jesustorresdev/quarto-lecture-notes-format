@@ -1,0 +1,101 @@
+# Level Blueprint {#sec-level-blueprint}
+
+Todos niveles incluyen un actor especial, que no podemos ver en la escena, llamado **Level Blueprint** que permite escribir lógica específica del nivel.
+En otros motores esto se asemeja a tener un *level manager*, es decir, una clase única por nivel que gestiona el ciclo de vida del nivel, coordina los diferentes sistemas y actores del nivel, y maneja eventos específicos de la escena.
+
+Por ejemplo, en Unity es común tener un `LevelManager` como **MonoBehaviour** que centraliza la lógica de inicialización del nivel, la gestión de puntos de salvado, la instanciación de enemigos, o el control de eventos específicos de la escena.
+En motores personalizados, el *level manager* suele ser una clase singleton que proporciona acceso global a los sistemas del nivel y coordina la comunicación entre los diferentes componentes de la escena.
+
+Sin embargo, en Unreal Engine el papel de *level manager* se divide, más bien, entre el **GameMode** y el **Level Blueprint**.
+Como el **Level Blueprint** tiene referencias a todos actores del nivel, es muy útil para implementar la lógica que conecta los eventos globales del nivel, para que los actores se coordinen.
+Por ejemplo, establecer suscripciones a eventos para que cuando el actor del jugador llegue a cierto punto del nivel se active un evento que haga que se instancien enemigos, se activen unas plataformas, etc.
+Mientras que el **GameMode** suele contener el resto del código de gestión del nivel, como las reglas para ganar o perder o la gestión de la creación de los actores del jugador.
+
+## ¿Cómo acceder al Level Blueprint?
+
+El **Level Blueprint** se puede editar desde el editor de Unreal Engine, seleccionando la opción **Blueprints / Open Level Blueprint** en el menú principal.
+
+<!-- TODO: Captura de un LevelBlueprint -->
+
+Sin embargo, internamente el **Level Blueprint** es un actor de tipo `ALevelScriptActor` que es creado automáticamente por la instancia de **UWorld** del nivel.
+Por tanto, se puede heredar de la clase `ALevelScriptActor` en C++ para crear una nueva clase base de **Level Blueprint**.
+Esto se suele hacer para incorporar métodos útiles o exponer ciertas funcionalidades al código de Blueprint en el **Level Blueprint**.
+
+```cpp
+UCLASS()
+class MYPROJECT_API AMyLevelScriptActor : public ALevelScriptActor
+{
+    GENERATED_BODY()
+public:
+    // Propiedad que podemos editar desde el editor del Level Blueprint
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "My Project|Level Scripting")
+    FString TestProperty;
+
+    // Función que podemos llamar desde cualquier Level Blueprint
+    UFUNCTION(BlueprintCallable, Category = "My Project|Level Scripting")
+    virtual void NotifyPlayerReachedCheckpoint(const FString& CheckpointName);
+
+    // Evento que podemos usar en cualquier Level Blueprint
+    UFUNCTION(BlueprintImplementableEvent, Category = "My Project|Level Scripting")
+    void OnLevelStart();
+
+protected:
+    virtual void BeginPlay() override;
+};
+```
+
+Para que un nivel use esta nueva clase como su **Level Blueprint** se debe abrir el editor del nivel y cambiar la clase en las opciones del nivel:
+  
+1. Abrir el nivel en el editor.
+1. En **World Settings** buscar la sección **Level Script**
+1. Cambiar **Level Script Class** a nuestra nueva clase `AMyLevelScriptActor`
+
+Una vez configurado, el **Level Blueprint** del nivel heredará todas las funciones, eventos y propiedades definidos en nuestra clase base.
+
+## Problemas Comunes del *Level Blueprint*
+
+El uso extensivo de los **Level Blueprint** puede generar varios problemas que afectan al mantenimiento y escalabilidad del proyecto.
+Una de las principales limitaciones es que el código en el **Level Blueprint** está fuertemente acoplado al nivel específico, lo que dificulta la reutilización de lógica común entre niveles.
+
+Por otro lado, la naturaleza visual de los Blueprints, aunque útil para prototipar rápidamente, puede volverse difícil de mantener cuando la lógica se vuelve compleja, especialmente en proyectos grandes con múltiples desarrolladores.
+Además, el versionado del código también se complica, ya que los cambios en el **Level Blueprint** están embebidos en el archivo del nivel, dificultando la revisión de código y la resolución de conflictos.
+Finalmente, la falta de capacidad para realizar pruebas unitarias en el **Level Blueprint** puede afectar la robustez del código, especialmente en funcionalidades críticas del juego.
+
+Por todo ello, se recomienda usar el **Level Blueprint** principalmente como un «coordinador» que realizar conexiones entre los diferentes sistemas y actores específicos del nivel.
+
+## Alternativas a los *Level Blueprints*
+
+### GameMode y GameState
+
+El **GameMode** es ideal para implementar las reglas fundamentales del juego y la lógica que debe mantenerse consistente entre niveles.
+Por ejemplo, el sistema de puntuación, las condiciones de victoria/derrota, las reglas de instanciación de los jugadores, vidas, reglas de dificultad globales del juego o condiciones de desbloqueo de áreas, podrían manejarse en el **GameMode**.
+
+El **GameState** complementa al **GameMode** almacenando el estado actual del juego que debe replicarse a todos los clientes en juegos multijugador.
+
+### Actores independientes
+
+Cuando la lógica está claramente asociada a una entidad específica, es mejor crear un actor dedicado en lugar de centralizar todo en el **Level Blueprint**.
+Estos actores pueden ser más fácilmente reutilizados entre niveles y permiten un mejor encapsulamiento de la funcionalidad.
+
+Algunos ejemplos de actores independientes que ya vienen con Unreal Engine son **PlayerController**, **AIController** y **PlayerCameraManager**.
+Ninguno de los tres actores mencionados tiene componentes en la escena, pero implementan funcionalidades específicas del juego.
+
+Los actores independientes también facilitan el *testing* y el versionado del código, ya que pueden desarrollarse y probarse de manera aislada.
+
+### *Game Features* y *Modular Gameplay*
+
+Para funcionalidades que podrían activarse o desactivarse según el nivel o modo de juego, el sistema de *Game Features* de Unreal Engine proporciona una solución más modular [@UnrealGameFeaturesModularGameplay].
+Este enfoque permite desarrollar funcionalidades como módulos independientes que pueden agregarse o removerse sin afectar el código base.
+
+### Subsistemas
+
+Los subsistemas son ideales para funcionalidades que deben estar disponibles globalmente, pero no están necesariamente ligadas a un actor específico (ver el @sec-unreal-subsystems).
+Por ejemplo, sistemas de inventario, gestión de misiones, o sistemas de guardado son candidatos ideales para implementarse como subsistemas.
+
+## Estrategia recomendada
+
+Como hemos comentado, se recomienda usar el **Level Blueprint** principalmente como un "coordinador" que conecta los diferentes sistemas y actores específicos del nivel.
+La lógica compleja o reutilizable debería extraerse a clases dedicadas, ya sea como actores, componentes o subsistemas.
+
+Es importante mantener el **Level Blueprint** lo más simple y declarativo posible, delegando la implementación detallada a otras clases más especializadas.
+Para proyectos grandes, es conveniente valorar la creación de una clase base de **Level Blueprint** personalizada que proporcione funcionalidades comunes a todos los niveles.

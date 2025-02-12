@@ -28,6 +28,13 @@ book:
       chapters:
         - chapters/unreal-core.qmd
         - chapters/unreal-gameplay-framework.qmd
+        - chapters/unreal-level-blueprint.qmd
+        - chapters/unreal-damage-api.qmd
+        - chapters/unreal-load-levels.qmd
+        - chapters/unreal-save-game.qmd
+        - chapters/unreal-timers.qmd
+        - chapters/unreal-tick-and-pause.qmd
+        - chapters/unreal-data-driven.qmd
   appendices:
     - chapters/perforce.qmd
 

@@ -19,10 +19,10 @@ Su uso es fundamental en muchas áreas, como:
 
 ::: {.callout-note}
 En Blueprint, una herramienta muy sencilla para animar propiedades usando curvas es la función `Timeline`.
-Sin embargo, esta función realmente usa un componente, por lo que no se puede usar dentro de otro componente, solo dentro de actores.
+Sin embargo, esta función realmente usa un componente, por lo que no se puede usar dentro de otro componente, sino solo dentro de actores.
 :::
 
-Los temporizadores son gestionados por un *manager* {{< api FTimerManager >}} al que se puede acceder desde cualquier punto del código:
+Los temporizadores son gestionados mediante un *manager* {{< api FTimerManager >}} al que se puede acceder desde cualquier punto del código:
 
 ```cpp
 FTimerManager TimerManager = GetWorld()->GetTimerManager();
@@ -30,26 +30,28 @@ FTimerManager TimerManager = GetWorld()->GetTimerManager();
 
 El *manager* tiene un método {{< api SetTimer >}} que permite crear temporizadores (ver la @fig-settimer):
 
-![Creación de un temporizador](figures/settimer-methods.png){#fig-settimer}
-
 ```cpp
 FTimerHandle TimerHandle;                                 // <1>
 GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, // <2>
     &MyClass::MyFunction, 5.0f, true, 2); 
 ```
 1. Identificador del temporizador creado.
-1. LLamar a `MyFunction` dentro de 2 segundos y luego periódicamente, cada 5 segundos.
+1. LLama a `MyFunction` dentro de 2 segundos y luego periódicamente, cada 5 segundos.
 
-Una vez se ha creado un temporizador, se puede detener o pausar usando los métodos {{< api ClearTimer >}} (ver la @fig-cleartimer-methods) y {{< api PauseTimer >}} (ver la @fig-pausetimer-methods) con el identificador del temporizador:
+Realmente, existen múltiples métodos {{< api SetTimer >}} con diferentes formas de indicar el código a ejecutar, por lo que es recomendable revisar la documentación.
 
-![Nodos para detener un temporizador](figures/cleartimer-methods.png){#fig-cleartimer-methods}
+![Creación de un temporizador](/assets/unreal-timers/settimer-methods.png){#fig-settimer}
 
-![Nodos para pausar un temporizador](figures/pausetimer-methods.png){#fig-pausetimer-methods}
+Una vez se ha creado un temporizador, se puede detener o pausar usando los métodos {{< api ClearTimer >}} (ver la @fig-cleartimer-methods) y {{< api PauseTimer >}} (ver la @fig-pausetimer-methods) indicando el identificador del temporizador:
 
 ```cpp
 GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 ```
 
+![Nodos para detener un temporizador](/assets/unreal-timers/cleartimer-methods.png){#fig-cleartimer-methods}
+
+![Nodos para pausar un temporizador](/assets/unreal-timers/pausetimer-methods.png){#fig-pausetimer-methods}
+
 Los temporizadores pausados con `PauseTimer()` se pueden reanudar usando {{< api UnPauseTimer >}} (ver la @fig-unpausetimer-methods).
 
-![Nodos para reanudar un temporizador](figures/unpausetimer-methods.png){#fig-unpausetimer-methods}
+![Nodos para reanudar un temporizador](/assets/unreal-timers/unpausetimer-methods.png){#fig-unpausetimer-methods}

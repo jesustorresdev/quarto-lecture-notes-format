@@ -3,7 +3,7 @@
 Las mecánicas de daño y salud son fundamentales en juegos donde la interacción y el conflicto son elementos clave como, por ejemplo: *shooters*, RPG y juegos de supervivencia.
 Pero también es frecuente tener que implementar este tipo de mecánicas en juegos de otros géneros, aunque no sean de acción.
 
-Unreal Engine ofrece una API de daño que facilita la implementación de estas mecánicas, al establecer una interfaz común para que todos los actores puedan recibir diferentes tipos de daño y procesarlo, tanto sin son objetos genéricos del juego, como personajes o estructuras[@UnrealBlueprintDamageAPI].
+Unreal Engine ofrece una API de daño que facilita la implementación de estas mecánicas, al establecer una interfaz común para que todos los actores puedan recibir diferentes tipos de daño y procesarlo, tanto sin son objetos genéricos del juego, como personajes o estructuras [@UnrealBlueprintDamageAPI].
 
 ## Conceptos de la API de daño
 
@@ -109,7 +109,7 @@ En el caso de recibir un evento de daño de tipo **FPointDamageEvent**, el méto
 
 1. Lanza al evento {{< api OnTakePointDamage >}}, para que otros actores y componentes puedan suscribirse a este evento y reaccionar al daño recibido por este actor (ver la @fig-ontakedamage-events).
 
-![Eventos de daño de los actores en Unreal Engine.](figures/ontakedamage-events.png){#fig-ontakedamage-events}
+![Eventos de daño de los actores en Unreal Engine.](/assets/unreal-damage-api/ontakedamage-events.png){#fig-ontakedamage-events}
 
 En el caso de recibir un evento de daño de tipo **FRadialDamageEvent**, el método `TakeDamage()` sigue unos pasos similares pero llamando a los métodos {{< api InternalTakeRadialDamage >}} y {{< api ReceiveRadialDamage >}} y lanzando el evento {{< api OnTakeRadialDamage >}}.
 
@@ -132,7 +132,7 @@ Pero subclases como **Pawn** o **Character** sobreescriben `TakeDamage()` para q
 La API de daño también ofrece funciones de ayuda para aplicar daño a un actor, sin tener que llamar a `TakeDamage()` en el actor directamente.
 Estas funciones están disponibles tanto en C++ como en Bluperint (ver la @fig-applydamage-methods):
 
-![Nodos para aplicar daño a un actor.](figures/applydamage-methods.png){#fig-applydamage-methods}
+![Nodos para aplicar daño a un actor.](/assets/unreal-damage-api/applydamage-methods.png){#fig-applydamage-methods}
 
 Sin embargo, no debemos perder de vista que estas funciones no son más que una interfaz más sencilla para llamar a `TakeDamage()` en el actor indicado.
 Es decir, no procesan el daño de ninguna manera, sino que crean el tipo de evento de daño **FDamageEvent** adecuado con la información proporcionada, para luego llamar al método `TakeDamage()` del actor o actores afectados.
@@ -190,7 +190,7 @@ Por defecto, esta función crea un objeto **FRadialDamageEvent** donde se indica
 Esto lo hace poniendo la propiedad **Damage Falloff** a 1.0 en el evento de daño.
 Pero si `bDoFullDamage` es `true`, pondrá la propiedad **Damage Falloff** a 0.0, para aplicar todo el *daño base* a todos los actores en el área, independientemente de la distancia al centro del área.
 
-Finalmente, el argumento `DamagePreventionChannel` se usa para indicar una canal de colisión[Ver @TorresD3DGameplay01] en el que la función buscará objetos que puedan bloquear el daño.
+Finalmente, el argumento `DamagePreventionChannel` se usa para indicar una canal de colisión en el que la función buscará objetos que puedan bloquear el daño [ver @sec-gameplay].
 Es decir, no intentará aplicar daño a los actores que estén detrás de objetos que bloqueen los *raycast* en el canal indicado.
 
 #### *ApplyRadialDamageWithFalloff*
@@ -249,7 +249,7 @@ En el momento de instanciar un actor usando {{< api SpawnActor >}} se puede indi
 En Blueprint esto se hace mediante un pin de entrada del nodo `SpawnActor()` (ver el pin **Instigator** en la @fig-spawnactor).
 Mientras que en C++ se hace mediante la variable `Instigator` de la estructura {{< api FActorSpawnParameters >}} que se pasa el método `SpawnActor()`.
 
-![Nodo SpawnActor de Blueprint.](figures/spawnactor.png){#fig-spawnactor}
+![Nodo SpawnActor de Blueprint.](/assets/unreal-damage-api/spawnactor.png){#fig-spawnactor}
 
 ## Volumen *Pain-Causing*
 
@@ -260,7 +260,7 @@ Unreal Engine incluye el actor {{< api PainCausingVolume >}}, que aplica daño p
 Para ello, el actor configura un temporizador para que se active periódicamente en el intervalo indicado en la propiedad **Pain Interval**.
 En cada activación, se aplica como *daño base* el producto entre **Damage Per Sec** y el intervalo de activación **Pain Interval**.
 
-![Propiedades del actor **PainCausingVolume**.](figures/paincausingvolume.png){#fig-paincausingvolume}
+![Propiedades del actor **PainCausingVolume**.](/assets/unreal-damage-api/paincausingvolume.png){#fig-paincausingvolume}
 
 Además, como se puede observar en la @fig-paincausingvolume, el actor **PainCausingVolume** tiene una propiedad **Damage Type**, que permite indicar el tipo de daño que se aplicará a los actores que se encuentran dentro de su volumen.
 
@@ -278,7 +278,7 @@ El **KillZVolume** es un actor que se puede añadir al nivel desde el editor de 
 Mientras que el *Kill Z* global se puede configurar en **World Settings**, estableciendo el valor de la propiedad **Kill Z**, como se puede observar en la @fig-world-killz.
 Se puede desactivar desmarcando la propiedad **Enable World Bounds Checks**.
 
-![Propiedad **Kill Z** en **World Settings**.](figures/world-killz.png){#fig-world-killz}
+![Propiedad **Kill Z** en **World Settings**.](/assets/unreal-damage-api/world-killz.png){#fig-world-killz}
 
 En ambos casos se aplica un daño de tipo **DmgTypeBP_Environment**, que es una subclase de **UDamageType** que se utiliza cuando el daño viene causado por el entorno, no por un enemigo.
 Sin embargo, se puede configurar un tipo de daño diferente, indicando una subclase de **UDamageType** en la propiedad **Kill Z Damage Type** de **World Settings** (ver la @fig-world-killz).

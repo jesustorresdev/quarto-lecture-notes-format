@@ -51,8 +51,7 @@ En la @fig-gamemode-inheritance se puede ver un ejemplo de jerarquía de herenci
 ```{mermaid}
 %%| label: fig-gamemode-inheritance
 %%| fig-cap: "Ejemplo de posible jerarquía de herencia de **GameMode**."
-%%| file: diagrams/gamemode-inheritance.mmd
-%%| fig-width: 15cm
+%%| file: ../diagrams/unreal_gameplay_framework/gamemode-inheritance.mmd
 ```
 
 ### *GameState*
@@ -84,8 +83,7 @@ El **PlayerState** de cada jugador también es accesible a través de su control
 La separación entre **GameMode** y **GameInstance** permite tener diferentes clases **GameMode** con distintas reglas para cada nivel.
 Incluso si en todos los niveles se usa la misma clase **GameMode**, es común emplear un nivel solo para el menú principal del juego, de forma que la lógica del menú puede estar en su propio **GameMode**, separado de la lógica de los niveles jugables.
 
-En este sentido, los **GameMode** hacen de *game / level manager*.
-Mientras que **GameInstance** sirve para preservar información entre partidas, como el número de victorias de cada equipo --por ejemplo, para enfrentamientos del tipo «el mejor de X partidas»-- los inventarios, las habilidades o la configuración del juego y de los personajes.
+En este sentido, los **GameMode** hacen de *game / level manager* --responsabilidad que puede compartir en parte con los *level blueprints* (ver la @sec-level-blueprint)---, mientras que **GameInstance** sirve para preservar información entre partidas, como el número de victorias de cada equipo --por ejemplo, para enfrentamientos del tipo «el mejor de X partidas»-- los inventarios, las habilidades o la configuración del juego y de los personajes.
 
 ::: {.callout-note}
 El *game manager* es un tipo especial de *manager* dedicado a llevar el flujo del juego: carga de escenas y transiciones, activación de modos de menús y pausa, etc.
@@ -157,19 +155,23 @@ Mientras que en otros juego el jugador suele controlar a un personaje humano, pe
 Para que un actor pueda ser poseído por un **Controller** debe heredar de la clase de actor {{< api Pawn >}}, que ofrece una interfaz mínima común para ser controlado.
 
 Para poseerlo se usa el método {{< api Possess >}} del {{< api Controller >}}, indicando el **Pawn** que se quiere controlar.
-Mientras que para desposeerlo se usa el método {{< api UnPossess >}}.
+Mientras que para desposeerlo se usa el método {{< api UnPossess >}} (ver la @fig-possess-nodes).
 
-![Nodos de los **Controller** para poseer y desposeer un **Pawn**.](/assets/unreal-gameplay-framework/possess-nodes.png)
+![Nodos de los **Controller** para poseer y desposeer un **Pawn**.](/assets/unreal-gameplay-framework/possess-nodes.png){#fig-possess-nodes}
 
 Si un **Controller** posee a un **Pawn** que ya estaba siendo controlado por otro **Controller**, este último deja de controlarlo y pasa a ser controlado por el nuevo **Controller**.
 Igualmente, si un **Controller** ya posee a un **Pawn** y se le indica que posea a otro, deja de controlar al primero y pasa a controlar al segundo.
 
 En todos los casos tanto el **Controller** como el **Pawn** son notificados.
-El {{< api Controller >}} recibe los eventos {{< api OnPossess >}} o {{< api OnUnPossess >}} y el {{< api Pawn >}} recibe los eventos {{< api Possessed >}} o {{< api UnPossessed >}}.
+El {{< api Controller >}} recibe los eventos {{< api OnPossess >}} o {{< api OnUnPossess >}} y el {{< api Pawn >}} recibe los eventos {{< api Possessed >}} o {{< api UnPossessed >}} (ver la @fig-controller-possess-events y la @fig-pawn-possess-events).
 
-![Nodos de evento de posesión de **Controller**.](/assets/unreal-gameplay-framework/controller-possess-events.png)
+::: {#fig-ue-input-action layout="[[1], [-1], [1]]"}
+![Eventos de posesión de **Controller**.](/assets/unreal-gameplay-framework/controller-possess-events.png){#fig-controller-possess-events}
 
-![Nodos de evento de posesión de **Pawn**.](/assets/unreal-gameplay-framework/pawn-possess-events.png)
+![Evento de posesión de **Pawn**.](/assets/unreal-gameplay-framework/pawn-possess-events.png){#fig-pawn-possess-events}
+
+Nodos de eventos de posesión.
+:::
 
 Estos eventos son útiles.
 Por ejemplo, si un personaje está poseído por un **AIController** y el jugador lo posee, el **AIController** dejará de controlar al personaje.
@@ -195,8 +197,7 @@ Por ejemplo, en la @fig-pawn-control se ilustra un posible caso donde nuestro **
 ```{mermaid}
 %%| label: fig-pawn-control
 %%| fig-cap: "Ejemplo de interfaz para el control del **Pawn** del jugador."
-%%| file: diagrams/pawn-control.mmd
-%%| fig-width: 15cm
+%%| file: ../diagrams/unreal_gameplay_framework/pawn-control.mmd
 ```
 
 Este **Pawn** es teledirigido por el controlador.
@@ -227,8 +228,7 @@ Es en el método `TickComponent()` de este componente de movimiento del actor, d
 ```{mermaid}
 %%| label: fig-controller-pawn-movement-sequence
 %%| fig-cap: "Ejemplo de control de movimiento de un **Pawn**."
-%%| file: diagrams/pawn-movement-sequence.mmd
-%%| fig-width: 15cm
+%%| file: ../diagrams/unreal_gameplay_framework/pawn-movement-sequence.mmd
 ```
 
 Por ejemplo, todo actor {{< api Character >}} --que es una clase derivada de **Pawn**-- tiene por defecto un {{< api CharacterMovementComponent >}} que se hace cargo del movimiento del personaje.
@@ -246,8 +246,7 @@ En la @fig-controller-character-movement-sequence se puede ver un diagrama de se
 ```{mermaid}
 %%| label: fig-controller-character-movement-sequence
 %%| fig-cap: "Ejemplo de control de movimiento de un **Character**."
-%%| file: diagrams/character-movement-sequence.mmd
-%%| fig-width: 15cm
+%%| file: ../diagrams/unreal_gameplay_framework/character-movement-sequence.mmd
 ```
 
 Unreal Engine proporciona diferentes **MovementComponent** para implementar diferentes tipos de movimiento, como por ejemplo: {{< api FloatingPawnMovement >}}, {{< api ProjectileMovementComponent >}}, {{< api RotatingMovementComponent >}}, {{< api InterpToMovementComponent >}} o {{< api CharacterMovementComponent >}} (ver la @sec-movement-components).
@@ -491,8 +490,7 @@ En la @fig-ai-controller se puede ver un diagrama de clases simplificado del act
 ```{mermaid}
 %%| label: fig-ai-controller
 %%| fig-cap: "Diagrama de clases de **AIController** y sus componentes."
-%%| file: diagrams/aicontroller-classes.mmd
-%%| fig-width: 15cm
+%%| file: ../diagrams/unreal_gameplay_framework/aicontroller-classes.mmd
 ```
 
 ### Lógica de la IA
@@ -536,8 +534,7 @@ Para controlar al **Pawn**, **PathFollowingComponent** necesita que el **Pawn** 
 
 ```{mermaid}
 %%| label: fig-ue-character-movement-hierarchy
-%%| file: diagrams/ue-character-movement-hierarchy.mmd
-%%| fig-width: 15cm
+%%| file: ../diagrams/unreal_gameplay_framework/ue-character-movement-hierarchy.mmd
 %%| fig-cap: Diagrama de clases involucradas en el control de NPC.
 ```
 
@@ -801,7 +798,11 @@ También actualiza el fundido de cámara y de audio, si está activo --ver {{< a
 
 En la @fig-update-camera se puede ver un esquema de la cadena de responsabilidad que se sigue para obtener el POV del jugador para el render.
 
-![Esquema de actualización del POV del jugador.](/assets/unreal-gameplay-framework/update-camera-sequence.pdf){#fig-update-camera}
+```{mermaid}
+%%| label: fig-update-camera
+%%| fig-cap: Esquema de actualización del POV del jugador.
+%%| file: ../diagrams/unreal_gameplay_framework/update-camera-sequence.mmd
+```
 
 ### Modificadores de cámara {#sec-camera-modifiers}
 
@@ -884,8 +885,7 @@ En la @fig-ue-gameplay-framework se puede observar un esquema del *gameplay fram
 ```{mermaid}
 %%| label: fig-ue-gameplay-framework
 %%| fig-cap: "Esquema del *gameplay framework* de Unreal Engine."
-%%| file: diagrams/ue-gameplay-framework.mmd
-%%| fig-width: 15cm
+%%| file: ../diagrams/unreal_gameplay_framework/ue-gameplay-framework.mmd
 ```
 
 Esta arquitectura se puede trasladar fácilmente a otros motores, con las modificaciones que mejor se adapten a nuestras necesidades y a las particularidades de cada motor.

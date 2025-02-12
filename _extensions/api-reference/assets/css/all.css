@@ -1,3 +1,7 @@
+.apirefs-ref{
+  white-space: nowrap;
+}
+
 .apirefs-ref-marker {
   padding-right: 1px;
 }

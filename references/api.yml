@@ -344,6 +344,9 @@ DataAsset:
 FActorSpawnParameters:
   refs:
     cpp: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FActorSpawnParameters/index.html
+FArchive:
+  refs:
+    cpp: https://docs.unrealengine.com/en-US/API/Runtime/Core/Serialization/FArchive/index.html
 FCoreUbjectDelegates:
   refs:
     cpp: https://docs.unrealengine.com/en-US/API/Runtime/CoreUObject/UObject/FCoreUObjectDelegates/
@@ -353,6 +356,18 @@ FDamageEvent:
 FLoadingScreenAttributes:
   refs:
     cpp: https://docs.unrealengine.com/en-US/API/Runtime/MoviePlayer/FLoadingScreenAttributes/
+FMemoryReader:
+  extends: FArchive
+  refs:
+    cpp: https://docs.unrealengine.com/en-US/API/Runtime/Core/Serialization/FMemoryReader/index.html
+FMemoryWriter:
+  extends: FArchive
+  refs:
+    cpp: https://docs.unrealengine.com/en-US/API/Runtime/Core/Serialization/FMemoryWriter/index.html
+FObjectAndNameAsStringProxyArchive:
+  extends: FArchive
+  refs:
+    cpp: https://dev.epicgames.com/documentation/en-us/unreal-engine/API/Runtime/CoreUObject/Serialization/FObjectAndNameAsStringProxyArchi-
 FPointDamageEvent:
   refs:
     cpp: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FPointDamageEvent/index.html
