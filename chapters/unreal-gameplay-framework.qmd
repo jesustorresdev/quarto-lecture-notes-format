@@ -437,9 +437,13 @@ En ese caso, es conveniente mantener una referencia a esta información en el **
 
 Para gestionar la entrada del jugador, el **PlayerController** tiene un objeto **PlayerInput**, que mapea los controles y dispositivos de entrada en acciones, y una pila de **InputComponent** de los actores interesados en leer la entrada del jugador.
 El **PlayerInput** emite los eventos de entrada y los entrega a los **InputComponent** en el orden determinado por la pila.
-Como se esquematiza en @fig-input-component-stack, según va pasando por los **InputComponent**, cada uno de ellos puede elegir «consumir» el evento de entrada, haciendo que no alcance a componentes posteriores en la pila.
+Como se esquematiza en el @vid-input-component-stack, según va pasando por los **InputComponent**, cada uno de ellos puede elegir «consumir» el evento de entrada, haciendo que no alcance a componentes posteriores en la pila.
 
-![La pila de **InputComponent** en el **PlayerController**.](/assets/unreal-gameplay-framework/input_component_stack.pdf){#fig-input-component-stack}
+::: {#vid-input-component-stack}
+{{< video /assets/unreal-gameplay-framework/input_component_stack.mp4 >}} 
+
+La pila de **InputComponent** en el **PlayerController**.
+:::
 
 El **PlayerController** es un actor, por lo que tiene un **InputComponent**.
 Este **InputComponent** es, generalmente, el primero de la pila.
@@ -451,7 +455,7 @@ Obviamente, es posible gestionar toda la entrada del jugador en el **Pawn** del 
 Cuando varios jugadores juegan en un mismo equipo, los jugadores pueden cambiar de personaje controlado durante la partida o la gestión de la entrada es compleja, es mejor hacerlo en el **PlayerController**.
 Aún así, si los diferentes personajes tienen algún aspecto del control que es muy específico de cada personaje, puede ser conveniente implementar la gestión de esos controles específicos en el **Pawn** de cada personaje.
 
-La @fig-input-component-stack también ilustra como cualquier actor puede colocar su **InputComponent** al principio de la pila, usando el método {{< api EnableInput >}}.
+El @vid-input-component-stack también ilustra como cualquier actor puede colocar su **InputComponent** al principio de la pila, usando el método {{< api EnableInput >}}.
 Es decir, por lo general, que el jugador pueda interactuar con un objeto cercano --como puertas, interruptores u objetos recogibles-- se implementa leyendo la acción del jugador en el **PlayerController** para luego comunicarla al objeto, a través de alguno de sus métodos.
 Sin embargo, gracias a este mecanismo, el objeto puede leer la entrada del jugador directamente y reaccionar a la acción indicada.
 

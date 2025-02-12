@@ -119,7 +119,7 @@ El motor expone su funcionalidad a través de una API bien definida --la interfa
 ```{mermaid}
 %%| label: fig-engine-component-diagram
 %%| fig-cap: Diagrama de componentes de un motor de videojuegos.
-%%| file: diagrams/engine-component-diagram.mmd
+%%| file: ../diagrams/unreal_gameplay_framework/engine-component-diagram.mmd
 ```
 
 Por herramientas de desarrollo nos referimos a todas las herramientas utilizadas para desarrollar un juego, como editores de personajes, habilidades, niveles o de configuración.

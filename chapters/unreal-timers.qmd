@@ -34,6 +34,8 @@ En Blueprint, una herramienta muy sencilla para animar propiedades usando curvas
 Sin embargo, esta función realmente usa un componente, por lo que no se puede usar dentro de otro componente, sino solo dentro de actores.
 :::
 
+## Creación de temporizadores
+
 Los temporizadores son gestionados mediante un *manager* {{< api FTimerManager >}} al que se puede acceder desde cualquier punto del código:
 
 ```cpp
@@ -53,6 +55,8 @@ GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, // <2>
 Realmente, existen múltiples métodos {{< api SetTimer >}} con diferentes formas de indicar el código a ejecutar, por lo que es recomendable revisar la documentación.
 
 ![Creación de un temporizador](/assets/unreal-timers/settimer-methods.png){#fig-settimer}
+
+## Detener y pausar temporizadores
 
 Una vez se ha creado un temporizador, se puede detener o pausar usando los métodos {{< api ClearTimer >}} (ver la @fig-cleartimer-methods) y {{< api PauseTimer >}} (ver la @fig-pausetimer-methods) indicando el identificador del temporizador:
 

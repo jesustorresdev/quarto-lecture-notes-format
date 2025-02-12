@@ -12,12 +12,12 @@ En la configuración de cada acción o en el mapeo se pueden aplicar algunos mod
 
 Los actores reciben las acciones a través de un componente denominado **InputComponent**.
 
-En la @fig-input-component-stack se puede ver como los **InputComponent** de los actores interesados en la entrada del jugador se insertan en una pila, que gestiona el actor **PlayerController**.
+En el @vid-input-component-stack se puede ver como los **InputComponent** de los actores interesados en la entrada del jugador se insertan en una pila, que gestiona el actor **PlayerController**.
 Cuando llega una acción, esta es procesada por los **InputComponent** según el orden en la pila, de forma que los primeros pueden consumir las acciones, evitando que lleguen a los componentes posteriores.
 
 ![La pila de **InputComponent** en el **PlayerController**.](figures/input_component_stack.pdf){#fig-input-component-stack}
 
-En la @fig-input-component-stack también se observa que, por defecto, el primer actor en la pila de **InputComponent** es el **PlayerController**, mientras que el siguiente es el **Pawn** del personaje del jugador.
+En el @vid-input-component-stack también se observa que, por defecto, el primer actor en la pila de **InputComponent** es el **PlayerController**, mientras que el siguiente es el **Pawn** del personaje del jugador.
 
 La idea es que el **PlayerController** representa al jugador, que puede «poseer» a cualquier **Pawn** para controlarlo.
 Por tanto, idealmente la entrada se lee en el **PlayerController**, para procesarla y usarla para teledirigir al personaje del jugador.
@@ -156,7 +156,7 @@ Todo empieza porque el objeto tenga un ***trigger*** que permita saber cuándo e
 Sin embargo, tanto el personaje como el objeto pueden ser informados del momento en el que eso ocurre, por lo que podríamos implementar el código de esta funcionalidad tanto en el actor del objeto como en el del personaje.
 
 Si solo el personaje tuviera acceso a la entrada del jugador, probablemente la segunda sería la mejor o, quizás, la única opción.
-Pero en la arquitectura de Unreal Engine ilustrada en @fig-input-component-stack, los objetos pueden leer la entrada del jugador si se colocan los primeros en la pila de **InputComponent** del **PlayerController**.
+Pero en la arquitectura de Unreal Engine ilustrada en el @vid-input-component-stack, los objetos pueden leer la entrada del jugador si se colocan los primeros en la pila de **InputComponent** del **PlayerController**.
 
 Después, cuando el jugador se aleja del objeto, lo único que hay que hacer es quitar el **InputComponent** del actor de la pila del **PlayerController**.
 
