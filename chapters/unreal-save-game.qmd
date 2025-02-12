@@ -1,4 +1,16 @@
+---
+abstract: |
+   En este capítulo se explica cómo se puede guardar y cargar el estado de la partida en Unreal Engine utilizando la clase **SaveGame** y el especificador **SaveGame**.
+   Se describe cómo se puede implementar un sistema de salvado de partida completo, que permita guardar y cargar el estado de múltiples actores en el nivel.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
 # Salvado de la partida {#sec-savegame}
+
+## Introducción
 
 El sistema de **UObject** de Unreal Engine permite disponer en C++ de características presentes en lenguajes de programación gestionados, como Java o C#.
 Una de estas características es la serialización de objetos, que permite guardar y cargar objetos de forma sencilla.

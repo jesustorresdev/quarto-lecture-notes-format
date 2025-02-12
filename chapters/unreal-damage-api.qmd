@@ -1,4 +1,16 @@
+---
+abstract: 
+  En este capítulo se describe la Damage API de Unreal Engine, que facilita la implementación de mecánicas de daño y salud en los juegos.
+  Se explican los conceptos fundamentales de la API, como el *daño base*, el *daño efectivo*, los *modificadores de daño*, el *tipo de daño*, el *causante del daño* y el *instigador del daño*, y se detallan los métodos y propiedades de la interfaz de daño de los actores.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
 # Damage API
+
+## Introducción
 
 Las mecánicas de daño y salud son fundamentales en juegos donde la interacción y el conflicto son elementos clave como, por ejemplo: *shooters*, RPG y juegos de supervivencia.
 Pero también es frecuente tener que implementar este tipo de mecánicas en juegos de otros géneros, aunque no sean de acción.

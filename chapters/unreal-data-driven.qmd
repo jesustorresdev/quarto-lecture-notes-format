@@ -1,4 +1,16 @@
+---
+abstract: |
+  En este capítulo se describen las herramientas que proporciona Unreal Engine para implementar un diseño dirigido por datos, como **Data Assets**, **Data Tables** y **Curve Tables**.
+  Se explica cómo se crean y se utilizan estos *assets* y cómo se pueden utilizar para definir las propiedades y el comportamiento de los objetos del juego.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
 # Herramientas para el diseño dirigido por datos
+
+## Introducción
 
 Por *diseño dirigido por datos* pueden entenderse dos conceptos diferentes:
 

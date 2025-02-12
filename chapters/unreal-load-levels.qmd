@@ -1,4 +1,15 @@
+---
+abstract: |
+  En este capítulo se describe cómo cargar niveles en Unreal Engine, incluyendo cómo cargar niveles de forma asíncrona, cómo implementar una pantalla de carga y cómo hacer transiciones entre niveles.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
 # Carga de niveles y transiciones
+
+## Introducción
 
 Un nivel es un espacio de juego autocontenido que incluye toda la geometría, iluminación, actores y lógica necesaria para una sección del juego.
 Desde el punto de vista del motor, un nivel es un objeto {{< api UWorld >}} que se almacenan en archivos `.umap` que contienen todos los datos serializados necesarios para recrear el nivel.

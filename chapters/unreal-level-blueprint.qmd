@@ -1,4 +1,17 @@
+---
+abstract: |
+  En este capítulo se describe el **Level Blueprint** de Unreal Engine, un actor especial que permite escribir lógica específica del nivel.
+  Se explica cómo acceder al **Level Blueprint** desde el editor y cómo crear una clase base de **Level Blueprint** en C++.
+  Se detallan los problemas comunes del **Level Blueprint** y se proponen alternativas para evitarlos.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
 # Level Blueprint {#sec-level-blueprint}
+
+## Introducción
 
 Todos niveles incluyen un actor especial, que no podemos ver en la escena, llamado **Level Blueprint** que permite escribir lógica específica del nivel.
 En otros motores esto se asemeja a tener un *level manager*, es decir, una clase única por nivel que gestiona el ciclo de vida del nivel, coordina los diferentes sistemas y actores del nivel, y maneja eventos específicos de la escena.

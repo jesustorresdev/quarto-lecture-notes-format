@@ -1,5 +1,7 @@
 ---
-abstract: Este artículo analiza los motores de videojuegos, un componente fundamental en el desarrollo de videojuegos. Se revisan los criterios para elegir entre desarrollar un motor propio o usar uno comercial, y se comparan las principales alternativas disponibles, con especial atención a Unity y Unreal Engine.
+abstract: |
+  Este artículo analiza los motores de videojuegos, un componente fundamental en el desarrollo de videojuegos.
+  Se revisan los criterios para elegir entre desarrollar un motor propio o usar uno comercial, y se comparan las principales alternativas disponibles, con especial atención a Unity y Unreal Engine.
 ---
 
 {{< audio file="../assets/motores.mp3" caption="Podcast autogenerado del capítulo." download_link="true" >}}

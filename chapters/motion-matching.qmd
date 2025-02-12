@@ -1,5 +1,7 @@
 ---
-abstract: "El **motion matching** es una técnica de animación que se basa en la selección de *keyframes* de animación en función del estado del personaje y de su entorno, para crear animaciones fluidas y realistas. En este artículo se describen los principales componentes y características de esta técnica." 
+abstract: |
+  El **motion matching** es una técnica de animación que se basa en la selección de *keyframes* de animación en función del estado del personaje y de su entorno, para crear animaciones fluidas y realistas.
+  En este artículo se describen los principales componentes y características de esta técnica.
 ---
 
 ::: {.callout-note appearance="simple"}

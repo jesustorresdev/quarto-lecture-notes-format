@@ -1,4 +1,16 @@
+---
+abstract: |
+  Perforce es un sistema de control de versiones centralizado que escala muy bien para manejar proyectos y equipos realmente grandes.
+  En este capítulo se explica cómo funciona Perforce, sus ventajas frente a otros sistemas de control de versiones y cómo se puede utilizar en un estudio de videojuegos.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
 # Control de versiones Perforce
+
+## Introducción
 
 {{< var perforce.site >}} es la compañía que desarrolla {{< var perforce.helixcore >}}, un sistema de control de versiones --en inglés, *Version Control System* o VCS-- que escala muy bien para manejar proyectos y equipos realmente grandes (véase la @fig-helix-code-scalability).
 

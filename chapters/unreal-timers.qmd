@@ -1,4 +1,16 @@
+---
+abstract: |
+  En este capítulo se describen los temporizadores de Unreal Engine, una herramienta fundamental en el desarrollo de videojuegos.
+  Se explica cómo crear, detener y pausar temporizadores usando la interfaz de `FTimerManager`.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
 # Temporizadores
+
+## Introducción
 
 Los temporizadores son herramientas cruciales en el desarrollo de videojuegos, proporcionando una manera de ejecutar código en intervalos regulares o después de un retraso específico.
 

@@ -1,4 +1,16 @@
+---
+abstract: 
+  En este capítulo se describen los componentes fundamentales del motor de Unreal Engine, como **UObject**, **Actor** y **ActorComponent**.
+  Se explica cómo arranca un juego y se detalla el papel de cada uno de estos componentes en el proceso.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
 # Componentes fundamentales
+
+## Introducción
 
 Antes de hablar del *gameplay framework* de Unreal Engine en el @sec-unreal-gameplay-framework, vamos a discutir los componentes básicos del motor, sobre los que se implementa dicho *framework*.
 

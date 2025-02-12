@@ -1,4 +1,15 @@
+---
+abstract: |
+    En este capítulo se explica cómo se propagan los *ticks** de actualización en Unreal Engine y cómo se pueden desactivar actores y componentes y poner el juego en pausa.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
 # Actualización, activación y pausa {#sec-ticks}
+
+## Introducción
 
 Por lo general, todo juego tiene al menos un ciclo de ejecución en el que en cada frame se lee la entrada del jugador y se notifica a los diferentes sistemas y entidades en el juego para que actualicen su estado.
 
