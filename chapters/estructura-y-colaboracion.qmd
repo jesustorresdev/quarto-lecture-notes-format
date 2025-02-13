@@ -1,19 +1,23 @@
 ---
-title: "Notas sobre la organización de proyectos"
-title-meta: "Notas sobre la organización de proyectos"
-nocite: |
-  @TorresD3DPerforce
+abstract: |
+  En este capítulo se presentan algunas recomendaciones para organizar el proyecto y facilitar la colaboración entre los diferentes equipos involucrados.
 ---
 
-{{< pagebreak >}}
+{{< audio file="../assets/estructura-y-colaboracion/estructura-y-colaboracion.mp3" caption="Podcast autogenerado del capítulo." download_link="true" >}}
 
-En los siguientes apartados veremos algunas recomendaciones para organizar el proyecto y facilitar la colaboración entre los diferentes equipos involucrados.
+::: {.callout-note appearance="simple"}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
 
-A fin de cuentas, poner algo de orden en un proyecto es importante para asegurar su sostenibilidad.
+# Estructura y colaboración
+
+## Introducción
+
+Poner algo de orden en un proyecto es importante para asegurar su sostenibilidad.
 Facilita que cada miembro del equipo sepa donde buscar o añadir aquello que necesite para hacer su trabajo.
-Por eso vamos a ver algunas buenas prácticas comunes.
+Por eso, en los siguientes apartados veremos algunas recomendaciones para organizar el proyecto y facilitar la colaboración entre los diferentes equipos involucrados.
 
-# Organización de los recursos {#sec-organización-de-los-recursos}
+## Organización de los recursos {#sec-organización-de-los-recursos}
 
 Cada motor de videojuegos define una estructura para el directorio de proyecto, de tal forma que más o menos sabemos dónde poner cada tipo de archivo.
 Por ejemplo:
@@ -27,6 +31,9 @@ Por ejemplo:
 * En **Open 3D Engine** los proyectos se ubican en el directorio `dev` dentro del árbol de directorios del motor.
   El código fuente del proyecto se guarda dentro de `dev/code/<NombreDelProyecto>`.
   Mientras que los recursos --incluidos los *scripts* en Lua-- se almacenan en `dev/<NombreDelProyecto>`.
+
+* En **Godot** se puede organizar libremente los recursos en la carpeta del proyecto.
+  Al acceder a los archivos, se recomienda usar `res://` para referenciarlos, de tal forma que se pueda mover el proyecto sin tener que cambiar las rutas.
 
 Como se puede observar, no se indica nada sobre cómo debemos organizar los recursos en directorios como `Content` o `Assets`.
 Podemos hacerlo como queramos, pero ¿cuál es la mejor forma de hacerlo?
@@ -42,7 +49,7 @@ Nunca debemos olvidar que realmente la opción adecuada es la que sea que se hay
 No puede ser que diferentes miembros del equipo utilicen diferentes criterios para organizar sus *assets*.
 :::
 
-## Organización por tipo {#sec-organización-por-tipo}
+### Organización por tipo {#sec-organización-por-tipo}
 
 En tutoriales, cursos y proyectos pequeños es muy común que en el primer nivel de carpetas se organicen los recursos por tipo de recursos.
 Por ejemplo: `Scripts`, `Art`, `Audio`, `Blueprints` o `BP`, `Animations`, `Prefabs`, `Scenes`, `Levels`, `Sprites`, `Data`, etc., como se puede observar en la @fig-unity-assets-tree-by-type-a
@@ -50,8 +57,7 @@ Por ejemplo: `Scripts`, `Art`, `Audio`, `Blueprints` o `BP`, `Animations`, `Pref
 ```{mermaid}
 %%| label: fig-unity-assets-tree-by-type-a
 %%| fig-cap: "Organización de los recursos por tipo en Unity (I)."
-%%| file: figures/unity-assets-tree-by-type-a.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/estructura-y-colaboracion/unity-assets-tree-by-type-a.mmd
 ```
 
 ::: {.callout-tip}
@@ -65,8 +71,7 @@ Por ejemplo, en la @fig-unity-assets-tree-by-type-b la carpeta `Art` contiene: `
 ```{mermaid}
 %%| label: fig-unity-assets-tree-by-type-b
 %%| fig-cap: "Organización de los recursos por tipo en Unity (II)."
-%%| file: figures/unity-assets-tree-by-type-b.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/estructura-y-colaboracion/unity-assets-tree-by-type-b.mmd
 ```
 
 Al crecer el proyecto suele acabar creándose carpetas por característica o funcionalidad del juego en los niveles más profundos de la jerarquía.
@@ -76,27 +81,24 @@ Y dentro de los NPC, los recursos de personajes especiales, como el *Final Boss*
 ```{mermaid}
 %%| label: fig-unity-assets-tree-by-type-c
 %%| fig-cap: "Organización de los recursos, primero por tipo y después por característica."
-%%| file: figures/unity-assets-tree-by-type-c.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/estructura-y-colaboracion/unity-assets-tree-by-type-c.mmd
 ```
 
 Para tutoriales o proyectos pequeños, esta organización resulta bastante intuitiva.
 Pero a poco que crezca el proyecto, nos daremos cuenta de que alguien que esté trabajando en el *Final Boss* tiene que buscar y trabajar con recursos en ramas distintas del árbol de recursos, lo que resulta un tanto incómodo.
 
-## Organización por característica y equipo de trabajo {#sec-organización-por-característica-y-equipo-de-trabajo}
+### Organización por característica y equipo de trabajo {#sec-organización-por-característica-y-equipo-de-trabajo}
 
 En proyectos más grandes, muchas veces se invierten las preferencias.
 Es decir, el primer nivel se organiza por característica, mientras que en niveles más profundos se organiza por tipos, como se muestra en la @fig-unity-assets-tree-by-feature.
 
 ::: {#fig-unity-assets-tree-by-feature}
 ```{mermaid}
-%%| file: figures/unity-assets-tree-by-feature.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/estructura-y-colaboracion/unity-assets-tree-by-feature.mmd
 ```
 
 ```{mermaid}
-%%| file: figures/unity-assets-tree-by-feature_part1.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/estructura-y-colaboracion/unity-assets-tree-by-feature_part1.mmd
 ```
 
 Organización de los recursos por característica en Unity.
@@ -122,7 +124,11 @@ Como se puede observar en la @fig-unity-assets-tree-by-feature, acaban usándose
 
 Para que los diseñadores compongan los niveles es común que exista alguna forma de agrupar componentes y guardarlos organizados en una carpeta, donde los diseñadores los puedan encontrar rápidamente.
 En Unity ese papel lo hacen los *prefabs*, que se suelen almacenar en la carpeta `Prefabs`.
-Mientras que en Unreal Engine lo más parecido son los Blueprints, que muchas veces se guardan en `Blueprints`.
+
+En Unreal Engine lo más parecido son los Blueprints, que muchas veces se guardan en la carpeta ``.
+Sin embargo, puede ser buena idea separar los Blueprints y otros *assets* que los diseñadores usan para componer los niveles, de los Blueprints que implementan la lógica del juego --como *game modes*, controladores, clases base y componentes--.
+Para lo primero se puede usar una carpeta `LevelContento` o `Placeables` y para lo segundo la carpeta `Blueprints`.
+
 Ambos motores prescriben una carpeta donde guardar las escenas del proyecto.
 En Unity es `Scenes` y en Unreal Engine suele llamarse `Maps`.
 
@@ -151,19 +157,18 @@ Otro nombre común es `Project` o simplemente el nombre del proyecto.
 ```{mermaid}
 %%| label: fig-unity-gameassets
 %%| fig-cap: "Organización de los recursos usando la carpeta `GameAssets`."
-%%| file: figures/unity-gameassets.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/estructura-y-colaboracion/unity-gameassets.mmd
 ```
 
 El motivo es que en Unity los *plugins* y *assets* importados desde el *Asset Store* se copian directamente en `Assets`, mezclándose con las carpetas con contenidos propios.
-Eso complica mantener una estructura organizada donde se separe qué es nuestro y qué es un plugin o recurso importado.
+Eso complica mantener una estructura organizada donde se separe qué es nuestro y qué es un *plugin* o recurso importado.
 
 ::: {.callout-note}
 Los paquetes gestionados con el **{{< var unity.packagemanager >}}** tienen la ventaja de que no se instalan en `Assets`, por lo que no meten contenidos en el proyecto.
 Sin embargo, los paquetes adquiridos en la web de *Asset Store* se descargan e instalan mediante el **Unity Package Manager** --a partir de Unity 2020.x-- pero se siguen importando en `Assets`, por lo que debemos seguir teniendo cuidado.
 :::
 
-Una práctica interesante es colocar un `'_'` en el primer caracter del nombre de la carpeta.
+Una práctica interesante es colocar un `'_'` en el primer carácter del nombre de la carpeta.
 Por ejemplo, llamándola `_GameAssets` o `_Project`.
 Así siempre aparecerá la primera del proyecto y, por tanto, es más fácil de localizar.
 
@@ -180,14 +185,14 @@ Esto reduce los tiempos de compilación, porque si se modifica un archivo de có
 
 El uso de **Assembly Definitions** tiene además importantes ventajas:
 
-* **Son necesarios para hacer tests del código del proyecto sin que el código de los test acabe en el producto definitivo**.
+* Son necesarios para **hacer tests del código del proyecto** sin que el código de los test acabe en el producto definitivo.
 
-* **Fuerza una buena práctica de programación que es que entre los componentes de software solo haya dependencias en un solo sentido**.
+* Fuerza una buena práctica de programación que es que **entre los componentes de software solo haya dependencias en un solo sentido**.
   Esto es debido a que un *assembly A* --una DLL-- no puede depender de un *assembly B* que a su vez dependa de *A*.
   Además, gracias a los modificadores de accesibilidad `internal` y `public` se puede controlar la interfaz pública que un *assembly* expone al resto del proyecto.
 
 * **Facilita controlar qué código se incluye o deja de incluir según la plataforma del proyecto**, ya que eso se puede indicar en la definición de cada *assembly*.
-  También permite controlar qué código es para el editor y cuál es para el *gameplay* sin tener que ponerlo en un directorio con un nombre concreto.
+  También permite controlar qué código es para el editor y cuál es para el *gameplay*, sin tener que ponerlo en un directorio con un nombre concreto --como `Editor`, que es dónde Unity espera encontrar los *scripts* del editor--.
 
 ### No abusar de `Resources`
 
@@ -198,15 +203,15 @@ Si se tiene *assets* a los que no se hace referencia en ninguna propiedad, pero 
 Sin embargo, hay que tener en cuenta que Unity incluirá en el proyecto todos los recursos en dicha carpeta, por lo que es importante asegurarse de que todo lo que hay en `Resources` es realmente necesario.
 
 Algo similar ocurre con la carpeta especial `StreamingAssets`, cuyo contenido se copia íntegramente durante la compilación del proyecto.
-Esta carpeta se usa para archivos que queremos que estén disponibles directamente en el sistema de archivos del dispositivo donde se instala el juego, sin las conversiones que hace Unity, accesibles mediante un ruta de archivo convencional.
+Esta carpeta se usa para archivos que queremos que estén disponibles directamente en el sistema de archivos del dispositivo donde se instala el juego, sin las conversiones que hace Unity, accesibles mediante una ruta de archivo convencional.
 
 ### Adoptar *AssetBundles* en lugar de `Resources`
 
-En realidad, el uso de la carpeta `Resources` puede presentar algunos problemas por lo que se recomienda no usarla[@UnityResourcesFolder].
+En realidad, el empleo de la carpeta `Resources` puede presentar algunos problemas por lo que se recomienda no usarla [@UnityResourcesFolder].
 Excepto, tal vez, para un conjunto mínimo de componentes que necesite el arranque del juego.
 
 En lugar de `Resources`, es preferible utilizar **AssetBundles**[@UnityAssetBundles], que son una forma de empaquetar recursos para cagarlos y descargarlos durante la ejecución, de forma selectiva.
-Gracias al **Addressables Assets System**[@UnityAddressables] se puede asignar a cada **AssetBundle** una dirección única que durante la ejecución sirve para localizarlos y cargarlos en la aplicación, independientemente de dónde estén ubicados
+Gracias al **Addressables Assets System** [@UnityAddressables] se puede asignar a cada **AssetBundle** una dirección única que durante la ejecución sirve para localizarlos y cargarlos en la aplicación, independientemente de dónde estén ubicados
 
 El **Addressables Assets System** permite localizar **AssetBundles** tanto del almacenamiento local como de algún servicio de almacenamiento online, lo que permite implementar fácilmente actualizaciones o la instalación de ampliaciones del juego.
 
@@ -215,12 +220,12 @@ El **Addressables Assets System** permite localizar **AssetBundles** tanto del a
 En Unity, tradicionalmente, todos los recursos y componentes de un proyecto deben estar en la carpeta `Assets`, aunque eso nunca ha sido lo ideal.
 Obliga a que formen parte del proyecto *plugins* y herramientas externas, complicando su actualización, que debe hacerse manualmente, y no facilita construir nuestro proyecto a base de módulos reusables.
 
-En Unity 2019.1 apareció **Unity Package Manager**[@UnityPackageManager], que ofrece características similares a los gestores de paquetes de otros lenguajes.
+En Unity 2019.1 apareció **Unity Package Manager** [@UnityPackageManager], que ofrece características similares a los gestores de paquetes de otros lenguajes.
 Ahora los proyectos tienen un archivo de manifiesto donde se indican las dependencias del proyecto; de tal forma que al abrirlo se instalan automáticamente en las versiones adecuadas.
 Es decir, los componentes gestionados de esta manera ya no tienen que formar parte del proyecto, sino que se gestionan como dependencias.
 
 Unity distribuye a través de este sistema diversos componentes adicionales.
-Sin embargo, lo que interesa destacar es la posibilidad de crear nuestros propios paquetes[@UnityCreateCustomPackage] y usarlos como dependencia de nuestros proyectos.
+Sin embargo, lo que interesa destacar es la posibilidad de crear nuestros propios paquetes y usarlos como dependencia de nuestros proyectos [@UnityCreateCustomPackage].
 
 Es buena idea estructurar nuestros proyectos en torno a un conjunto de componentes reusables --por ejemplo, entrada de usuario, controlador del personaje, sistema de inventario, interfaz de usuario, sistema de conducción, IA, carga de niveles, etc.-- y desarrollar e incorporar cada uno a nuestros proyectos en paquetes separados.
 Esto puede facilitar enormemente el mantenimiento y reutilización del código porque:
@@ -249,8 +254,8 @@ En Unreal Engine se suele seguir la convención de nombrar los *assets* con un p
 Por ejemplo, `BP_` para los Blueprints, `SM_` para las **Static Mesh**, `SK_` para las **Skeletal Mesh**, `M_` para los materiales, etc.
 A veces también se usan sufijos para indicar variantes como, por ejemplo, `_Cue` para indicar que un recursos de sonido --seguramente con prefijo `A_`--  es un **Sound Cue**.
 
-En la documentación de Unreal Engine[@UnrealAssetNameConventions] se indica una lista de prefijos recomendados para los diferentes tipos de *assets*.
-En el repositorio *«Gamemakin UE4 Style Guide()»*[@AllarAssetNamingConventions] se recopila una lista mucho más extensa de prefijos y sufijos sugeridos, que puede usarse para complementar a la anterior.
+En la documentación de Unreal Engine [@UnrealAssetNameConventions] se indica una lista de prefijos recomendados para los diferentes tipos de *assets*.
+En el repositorio *«Gamemakin UE4 Style Guide()»* [@AllarAssetNamingConventions] se recopila una lista mucho más extensa de prefijos y sufijos sugeridos, que puede usarse para complementar a la anterior.
 
 Uno de los efectos de esta convención es que realmente no hace falta tener subdirectorios por tipo de *asset* --del estilo de `Materials`, `Meshes` o `Textures`-- puesto que resulta redundante.
 Este tipo de carpetas solo hacen falta cuando la cantidad de *asset* es tan grande que es conveniente separarlos y construir una jerarquía de directorios para su organización.
@@ -260,8 +265,7 @@ Este tipo de carpetas solo hacen falta cuando la cantidad de *asset* es tan gran
 ```{mermaid}
 %%| label: fig-ue-assets-tree-by-feature
 %%| fig-cap: "Organización de los recursos por característica en Unreal Engine."
-%%| file: figures/ue-assets-tree-by-feature.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/estructura-y-colaboracion/ue-assets-tree-by-feature.mmd
 ```
 
 En la @fig-ue-assets-tree-by-feature se puede observar un ejemplo de organización de un proyecto, que vamos a comentar brevemente a continuación:
@@ -272,6 +276,8 @@ En la @fig-ue-assets-tree-by-feature se puede observar un ejemplo de organizaci�
   Por eso esta carpeta es donde principalmente trabajan los programadores.
 
 * **En carpetas como `Content/Characters`, `Content/Weapons` o `Content/Pickups` se suelen organizar subdirectorios para los distintos personajes, armas o recolectables, respectivamente**.
+  En algunos proyectos se optar por poner estas carpetas dentro de `Content/LevelContent`, `Content/Placeables` o similares.
+  
   En cada subdirectorio se guardan las mallas, materiales, texturas y animaciones de cada uno.
   También los Blueprints que finalmente serán instanciados en la escena.
   Para ello los diseñadores heredan de las clases base en la carpeta `Content/Blueprints` y las configuran y ajustan sus propiedades para crear cada elemento definitivo.
@@ -286,7 +292,7 @@ En la @fig-ue-assets-tree-by-feature se puede observar un ejemplo de organizaci�
   En ese caso es más sencillo importa el trabajo en una carpeta como `Content/Sounds`, sobrescribiendo el contenido anterior, que ir buscando cada *asset* de sonido uno a uno para sustituirlo.
 
 La estructura mostrada en la @fig-ue-assets-tree-by-feature toma algunas ideas de *«Gamemakin UE4 Style Guide()»*[@AllarDirectoryStructure], que es un documento que conviene tener a mano porque recoge recomendaciones sobre cómo nombrar y organizar los recursos.
-Estas recomendaciones se basan en la guía que originalmente estaba disponible en el Wiki de Unreal Engine[@AssetsNamingConventionOldUE4Wiki].
+Estas recomendaciones se basan en la guía que originalmente estaba disponible en el Wiki de Unreal Engine [@AssetsNamingConventionOldUE4Wiki].
 
 ### Subdirectorio de *assets* del proyecto
 
@@ -315,38 +321,38 @@ Aunque en muchos cursos y tutoriales todo se desarrolla en Blueprint para que se
 
 Por norma general los actores y componentes de los sistemas del juego se desarrollan en C++, por lo que son responsabilidad del equipo de programadores.
 
-Estás clases generalmente exponen una interfaz pública de métodos, propiedades y eventos accesible desde Blueprint.
+Estas clases generalmente exponen una interfaz pública de métodos, propiedades y eventos accesible desde Blueprint.
 En el editor se hereda de ellas para crear clases Blueprint, lo que facilita a los diseñadores poder configurar, ajustar el comportamiento, posicionar y conectar actores directamente en editor.
 
 ### Módulos de C++
 
-Para facilitar la sostenibilidad y la reutilización del código es recomendable implementar sistemas diferentes en módulos separados.
+Para facilitar la sostenibilidad y la reutilización del código es recomendable implementar sistemas diferentes en módulos separados [@UnrealModules].
 Por ejemplo, si creamos un sistema de conducción de vehículos para nuestro juego, podríamos crear dos módulos, uno para el código del sistema de conducción y otro para tener una extensión del editor con la que gestionar el sistema de forma sencilla.
 El primero sería el **módulo de gameplay** de ese sistema en particular.
 Mientras que el segundo sería el **módulo de editor** que, seguramente, tenga al primero como dependencia.
 
 El análisis de las dependencias entre los módulos permite al sistema de construcción excluir automáticamente los módulos que realmente no son utilizados en el proyecto.
 Por ejemplo, los **módulos de editor** son excluidos en la compilación final del proyecto.
-Si alguno de esos módulos tenía una dependencia que no es también dependencia de los **módulo de gameplay**, la dependencia tampoco es compilada e incluida en el proyecto final.
+Si alguno de esos módulos tenía una dependencia que no es también dependencia de los **módulos de gameplay**, la dependencia tampoco es compilada e incluida en el proyecto final.
 
 Organizar un proyecto en módulos tiene otras importantes ventajas, muy similares al uso de **Assembly Definitions** en Unity:
 
 * **Los módulos obligan a separar bien el código**, ofreciendo una forma de encapsular funcionalidades.
   Estas funcionales son ofrecidas mediante una interfaz pública al resto del proyecto, al tiempo que ocultan los detalles internos.
 
-* **Cada módulo genera una DLL, lo que significa que al compilar el proyecto solo los módulos modificados tienen que ser compilados**.
+* Cada módulo genera una DLL, lo que significa que al compilar el proyecto **solo los módulos modificados tienen que ser compilados**.
   Esto puede mejorar significativamente el tiempo de compilación en proyectos muy grandes.
 
-* **Descomponer el proyecto en módulos fuerza una buena práctica de programación, que es que entre los componentes de software solo haya dependencias en un solo sentido**.
+* Descomponer el proyecto en módulos fuerza una buena práctica de programación, que es que entre **los componentes de software solo haya dependencias en un solo sentido**.
   Esto es debido a que un *módulo A* no puede depender de un *módulo B* que a su vez dependa del *módulo A*.
 
-* **Se puede intentar optimizar el rendimiento aprovechando la posibilidad de cargar o descargar dinámicamente los módulos en tiempo de ejecución**, para solo tenerlos cargados cuando realmente son necesarios.
+* Se puede intentar optimizar el rendimiento aprovechando la posibilidad de **cargar o descargar dinámicamente los módulos en tiempo de ejecución**, para solo tenerlos cargados cuando realmente son necesarios.
 
-* **Se pueden establecer condiciones para incluir o excluir ciertos módulos en la compilación** como, por ejemplo, en función de la plataforma para la que se está compilando o si se trata de una versión con editor o sin él.
+* Se pueden establecer **condiciones para incluir o excluir ciertos módulos en la compilación** como, por ejemplo, en función de la plataforma para la que se está compilando o si se trata de una versión con editor o sin él.
 
 ### Plugins
 
-En el caso de que los módulos sean lo bastante generales como para poder ser reutilizados en otros proyectos, podríamos incluirlos en *plugins*.
+En el caso de que los módulos sean lo bastante generales como para poder ser reutilizados en otros proyectos, podríamos incluirlos en *plugins* [@UnrealPlugins].
 
 Los *plugins* específicos del proyecto se almacenan en subdirectorios de la carpeta `Plugins` del proyecto.
 Un *plugin* de Unreal Engine puede contener varios módulos de código, tanto de *gameplay* como de editor --en su carpeta `Source`-- así como *assets* --en su carpeta `Content`--.
@@ -363,8 +369,8 @@ Las experiencias de juego se implementan en varios *plugins*.
 Uno de ellos contiene los materiales compartidos por todo el proyecto, otros implementan el *gameplay* principal de las diferentes experiencias de juego --por ejemplo, la lógica del modo de juego *shooter* se implementa en su propio *plugin*-- y otros contienen los niveles donde se van a jugar las experiencias y lógica específica de cada nivel.
 Cuando el jugador escoge una experiencia, el juego cargar los plugins necesarios y la inicia.
 
-Esta arquitectura de forma intensiva dos *plugins* que vienen con Unreal Engine 5: **Game Features** y **Modular Gameplay**.
-Con ayuda de ambos se pueden distribuir características de juego en forma de *plugins*, de tal manera que se puedan activar o desactivar a demanda durante la ejecución[@UnrealModularGameplay;@UnrealModularGameFeatures].
+Esta arquitectura uitliza de forma intensiva dos *plugins* que vienen con Unreal Engine 5: **Game Features** y **Modular Gameplay**.
+Con ayuda de ambos se pueden distribuir características de juego en forma de *plugins*, de tal manera que se puedan activar o desactivar a demanda durante la ejecución [@UnrealModularGameplay; @UnrealModularGameFeatures].
 
 Permiten, por ejemplo, modificar el *gameplay* o añadir un nuevo modo de juego o nuevo contenido.
 Por tanto, pueden ser útiles para desarrollar *plugins* con parches, DLC o nuevo contenido para juegos que siguen el modelo de «juego como servicio», como es el caso de Fornite.
@@ -376,17 +382,17 @@ Algunas de las acciones que pueden realizar estos *plugins* de características 
   Los *cheat codes* son códigos que ofrecen atajos en el juego, usados generalmente para facilitar la depuración y verificación del juego.
   Se introducen en la consola que se abre al pulsar `'~'` en las compilaciones de desarrollo del proyecto.
 
-* **Añadir componentes a actores de una lista de subclases indicadas**.
+* **Añadir componentes a actores** de una lista de subclases indicadas.
   Esta es la forma más común de añadir nuevas características al juego.
 
 * **Añadir nuevos registros y fuentes de datos**.
   En el *diseño dirigido por datos* la lógica del *gameplay* se parametriza para ofrecer la posibilidad de que sea ajustable mediante tablas de parámetros.
-  Esto facilita el trabajo de ajustar y balancear el juego a partir de las indicaciones de testers y jugadores.
+  Esto facilita el trabajo de ajustar y balancear el juego a partir de las indicaciones de *testers* y jugadores.
   En este sentido, que los *plugins* puedan modificar los registros de datos es una forma de que pueda hacer ajustes en el *gamplay*.
 
 * **Añadir controles de interfaz de usuario, habilidades o modificar la configuración de la entrada del usuario**.
 
-# Jerarquía de la escena
+## Jerarquía de la escena
 
 Es conveniente fijar ciertas reglas sobre la organización de la jerarquía de objetos en la escena.
 
@@ -395,8 +401,7 @@ En general es buena idea agrupar los elementos de la escena atendiendo a su pape
 ```{mermaid}
 %%| label: fig-scene-hierarchy
 %%| fig-cap: "Ejemplo de organización de una escena em Unity."
-%%| file: figures/scene-hierarchy.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/estructura-y-colaboracion/scene-hierarchy.mmd
 ```
 
 Para eso Unreal ofrece carpetas en su **World Outliner** mientras que Unity obliga a introducir *GameObjects* vacíos.
@@ -405,7 +410,7 @@ La diferencia entre la solución de Unreal Engine y la de Unity es importante, p
 No existen para el motor.
 Pero los *GameObjects* de Unity, incluso cuando están vacíos, si pueden afectar al rendimiento si no se usan adecuadamente.
 
-Básicamente Unity hace lo siguiente:
+Básicamente, Unity hace lo siguiente:
 
 * Cada *GameObject* en el primer nivel de la escena conforma un árbol de objetos.
 
@@ -433,31 +438,34 @@ Una recomendación que simplifica la colaboración entre desarrolladores y que a
 ```{mermaid}
 %%| label: fig-unity-additive-scenes
 %%| fig-cap: "Ejemplo de uso de escenas aditivas en Unity."
-%%| file: figures/unity-additive-scenes.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/estructura-y-colaboracion/unity-additive-scenes.mmd
 ```
 
-En la @fig-unity-additive-scenes se puede observar un ejemplo dónde lo elementos generales del nivel --`Level01`-- los elementos específicos de la misión actual --`Quest01`-- y la interfaz de usuario --`UI`-- están en escenas diferentes.
+En la @fig-unity-additive-scenes se puede observar un ejemplo dónde los elementos generales del nivel --`Level01`-- los elementos específicos de la misión actual --`Quest01`-- y la interfaz de usuario --`UI`-- están en escenas diferentes.
 Esto facilita cargar y descargar todos los elementos específicos de una misión, en función de la misión activa en cada momento.
 
-# Control de versiones
+En Unreal Engine se puede hacer algo similar usando subniveles, que son escenas que se cargan y descargan en tiempo de ejecución (ver la @sec-ue-sublevels)
+
+## Control de versiones
 
 Durante el desarrollo es fundamental seguir la pista a todos los cambios, asegurando que disponemos un histórico de ellos.
 Esto permite probar diferentes alternativas, con la seguridad de que podemos volver a cualquier versión anterior, si decidimos que los cambios que estamos probando no funcionan.
-Para eso es fundamental contar con herramientas de control de versiones --en inglés, *Version Control System* o VCS-- como Git, {{< var perforce.helixcore >}} o {{< var plasticscm >}}.
+Para eso es fundamental contar con herramientas de control de versiones --en inglés, *Version Control System* o VCS-- como Git, {{< var perforce.helixcore >}} o {{< var unity.vcs >}}.
 
-En desarrollo de videojuegos, herramientas como Plastic SCM y Perforce --que es considerado el estándar *de facto* de la industria-- tienen una ventaja importante respecto a Git en que tienen la capacidad de almacenar y versionar los recursos del juego, contenidos de arte y documentos de diseño, además del código fuente[^1].
+En desarrollo de videojuegos, herramientas como Unity VCS y Perforce --que es considerado el estándar *de facto* de la industria-- tienen una ventaja importante respecto a Git en que tienen la capacidad de almacenar y versionar los recursos del juego, contenidos de arte y documentos de diseño, además del código fuente.
 
-[^1]: En Git se pueden conseguir características similares utilizando {{< var git.lfs >}}.
+::: {.callout-note}
+En Git se pueden conseguir características similares a las de otras herramientas de control de versiones utilizando {{< var git.lfs >}}.
+:::
 
 En los estudios más grandes se suele utilizar un gestor de recursos digitales --en inglés, *Digital Asset Manager* o DAM-- para gestionar específicamente los recursos artísticos.
 El ejemplo más común es {{< var shotgrid >}}, pero Perforce también tiene el suyo, llamado {{< var perforce.helixdam >}}.
-Gracias a las facilidades que ofrece un DAM, el director creativo y los *lead artiss* puede ofrecer feedback en el estilo que se busca y pedir cambios y mejoras, al tiempo que se mantiene un registro de todas las pruebas que se hacen a nivel artístico.
+Gracias a las facilidades que ofrece un DAM, el director creativo y los *lead artists* puede ofrecer *feedback* en el estilo que se busca y pedir cambios y mejoras, al tiempo que se mantiene un registro de todas las pruebas que se hacen a nivel artístico.
 
 En los estudios más pequeños no suele compensar el coste extra de un DAM.
-Por eso se suele optar por utilizar el software de control de versiones o incluso soluciones de almacenamiento más convencionales, como Dropbox o un servidor de archivos.
+Por eso se suele optar por utilizar para eso el propio software de control de versiones o incluso soluciones de almacenamiento más convencionales, como Dropbox o un servidor de archivos.
 
-## Directorios en el control de versiones
+### Directorios en el control de versiones
 
 A la hora de utilizar correctamente un VCS es importante saber qué rutas del proyecto deben incluirse en el VCS --para no perder información relevante-- y cuáles no debe incluirse nunca.
 Obviamente, esto depende del motor de videojuegos con el que estemos trabajando, por lo que debemos consultar su documentación.
@@ -491,14 +499,14 @@ Además, en Unreal Engine se debe valorar si incluir o excluir el directorio `Co
 
 El resto de archivos son temporales y se generan al abrir el proyecto o compilarlo, por lo que no se deben incluir en el VCS.
 
-## Colaborar con el VCS
+### Colaborar en el VCS
 
 Es evidente que, a menos que un proyecto sea muy pequeño, nos interesará que varios desarrolladores y diseñadores puedan trabajar en un mismo proyecto al mismo tiempo.
 Pero mientras que los VCS trabajan muy bien con archivos de código, no ocurre lo mismo con los archivos binarios.
 
 ::: {.callout-note}
 No vamos a entrar en cómo usar los distintos VCS ni en cómo se integran con los editores de los motores de videojuegos, porque ya debemos conocerlo.
-Aun así, en *«Control de Versiones Con Perforce»* desarrollamos las características y ventajas de Perforce frente a otros VCS.
+Aun así, en el @sec-perforce desarrollamos las características y ventajas de Perforce frente a otros VCS.
 :::
 
 Los VCS no entienden los formatos binarios, así que no son capaces de calcular las diferencias en las modificaciones de varios usuarios ni de integrarlas.
@@ -510,7 +518,7 @@ Así que ¿cómo podríamos hacer para facilitar la colaboración?.
 
 ### Unity
 
-Lo primero que hay que mencionar es que Unity guarda escenas y *prefabs* en formato binario, pero también admite activar un formato de texto basado en YAML[@UnityYaml].
+Lo primero que hay que mencionar es que Unity guarda escenas y *prefabs* en formato binario, pero también admite activar un formato de texto basado en YAML [@UnityYaml].
 Por lo que hemos mencionado, este formato es interesante cuando trabajamos con un VCS, aunque no es buena idea confiar en las capacidades de este para integrar archivos de texto.
 En su lugar, Unity recomienda configurar el VCS para usar una herramienta llamada {{< var unity.smartmerge >}}.
 Así que, en teoría, varios desarrolladores pueden trabajar en escenas y *prefabs* al mismo tiempo --sin bloqueo-- y {{< var unity.smartmerge >}} se encargaría de integrar todos los cambios.
@@ -537,23 +545,23 @@ De esta forma varios desarrolladores pueden modificar diferentes aspectos de un 
 ### Unreal Engine
 
 En Unreal Engine la estrategia para colaborar es diferente si se utiliza **World Partition** o no.
-En este útlimo caso, la manera de colaborar es muy similar a la empleada con Unity, utilizando subniveles.
+En este segundo caso, la manera de colaborar es muy similar a la empleada con Unity, utilizando subniveles.
 
-Además el editor ofrece algunas funcionales adicionales, que también comentaremos.
+Además, el editor ofrece algunas funcionales adicionales, que también comentaremos.
 
-#### Subniveles
+#### Subniveles {#sec-ue-sublevels}
 
 Al editar un nivel su archivo se bloquea, por lo que en un nivel solo puede haber una persona trabajando al mismo tiempo.
 Pero cuando no se utiliza **World Partition**, Unreal Engine permite descomponer cada nivel en varios subniveles y que estos se carguen a demanda.
 Como cada subnivel se almacena en su propio archivo, diferentes desarrolladores pueden trabajar en distintos subniveles.
 
-El soporte de subniveles es parte de una característica denominada **Level Streaming**[@UnrealLevelStreaming] que se utiliza para optimizar recursos, al permitirnos dividir el mundo en varias partes --los subniveles-- y recorrerlo teniendo cargadas solamente las partes que necesitamos en cada momento.
+El soporte de subniveles es parte de una característica denominada **Level Streaming** [@UnrealLevelStreaming] que se utiliza para optimizar recursos, al permitirnos dividir el mundo en varias partes --los subniveles-- y recorrerlo teniendo cargadas solamente las partes que necesitamos en cada momento.
 
 En el **Level Streaming**, al cargar un nivel lo que se carga es el **Persistent Level**, que contiene información sobre los subniveles y los actores que deben permanecer cargados en todo momento.
 Luego podemos decidir cuándo cargar los subniveles en función, por ejemplo, de la posición del jugador en el mapa.
 Sin embargo, si algún subnivel se marca como **Always Streaming**, ya no se cargará a demanda, sino junto al **Persistent Level**.
 
-El uso de subniveles en modo **Always Streaming** es la primera pieza del método para poder usarlos de forma colaborativa[@UnrealCollaborateWithSublevels].
+El uso de subniveles en modo **Always Streaming** es la primera pieza del método para poder usarlos de forma colaborativa [@UnrealCollaborateWithSublevels].
 La segunda es que, como ocurre en Unity con las escenas aditivas, no estamos obligados a usar los subniveles solamente para dividir el espacio del mapa.
 La descomposición puede ser de otro tipo, en función de cómo se haya planificado repartir el desarrollo.
 
@@ -561,15 +569,15 @@ Así, por ejemplo, un subnivel puede tener las mallas estáticas que dan forma a
 
 En la @fig-ue-sublevels se puede observar un ejemplo de organización de un nivel en subniveles en el panel **Levels** en el editor de Unreal Engine.
 
-![Panel **Levels** en el editor de Unreal Engine.](figures/ue-sublevels.png){#fig-ue-sublevels}
+![Panel **Levels** en el editor de Unreal Engine.](/assets/estructura-y-colaboracion/ue-sublevels.png){#fig-ue-sublevels}
 
 #### Word Partition
 
-El **World Partition**[@UnrealWorldPartition] es una característica de Unreal Engine 5 especialmente diseñada para crear mapas realmente grandes.
+El **World Partition** [@UnrealWorldPartition] es una característica de Unreal Engine 5 especialmente diseñada para crear mapas realmente grandes.
 
 Desde el punto de vista de la colaboración, **World Partition** tiene diferencias fundamentales respecto al uso de subniveles con el **Level Streaming**:
 
-* Cada actor del nivel se guarda en su propio archivo --también conocidos por actores externos-- por lo que al editar no se tiene que bloquear el archivo del nivel sino los de los actores que se están manipulado, lo que facilita la colaboración.
+* Cada actor del nivel se guarda en su propio archivo --también conocidos por actores externos-- por lo que al editar no se tiene que bloquear el archivo del nivel, sino el archivo de cada actor que se está manipulando, lo que facilita la colaboración.
 
   Esta característica se puede activar en cualquier nivel --se esté usado **World Partition** o no-- pero en niveles con **World Partition** se activa por defecto.
 
@@ -580,13 +588,13 @@ Desde el punto de vista de la colaboración, **World Partition** tiene diferenci
 
 En la @fig-ue-datalayers se puede observar un ejemplo del panel de **Data Layers** en un nivel con **World Partition** activado.
 
-![Panel **Data Layers** en el editor de Unreal Engine.](figures/ue-datalayers.png){#fig-ue-datalayers}
+![Panel **Data Layers** en el editor de Unreal Engine.](/assets/estructura-y-colaboracion/ue-datalayers.png){#fig-ue-datalayers}
 
 #### Prefabs
 
-En Unreal Engine no existe el concepto de *prefabs*[^2], pero los actores Blueprint se pueden utilizar, hasta cierto punto, para tener algo similar.
-
-[^2]: Los *prefabs* son como plantillas a partir de la cual se pueden crear instancias de objetos en la escena. Unreal Engine no soporta *prefabs* pero en el *marketplace* existen diferentes soluciones que sí intentan ofrecer una implementación.
+En Unity los *prefabs* son como plantillas a partir de la cual se pueden crear instancias de objetos en la escena.
+Unreal Engine no soporta *prefabs*, pero en el *marketplace* existen diferentes soluciones que sí intentan ofrecer una implementación.
+En todo caso, los actores Blueprint se pueden utilizar, hasta cierto punto, para tener una funcionalidad similar.
 
 Basta con crear un actor Blueprint y --sin tener que añadirle código-- incorporar como componentes mallas, luces, sistemas de partículas y el resto de elementos que nos interesen.
 Posteriormente, las instancias del actor Blueprint se ponen en los lugares del nivel que queramos.
@@ -598,14 +606,14 @@ O modificar cada instancia ubicada en el nivel, si se quieren hacer cambios indi
 
 La solución anterior no funciona exactamente igual que los *prefabs* de Unity porque estos permiten agrupar *GameObjects*, mientras que un actor Blueprint solo puede agrupar componentes.
 
-A veces hay características que solo están disponibles como un actor y no como un componente que puedas poner dentro de un actor.
+Lamentablemente, a veces hay características que solo están disponibles como un actor y no como un componente que puedas poner dentro de un actor.
 Eso significa que esas características no se pueden agrupar dentro del actor Blueprint que queremos usar a modo de *prefab*.
 
 En ese caso se puede añadir al actor Blueprint un componente llamado **Child Actor Component**.
 Este recibe como argumento el actor que queremos instanciar o destruir cuando el actor principal sea instanciado o destruido, respectivamente.
 De esta forma, ese actor que no podemos incluir como componente en el *prefab* sería el actor hijo que el *Child Actor Component* del *prefab* gestionará.
 
-En general no se recomienda usar actores hijos.
+Sin embargo, debemos tener encuenta que, en general, no se recomienda usar actores hijos.
 En lo posible, es mejor utilizar componentes.
 
 #### Carpeta *Developers* {#sec-carpeta-developers}
@@ -625,7 +633,7 @@ Realmente, las **colecciones** no guardan los *assets*, si no referencias a dich
 
 Como se indica en la @fig-collections-toggle, para ver y gestionar las **colecciones** solo tenemos que usar el desplegable en la parte baja del **Content Browser**.
 
-![Desplegable del panel **Collections**.](figures/collections_toggle.png){#fig-collections-toggle}
+![Desplegable del panel **Collections**.](/assets/estructura-y-colaboracion/collections-toggle.png){#fig-collections-toggle}
 
 Existen 3 tipos de **colecciones**:
 
@@ -639,8 +647,3 @@ Existen 3 tipos de **colecciones**:
 * **Compartidas**, que se guardan en el directorio `Content\Collections`.
   Son las **colecciones** compartidas entre los desarrolladores del proyecto.
   Solo se pueden crear este tipo de **colecciones** si tenemos activado el control de versiones.
-
-# Referencias {.unnumbered}
-
-::: {#refs}
-::: 
