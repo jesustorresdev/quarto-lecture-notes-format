@@ -1,0 +1,19 @@
+#!/bin/bash
+
+read -r -d '' TYPHOEUS_CONFIG <<EOF
+{
+  "headers": {
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36"
+  },
+  "ssl_verifyhost": 0,
+  "ssl_verifypeer": false
+}
+EOF
+
+  # --disable-external \
+htmlproofer _book \
+  --allow-missing-href \
+  --alt_ignore '/.*/' \
+  --enforce_https \
+  --http-status-ignore "403" \
+  --typhoeus-config "$TYPHOEUS_CONFIG"
