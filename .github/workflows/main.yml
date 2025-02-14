@@ -6,9 +6,6 @@ on:
     tags:
       - '*'
 
-env:
-  ACADEMIC_YEAR: 2024-2025
-
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
@@ -18,15 +15,23 @@ jobs:
     - name: Obtener el proyecto
       uses: actions/checkout@v4
 
+    - id: dotenv
+      name: Leer variables de entorno
+      uses: falti/dotenv-action@v1.1.4
+      with:
+        path: ./_environment-production
+        log-variables: true
+
     - name: Configurar Quarto
       uses: quarto-dev/quarto-actions/setup@v2
 
     - name: Publicar en GitHub Pages
       uses: quarto-dev/quarto-actions/publish@v2
-      with:
-        target: gh-pages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        QUARTO_PROFILE: production
+      with:
+        target: gh-pages
 
     - name: Empaquetar la documentación
       run: cd _book && zip -r ../desarrollo3d.zip *
@@ -37,8 +42,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
         file: desarrollo3d.zip
-        body: "Apuntes de Desarrollo de Videojuegos 3D del curso ${{ env.ACADEMIC_YEAR }}."
-        release_name: "Curso ${{ env.ACADEMIC_YEAR }}"
+        body: "Apuntes de Desarrollo de Videojuegos 3D del curso ${{ steps.dotenv.outputs.academic_year }}."
+        release_name: "Curso ${{ steps.dotenv.outputs.academic_year }}"
         prerelease: true
         overwrite: true
-    
