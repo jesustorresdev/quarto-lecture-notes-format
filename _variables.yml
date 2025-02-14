@@ -1,7 +1,7 @@
 git:
   lfs: "[Git LFS](https://git-lfs.github.com/)"
 perforce:
-  site: "[Perforce](http://www.perforce.com)"
+  site: "[Perforce](https://www.perforce.com)"
   helixcore: "[Helix Core](https://www.perforce.com/products/helix-core)"
   helixdam: "[Helix DAM](https://www.perforce.com/products/helix-dam)"
   helix4git: "[Helix 4 Git](https://www.perforce.com/products/helix-4-git)"
