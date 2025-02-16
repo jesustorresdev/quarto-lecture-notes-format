@@ -24,7 +24,7 @@ Por ejemplo, gestión automática de memoria, mediante el uso de un recolector d
 Un {{< api UWorld >}} es la clase del objeto de Unreal Engine que representa el mundo del juego y contiene todos los objetos que existen en él.
 Por tanto, por lo general, solo existe una instancia de **UWorld** al mismo tiempo, excepto cuando tiene lugar una transición fluida entre niveles, en cuyo caso existen dos instancias de **UWorld** simultáneamente: la del nivel que se está descargando y la del que se está cargando.
 
-La clase **UWorld**, por ejemplo, contiene los métodos para instanciar objetos en el nivel y para consultar la geometría del nivel mediante *raycasts* y barridos de formas (ver el @sec-gameplay).
+La clase **UWorld**, por ejemplo, contiene los métodos para instanciar objetos en el nivel y para consultar la geometría del nivel mediante *raycasts* y barridos de formas (ver la @sec-raycasts).
 
 ## *Actor* y *ActorComponent*
 

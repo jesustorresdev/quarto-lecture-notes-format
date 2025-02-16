@@ -1,5 +1,7 @@
 ---
-abstract: TODO
+abstract: |
+  En este capítulo vamos a ver cómo se implementa el control de personajes en videojuegos.
+  Veremos cómo se implementa el movimiento de los personajes, cómo se detectan las colisiones y cómo se resuelven.
 ---
 
 ::: {.callout-note}
@@ -24,14 +26,14 @@ Generalmente, estos compomnentes deben ser extendidos para implementar los modos
 ## Control de movimiento {#sec-control-de-movimiento}
 
 La entrada del control de movimiento son las acciones de movimiento indicadas por el jugador o por la IA --por ejemplo, «accelera hacia la derecha», «salta» o «camina agachado»-- y la salida es la nueva posición del personaje, ajustada a las restricciones físicas del mundo.
-Es responsabilidad del controlador implementar la física del personaje --aunque, como veremos más adelante, eso no significa necesariamente que usen motor de simulación física[Ver *«Colisión y simulación»* en @TorresD3DFisicas]-- haciendo que se mueva sin atravesar muros o suelos, que salte y caiga, que pueda subir y bajar pendientes y escaleras o escalar muros.
+Es responsabilidad del controlador implementar la física del personaje --aunque, como veremos más adelante, eso no significa necesariamente que usen motor de simulación física (ver la @sec-colisión-y-simulación)-- haciendo que se mueva sin atravesar muros o suelos, que salte y caiga, que pueda subir y bajar pendientes y escaleras o escalar muros.
 
-## Cápsula del personaje
+### Cápsula del personaje
 
 Como hemos comentado, el volumen del personaje se modela con una forma tridimensional sencilla que se usa para detectar sus colisiones con el entorno.
-Frecuentemente, este volumen es una cápsula, pero también puede ser una esfera o una caja, según se ajuste mejor a la figura del personaje y al movimiento.
+Frecuentemente, este volumen es una cápsula --como se puede ver en la @fig-ue-empty-character-- pero también puede ser una esfera o una caja, según se ajuste mejor a la figura del personaje y al movimiento.
 
-![Actor **Character** de Unreal Engine.](figures/ue_empty_character.png)
+![Actor **Character** de Unreal Engine.](/assets/control-de-personajes/ue-empty-character.png){#fig-ue-empty-character}
 
 Por lo general, es preferible usar cápsulas o esferas a las cajas, por varios motivos:
 
@@ -39,10 +41,9 @@ Por lo general, es preferible usar cápsulas o esferas a las cajas, por varios m
 Asi es más sencillo implementar un controlador que ubique al personaje adecuadamente.
 
 ::: {#fig-capsule-contact layout-nrows="2"}
+![Contacto con un suelo plano.](/assets/control-de-personajes/capsule-contact-floor.png)
 
-![Contacto con un suelo plano.](figures/capsule-contact-floor.png)
-
-![Contacto con una pendiente.](figures/capsule-contact-slope.png)
+![Contacto con una pendiente.](/assets/control-de-personajes/capsule-contact-slope.png)
 
 Contacto de una cápsula con el suelo.
 :::
@@ -54,11 +55,11 @@ Esto significa que se puede rotar el personaje para que mire en una determinada 
   En ese caso, si se usa un cubo como colisión del personaje, el personaje podría penetrar en otros objetos si que la condición pueda ser detectada por el controlador.
   Entonces el personaje quedaría atrapado y ya no puede moverse por la escena, como se puede ver en la @fig-cube-rotation.
 
-![Rotación que causa penetración cuando la colisión tiene forma de cubo.](figures/cube-rotation.png){#fig-cube-rotation}
+![Rotación que causa penetración cuando la colisión tiene forma de cubo.](/assets/control-de-personajes/cube-rotation.png){#fig-cube-rotation}
 
 Los compomentes responsables del movimiento del personaje lo que hacen es mover esta cápsula, mientras comprueba las colisiones, de forma que el resto de elementos del personaje se mueven con ella.
 
-## Tipos de entrada {#sec-tipo-de-entrada}
+### Tipos de entrada de control {#sec-tipo-de-entrada}
 
 Obviamente, para que el control de movimiento pueda hacer su trabajo, necesita saber en qué dirección y en qué cantidad debe mover la capsula de colisión.
 Por tanto, una de las entradas del control suele ser un vector con dicha información.
@@ -76,7 +77,7 @@ En función del significado de la magnitud del vector, el control de movimiento 
 * **Control de tercer orden**.
   La entrada es la aceleración deseada para el personaje, en la dirección indicada.
 
-### Control de primer orden
+#### Control de primer orden
   
 En el **control de primer orden** la entrada es directamente el desplazamiento deseado para el personaje.
 
@@ -88,7 +89,7 @@ Es decir, la velocidad de movimiento puede variar de un equipo a otro.
 
 Este tipo de control puede ser adecuado para juegos donde los personajes solo se mueven entre posiciones fijas, como ocurre en muchos juegos de tablero.
 
-### Control de segundo orden
+#### Control de segundo orden
 
 En el **control de segundo orden** la entrada es la velocidad deseada para el personaje.
 Por ejemplo, «muévete hacia la derecha a 10 m/s».
@@ -135,7 +136,7 @@ Una mejor aproximación es usar la velocidad calculada a partir de la aceleraci�
 En este caso, se puede ignorar el valor de `InputVelocity` si el personaje esta en el aire y se supone que no tiene ningún control sobre su movimiento.
 En los juegos donde el personaje puede maniobrar en el aire, se usa `InputVelocity` para calcular el movimiento del personaje, pero se limita la velocidad y aceleación máxima, de forma que se restringe el control del personaje:
 
-```cpp
+```cs
 // Cálcular la velocidad de caida.
 Vector FallingVelocity = PrevFallingVelocity + Gravity * DeltaTime;     // <1>
 
@@ -158,7 +159,7 @@ SweepTo(CurrentLocation + Offset);
 2. Calcular la velocidad debida al control del jugador.
 3. Sumar ambas velocidades para obtener la velocidad final del personaje y calcular el desplazamiento.
 
-### Control de tercer orden
+#### Control de tercer orden
 
 En el **control de tercer orden** el jugador o la IA pueden controlar directamente la aceleración del personaje.
 Por tanto, no tiene control directo sobre la velocidad del personaje, pero pueden hacer que gane o pierda velocidad en la dirección indicada, a través de la aceleración, lo que resulta más realista.
@@ -208,7 +209,7 @@ SweepTo(CurrentLocation + Offset);
 1. `BrakingDeceleration` es un factor que determina la aceleración de frenado.
   Se multiplica por la dirección de la velocidad del personaje en el *tick* anterior para obtener el vector de desaceleración con el que se actualiza la aceleración del personaje. 
 
-## Controladores cinemáticos {#sec-controladores-cinematicos}
+### Controladores cinemáticos {#sec-controladores-cinematicos}
 
 Los controladores de movimiento de personajes pueden ser **cinemáticos** o **dinámicos**.
 
@@ -233,7 +234,7 @@ Por ejemplo, en la @fig-collide-and-slide se ilustra como el personaje se desliz
 La distancia que se desliza es la proyección sobre la superficie del vector de desplazamiento restante tras la colisión.
 Esto se puede calcular fácilmente utilizando el producto escalar y genera el efecto de que haya menos deslizamiento cuanto más perpendicular es el vector del impacto a la superficie.
 
-![Ejemplo típico de *collide and slide*.](figures/collide-and-slide.pdf){#fig-collide-and-slide}
+![Ejemplo típico de *collide and slide*.](/assets/control-de-personajes/collide-and-slide.pdf){#fig-collide-and-slide}
 
 El controlador suele soportar distintos modos para mover el personaje hasta una ubicación viable, según las mecánicas de movimiento del juego: volar, caminar o correr, subir o bajar escalones o rampas, saltar y maniobrar en el aire, moverse sobre plataformas --como ascensores o cintas transportadoras-- empujar objetos, nadar o escalar.
 
@@ -245,7 +246,7 @@ En este modo el personaje tienen un movimiento diferente al del modo «caminar»
 
 Para ilustrar el algoritmo de ***collide and slide***, vamos a ver como se suele gestionar el modo «caminar» en algunos casos muy comunes en cualquier personaje.
 
-### Deslizamiento
+#### Deslizamiento
 
 Caminar por un suelo plano implica, simplemente, deslizar el personaje en el plano XY, manteniendo la distancia con el suelo.
 Para hacerlo, el controlador toma la entrada de movimiento para calcular la posición final del personaje, manteniendo la altura Z, e intentar moverlo hasta dicha ubicación, mientras detecta colisiones.
@@ -264,9 +265,9 @@ Para eso, el controlador verifica si hay suelo en la posición final y, en caso 
 En otros casos, solo en determinadas situaciones se espera que el personaje no pueda caer o, al menos, que sea más complicado que ocurra, como cuando cruza sobre una estructura estrecha donde hace equilibrio, como se ilustra en la @fig-thin-bridge.
 En ese caso, un *trigger* en la estructura puede activar un modo de deslizamiento especial, que evita que el personaje caiga o donde se aplica cierto grado de resistencia contra los movimientos en la dirección en la que puede caer el personaje.
 
-![Cruce sobre una escalera en *«Death Stranding» (2019)*.](figures/thin-bridge.jpg){#fig-thin-bridge}
+![Cruce sobre una escalera en *«Death Stranding» (2019)*.](/assets/control-de-personajes/thin-bridge.jpg){#fig-thin-bridge}
 
-### Bajar rampas y escalones
+#### Bajar rampas y escalones
 
 El *raycast* hacia el suelo comentado anteriormente, facilita implementar el descenso de escalones y rampas.
 Básicamente, el controlador debe tener configurada una *altura máxima de escalón*, de forma que si el suelo se detecta más cerca que dicha altura, el personaje desciende hasta que la distancia al suelo esté dentro del rango permitido.
@@ -274,14 +275,14 @@ Básicamente, el controlador debe tener configurada una *altura máxima de escal
 En la @fig-collide-and-slide-stepdown y @fig-collide-and-slide-rampdown se ilustra como el resultado es que así el personaje puede descender por rampas y escalones.
 
 ::: {layout="[10, -1, 10]"}
-![Descenso de escalones.](figures/collide-and-slide-stepdown.pdf){#fig-collide-and-slide-stepdown}
+![Descenso de escalones.](/assets/control-de-personajes/collide-and-slide-stepdown.pdf){#fig-collide-and-slide-stepdown}
 
-![Descenso de rampas.](figures/collide-and-slide-rampdown.pdf){#fig-collide-and-slide-rampdown}
+![Descenso de rampas.](/assets/control-de-personajes/collide-and-slide-rampdown.pdf){#fig-collide-and-slide-rampdown}
 :::
 
 En este caso, cada vez que el personaje avanza queda en el aire, por lo que el controlador baja automáticamente el personaje hasta el suelo para ajustar la distancia con respecto a este, haciendo que descienda.
 
-### Caída y aterrizaje
+#### Caída y aterrizaje
 
 Si durante la comprobación de la distancia al suelo esta es mayor que la *altura máxima de escalón*, entonces es que el personaje está en el aire.
 En ese caso, el controlador cambia al modo «salto» o «caída», en el que incluye en los cálculos el efecto de la aceleración de la gravedad, de manera que el personaje se mueva en Z para ir cayendo frame a frame hasta el suelo.
@@ -293,7 +294,7 @@ Es decir, en ese caso el desplazamiento horizontal solo viene determinado por la
 
 Cuando el controlador detecta el suelo a una distancia menor que la *altura máxima de escalón*, vuelva al modo «caminar» porque el personaje ha aterrizado.
 
-### Subir rampas y escalones
+#### Subir rampas y escalones
 
 Un controlador básico también sabe como hacer que el personaje suba rampas y escalones.
 De hecho, incluso cuando no es necesaria esta funcionalidad, es interesante implementarla porque facilita que el personaje pueda superar pequeñas irregularidades del suelo.
@@ -301,9 +302,9 @@ De hecho, incluso cuando no es necesaria esta funcionalidad, es interesante impl
 Un escalón o una rampa se detectan con una colisión al mover el personaje hacia su posición definitiva, solo que se hacen varias comprobaciones antes de decidir que el personaje no puede superar el obstáculo:
 
 ::: {layout="[10, -1, 10]"}
-![Subida de rampas.](figures/collide-and-slide-rampup.pdf){#fig-collide-and-slide-rampup}
+![Subida de rampas.](/assets/control-de-personajes/collide-and-slide-rampup.pdf){#fig-collide-and-slide-rampup}
 
-![Subida de escalones.](figures/collide-and-slide-stepup.pdf){#fig-collide-and-slide-stepup}
+![Subida de escalones.](/assets/control-de-personajes/collide-and-slide-stepup.pdf){#fig-collide-and-slide-stepup}
 :::
 
 1. Si la superficie de la colisión tiene una pendiente menor que la máxima permitida en la dirección del movimiento, es porque se trata de una rampa.
@@ -316,7 +317,7 @@ Un escalón o una rampa se detectan con una colisión al mover el personaje haci
 
 1. Finalmente, si no es ni una rampa ni un escalón, es que el personaje está ante una pared, por lo que lo desplaza de forma paralela a la superficie, como se ilustra en la @fig-collide-and-slide.
 
-## Controladores dinámicos
+### Controladores dinámicos
 
 Los **controladores de personaje dinámicos** aprovechan las funcionalidades del motor de físicas, por lo que en teoría son muy sencillos de implementar.
 
@@ -361,7 +362,7 @@ Algunos problemas típicos de los controladores **dinámicos** son:
   Es decir, debe estar siempre en vertical, apoyada sobre uno de sus extremos en el suelo.
   Lamentablemente, los motores de físicas suelen carecer de las características necesarias para restringir este tipo de rotaciones.
 
-Algunas de estos problemas se pueden resolver usando *uniones*[Ver *«Uniones»* en @TorresD3DFisicas], que a veces no funcionan del todo bien porque son dinámicas.
+Algunas de estos problemas se pueden resolver usando *uniones*, que a veces no funcionan del todo bien porque son dinámicas (ver la @sec-uniones).
 Es decir, se basan en aplicar fuerzas para intentar restringir ciertos movimientos, lo que puede causar rebotes, como hemos comentado.
 
 Otras opciones son que el controlador aplique por sí mismo ciertas fuerzas en momentos concretos o ajustar de forma cuidadosa y dinámica algunos parámetros del motor de físicas.
@@ -369,7 +370,7 @@ Otras opciones son que el controlador aplique por sí mismo ciertas fuerzas en m
 Todo para emular con un motor de físicas un comportamiento mucho más simple de aquel para el que el motor fue diseñado.
 Por eso, suele ser mucho más sencillo y estable implementar directamente el comportamiento deseado en un controlador cinemático, usando el motor de físicas para otros aspectos del juego.
 
-## Actualización en subpasos {#sec-substeps}
+### Actualización en subpasos {#sec-substeps}
 
 Idealmente, un personaje controlado con un control de segundo o tercer orden, sea cinemático o dinámico, debería moverse a lo largo de una curva.
 Sin embargo, en la práctica, en cada *tick* se calcula la ubicación en la trayectoria en base al tiempo trascurrido desde la actualización anterior, para luego desplazar al personaje hasta allí en línea recta.
@@ -378,7 +379,7 @@ Esto quiere decir, que el personaje realmente se mueven en una aproximación de 
 Como se puede ver en la @fig-movement-substeps, el personaje podría moverse en una trayectoria muy diferente a la esperada se lo hace a una velocidad muy alta o el tiempo entre actualizaciones es muy grande.
 Esto puede dar lugar, por ejemplo, a que se detecten colisiones con objetos que no deberían estar en la trayectoria del personaje.
 
-![Aproximar una trayectoria en cada *tick* vs. en cada *subpaso*.](figures/movement-substeps.pdf){#fig-movement-substeps}
+![Aproximar una trayectoria en cada *tick* vs. en cada *subpaso*.](/assets/control-de-personajes/movement-substeps.pdf){#fig-movement-substeps}
 
 Para evitarlo, en cada *tick*, se puede dividir el `DeltaTime` en varias porciones, calculando y moviendo la ubicación del personaje en cada una, hasta completar el tiempo `DeltaTime`:
 
@@ -396,7 +397,7 @@ while (RemainingTime > EPSILON) {
 ```
 1. Se divide `DeltaTime` en `MaxSubsteps` pasos, pero el tiempo de cada uno nunca puede ser inferior a `MinTickTime` para evitar problemas cuando el tiempo es muy pequeño o prácticamente 0.0.
 
-## Uso de máquinas de estados
+### Uso de máquinas de estados
 
 Cuando el control del movimiento es complejo, con múltiples modos diferentes, puede ser necesario utilizar algún patrón de diseño que ayude a organizar el código.
 Un ejemplo muy común es el uso de máquinas de estados, como se ilustra en la @fig-movement-controller.
@@ -404,8 +405,7 @@ Un ejemplo muy común es el uso de máquinas de estados, como se ilustra en la @
 ```{mermaid}
 %%| label: fig-movement-controller
 %%| fig-cap: "Ejemplo de máquina de estados del control de movimiento."
-%%| file: figures/movement-controller.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/control-de-personajes/movement-controller.mmd
 ```
 
 De hecho, es frecuente que en el controlador de los personajes se usen al menos dos máquinas de estados que, por motivos obvios, van a presentar importantes similitudes.
@@ -414,8 +414,7 @@ Una para los modos de movimiento y otra para el control de la animación, según
 ```{mermaid}
 %%| label: fig-movement-controller-animation
 %%| fig-cap: "Ejemplo de máquinas de estados de control de movimiento y animación"
-%%| file: figures/movement-controller-animation.mm
-%%| fig-width: 15cm
+%%| file: ../diagrams/control-de-personajes/movement-controller-animation.mmd
 ```
 
 En algunos casos, puede ser necesario utilizar otras máquinas de estados en otros componentes del controlador de personaje.
@@ -428,7 +427,7 @@ En esos casos se puede valor la implementación de algún tipo de *ability syste
 
 También es común usar máquinas de estado --junto a otras técnicas, como *behaviour trees* o *utility AI*-- para implementar el cerebro de los NPC, estableciendo las reglas de comportamiento a alto nivel, que luego se traducen en acciones de movimiento, combate y animación.
 
-## Control de rotación
+## Control de la dirección
 
 El movimiento del personaje no solo consiste en moverlo, sino también en rotarlo para que se oriente en la dirección adecuada.
 
@@ -444,7 +443,7 @@ Si la cámara es fija o se mueve sobre railes, este control se puede utilizar pa
 
 Lo descrito en el párrafo anterior es común en muchos juegos de acción en tercera persona, donde:
 
-![Movimiento y rotación en tercera persona.](figures/tpp-movement-and-rotation.pdf){#fig-tpp-movement-and-rotation}
+![Movimiento y rotación en tercera persona.](/assets/control-de-personajes/tpp-movement-and-rotation.pdf){#fig-tpp-movement-and-rotation}
 
 * El controlador mueve al personaje en la dirección indicada por el jugador en el frame, independientemente de como esté orientado el personaje, como se ilustra en la @fig-tpp-movement-and-rotation.
 
@@ -464,7 +463,7 @@ Lo descrito en el párrafo anterior es común en muchos juegos de acción en ter
   Como se puede ver en la @fig-tpp-movement-and-rotation, esta rotación se interpola a lo largo de varios frames, evitando que el personaje cambie de orientación instantaneamente.
   Como en el caso del movimiento, una rotación más lenta se percibe más pesada, pero ofrece mayor fidelidad en la animación.
 
-## Comportamientos de dirección (*steering behaviours*){#sec-steering-behaviours}
+### Comportamientos de dirección (*steering behaviours*){#sec-steering-behaviours}
 
 El comportamiento anterior, donde el personaje se puede mover en cualquier dirección, independientemente de su orientación, ofrece mejor respuesta al jugador, pero no es realista.
 
@@ -480,7 +479,7 @@ Algunos ejemplos de **comportamientos de dirección** son:
 
 <!-- TODO: Añadir ejemplos de comportamientos de dirección mediante vídeos o animaciones -->
 
-![Comportamiento **seguir** (*seek*).](figures/steering-behaviours-seek.pdf){#fig-steering-behaviours-seek}
+![Comportamiento **seguir** (*seek*).](/assets/control-de-personajes/steering-behaviours-seek.pdf){#fig-steering-behaviours-seek}
 
 * **Seguir (*Seek*)**:
   El agente se mueve hacia un objetivo, como el jugador, de la forma más directa posible.
@@ -536,7 +535,7 @@ Finalmente, Unity ofrece otro **CharacterController** para utilizar con proyecto
 
 ### Unreal Engine
 
-En Unreal Engine el compomente más simple para implementar el movimiento de un personaje es {{< api PawnMovementComponent >}} [Ver *«Movimiento del actor»* en @TorresD3DGameplayFramework].
+En Unreal Engine el compomente más simple para implementar el movimiento de un personaje es {{< api PawnMovementComponent >}} (ver la @sec-movimiento-del-actor).
 Sin embargo, no incluye ningún tipo de control de movimiento, sino que su función es proporcionar la integración con la clase de actor {{< api Pawn >}}, que es reutilizada por las clases derivadas de esta.
 
 Extender directamente {{< api PawnMovementComponent >}} para implementar un control de movimiento desde 0, pero no es lo más habitual.
@@ -556,11 +555,11 @@ Para añadir otros modos --como escalar, subir escaleras de mano o «parkour»--
 Por ejemplo, el controlador sabe ajustar el tamaño de la cápsula cuando el personaje se agacha.
 
 Igualmente, se integra con el sistema de navegación, permitiendo que el {{< api AIController >}} de un NPC marque un destino y el sistema de navegación considere para llegar a él los modos de movimiento soportados por el **CharacterMovementComponent**.
-Con la ruta obtenida, el **AIController** mueve el personaje dando órdenes de desplazamiento al **CharacterMovementComponent**, para llegar a los distintos puntos de dicha ruta usando los modos de movimiento adecuados[Ver *«AIController»* en @TorresD3DGameplayFramework].
+Con la ruta obtenida, el **AIController** mueve el personaje dando órdenes de desplazamiento al **CharacterMovementComponent**, para llegar a los distintos puntos de dicha ruta usando los modos de movimiento adecuados (ver la @sec-aicontroller).
 
 #### Rotación de control
 
-Unreal Engine implementa el concepto de *rotación de control*, que es una rotación que se guarda en los **Controller** que pueden poseer a personajes, independiente del vector de movimiento del personaje[Ver *«Rotación de control»* en @TorresD3DGameplayFramework].
+Unreal Engine implementa el concepto de *rotación de control*, que es una rotación que se guarda en los **Controller** que pueden poseer a personajes, independiente del vector de movimiento del personaje (ver la @sec-rotación-de-control).
 Esta *rotación de control* se puede utilizar para controlar la orientación del personaje o para el control de la cámara, según la perspectiva utilizada en el proyecto.
 
 #### Modo de movimiento personalizado {#sec-custom-movement-mode}
@@ -569,11 +568,11 @@ El método `SetMovementMode()` de **CharacterMovementComponent** permite conmuta
 Uno de estos modos es el **Custom**, que admite especificar un sub-modo en el segundo argumento de {{< api SetMovementMode >}}.
 Como se puede observar en la @fig-set-movement-mode, este sub-modo no más que un entero, que se puede elegir libremente pero que debe ser diferente para cada modo personalizado que se quiera implementar. 
 
-![Set Movement Mode.](figures/set-movement-mode.png){#fig-set-movement-mode}
+![Set Movement Mode.](/assets/control-de-personajes/set-movement-mode.png){#fig-set-movement-mode}
 
 Cuando el modo de movimiento cambia, el **CharacterMovementComponent** invoca al evento {{< api OnMovementModeChanged >}} en el **Character** para actualizar el movimiento del personaje (ver la @fig-movement-mode-changed-event).
 
-![Evento de cambio de modo de movimiento.](figures/movement-mode-changed-event.png){#fig-movement-mode-changed-event}
+![Evento de cambio de modo de movimiento.](/assets/control-de-personajes/movement-mode-changed-event.png){#fig-movement-mode-changed-event}
 
 Este evento es interesante cuando se va a implementar un modo de movimiento personalizado porque permite saber cuando se ha activado o desactivado el modo **Custom** y, por tanto, cuando se debe cambiar el comportamiento del movimiento del personaje.
 
@@ -583,7 +582,7 @@ A través de la propiedad **CustomMovementMode** del **CharacterMovementComponen
 Una de las tareas que realiza el `PhysCustom` por defecto, es llamar al evento **UpdateCustomMovement** del **Character** (ver la @fig-update-custom-movement).
 Como el **CharacterMovementComponent** no es directamente heredable en Blueprint, este evento, apoyado por `OnMovementModeChanged()` sería el lugar para implementar movimientos personalizados directamente en Blueprint.
 
-![Evento para actualizar el movimiento en el modo personalizado.](figures/update-custom-movement.png){#fig-update-custom-movement}
+![Evento para actualizar el movimiento en el modo personalizado.](/assets/control-de-personajes/update-custom-movement.png){#fig-update-custom-movement}
 
 ## Jerarquía de clases
 
@@ -591,6 +590,6 @@ Esta es la jerarquía de las clases de Unreal Engine vistas en este documento.
 
 ```{mermaid}
 %%| label: fig-ue-class-hierarchy
-%%| file: figures/ue-class-hierarchy-part2.mm
+%%| file: ../diagrams/control-de-personajes/ue-class-hierarchy.mmd
 %%| fig-cap: Jerarquía de clases de Unreal Engine
 ```

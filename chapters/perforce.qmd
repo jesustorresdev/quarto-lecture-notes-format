@@ -30,7 +30,7 @@ Git es actualmente el VCS por excelencia y, obviamente, se puede utilizar sin pr
 Por ejemplo, veamos en la @tbl-git-large-projects el tamaño y los tiempos --obtenidos sin ningún rigor, desde mi propia casa-- para algunos proyectos conocidos.
 
 | **Proyecto**          | **Tamaño del proyecto** | **Tamaño del repositorio** | **Tiempo de clonado** |
-|-----------------------|-------------------------|----------------------------|-----------------------|
+|:----------------------|------------------------:|---------------------------:|----------------------:|
 | **Kernel Linux**      | 1.1 GiB                 | 4.0 GiB                    | 5:45 min              |
 | **Unreal Engine 4**   | 1.7 GiB                 | 4.4 GiB                    | 10:13 min             |
 

@@ -15,9 +15,11 @@ classDiagram
     UObject <|-- UWorld
 
     ActorComponent <|-- SceneComponent
+    note for SceneComponent "Puede ser ubicados<br>en la escena."
     ActorComponent <|-- MovementComponent
 
     SceneComponent <|-- PrimitiveComponent
+    note for PrimitiveComponent "Generan algún tipo<br>de geometría como para<br>render o colisión."    
     PrimitiveComponent <|-- ShapeComponent
     PrimitiveComponent <|-- StaticMeshComponent
     PrimitiveComponent <|-- BrushComponent

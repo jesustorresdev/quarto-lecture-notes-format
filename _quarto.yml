@@ -24,6 +24,12 @@ book:
       chapters: 
         - chapters/motores.qmd
         - chapters/estructura-y-colaboracion.qmd
+    - part: chapters/gameplay.qmd
+      chapters:
+        - chapters/colisiones-triggers-y-raycasts.qmd
+        - chapters/control-de-personajes.qmd
+        - chapters/ascensores-y-plataformas.qmd
+        - chapters/entrada-del-jugador.qmd
     - part: Animación
       chapters:
         - chapters/motion-matching.qmd

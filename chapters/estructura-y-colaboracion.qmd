@@ -499,7 +499,7 @@ Además, en Unreal Engine se debe valorar si incluir o excluir el directorio `Co
 
 El resto de archivos son temporales y se generan al abrir el proyecto o compilarlo, por lo que no se deben incluir en el VCS.
 
-### Colaborar en el VCS
+### Colaborar en el VCS {#sec-colaborar-vcs}
 
 Es evidente que, a menos que un proyecto sea muy pequeño, nos interesará que varios desarrolladores y diseñadores puedan trabajar en un mismo proyecto al mismo tiempo.
 Pero mientras que los VCS trabajan muy bien con archivos de código, no ocurre lo mismo con los archivos binarios.

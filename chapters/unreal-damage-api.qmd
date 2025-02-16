@@ -202,7 +202,7 @@ Por defecto, esta función crea un objeto **FRadialDamageEvent** donde se indica
 Esto lo hace poniendo la propiedad **Damage Falloff** a 1.0 en el evento de daño.
 Pero si `bDoFullDamage` es `true`, pondrá la propiedad **Damage Falloff** a 0.0, para aplicar todo el *daño base* a todos los actores en el área, independientemente de la distancia al centro del área.
 
-Finalmente, el argumento `DamagePreventionChannel` se usa para indicar una canal de colisión en el que la función buscará objetos que puedan bloquear el daño [ver @sec-gameplay].
+Finalmente, el argumento `DamagePreventionChannel` se usa para indicar una canal de colisión en el que la función buscará objetos que puedan bloquear el daño (ver la @sec-raycasts).
 Es decir, no intentará aplicar daño a los actores que estén detrás de objetos que bloqueen los *raycast* en el canal indicado.
 
 #### *ApplyRadialDamageWithFalloff*

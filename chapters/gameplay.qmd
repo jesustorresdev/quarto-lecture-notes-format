@@ -1,4 +1,4 @@
-# Desarrollo de *gameplay*
+# Gameplay
 
 El *gameplay* en un videojuego se refiere a la forma en la que el jugador interactúa con el juego, incluyendo los controles, las mecánicas de juego, objetivos y desafíos.
 Es la experiencia del jugador mientras está jugando y cómo se siente al hacerlo.
@@ -6,9 +6,8 @@ Es la experiencia del jugador mientras está jugando y cómo se siente al hacerl
 El *gameplay* se puede dividir en varias categorías, como la exploración, la resolución de puzzles, el combate, la estrategia o la simulación.
 Cada uno de estos tipos de *gameplay* ofrece diferentes desafíos y experiencias al jugador, y muchos juegos combinan varios tipos de *gameplay* para crear una experiencia única y diversa.
 
-Por el momento, nosotros vamos a centrarnos en aquellos aspectos del *gameplay* relacionados o condicionados por el desarrollo de un juego en un mundo 3D.
+Nosotros vamos a centrarnos en aquellos aspectos del *gameplay* relacionados o condicionados por el desarrollo de un juego en un mundo 3D.
 Pero, obviamente, debemos tener presente que en un juego en 3D puede haber mucha lógica de *gameplay* que nada tenga que ver con las características del entorno de juego ni con el motor de videojuegos.
-
 Por ejemplo, el sistema que gestiona el inventario del jugador, el sistema de habilidades --típico en muchos juegos con algún componente de RPG-- o el combate en los juegos de estrategia se pueden desarrollar y probar independientemente del juego y del motor de videojuegos.
 
 Lo mismo ocurre con los simuladores de granjas, fábricas o de ciudades, pues en realidad lo que se muestra al jugador no es sino una interfaz elegante y vistosa de la simulación, que puede --y debe-- desarrollarse de forma completamente independiente de esta.

@@ -1,9 +1,9 @@
 sequenceDiagram
-    %% box Projectile
+    box Projectile
         participant DamageManager
         participant MovementController
-    %% end
-
+    end
+    
     participant Engine
 
     MovementController ->> Engine: SetActorLocation(..., Sweep=true,...)

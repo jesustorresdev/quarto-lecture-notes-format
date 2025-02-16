@@ -139,7 +139,7 @@ Como se puede observar en la @fig-gamemode-properties, entre las propiedades que
 
 Obviamente, nada impide que añadamos otras propiedades específicas de cada nivel.
 
-## Controladores
+## Controladores {#sec-controllers}
 
 En Unreal Engine Gameplay Framework, se llama **Controller** al actor responsable de controlar al actor del personaje.
 Es decir, el personaje y su controlador son actores diferentes, mientras que en Unity es común que el controlador sea un componente del *GameObject* del personaje.
@@ -217,7 +217,7 @@ Puede dirigir su movimiento usando el método {{< api AddMovementInput >}} (ver 
 
 ![Función `AddMovementInput()` de **Pawn**.](/assets/unreal-gameplay-framework/pawn-addmovementinput.png){#fig-pawn-addmovementinput}
 
-#### Movimiento del actor
+#### Movimiento del actor {#sec-movimiento-del-actor}
 
 Un **Controller** puede mover un **Pawn** directamente llamando a métodos como `SetActorLocation()` o `AddActorWorldOffset()`, que tienen todos los actores.
 
@@ -330,7 +330,7 @@ En el **PlayerController**, {{< api short PlayerController::GetPlayerViewPoint >
 En otro caso, si el controlador tiene un configurado un actor *view target*, devuelve la rotación y localización de dicho actor.
 Finalmente, si no tiene un *view target*, sigue las mismas reglas que el **AIController** para calcular el punto de vista del **Pawn** desde la supuesta altura de sus ojos.
 
-## Gestión de la entrada del jugador (*PlayerController*)
+## Gestión de la entrada del jugador (*PlayerController*) {#sec-playercontroller}
 
 Como hemos comentado, el {{< api PlayerController >}} es el **Controller** responsable del leer la entrada del jugador y cambia el estado del personaje en base a ella.
 
@@ -437,9 +437,9 @@ En ese caso, es conveniente mantener una referencia a esta información en el **
 
 Para gestionar la entrada del jugador, el **PlayerController** tiene un objeto **PlayerInput**, que mapea los controles y dispositivos de entrada en acciones, y una pila de **InputComponent** de los actores interesados en leer la entrada del jugador.
 El **PlayerInput** emite los eventos de entrada y los entrega a los **InputComponent** en el orden determinado por la pila.
-Como se esquematiza en el @vid-input-component-stack, según va pasando por los **InputComponent**, cada uno de ellos puede elegir «consumir» el evento de entrada, haciendo que no alcance a componentes posteriores en la pila.
+Como se esquematiza en el @vid-unreal-input-component-stack, según va pasando por los **InputComponent**, cada uno de ellos puede elegir «consumir» el evento de entrada, haciendo que no alcance a componentes posteriores en la pila.
 
-::: {#vid-input-component-stack}
+::: {#vid-unreal-input-component-stack}
 {{< video /assets/unreal-gameplay-framework/input_component_stack.mp4 >}} 
 
 La pila de **InputComponent** en el **PlayerController**.
@@ -496,7 +496,7 @@ Teniendo en cuenta lo comentado, veamos algunos supuestos prácticos:
   Por tanto, el inventario debe ser gestionado en el **GameInstance** del servidor --para evitar cualquier tipo de trampa-- pero al cargar un nivel debe copiarse la información necesaria al **PlayerController** de cada jugador, para que así sea replicada automáticamente en el **PlayerController** del cliente correspondiente.
   De esta forma, cada jugador en su cliente tiene acceso a la información de su inventario, al mismo tiempo que el servidor se hace cargo de gestionar el inventario de todos los jugadores.
 
-## *AIController*
+## *AIController* {#sec-aicontroller}
 
 El {{< api AIController >}} en Unreal Engine es el **Controller** que se encarga de controlar el movimiento de los NPC, así como de su comportamiento.
 Por tanto, no utiliza la entrada del jugador, sino que tiene programado unas reglas de comportamiento predeterminadas.
@@ -597,7 +597,7 @@ En cada *tick* el **AIController** actualiza la *rotación de control* en la dir
 
 ### Percepción
 
-Por lo general, la percepción de los NPC --que pueden ver u oír-- se implementa utilizando *raycasts* o *triggers* (ver el @sec-gameplay).
+Por lo general, la percepción de los NPC --que pueden ver u oír-- se implementa utilizando *raycasts* o *triggers* (ver el @sec-colisiones-triggers-raycasts).
 Sin embargo, Unreal Engine implementa un sistema de percepción que permite a los NPC detectar a los jugadores y otros objetos de forma más avanzada, así como saber cuándo están siendo dañados por algo.
 Este sistema se basa en el componente **AIPerceptionComponent** y en los *estímulos* que emiten los objetos [@UnrealAIPerception].
 
@@ -748,7 +748,7 @@ Por ejemplo, en el caso de la escalada, se puede usar una transición de tipo *e
 
 <!-- TODO: Referencia a los ease aquí o en un capítulo de animaciones -->
 
-### Personalizar el comportamiento de la cámara
+### Personalizar el comportamiento de la cámara {#sec-camera-customization}
 
 En la arquitectura descrita existen diferentes puntos donde se puede personalizar el comportamiento de la cámara.
 
