@@ -27,23 +27,28 @@ Realmente, puede que la plataforma este fija y que lo que se mueva sea una parte
 En este caso, el tiempo invertido en el viaje puede servir para cargar los *assets* de la planta a la que nos dirigimos.
 Por tanto, estos ascensores y plataformas son, en efecto, pantallas de carga.
 
-Finalmente, existen casos donde la acción trascurre en un vehículo en movimiento, como un tren, un barco o un avión.
-Nuevamente, puede que realmente no se esté moviendo el vehículo, sino que se esté moviendo el mundo alrededor, porque es más sencillo implementarlo.
+Finalmente, existen casos donde la acción trascurre en un vehículo grande en movimiento, como un tren, un barco o un avión.
+En estos casos puede que realmente no se esté moviendo el vehículo, sino que sea el mundo el que se está moviendo alrededor, porque es más sencillo implementarlo de esta manera.
 
 ## Plataformas y control de movimiento
 
 El problema con los ascensores y plataformas reales está en su interacción con el control de movimiento del personaje.
-
-<!-- TODO: Ilustrar estas situaciones con gif animados -->
 
 ### Plataformas que bajan
 
 El caso más sencillo suele ser cuando la plataforma sobre la que está el personaje baja, porque entonces el efecto de la gravedad suele hacer que el personaje se mantenga sobre la plataforma.
 
 En concreto, en los controladores dinámicos, el motor de físicas se encarga de que el personaje caiga sobre la plataforma cuando esta desciende.
-Mientras que en los controladores cinemáticos, como se puede ver en la @fig-platform-down-movement, el mecanismo que se utiliza para detectar el suelo y reubicar el personaje a la altura correcta (ver la @sec-controladores-cinematicos) también ayuda a que el personaje se mantenga sobre la plataforma.
+Mientras que en los controladores cinemáticos, como se puede ver en el @vid-platform-down-movement, el mecanismo que se utiliza para detectar el suelo y reubicar el personaje a la altura correcta (ver la @sec-controladores-cinematicos) también ayuda a que el personaje se mantenga sobre la plataforma.
 
-![Movimiento del personaje cuando la plataforma baja.](figures/platform-down-movement.pdf){#fig-platform-down-movement}
+::: {#vid-platform-down-movement}
+{{< video /assets/ascensores-y-plataformas/platform-down-movement.mp4 >}} 
+
+Movimiento del personaje cuando la plataforma baja.
+:::
+
+Que el resultado quede realista, dependerá de la velocidad de la plataforma y de la velocidad de caída del personaje.
+Si plataforma baja muy rápido, el personaje puede parecer que está cayendo, en lugar de caminando sobre la plataforma.
 
 ### Plataformas que suben
 
@@ -54,12 +59,22 @@ Esto puede ser especialmente problemático si la plataforma sube muy rápidament
 
 En el caso de los controladores cinemáticos, pueden darse varias situaciones:
 
-* Si el personaje y la plataforma tienen activado bloquearse entre sí, la plataforma no podrá moverse porque el personaje le bloqueará el movimiento ascendente.
+* Si el personaje y la plataforma tienen activado bloquearse entre sí, la plataforma no podrá moverse porque el personaje le bloqueará el movimiento ascendente, como se puede ver en el @vid-platform-up-movement-block.
 
-* Si ambos están configurados para superponerse, el personaje se hundirá en la plataforma cuando la segunda suba, en lugar de mantenerse sobre ella, como se puede ver en la @fig-platform-up-movement.
-  Esto puede terminar bloqueando cualquier movimiento del personaje o que éste piense que está cayendo, en lugar de caminando.
+::: {#vid-platform-up-movement-block}
+{{< video /assets/ascensores-y-plataformas/platform-up-movement-block.mp4 >}} 
 
-![El personaje puede quedar atascado si la plataforma sube.](figures/platform-up-movement.pdf){#fig-platform-up-movement}
+El ascensor puede quedar bloqueado por el personaje.
+:::
+
+* Si ambos están configurados para superponerse, el personaje se hundirá en la plataforma cuando la segunda suba, en lugar de mantenerse sobre ella, como se puede ver en el @vid-platform-up-movement-overlap.
+  Esto puede terminar bloqueando cualquier movimiento del personaje o que éste piense que está cayendo, en lugar de caminando, si la parte baja del personaje queda por debajo de la plataforma.
+
+::: {#vid-platform-up-movement-overlap}
+{{< video /assets/ascensores-y-plataformas/platform-up-movement-overlap.mp4 >}} 
+
+El personaje puede quedar atascado si la plataforma sube.
+:::
 
 ### Plataformas que se mueven lateralmente
 
@@ -71,9 +86,13 @@ Con un controlador dinámico, el motor de físicas puede encargarse de que el pe
 Por lo general, se usan coeficientes de fricción bajos para tener un movimiento más fluido, lo que hace que al moverse la plataforma está no arrastre al personaje.
 
 Mientras que con un control cinemático, no existe la fricción entre ambas entidades.
-Como se ilustra en la @fig-platform-side-movement, el personaje no se moverá con la plataforma --a menos que se le programe para que lo haga-- por lo que se deslizará sobre su superficie y acabará cayendo.
+Como se ilustra en el @vid-platform-side-movement, el personaje no se moverá con la plataforma --a menos que se le programe para que lo haga-- por lo que se deslizará sobre su superficie y acabará cayendo.
 
-![El personaje se desliza y puede caer si la plataforma se mueve lateralmente.](figures/platform-side-movement.pdf){#fig-platform-side-movement}
+::: {#vid-platform-side-movement}
+{{< video /assets/ascensores-y-plataformas/platform-side-movement.mp4 >}} 
+
+El personaje se desliza y puede caer si la plataforma se mueve lateralmente.
+:::
 
 ## Implementación de plataformas
 
@@ -84,7 +103,7 @@ En ambos, casos se puede utilizar un *trigger* para detectar cuando el personaje
 
 Cuando una plataforma se mueve lo que se pretende es que el personaje se mueva con ella, por lo que una solución es emparentar al personaje con la plataforma, de tal forma que el personaje sea un hijo de la plataforma.
 
-Esta técnica es muy sencilla, pero hay que tener en cuenta que al desplazar al personaje no debe hacerse aplicando un desplazamiento sobre la posición absoluta de este en el mundo, sino sobre la posición relativa a su padre, que es la plataforma.
+Esta técnica es muy sencilla, pero hay que tener en cuenta que, en este modo, al desplazar al personaje, no debe hacerse aplicando el desplazamiento sobre la posición absoluta de este en el mundo, sino sobre la posición relativa a su padre, que es la plataforma.
 
 Además, si el controlador es dinámico, se deben usar **uniones** (ver la @sec-uniones) para establecer la relación entre el personaje y la plataforma, puesto que las relaciones padre - hijo entre objetos no se tienen en cuenta para restringir el movimiento del hijo si este tiene activa la simulación física.
 
@@ -94,7 +113,11 @@ Otra solución es que el personaje detecte el movimiento de la plataforma desde 
 Esto es lo que hace el {{< api CharacterMovementComponent >}} de Unreal Engine.
 
 Lo primero que hace este componente es realizar un *raycast* hacia abajo para detectar la superficie sobre la que está el personaje y --si es la misma que en el *tick* anterior-- compara su posición actual con la del *tick* anterior.
-Si la superficie se ha movido, ajusta la posición del personaje en la misma cantidad, antes de continuar con el cálculo de movimiento, como se puede ver en la @fig-platform-movement.
+Si la superficie se ha movido, ajusta la posición del personaje en la misma cantidad, antes de continuar con el cálculo de movimiento, como se puede ver en la @fig-platform-side-movement-solved.
 Mientras que si la superficie ha cambiado, el componente guarda una referencia a la nueva superficie para usarla en la comparación en el siguiente *tick*.
 
-![Movimiento de personaje en una plataforma.](figures/platform-movement.pdf){#fig-platform-movement}
+::: {#vid-platform-side-movement-solved}
+{{< video /assets/ascensores-y-plataformas/platform-side-movement-solved.mp4 >}} 
+
+Movimiento de personaje en una plataforma.
+:::

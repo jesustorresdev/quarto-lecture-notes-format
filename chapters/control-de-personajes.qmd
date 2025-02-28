@@ -230,11 +230,15 @@ En cada frame, los **controladores cinemáticos**:
 
 Al algoritmo descrito se lo denomina ***collide and slide***, porque es frecuente que se implemente haciendo que si el personaje colisiona con otro objeto al actualizar su posición, el resto del desplazamiento lo haga deslizando el personaje paralelamente a la superficie del objeto.
 
-Por ejemplo, en la @fig-collide-and-slide se ilustra como el personaje se desliza por la superficie de una pared en lugar de atravesarla.
+Por ejemplo, en el @vid-collide-and-slide se ilustra como el personaje se desliza por la superficie de una pared en lugar de atravesarla.
 La distancia que se desliza es la proyección sobre la superficie del vector de desplazamiento restante tras la colisión.
 Esto se puede calcular fácilmente utilizando el producto escalar y genera el efecto de que haya menos deslizamiento cuanto más perpendicular es el vector del impacto a la superficie.
 
-![Ejemplo típico de *collide and slide*.](/assets/control-de-personajes/collide-and-slide.pdf){#fig-collide-and-slide}
+::: {#vid-collide-and-slide}
+{{< video /assets/control-de-personajes/collide-and-slide.mp4 >}} 
+
+Ejemplo típico de *collide and slide*.
+:::
 
 El controlador suele soportar distintos modos para mover el personaje hasta una ubicación viable, según las mecánicas de movimiento del juego: volar, caminar o correr, subir o bajar escalones o rampas, saltar y maniobrar en el aire, moverse sobre plataformas --como ascensores o cintas transportadoras-- empujar objetos, nadar o escalar.
 
@@ -255,7 +259,7 @@ Por lo general, el personaje se mueve ligeramente por encima del suelo --de form
 Por eso, uno de los primeros pasos del algoritmo, antes de desplazar la cápsula del personaje, es hacer un *raycast* hacia abajo para detectar la distancia al suelo y ajustar la posición en altura del personaje en consecuencia, asegurando que la distancia al suelo esté siempre por debajo de un máximo y por encima de un mínimo preestablecido.
 
 Si se detecta una colisión durante el deslizamiento, el personaje se coloca en la posición viable más cercana a la deseada.
-Luego se proyecta el vector del desplazamiento, que no se pudo realizar, sobre el plano de la superficie de contacto, para obtener el vector de desplazamiento final paralelo a esta, como se ilustra en la @fig-collide-and-slide.
+Luego se proyecta el vector del desplazamiento, que no se pudo realizar, sobre el plano de la superficie de contacto, para obtener el vector de desplazamiento final paralelo a esta, como se ilustra en el @vid-collide-and-slide.
 
 Comprobar si la posición final es viable puede implicar verificar otras condiciones, aparte de las colisiones.
 Por ejemplo, en muchos juegos el personaje puede caer, pero no siempre es así.
@@ -272,15 +276,21 @@ En ese caso, un *trigger* en la estructura puede activar un modo de deslizamient
 El *raycast* hacia el suelo comentado anteriormente, facilita implementar el descenso de escalones y rampas.
 Básicamente, el controlador debe tener configurada una *altura máxima de escalón*, de forma que si el suelo se detecta más cerca que dicha altura, el personaje desciende hasta que la distancia al suelo esté dentro del rango permitido.
 
-En la @fig-collide-and-slide-stepdown y @fig-collide-and-slide-rampdown se ilustra como el resultado es que así el personaje puede descender por rampas y escalones.
+En el @vid-collide-and-slide-stepdown y @vid-collide-and-slide-rampdown se ilustra como el resultado es que así el personaje puede descender por rampas y escalones.
 
-::: {layout="[10, -1, 10]"}
-![Descenso de escalones.](/assets/control-de-personajes/collide-and-slide-stepdown.pdf){#fig-collide-and-slide-stepdown}
+::: {#vid-collide-and-slide-stepdown}
+{{< video /assets/control-de-personajes/collide-and-slide-stepdown.mp4 >}} 
 
-![Descenso de rampas.](/assets/control-de-personajes/collide-and-slide-rampdown.pdf){#fig-collide-and-slide-rampdown}
+Descenso de escalones.
 :::
 
 En este caso, cada vez que el personaje avanza queda en el aire, por lo que el controlador baja automáticamente el personaje hasta el suelo para ajustar la distancia con respecto a este, haciendo que descienda.
+
+::: {#vid-collide-and-slide-rampdown}
+{{< video /assets/control-de-personajes/collide-and-slide-rampdown.mp4 >}} 
+
+Descenso de rampas.
+:::
 
 #### Caída y aterrizaje
 
@@ -301,21 +311,27 @@ De hecho, incluso cuando no es necesaria esta funcionalidad, es interesante impl
 
 Un escalón o una rampa se detectan con una colisión al mover el personaje hacia su posición definitiva, solo que se hacen varias comprobaciones antes de decidir que el personaje no puede superar el obstáculo:
 
-::: {layout="[10, -1, 10]"}
-![Subida de rampas.](/assets/control-de-personajes/collide-and-slide-rampup.pdf){#fig-collide-and-slide-rampup}
-
-![Subida de escalones.](/assets/control-de-personajes/collide-and-slide-stepup.pdf){#fig-collide-and-slide-stepup}
-:::
-
 1. Si la superficie de la colisión tiene una pendiente menor que la máxima permitida en la dirección del movimiento, es porque se trata de una rampa.
-   En ese caso, el personaje se desplaza lo que le queda paralelamente a la superficie, como se ilustra en la @fig-collide-and-slide-rampup.
+   En ese caso, el personaje se desplaza lo que le queda paralelamente a la superficie, como se ilustra en el @vid-collide-and-slide-rampup.
+
+   ::: {#vid-collide-and-slide-rampup}
+   {{< video /assets/control-de-personajes/collide-and-slide-rampup.mp4 >}} 
+
+   Subida de rampas.
+   :::
 
    Al llegar arriba, el controlador detecta que el personaje está por encima del suelo, por lo que lo baja y, nuevamente, lo hace moverse de forma paralela a este.
 
 1. En caso contrario, comprueba si el personaje puede continuar su movimiento si antes lo sube hasta la *altura máxima de escalón*.
-   En tal caso, es que personaje está ante un escalón, por lo que hace el movimiento indicado y continúa desplazándolo de forma paralela al suelo, como se ilustra en la @fig-collide-and-slide-stepup.
+   En tal caso, es que personaje está ante un escalón, por lo que hace el movimiento indicado y continúa desplazándolo de forma paralela al suelo, como se ilustra en el @vid-collide-and-slide-stepup.
 
-1. Finalmente, si no es ni una rampa ni un escalón, es que el personaje está ante una pared, por lo que lo desplaza de forma paralela a la superficie, como se ilustra en la @fig-collide-and-slide.
+   ::: {#vid-collide-and-slide-stepup}
+   {{< video /assets/control-de-personajes/collide-and-slide-stepup.mp4 >}} 
+
+   Subida de escalones.
+   :::
+
+1. Finalmente, si no es ni una rampa ni un escalón, es que el personaje está ante una pared, por lo que lo desplaza de forma paralela a la superficie, como se ilustra en el @vid-collide-and-slide.
 
 ### Controladores dinámicos
 
@@ -379,7 +395,48 @@ Esto quiere decir, que el personaje realmente se mueven en una aproximación de 
 Como se puede ver en la @fig-movement-substeps, el personaje podría moverse en una trayectoria muy diferente a la esperada se lo hace a una velocidad muy alta o el tiempo entre actualizaciones es muy grande.
 Esto puede dar lugar, por ejemplo, a que se detecten colisiones con objetos que no deberían estar en la trayectoria del personaje.
 
-![Aproximar una trayectoria en cada *tick* vs. en cada *subpaso*.](/assets/control-de-personajes/movement-substeps.pdf){#fig-movement-substeps}
+```{python}
+#| label: fig-movement-substeps
+#| echo: false
+#| fig-cap: "Aproximar una trayectoria en cada *tick* vs. en cada *subpaso*"
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+initial_height = 10  # Initial height in meters
+g = 9.81  # Acceleration due to gravity (m/s^2)
+
+# Time when the projectile hits the ground
+t_ground = np.sqrt(2 * initial_height / g)
+
+# Generate time points for the parabolic trajectory
+t = np.linspace(0, t_ground, num=500)
+# Parabolic trajectory equation (ruta deseada)
+y_parabolic = initial_height - 0.5 * g * t**2
+
+# Approximation with 3 straight line segments (aproximación)
+t_approx = np.array([0, t_ground / 3, 2 * t_ground / 3, t_ground])
+y_approx = initial_height - 0.5 * g * t_approx**2
+
+# More detailed approximation with 5 subsegments within each of the 3 segments (subpasos)
+t_substeps = np.linspace(0, t_ground, num=16)  # 3 segments * 5 subsegments + 1 for start
+y_substeps = initial_height - 0.5 * g * t_substeps**2
+
+# Plotting the trajectories
+t_scaler = 10
+plt.figure()
+plt.plot(t * t_scaler, y_parabolic, label="Ruta deseada", color="blue")
+plt.plot(t_approx * t_scaler, y_approx, label="Aproximación cada $\it{tick}$", color="green", linestyle='--')
+plt.plot(t_substeps * t_scaler, y_substeps, label="Aprox. con 5 subpasos", color="red", linestyle='-.')
+
+# Adding details to the plot
+plt.title("Trayectoria de un proyectil disparado horizontalmente")
+plt.xlabel("Tiempo (segundos)")
+plt.ylabel("Altura (metros)")
+plt.legend()
+plt.grid(True)
+plt.show()
+```
 
 Para evitarlo, en cada *tick*, se puede dividir el `DeltaTime` en varias porciones, calculando y moviendo la ubicación del personaje en cada una, hasta completar el tiempo `DeltaTime`:
 
@@ -479,13 +536,13 @@ Algunos ejemplos de **comportamientos de dirección** son:
 
 <!-- TODO: Añadir ejemplos de comportamientos de dirección mediante vídeos o animaciones -->
 
-![Comportamiento **seguir** (*seek*).](/assets/control-de-personajes/steering-behaviours-seek.pdf){#fig-steering-behaviours-seek}
-
 * **Seguir (*Seek*)**:
   El agente se mueve hacia un objetivo, como el jugador, de la forma más directa posible.
   Esto se hace calculando una aceleración que lo impulse en la dirección del objetivo y ajustado su orientación hacia él.
   
   En la @fig-steering-behaviours-seek se ilustra un ejemplo de este comportamiento que se puede comparar con el de la @fig-tpp-movement-and-rotation
+
+![Comportamiento **seguir** (*seek*).](/assets/control-de-personajes/steering-behaviours-seek.pdf){#fig-steering-behaviours-seek}
 
   Este comportamiento es útil para enemigos que persiguen al jugador, para cohetes guiados o para aliados que siguen al líder del grupo.
 
