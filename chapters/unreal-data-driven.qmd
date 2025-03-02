@@ -46,13 +46,32 @@ Esta información puede ser utilizada por el actor en la escena responsable de i
 Los datos externos pueden venir desde distintas fuentes:
 
 * **Archivos de texto plano**, como CSV, JSON, YAML o XML.
+Son fáciles de editar y leer con herramientas externas accesibles a cualquier miembro del equipo como hojas de cálculo o editores de texto.
+Después se pueden cargar en el motor y procesarlos para crear los objetos del juego.
 
 * **Bases de datos**, como SQLite, MySQL o PostgreSQL.
+Son más complejas de manejar, pero permiten gestionar grandes cantidades de datos y compartirlos entre distintas versiones del juego.
+Son muy útiles para juegos con contenido generado por los usuarios o juegos multijugador.
 
 * ***Assets* del motor**.
-  Algunos motores proporcionan un mecanismo para definir clases de datos que pueden ser utilizadas por el juego.
-  En Unity, por ejemplo, es posible definir objetos de tipo **ScriptableObject** para guardar este tipo de información.
-  De forma similar, en Unreal Engine es posible definir **Data Assets**, **Data Tables** y **Curve Tables**.
+Algunos motores proporcionan mecanismos para definir conjuntos de datos que pueden ser utilizadas por el juego.
+En Unity, por ejemplo, es posible definir objetos de tipo **ScriptableObject** para guardar este tipo de información.
+De forma similar, en Unreal Engine es posible definir **Data Assets**, **Data Tables** y **Curve Tables**.
+
+## Archivos de texto plano
+
+De entre los formatos de archivo de texto plano, los formatos CSV y JSON son los más utilizados:
+
+* **CSV (Comma-Separated Values)** [@WikipediaCSV] es un formato de archivo que se utiliza para almacenar datos tabulares.
+  * Es un formato ligero, compacto y fácil de leer y escribir para cualquiera en el equipo.
+  * Funciona muy bien para archivos sencillos pero grandes, como las traducciones de los textos del juego.
+
+* **JSON (JavaScript Object Notation)** [@WikipediaJSON] es un formato de archivo muy versátil y legible para datos estructurados complejos.
+  * Permiten visualizar la jerarquía y el anidamiento en los datos de mejor forma que CSV.
+  * Funciona muy bien para datos anidados, como las ramificaciones de los diálogos, las misiones del juego o la configuración.
+  * Puede ser más complejo de utilizar para algunos perfiles, como escritores, traductores y diseñadores, que no estén familiarizados con la sintaxis de JSON.
+
+En Unreal Engine, se recomienda importar los archivos CSV y JSON en **Data Tables** para utilizar los datos en el juego. 
 
 ## *Data Assets*
 
@@ -66,38 +85,53 @@ class MYPROJECT_API UMyPickupItem : public UDataAsset
 	  GENERATED_BODY()
 
 public:
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Pickup")
+	  int32 SomeValue;
+
 	  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Pickup")
-	  UStaticMesh* PickupStaticMesh;
+	  TObjectPtr<UStaticMesh> PickupStaticMesh;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Pickup")
-	  USoundCue* PickupSound;
+	  TObjectPtr<USoundCue> PickupSound;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Pickup")
-	  UTexture2D* UIThumbnail;
+	  TObjectPtr<UTexture2D> UIThumbnail;
 };
 ```
 
-Una vez creada la clase, se pueden crear *assets* de este tipo usando la opción **Miscellaneous / Data Asset** del menú contextual del **Content Browser**.
+La clase se puede crear tanto en C++ como en Blueprints.
+Una vez creada la clase, se pueden crear *assets* de ese tipo usando la opción **Miscellaneous / Data Asset** del menú contextual del **Content Browser**.
 Luego se pueden editar los valores de las propiedades de estos nuevos *assets* en el editor, como se puede ver en la @fig-data-asset-editor.
 
 ![Editor de **DataAsset**.](/assets/unreal-data-driven/data-asset-editor.png){#fig-data-asset-editor}
 
+Los **Data Assets** son ideales para almacenar pequeños conjuntos de datos del juego, por lo que generalmente se pueden cargar en menor tiempo que las **Data Tables**.
+
 Entre otras características de los **Data Assets**:
 
-* Se pueden crear clases **DataAsset** tanto en C++ como en Blueprints.
+* Se pueden crear clases **Data Assets** tanto en C++ como en Blueprints.
 
 * Admiten herencia.
   Por ejemplo, se puede crear una clase base con las propiedades comunes para todos los objetos que son recogibles por el jugador, y luego crear clases derivadas para cada tipo de objeto, como armas, herramientas, consumibles, etc.
 
-* Las propiedades pueden hacer referencia a otros *assets*.
+* Como propiedades admiten cualquier tipo de dato válido en un **UObject**, incluyendo *structs* y referencias a otros assets, así como colecciones como *arrays*, *sets* y *maps*.
+  El editor permite expandir y editar *structs* y colecciones de forma similar a como se hace con cualquier *asset*,
+  por lo que manejar y visualizar información anidada es más sencillo que con **Data Tables**.
 
-  En este caso, puede ser buena idea utilizar referencias *soft* para evitar que los *assets* referenciados sean cargados desde el disco al cargar el **Data Asset** que los referencia.
-  Usando referencias *soft* se obtiene más control, para cargar los *assets* referenciados cuando realmente van a hacer falta.
+* Pueden definirse como *assets* primarios, es decir, que se cargan y descargan manualmente, en lugar de ser cargados automáticamente cuando se carga un *asset* que contiene una referencia a ellos.
+  Esto puede ser útil para almacenar información que se necesita en varios niveles o en distintos momentos del juego.
+
+  Para definir un *asset* como primario, se puede heredar de la clase {{< api PrimaryDataAsset >}} en lugar de {{< api DataAsset >}} y registrar el tipo en el **Asset Manager** (ver la @sec-primary-data-assets).
+  De esta forma, el **Asset Manager** puede localizar los *assets* de este tipo creados en el proyecto y cargarlos o descargarlos cuando se lo indiquemos.
 
 * Pueden tener métodos y exponerlos a Blueprint --con `BlueprintCallable` o `BlueprintPure`--.
-
-  Pero no debe olvidarse que el propósito principal de los **Data Assets** es almacenar datos, no lógica de programación.
+  Sin embargo, no debe olvidarse que el propósito principal de los **Data Assets** es almacenar datos, no lógica de programación.
   Si se necesita algo más complejo que operaciones básicas para acceder o validar los datos, es mejor crear una clase o un componente convencional.
+
+::: {.callout-tip}
+Al hacer referencia a otros *assets* es buena idea utilizar referencias *soft* para evitar que los *assets* referenciados sean cargados desde el disco al cargar el **Data Asset** que los referencia.
+  Usando referencias *soft* se obtiene más control para cargar los *assets* referenciados cuando realmente van a hacer falta.
+:::
 
 Cuando la cantidad de *assets* que se pretenden manipular al mismo tiempo es muy grande, se puede utilizar la vista **Bulk Edit** del **Content Browser**.
 Se puede abrir seleccionando varios *assets* y elegir la opción **Asset Actions / Edit Selection in Property Matrix** del menú contextual del **Content Browser**.
@@ -106,8 +140,9 @@ Esta vista se puede observar en la @fig-data-asset-bulk-edit y permite editar la
 ![Vista **Bulk Edit** del **Content Browser**.](/assets/unreal-data-driven/data-asset-bulk-edit.png){#fig-data-asset-bulk-edit}
 
 Aun así, en un caso con muchos datos, puede ser más conveniente usar una **Data Table**, ya que son más adecuadas para trabajar con grandes cantidades de datos en formato tabla.
+A cambio, las **Data Tables** pueden tener tiempos de carga más largos que los **Data Assets**.
 
-### *Data Assets* primarios
+### *Data Assets* primarios {#sec-primary-data-assets}
 
 Estos **Data Assets** así como la mayor parte de los tipos de *assets* que acostumbramos a usar se denominan *assets secundarios*.
 Su nombre es debido a que son cargados cuando se carga un *asset* que contiene una referencia a ellos y se puede acceder a ellos a través de estas referencias.
@@ -118,7 +153,7 @@ Es, por ejemplo, el caso de los niveles, que son *assets primarios* que se carga
 Teniendo esto en cuenta, a veces interesa que un **Data Asset** sea un *asset primario*.
 Por ejemplo, los elementos del inventario, las habilidades de los personajes o los enemigos, la configuración del juego; porque puede ser interesante que los subsistemas del juego puedan cargar y acceder a estos datos de forma independiente al nivel que esté cargado actualmente.
 
-Para crear un **Data Asset** primario se puede heredar de la clase **PrimaryDataAsset** en lugar de usar **DataAsset**.
+Para crear un **Data Asset** primario se puede heredar de la clase {{< api PrimaryDataAsset >}} en lugar de usar {{< api DataAsset >}}.
 Después, se registra el tipo en el **Asset Manager** para que este pueda localizar los *assets* de este tipo creados en el proyecto y cargarlos o descargarlos cuando sea necesario.
 Para eso es necesario añadir una nueva entrada en **Primary Asset Type to Scan** en **Project Settings / Asset Manager**, indicado el nombre de la clase derivada de **PrimaryDataAsset** como **Primary Asset Type**, la clase **PrimarDataAsset** como **Asset Base Class** y la ruta a la carpeta en dónde buscar los *assets* de este tipo.
 De todo esto se puede ver un ejemplo en la @fig-primary-assets-scan.
@@ -130,7 +165,7 @@ De todo esto se puede ver un ejemplo en la @fig-primary-assets-scan.
 Las **Data Tables** son como archivos CSV, ideales para guardar datos tabulares, como los que se pueden encontrar en una hoja de cálculo.
 Mientras que las **Curve Tables** son similares, pero están pensadas para guardar datos que varían en función de un parámetro, como la forma en la que se incrementa la salud de un personaje al ir subiendo de nivel.
 
-Ambos tipo de tablas se pueden exportar e importar en formato CSV, lo que facilita su edición por parte de los diseñadores y la realización de cálculos y simulaciones en herramientas como las hojas de cálculo.
+Ambos tipo de tablas se pueden exportar e importar en formatos CSV y JSON, lo que facilita su edición por parte de los diseñadores y otros miembros del equipo, así como la realización de cálculos y simulaciones en herramientas como las hojas de cálculo.
 
 Una **Data Table** se crea en la opción **Miscellaneous / Data Table** del menú contextual del **Content Browser**.
 Al elegir esta opción se abre un diálogo para elegir la estructura que define las columnas de la tabla.
@@ -143,14 +178,17 @@ struct FMyPickupItemRow : public FTableRowBase
     GENERATED_BODY()
 
 public:
-    UPROPERTY(EditAnywhere)
-    UStaticMesh* PickupStaticMesh;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Pickup")
+	  int32 SomeValue;
 
     UPROPERTY(EditAnywhere)
-    USoundCue* PickupSound;
+    TSoftObjectPtr<UStaticMesh> PickupStaticMesh;
 
     UPROPERTY(EditAnywhere)
-    UTexture2D* UIThumbnail;
+    TSoftObjectPtr<USoundCue> PickupSound;
+
+    UPROPERTY(EditAnywhere)
+    TSoftObjectPtr<UTexture2D> UIThumbnail;
 };
 ```
 
@@ -160,14 +198,46 @@ Luego se pueden editar la tabla en el editor, como se puede ver en la @fig-data-
 
 Aparte de las características comentadas, con las **Data Tables**:
 
-* Solo se pueden definir la estructura de las filas en C++.
+* La estructura de las filas de una **Data Table** solo se puede definir en C++, no en Blueprints.
 
 * Cada fila se identifica mediante un nombre, como se puede ver en la @fig-data-table-editor.
 
 * Otros objetos pueden usar el tipo **FDataTableRowHandle** para tener propiedades que hagan referencia a una fila particular de una **Data Table**.
   Por ejemplo, un objeto que representa un enemigo puede tener una propiedad de este tipo que haga referencia a una fila de una **Data Table** que define las propiedades de ese enemigo.
 
-* Cualquier tipo de propiedad válido en un **UObject** puede ser un tipo para una columna de la tabla, incluyendo referencias a filas en otras tablas.
-  En todo caso, se recomienda usar referencias *soft* para asegurar que los *assets* referenciados solo se cargan cuando son necesarios.
+  Para indicar el tipo de fila de las **Data Tables** que debe aceptar una propiedad **FDataTableRowHandle**, se puede utilizar la propiedad *meta* **RowType**:
+
+  ```cpp
+  UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(RowType=MyPickupItemRow))
+  FDataTableRowHandle PickupData;
+  ```
+
+* Las columnas de una **Data Table** pueden ser de tipos básicos, *structs* o referencias a filas en otras tablas, pero nunca referencias a otros *assets*.
+  Sin embargo, si se pueden usar referencias *soft* para referenciar otros *assets*.
+
+* Es más complicado trabajar con información anidada que con **Data Assets**.
 
 * Es imposible reordenar las entradas, pues el orden de la tabla no está definido.
+
+Por su parte, las **Curve Tables** son ideales para añadir animación a elementos o variar propiedades del juego.
+Permiten definir la lógica para animar un elemento o una propiedad solo una vez y luego reutilizar este código en distintas partes del juego indicando la curva deseada en cada caso.
+
+### Exportar *Data Tables*
+
+Aunque las **Data Tables** se pueden editar en el editor de Unreal Engine, muchas veces es más cómodo hacerlo en una hoja de cálculo o en un editor de texto.
+Para ello se pueden usar las opciones del editor para exportar las tablas en formato CSV o JSON, pero también se puede hacer desde C++, lo que puede resultar últil para automatizar el proceso de exportación, por ejemplo para guardar copias de seguridad de las tablas.
+
+El contenido de una **Data Table** se puede obtener en formato CSV con el método {{< api GetTableAsCSV >}} de la clase {{< api DataTable >}}.
+Mientras que se puede obtener en formato JSON con el método {{< api GetTableAsJSON >}}.
+
+Por tanto, se puede guardar el contenido de una **Data Table** en un archivo CSV en la ruta `CsvFilePath` usando el siguiente código:
+
+```cpp
+FFileHelper::SaveStringToFile(DataTable->GetTableAsCSV(), *CsvFilePath);
+```
+
+Mientras que para guardar el contenido en un archivo JSON así:
+
+```cpp
+FFileHelper::SaveStringToFile(DataTable->GetTableAsJSON(), *JsonFilePath);
+```
