@@ -4,6 +4,8 @@ abstract: |
   En este artículo se describen los principales componentes y características de esta técnica.
 ---
 
+{{< audio file="../assets/motion-matching/motion-matching.mp3" caption="Podcast autogenerado del capítulo." download_link="true" >}}
+
 ::: {.callout-note appearance="simple"}
 El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
 :::
