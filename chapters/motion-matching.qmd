@@ -187,5 +187,5 @@ El ***motion matching*** es una técnica relativamente nueva.
 Por tanto, no es una característica incluida de serie en todos ellos, aunque hace tiempo que se puede usar mediante desarrollos propios o *plugins* de terceros.
 
 Por ejemplo, en el motor de videojuegos Open 3D Engine, que es de código abierto, se incluyó soporte para ***motion matching*** de forma experimental en la versión 22.05 [@O3DEMotionMatching].
-En Unreal Engine, por otro lado, se incluyó, también de forma experimental, desde la versión 5.1 [@UnrealMotionMatching].
+En Unreal Engine, por otro lado, se incluyó, también de forma experimental, desde la versión 5.1 y de forma estable desde la versión 5.4 [@UnrealMotionMatching].
 Mientras que en Unity, se puede usar ***motion matching*** mediante *plugins* de terceros, como *«Motion Matching for Unity»* [@AnimationUprisingMotionMatchingForUnity], que se puede adquirir en la *Asset Store* de Unity.
