@@ -113,6 +113,7 @@ format:
     mermaid:
       theme: default
     include-in-header: 
-      text: '<meta name="robots" content="noindex, nofollow">'
+      - text: '<meta name="robots" content="noindex, nofollow">'
+      - pwa-header.html
     resources:
       - robots.txt

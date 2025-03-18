@@ -1,0 +1,20 @@
+<meta name="theme-color" content="#0d6efd">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Mi Libro Web">
+
+<link rel="manifest" href="manifest.json">
+
+<link rel="apple-touch-icon" href="assets/icons/apple-icon-180.png">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js').then(function(registration) {
+        console.log('Service Worker registrado con éxito:', registration.scope);
+      }, function(err) {
+        console.log('Error al registrar el Service Worker:', err);
+      });
+    });
+  }
+</script>
