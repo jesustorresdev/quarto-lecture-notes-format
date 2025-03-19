@@ -1,0 +1,26 @@
+title: MUDV-D3D HTML Format
+author: Jesús Torres
+version: 1.0.0
+quarto-required: ">=1.6.0"
+contributes:
+  formats:
+    common:
+      toc: true
+      toc-title: Contenidos
+      reference-section-title: Referencias
+      number-sections: true
+      number-depth: 3
+      callout-appearance: simple
+      crossref:
+        title-delim: ":"
+        custom:
+          - kind: float
+            reference-prefix: Vídeo
+            key: vid
+    html:
+      theme: [default, custom.scss]
+      mermaid:
+        theme: default
+      anchor-sections: true
+      smooth-scroll: true
+      html-math-method: katex

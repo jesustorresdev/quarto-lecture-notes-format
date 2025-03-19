@@ -48,18 +48,8 @@ book:
     - chapters/perforce.qmd
 
 lang: es
-toc-title: Contenidos
-callout-appearance: simple
-crossref:
-  title-delim: ":"
-  custom:
-    - kind: float
-      reference-prefix: Vídeo
-      key: vid
-
 bibliography: references/references.bib
 csl: references/elsevier-with-titles.csl
-reference-section-title: Referencias
 
 api-reference:
   path: references/api.yml
@@ -103,17 +93,6 @@ filters:
   - section-bibliographies
 
 format:
-  html:
-    css: styles.css
-    number-sections: true
-    number-depth: 3
-    anchor-sections: true
-    smooth-scroll: true
-    html-math-method: katex
-    mermaid:
-      theme: default
+  mudv-d3d-html:
     include-in-header: 
       - text: '<meta name="robots" content="noindex, nofollow">'
-      - pwa-header.html
-    resources:
-      - robots.txt
