@@ -91,6 +91,7 @@ filters:
   - quarto
   - api-reference
   - section-bibliographies
+  - pwa
 
 format:
   mudv-d3d-html:
