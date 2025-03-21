@@ -500,9 +500,13 @@ Si la cámara es fija o se mueve sobre railes, este control se puede utilizar pa
 
 Lo descrito en el párrafo anterior es común en muchos juegos de acción en tercera persona, donde:
 
-![Movimiento y rotación en tercera persona.](/assets/control-de-personajes/tpp-movement-and-rotation.pdf){#fig-tpp-movement-and-rotation}
+::: {#vid-tpp-movement-and-rotation}
+{{< video /assets/control-de-personajes/tpp-movement-and-rotation.mp4 >}} 
 
-* El controlador mueve al personaje en la dirección indicada por el jugador en el frame, independientemente de como esté orientado el personaje, como se ilustra en la @fig-tpp-movement-and-rotation.
+Movimiento y rotación en tercera persona.
+:::
+
+* El controlador mueve al personaje en la dirección indicada por el jugador en el frame, independientemente de como esté orientado el personaje, como se ilustra en la @vid-tpp-movement-and-rotation.
 
   El motivo para hacerlo así, en lugar de que el personaje solo se pueda mover en la dirección en la que se orienta --como se ilustra en la @fig-steering-behaviours-seek-- es que el jugador perciba una respuesta más directa del personaje a sus órdenes, a cambio de menos realismo.
   Limitado la velocidad y la aceleración y ajustando la aceleración de frenado, se puede determinar como de pesado o ligero puede percibir el jugador el control del personaje. 
@@ -517,7 +521,7 @@ Lo descrito en el párrafo anterior es común en muchos juegos de acción en ter
   En algunos juegos se opta por un control más ligero, pero se minimizan los problemas con la animación limitando el ángulo y la posición de la cámara para que prácticamente nunca se puedan ver los pies del personaje sobre el suelo.
 
 * El control de movimiento actualiza la orientación del personaje hacia la dirección del movimiento del personaje.
-  Como se puede ver en la @fig-tpp-movement-and-rotation, esta rotación se interpola a lo largo de varios frames, evitando que el personaje cambie de orientación instantaneamente.
+  Como se puede ver en la @vid-tpp-movement-and-rotation, esta rotación se interpola a lo largo de varios frames, evitando que el personaje cambie de orientación instantaneamente.
   Como en el caso del movimiento, una rotación más lenta se percibe más pesada, pero ofrece mayor fidelidad en la animación.
 
 ### Comportamientos de dirección (*steering behaviours*){#sec-steering-behaviours}
@@ -534,15 +538,13 @@ Estos comportamientos permiten a los controladores calcular la dirección en la 
 
 Algunos ejemplos de **comportamientos de dirección** son:
 
-<!-- TODO: Añadir ejemplos de comportamientos de dirección mediante vídeos o animaciones -->
-
 * **Seguir (*Seek*)**:
   El agente se mueve hacia un objetivo, como el jugador, de la forma más directa posible.
   Esto se hace calculando una aceleración que lo impulse en la dirección del objetivo y ajustado su orientación hacia él.
   
-  En la @fig-steering-behaviours-seek se ilustra un ejemplo de este comportamiento que se puede comparar con el de la @fig-tpp-movement-and-rotation
+  En la @fig-steering-behaviours-seek se ilustra un ejemplo de este comportamiento que se puede comparar con el de la @vid-tpp-movement-and-rotation
 
-![Comportamiento **seguir** (*seek*).](/assets/control-de-personajes/steering-behaviours-seek.pdf){#fig-steering-behaviours-seek}
+![Comportamiento **seguir** (*seek*).](/assets/control-de-personajes/steering-behaviours-seek.png){#fig-steering-behaviours-seek}
 
   Este comportamiento es útil para enemigos que persiguen al jugador, para cohetes guiados o para aliados que siguen al líder del grupo.
 
