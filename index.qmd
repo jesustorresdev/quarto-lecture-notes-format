@@ -1,3 +1,6 @@
+---
+pwa-render-manifest: true
+---
 # Introducción {.unnumbered}
 
 ![](/assets/site-under-construction.webp)
