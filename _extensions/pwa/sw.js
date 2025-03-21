@@ -1,17 +1,19 @@
-const CACHE_NAME = 'ull-mudv-d3d';
-
-const URLS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  // Añade aquí tus recursos importantes (CSS, JS, imágenes principales, etc.)
-];
+// START CONFIGURATION
+CONFIG = {
+  cacheName: 'ull-mudv-d3d',
+  urlsToCache: [
+    '/',
+    '/index.html',
+    '/manifest.json',
+  ]
+}
+// END CONFIGURATION
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches.open(CONFIG.cacheName)
       .then(cache => {
-        return cache.addAll(URLS_TO_CACHE);
+        return cache.addAll(CONFIG.urlsToCache);
     })
   )
 })
@@ -34,7 +36,7 @@ self.addEventListener('fetch', event => {
             if (networkResponse && networkResponse.status === 200 && 
                 networkResponse.type === 'basic') {
               const responseToCache = networkResponse.clone();
-              caches.open(CACHE_NAME)
+              caches.open(CONFIG.cacheName)
                 .then(cache => {
                   cache.put(event.request, responseToCache);
                 });
@@ -49,7 +51,7 @@ self.addEventListener('fetch', event => {
 // Update service worker
 self.addEventListener('activate', event => {
   // Add current cache to the whitelist
-  const cacheWhitelist = [CACHE_NAME];
+  const cacheWhitelist = [CONFIG.cacheName];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
