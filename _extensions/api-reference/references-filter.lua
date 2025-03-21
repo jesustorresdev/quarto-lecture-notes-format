@@ -2,6 +2,7 @@
 
 local apiref = require "api-reference"
 
+local Attr = pandoc.Attr
 local BulletList = pandoc.BulletList
 local Code = pandoc.Code
 local Div = pandoc.Div
@@ -33,29 +34,29 @@ local function processEntry(opts, entry, parent)
   -- type marker
   local marker = opts['markers'][entry.type]
   if marker then
-    header:insert(Span(marker, {class="apirefs-entry-marker"}))
+    header:insert(Span(marker, Attr("", {"apirefs-entry-marker"})))
     header:insert(RawInline("html", "&nbsp;"))
   end
 
   -- name
   local labelSuffix = entry.isFunc and "()" or ""
-  header:insert(Span({entry.label, labelSuffix}, {class="apirefs-entry-label"}))  
+  header:insert(Span({entry.label, labelSuffix}, Attr("", {"apirefs-entry-label"})))  
 
   -- type
   -- header::insert(Span("«" .. TYPE_MAPPING[entry.type] .. "»"))
   header:insert(Space())
-  header:insert(Span(TYPE_MAPPING[entry.type], {class="apirefs-entry-type"}))
+  header:insert(Span(TYPE_MAPPING[entry.type], Attr("", {"apirefs-entry-type"})))
 
   -- internal name
   if entry['internal-name'] then
     header:insert(Space())
-    header:insert(Span({"|", Code(entry['internal-name']), "|"}, {class="apirefs-entry-internal-name"}))
+    header:insert(Span({"|", Code(entry['internal-name']), "|"}, Attr("", {"apirefs-entry-internal-name"})))
   end
 
   -- derived class
   if entry.isClass and entry.extends then
     headerEnd:insert(": ")
-    headerEnd:insert(Span(entry.extends, {class="apirefs-entry-extends"}))
+    headerEnd:insert(Span(entry.extends, Attr("", {"apirefs-entry-extends"})))
   end
   
   -- references
@@ -68,23 +69,23 @@ local function processEntry(opts, entry, parent)
         refList:insert(Space())
       end
       refList:insert(Link(opts['markers'][lang] or lang, url, LANG_MAPPING[lang],
-      {class="apirefs-entry-ref " .. "apirefs-entry-ref-" .. lang}))
+      Attr("", {"apirefs-entry-ref " .. "apirefs-entry-ref-" .. lang})))
       firstRef = false
     end
-    headerEnd:insert(Span(refList, {class="apirefs-entry-refs"}))
+    headerEnd:insert(Span(refList, Attr("", {"apirefs-entry-refs"})))
   end
   
   -- we use headerEnd to avoid breaking the line for the end of the header
   if #headerEnd > 0 then
     header:insert(Space())
-    header:insert(Span(headerEnd, {class="apirefs-entry-nobrk"}))
+    header:insert(Span(headerEnd, Attr("", {"apirefs-entry-nobrk"})))
   end
 
-  results = Div({pandoc.Inlines(header)}, {id=entry.refname, class="apirefs-entry " .. "apirefs-ref-" .. entry.type})
+  results = Div({pandoc.Inlines(header)}, Attr(entry.refname, {"apirefs-entry", "apirefs-ref-" .. entry.type})))
 
   -- description
   if entry.description then
-    description = Div(entry.description, {class="apirefs-entry-description"})
+    description = Div(entry.description, Attr("", {"apirefs-entry-description"}))
     results.content:insert(description)
   end
 
@@ -93,9 +94,9 @@ local function processEntry(opts, entry, parent)
     local refList = pandoc.List()
     for _, ref in ipairs(entry['other-refs']) do
       refList:insert(Link(ref.title, ref.url, nil,
-        {class="apirefs-entry-otherref"}))
+        Attr("", {"apirefs-entry-otherref"})))
     end
-    otherRefsList = Div(BulletList(refList), {class="apirefs-entry-otherrefs"})
+    otherRefsList = Div(BulletList(refList), Attr("", {"apirefs-entry-otherrefs"}))
     results.content:insert(otherRefsList)
   end
   
@@ -140,11 +141,11 @@ local function create_section_references(opts)
         local membersList = Div({BulletList(ref[2]:map(function(memberRef)
             return processEntry(opts, memberRef, ref[1])
           -- return 
-          end))}, {class="apirefs-list apirefs-entry-members-list"})
+          end))}, Attr("", {"apirefs-list, apirefs-entry-members-list"}))
         refBlock.content:insert(membersList)
       end
       return refBlock
-    end))}, {class="apirefs-list apirefs-top-list"})
+    end))}, Attr("", {"apirefs-list, apirefs-top-list"}))
 end
 
 return {
@@ -153,7 +154,7 @@ return {
     -- insert references section at the end of the document
     if apiref.isInitialized() then
       local section = {
-        Header(1, opts['reference-section-title'], {id="toc-apirefs"}),
+        Header(1, opts['reference-section-title'], Attr("toc-apirefs")),
         create_section_references(opts)
       }
       local newSection = pandoc.structure.make_sections(section, {number_sections=false})

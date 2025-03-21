@@ -3,6 +3,7 @@
 local apiref = require "api-reference"
 
 local stringify = pandoc.utils.stringify
+local Attr = pandoc.Attr
 local Link = pandoc.Link
 local Span = pandoc.Span
 local Strong = pandoc.Strong
@@ -54,13 +55,13 @@ local function apiShortcode(args, kwargs, meta)
   end
 
   local marker = opts['suppress-ref-marker'] and pandoc.Null() or opts['markers'][entry.type]
-  local reftext = isFull and parent.label .. "::" .. entry.label or entry.label
+  local reftext = isFull and (parent and parent.label or "") .. "::" .. entry.label or entry.label
   reftextSuffix = entry.isFunc and "()" or ""
   return Span({
-    Span(marker, {class="apirefs-ref-marker"}),
-    Link(reftext, "#" .. entry.refname, nil, {role="apiref", class="quarto-xref"}),
-    Span({reftextSuffix}, {class="apirefs-ref-suffix"}),
-  }, {class="apirefs-ref " .. "apirefs-ref-" .. entry.type})
+    Span(marker, Attr("", {"apirefs-ref-marker"})),
+    Link(reftext, "#" .. entry.refname, nil, Attr("", {"quarto-xref"}, {{"role", "apiref"}})),
+    Span({reftextSuffix}, Attr("", {"apirefs-ref-suffix"})),
+  }, Attr("", {"apirefs-ref", "apirefs-ref-" .. entry.type}))
 end
 
 return {
