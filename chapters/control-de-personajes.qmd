@@ -392,51 +392,167 @@ Idealmente, un personaje controlado con un control de segundo o tercer orden, se
 Sin embargo, en la práctica, en cada *tick* se calcula la ubicación en la trayectoria en base al tiempo trascurrido desde la actualización anterior, para luego desplazar al personaje hasta allí en línea recta.
 Esto quiere decir, que el personaje realmente se mueven en una aproximación de la curva realizada con segmentos de recta.
 
-Como se puede ver en la @fig-movement-substeps, el personaje podría moverse en una trayectoria muy diferente a la esperada se lo hace a una velocidad muy alta o el tiempo entre actualizaciones es muy grande.
+Como se ilustra en la @fig-movement-substeps para el caso del disparo de un proyectil, el personaje podría moverse en una trayectoria muy diferente a la esperada se lo hace a una velocidad muy alta o el tiempo entre actualizaciones es muy grande.
 Esto puede dar lugar, por ejemplo, a que se detecten colisiones con objetos que no deberían estar en la trayectoria del personaje.
 
-```{python}
-#| label: fig-movement-substeps
-#| echo: false
-#| fig-cap: "Aproximar una trayectoria en cada *tick* vs. en cada *subpaso*"
-import numpy as np
-import matplotlib.pyplot as plt
+::: {#fig-movement-substeps}
+```{ojs}
+//| panel: sidebar
+//| echo: false
+viewof gMultiplier = Inputs.range([0.1, 2], {step: 0.1, value: 1, label: "Gravedad:"})
+viewof initialHeight = Inputs.range([1, 20], {step: 1, value: 10, label: "Altura inicial (m.):"})
+viewof tickDeltaTime = Inputs.range([0.1, 2], {step: 0.1, value: 0.9, label: "Tiempo por tick (s.):"})
+viewof substepsPerTick = Inputs.range([1, 10], {step: 1, value: 3, label: "Subpasos por tick:"})
 
-# Constants
-initial_height = 10  # Initial height in meters
-g = 9.81  # Acceleration due to gravity (m/s^2)
+// Constantes y cálculos principales
+g = 9.81 * gMultiplier // Aceleración gravitacional ajustable
+timeToGround = Math.sqrt(2 * initialHeight / g) // Tiempo hasta tocar el suelo
 
-# Time when the projectile hits the ground
-t_ground = np.sqrt(2 * initial_height / g)
+// Función para crear arrays lineales (equivalente a np.linspace)
+function linspace(start, stop, num) {
+  const step = (stop - start) / (num - 1);
+  return Array.from({length: num}, (_, i) => start + step * i);
+}
 
-# Generate time points for the parabolic trajectory
-t = np.linspace(0, t_ground, num=500)
-# Parabolic trajectory equation (ruta deseada)
-y_parabolic = initial_height - 0.5 * g * t**2
+// Calculamos cuántos ticks necesitamos para la primera aproximación
+// basados en el delta time elegido
+numTicks = Math.ceil(timeToGround / tickDeltaTime)
+tickEndTime = numTicks * tickDeltaTime
 
-# Approximation with 3 straight line segments (aproximación)
-t_approx = np.array([0, t_ground / 3, 2 * t_ground / 3, t_ground])
-y_approx = initial_height - 0.5 * g * t_approx**2
+// Calculamos cuántos subpasos necesitamos para la segunda aproximación
+// basados en el número de subpasos por tick elegido
+numSubsteps = numTicks * substepsPerTick
 
-# More detailed approximation with 5 subsegments within each of the 3 segments (subpasos)
-t_substeps = np.linspace(0, t_ground, num=16)  # 3 segments * 5 subsegments + 1 for start
-y_substeps = initial_height - 0.5 * g * t_substeps**2
+// Generación de datos para las trayectorias
+t = linspace(0, timeToGround, 500)
+yParabolic = t.map(time => initialHeight - 0.5 * g * time ** 2)
 
-# Plotting the trajectories
-t_scaler = 10
-plt.figure()
-plt.plot(t * t_scaler, y_parabolic, label="Ruta deseada", color="blue")
-plt.plot(t_approx * t_scaler, y_approx, label="Aproximación cada $\it{tick}$", color="green", linestyle='--')
-plt.plot(t_substeps * t_scaler, y_substeps, label="Aprox. con 5 subpasos", color="red", linestyle='-.')
+// Aproximación con ticks de delta time fijo
+tTicks = {
+  let ticks = linspace(0, tickEndTime, numTicks + 1)
+  // Encontrar el primer valor que supera timeToGround
+  const firstOverIndex = ticks.findIndex(t => t > timeToGround)
+  if (firstOverIndex > 0) {
+    // Reemplazar el primer valor que supera timeToGround con timeToGround
+    ticks[firstOverIndex] = timeToGround
+    // Eliminar el resto de valores que superan timeToGround
+    ticks = ticks.slice(0, firstOverIndex + 1)
+  }
+  return ticks
+}
+yTicks = tTicks.map(time => {
+  // Si el tiempo es mayor que timeToGround, la altura es 0
+  if (time > timeToGround) return 0;
+  return initialHeight - 0.5 * g * time ** 2;
+})
 
-# Adding details to the plot
-plt.title("Trayectoria de un proyectil disparado horizontalmente")
-plt.xlabel("Tiempo (segundos)")
-plt.ylabel("Altura (metros)")
-plt.legend()
-plt.grid(True)
-plt.show()
+// Aproximación con subpasos dentro de cada tick
+tSubsteps = {
+  let substeps = linspace(0, tickEndTime, numSubsteps + 1)
+  // Encontrar el primer valor que supera timeToGround
+  const firstOverIndex = substeps.findIndex(t => t > timeToGround)
+  if (firstOverIndex > 0) {
+    // Reemplazar el primer valor que supera timeToGround con timeToGround
+    substeps[firstOverIndex] = timeToGround
+    // Eliminar el resto de valores que superan timeToGround
+   substeps = substeps.slice(0, firstOverIndex + 1)
+  }
+  return substeps
+}
+ySubsteps = tSubsteps.map(time => {
+  // Si el tiempo es mayor que timeToGround, la altura es 0
+  if (time > timeToGround) return 0;
+  return initialHeight - 0.5 * g * time ** 2;
+})
 ```
+```{ojs}
+//| echo: false
+//| panel: fill
+Plot.plot({
+  color: {
+    legend: true
+  },
+  x: {
+    label: "Tiempo (s.)",
+    grid: true,
+    domain: [0, tickEndTime]
+  },
+  y: {
+    label: "Altura (m.)",
+    grid: true,
+    domain: [0, initialHeight * 1.1]
+  },
+  marks: [
+    // Línea de referencia en y=0 (suelo)
+    Plot.ruleY([0], {stroke: "black", strokeWidth: 1.5}),
+    
+    // Línea vertical en el momento de impacto
+    Plot.ruleX([timeToGround], {stroke: "red", strokeDasharray: "2,2"}),
+    
+    // Trayectoria parabólica ideal
+    Plot.line(t.map((time, i) => ({
+      x: time, 
+      y: yParabolic[i],
+      group: "Ruta deseada"
+    })), {
+      x: "x",
+      y: "y",
+      stroke: "blue"
+    }),
+    
+    // Aproximación por ticks
+    Plot.line(tTicks.map((time, i) => ({
+      x: time, 
+      y: yTicks[i],
+      group: `Aproximación cada tick (${numTicks} ticks)`
+    })), {
+      x: "x",
+      y: "y",
+      stroke: "green",
+      strokeDasharray: "4,4"
+    }),
+    
+    // Aproximación con subpasos
+    Plot.line(tSubsteps.map((time, i) => ({
+      x: time, 
+      y: ySubsteps[i],
+      group: `Aproximación con ${substepsPerTick} subpasos por tick`
+    })), {
+      x: "x",
+      y: "y",
+      stroke: "red",
+      strokeDasharray: "6,2"
+    }),
+    
+    // Puntos en los ticks
+    Plot.dot(tTicks.map((time, i) => ({
+      x: time, 
+      y: yTicks[i]
+    })), {
+      x: "x",
+      y: "y",
+      stroke: "green",
+      fill: "white",
+      r: 4
+    }),
+    
+    // Puntos en los subpasos (opcional)
+    Plot.dot(tSubsteps.map((time, i) => ({
+      x: time, 
+      y: ySubsteps[i]
+    })), {
+      x: "x",
+      y: "y",
+      stroke: "red",
+      fill: "white",
+      r: 2
+    })
+  ],
+})
+```
+
+: Ejemplo de aproximación de una trayectoria en cada *tick* vs. en cada *subpaso*
+:::
 
 Para evitarlo, en cada *tick*, se puede dividir el `DeltaTime` en varias porciones, calculando y moviendo la ubicación del personaje en cada una, hasta completar el tiempo `DeltaTime`:
 
