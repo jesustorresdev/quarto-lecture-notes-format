@@ -13,6 +13,7 @@ local Span = pandoc.Span
 
 local TYPE_MAPPING = {
   ["class"] = "clase",
+  ["struct"] = "estructura",
   ["function"] = "función",
   ["method"] = "método",
   ["event"] = "evento",
@@ -52,7 +53,7 @@ local function processEntry(opts, entry, parent)
   end
 
   -- derived class
-  if entry.type == apiref.ENTITY_TYPES.class and entry.extends then
+  if entry.isClass and entry.extends then
     headerEnd:insert(": ")
     headerEnd:insert(Span(entry.extends, {class="apirefs-entry-extends"}))
   end

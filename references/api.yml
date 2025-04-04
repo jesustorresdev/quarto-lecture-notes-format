@@ -489,6 +489,7 @@ GameplayTask:
     bp: https://docs.unrealengine.com/en-US/BlueprintAPI/GameplayTasks/
     cpp: https://docs.unrealengine.com/en-US/API/Runtime/GameplayTasks/UGameplayTask/index.html
 HitResult:
+  type: struct
   internal-name: FHitResult
   refs:
     cpp: https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FHitResult/
@@ -708,6 +709,7 @@ RotatingMovementComponent:
   refs:
     cpp: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/URotatingMovementComponent/index.html
 Rotator:
+  type: struct
   internal-name: FRotator
   refs:
     cpp: https://docs.unrealengine.com/4.27/en-US/API/Runtime/Core/Math/FRotator/

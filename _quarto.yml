@@ -66,6 +66,7 @@ api-reference:
   reference-section-title: Referencias a la API
   markers:
     class: "{{< iconify ph cube-bold >}}"
+    struct: "{{< iconify ph brackets-curly-bold >}}"
     event: "{{< iconify ph lightning-bold >}}"
     function: "{{< iconify ph function-bold >}}"
     method: "{{< iconify ph function-bold >}}"

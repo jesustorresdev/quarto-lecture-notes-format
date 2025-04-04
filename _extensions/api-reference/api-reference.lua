@@ -4,15 +4,17 @@ local CROSSREF_PREFIX = "apiref-"
 local CROSSREF_SEP = "-"
 
 local ENTITY_TYPES = {
-  class = "class",
-  func = "function",
-  method = "method",
-  event = "event",
-  static = "static",
+  class = { name = "class", isFunc = false, isClass = true },
+  struct = { name = "struct", isFunc = false, isClass = true },
+  ["function"] = { name = "function", isFunc = true, isClass = false },
+  method = { name = "method", isFunc = true, isClass = false },
+  event = { name = "event", isFunc = true, isClass = false },
+  static = { name = "static", isFunc = true, isClass = false },
 }
 
 local DEFAULT_MARKERS = {
   ["class"] = pandoc.Str("C{}"),
+  ["struct"] = pandoc.Str("S{}"),
   ["event"] = pandoc.Str("E→"),
   ["function"] = pandoc.Str("ƒ()"),
   ["method"] = pandoc.Str("ƒ()"),
@@ -22,8 +24,6 @@ local DEFAULT_MARKERS = {
 }
 
 local stringify = pandoc.utils.stringify
-local Link = pandoc.Link
-local Span = pandoc.Span
 
 local globalReferences
 
@@ -70,10 +70,9 @@ local function intializeReference(item, parent)
   entry.id = item.id
   entry.used = false
   entry.type = item.type and stringify(item.type)
-    or parent and ENTITY_TYPES.method or ENTITY_TYPES.class
-  entry.isFunc = entry.type == ENTITY_TYPES.func
-    or entry.type == ENTITY_TYPES.method
-    or entry.type == ENTITY_TYPES.static
+    or parent and ENTITY_TYPES.method.name or ENTITY_TYPES.class.name
+  entry.isFunc = ENTITY_TYPES[entry.type].isFunc
+  entry.isClass = ENTITY_TYPES[entry.type].isClass
   entry.label = item.label and stringify(item.label) or item.id
   entry.refname = table.concat({
     parent and parent.refname or CROSSREF_PREFIX,
@@ -179,7 +178,6 @@ local function getOptions(meta)
 end
 
 return {
-  ENTITY_TYPES = ENTITY_TYPES,
   initializeReferences = function(path)
     if not globalReferences then
       ensureHtmlDeps()
