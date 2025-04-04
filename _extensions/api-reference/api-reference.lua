@@ -84,12 +84,19 @@ local function intializeReference(item, parent)
   if item['extends'] then
     entry['extends'] = stringify(item['extends'])
   end
+  if item['description'] then
+    entry['description'] = item['description']
+  end
+  
+  -- references by language
   if item.refs then
     entry.refs = {}
     for refLang, refUrl in pairs(item.refs) do
       entry.refs[stringify(refLang)] = stringify(refUrl)
     end
   end
+
+  -- other references
   if item['other-refs'] then
     entry['other-refs'] = {}
     for _, refItem in ipairs(item['other-refs']) do

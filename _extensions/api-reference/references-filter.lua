@@ -28,7 +28,7 @@ local LANG_MAPPING = {
 local function processEntry(opts, entry, parent)
   local header = pandoc.List()
   local headerEnd = pandoc.List()
-  local otherRefsList = pandoc.Nil
+  local results = pandoc.Nil
   
   -- type marker
   local marker = opts['markers'][entry.type]
@@ -80,6 +80,14 @@ local function processEntry(opts, entry, parent)
     header:insert(Span(headerEnd, {class="apirefs-entry-nobrk"}))
   end
 
+  results = Div({pandoc.Inlines(header)}, {id=entry.refname, class="apirefs-entry " .. "apirefs-ref-" .. entry.type})
+
+  -- description
+  if entry.description then
+    description = Div(entry.description, {class="apirefs-entry-description"})
+    results.content:insert(description)
+  end
+
   -- other reference list
   if entry['other-refs'] then
     local refList = pandoc.List()
@@ -88,12 +96,10 @@ local function processEntry(opts, entry, parent)
         {class="apirefs-entry-otherref"}))
     end
     otherRefsList = Div(BulletList(refList), {class="apirefs-entry-otherrefs"})
+    results.content:insert(otherRefsList)
   end
   
-  return Div({
-      pandoc.Inlines(header),
-      otherRefsList
-    }, {id=entry.refname, class="apirefs-entry " .. "apirefs-ref-" .. entry.type})
+  return results
 end
 
 local function create_section_references(opts)
