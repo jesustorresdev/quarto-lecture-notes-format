@@ -81,7 +81,7 @@ local function processEntry(opts, entry, parent)
     header:insert(Span(headerEnd, Attr("", {"apirefs-entry-nobrk"})))
   end
 
-  results = Div({pandoc.Inlines(header)}, Attr(entry.refname, {"apirefs-entry", "apirefs-ref-" .. entry.type})))
+  results = Div({pandoc.Inlines(header)}, Attr(entry.refname, {"apirefs-entry", "apirefs-ref-" .. entry.type}))
 
   -- description
   if entry.description then
@@ -150,9 +150,9 @@ end
 
 return {
   Pandoc = function(doc)
-    opts = apiref.getOptions(doc.meta) 
     -- insert references section at the end of the document
     if apiref.isInitialized() then
+      local opts = apiref.getOptions() 
       local section = {
         Header(1, opts['reference-section-title'], Attr("toc-apirefs")),
         create_section_references(opts)

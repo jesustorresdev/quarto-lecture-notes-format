@@ -17,20 +17,18 @@ local function splitCrossref(crossref)
 end
 
 local function apiShortcode(args, kwargs, meta)
-  local opts = apiref.getOptions(meta)
-  if not (opts and opts['path']) then
-    return Strong("?api:")
-  end
-
   if not apiref.isInitialized() then
-    local path = stringify(opts['path'])
-    apiref.initializeReferences(path)
-  end
-
-  if #args < 1 then
+    if not apiref.initialize(meta) then
       return Strong("?api:")
+    end
+  end
+  
+  if #args < 1 then
+    return Strong("?api:")
   end 
-
+  
+  local opts = apiref.getOptions()
+  
   local mode
   local crossref = stringify(args[1])
   if #args > 1 then

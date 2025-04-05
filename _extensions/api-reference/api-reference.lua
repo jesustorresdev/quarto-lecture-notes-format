@@ -25,7 +25,8 @@ local DEFAULT_MARKERS = {
 
 local stringify = pandoc.utils.stringify
 
-local globalReferences
+local globalReferences = {}
+local globalOptions = nil
 
 local function ensureHtmlDeps()
   quarto.doc.add_html_dependency({
@@ -33,6 +34,26 @@ local function ensureHtmlDeps()
     version = '0.1.0',
     stylesheets = {'assets/css/all.css'}
   })
+end
+
+local function getOptions(meta)
+  local opts = meta['api-reference'] or {}
+  local suppressShowMarkers = opts['suppress-ref-marker'] and stringify(opts['suppress-ref-marker']):lower() or "0"
+  if suppressShowMarkers == "true" or suppressShowMarkers == "1" then
+      opts['suppress-ref-marker'] = true
+  else
+    opts['suppress-ref-marker'] = false
+  end
+  opts['ref-show-marker'] = opts['ref-show-marker']and true or opts['ref-show-marker']
+  opts['markers'] = opts['markers'] or {}
+  opts['reference-section-title'] = opts['reference-section-title'] or "API References"
+  -- merge the default markers
+  for key, value in pairs(DEFAULT_MARKERS) do
+    if not opts['markers'][key] then
+      opts['markers'][key] = value
+    end
+  end
+  return opts
 end
 
 local function readYamlFile(filename)
@@ -143,6 +164,25 @@ local function initializeReferences(metadata)
   return refs
 end
 
+local function initialize(meta)
+  if globalOptions then
+    return true
+  end
+
+  ensureHtmlDeps()
+
+  globalOptions = getOptions(meta)
+  if not (globalOptions and globalOptions['path']) then
+    return false
+  end
+
+  local path = stringify(globalOptions['path'])
+  local metadata = readYamlFile(path)
+  globalReferences = initializeReferences(metadata)
+
+  return true
+end
+
 local function findEntry(entry_ref, parent_ref)
   local found = { parent = nil, entry = nil }
   if parent_ref then
@@ -164,40 +204,16 @@ local function findEntry(entry_ref, parent_ref)
   return found
 end
 
-local function getOptions(meta)
-  local opts = meta['api-reference'] or {}
-  local suppressShowMarkers = opts['suppress-ref-marker'] and stringify(opts['suppress-ref-marker']):lower() or "0"
-  if suppressShowMarkers == "true" or suppressShowMarkers == "1" then
-      opts['suppress-ref-marker'] = true
-  else
-    opts['suppress-ref-marker'] = false
-  end
-  opts['ref-show-marker'] = opts['ref-show-marker']and true or opts['ref-show-marker']
-  opts['markers'] = opts['markers'] or {}
-  opts['reference-section-title'] = opts['reference-section-title'] or "API References"
-  -- merge the default markers
-  for key, value in pairs(DEFAULT_MARKERS) do
-    if not opts['markers'][key] then
-      opts['markers'][key] = value
-    end
-  end
-  return opts
-end
-
 return {
-  initializeReferences = function(path)
-    if not globalReferences then
-      ensureHtmlDeps()
-      local metadata = readYamlFile(path)
-      globalReferences = initializeReferences(metadata)
-    end
-  end,
+  initialize = initialize,
   isInitialized = function()
-    return globalReferences ~= nil
+    return globalOptions ~= nil
   end,
   findEntry = findEntry,
   referencesIterator = function()
     return pairs(globalReferences)
   end,
-  getOptions = getOptions,
+  getOptions = function()
+    return globalOptions
+  end
 }
