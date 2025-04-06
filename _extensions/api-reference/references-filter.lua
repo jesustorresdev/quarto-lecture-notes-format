@@ -124,7 +124,7 @@ local function create_section_references()
       local refBlock = processEntry(ref[1])
       if #ref[2] > 0 then
         local membersList = Div({BulletList(ref[2]:map(function(memberRef)
-            return processEntry(memberRef, ref[1])
+            return processEntry(memberRef)
           -- return 
           end))}, Attr("", {"apirefs-list, apirefs-entry-members-list"}))
         refBlock.content:insert(membersList)
