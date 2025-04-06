@@ -702,9 +702,25 @@ En Unreal Engine se pueden prototipar niveles usando:
 
 * O el **kit de diseño de niveles** del proyecto *«Lyra Starter Game»*.
 
-Además de las herramientas que acompañan a Unreal Engine, en el {{< var unreal.marketplace >}} existen algunos complementos interesantes para prototipar.
-Entre ellos merece la pena destacar *«Mesh Tool»*[@NateMeshTool] y *«Blockout Tools Plugin»*[@KarpukhinBlockoutTools].
-Tambien son muy útiles los materiales con cuadrícula, como *«Customizable Grid»*[@ZaroaCustomizableGrid], pues ayudan a visualizar las escalas y a organizar el espacio.
+Además de las herramientas que acompañan a Unreal Engine, en el {{< var fab >}} existen algunos complementos interesantes para prototipar.
+Entre las herramientas disponibles merece la pena destacar:
+
+<!-- TODO: Poner algunos vídeos e imágenes -->
+
+* «Gradientspace Toolbox»[@GradientspaceToolbox].
+En particular, «QuickMove Tool», que facilita la colocación de objetos en el nivel, y «ModelGrid», que lleva el concepto de cubos de vóxeles a otro nivel, permitiendo crear mallas 3D a partir de una cuadrícula de celdas con diferentes objetos paramétricos, resultan muy útiles para el diseño de niveles y el *blockout*.
+
+* «Blockout Tools Plugin»[@KarpukhinBlockoutTools], que ofrece un conjunto de elementos primitivos que se pueden escalar y transformar fácilmente, así como un material de cuadrícula triplanar personalizado para facilitar el flujo de trabajo de diseño de niveles.
+
+Mientras que en lo que respecta a *assets* y modelos, merece la pena mencionar:
+
+* «Blockout Starter Pack»[@LouxBlockoutStarterPack], que contine múltiples primitivas, *assets* modulares, *props*, materiales y *decal* para facilitar el *blockout* de niveles.
+
+* «Level Design Kit»[@PearsLevelDesignKit], que es un paquete esencial de inicialización al diseño de niveles donde se incluyen cerca de 300 mallas, entre *props* y *assets* modulares, para comunicar de forma clara las intenciones de cualquier diseño.
+
+* «Synty Studios' POLYGON Prototype Pack»[@SyntyPolygonPrototypePack], es un paquete de modelos de bajo poligonaje que se pueden usar para crear prototipos de niveles rápidamente.
+
+Tambien son muy útiles los materiales de cuadrícula, como *«Customizable Grid»*[@ZaroaCustomizableGrid], pues ayudan a visualizar las escalas y a organizar el espacio.
 
 ### Modo de modelado
 
