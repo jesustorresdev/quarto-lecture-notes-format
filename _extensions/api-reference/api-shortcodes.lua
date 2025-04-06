@@ -27,8 +27,6 @@ local function apiShortcode(args, kwargs, meta)
     return Strong("?api:")
   end 
   
-  local opts = apiref.getOptions()
-  
   local mode
   local crossref = stringify(args[1])
   if #args > 1 then
@@ -52,7 +50,7 @@ local function apiShortcode(args, kwargs, meta)
     parent.used = true
   end
 
-  local marker = opts['suppress-ref-marker'] and pandoc.Null() or opts['markers'][entry.type]
+  local marker = apiref.getOptions()['suppress-ref-marker'] and pandoc.Null() or apiref.getType(entry.type).marker
   local reftext = isFull and (parent and parent.label or "") .. "::" .. entry.label or entry.label
   reftextSuffix = entry.isFunc and "()" or ""
   return Span({

@@ -2,31 +2,27 @@
 
 local CROSSREF_PREFIX = "apiref-"
 local CROSSREF_SEP = "-"
-
-local ENTITY_TYPES = {
-  class = { name = "class", isFunc = false, isClass = true },
-  struct = { name = "struct", isFunc = false, isClass = true },
-  ["function"] = { name = "function", isFunc = true, isClass = false },
-  method = { name = "method", isFunc = true, isClass = false },
-  event = { name = "event", isFunc = true, isClass = false },
-  static = { name = "static", isFunc = true, isClass = false },
-}
-
-local DEFAULT_MARKERS = {
-  ["class"] = pandoc.Str("C{}"),
-  ["struct"] = pandoc.Str("S{}"),
-  ["event"] = pandoc.Str("E→"),
-  ["function"] = pandoc.Str("ƒ()"),
-  ["method"] = pandoc.Str("ƒ()"),
-  ["static"] = pandoc.Str("ƒ()"),
-  ["cpp"] = pandoc.Str("C++"),
-  ["bp"] = pandoc.Str("BP"),
-}
+local REFERENCE_SECTION_TITLE = "API References"
 
 local stringify = pandoc.utils.stringify
 
-local globalReferences = {}
 local globalOptions = nil
+local globalReferences = {}
+
+local CLASS_TYPE_NAME = "class"
+local METHOD_TYPE_NAME = "method"
+local knownEntryTypes = {
+  class = { title = "class", func = false, class = true, marker = "C{}" },
+  struct = { title = "struct", func = false, class = true, marker = "{}" },
+  enum = { title = "enum", func = false, class = true, marker = "E{}" },
+  func = { title = "function", func = true, class = false, marker = "ƒ()" },
+  method = { title = "method", func = true, class = false, marker = "ƒ()" },
+}
+
+local knownLanguages = {
+  c = { title = "C", marker = "C" },
+  cpp = { title = "C++", marker = "C++" },
+}
 
 local function ensureHtmlDeps()
   quarto.doc.add_html_dependency({
@@ -34,6 +30,30 @@ local function ensureHtmlDeps()
     version = '0.1.0',
     stylesheets = {'assets/css/all.css'}
   })
+end
+
+local function createLanguage(lang, defaults)
+  if not defaults then
+    defaults = {}
+  end
+
+  local langEntry = {}
+  langEntry.title = defaults.title or lang
+  langEntry.marker = defaults.marker or langEntry.title
+  return langEntry
+end
+
+local function createEntryType(type, defaults)
+  if not defaults then
+    defaults = {}
+  end
+  
+  local typeEntry = {}
+  typeEntry.title = defaults.title or type
+  typeEntry.func = defaults.func or false
+  typeEntry.class = defaults.class or false
+  typeEntry.marker = defaults.marker or type:sub(1, 1):upper() .. (typeEntry.func and "()" or (typeEntry.class and "{}" or ""))
+  return typeEntry
 end
 
 local function getOptions(meta)
@@ -45,15 +65,61 @@ local function getOptions(meta)
     opts['suppress-ref-marker'] = false
   end
   opts['ref-show-marker'] = opts['ref-show-marker']and true or opts['ref-show-marker']
-  opts['markers'] = opts['markers'] or {}
-  opts['reference-section-title'] = opts['reference-section-title'] or "API References"
-  -- merge the default markers
-  for key, value in pairs(DEFAULT_MARKERS) do
-    if not opts['markers'][key] then
-      opts['markers'][key] = value
+  opts['reference-section-title'] = opts['reference-section-title'] or REFERENCE_SECTION_TITLE
+  
+  -- merge the languages options with the default ones
+  local langs = opts['langs'] or {}
+  for lang, desc in pairs(langs) do
+    if not knownLanguages[lang] ~= nil then
+      knownLanguages[lang] = createLanguage(lang, desc)
+    else
+      for key, value in pairs(desc) do
+        if knownLanguages[lang][key] then
+          knownLanguages[lang][key] = value
+        end
+      end
     end
   end
+
+  -- merge the entry types options with the default ones
+  local types = opts['types'] or {}
+  for type, desc in pairs(types) do
+    if not knownEntryTypes[type] ~= nil then
+      knownEntryTypes[type] = createEntryType(type, desc)
+    else
+      for key, value in pairs(desc) do
+        if knownEntryTypes[type][key] then
+          knownEntryTypes[type][key] = value
+        end
+      end
+    end
+  end
+
+  opts['langs'] = nil
+  opts['types'] = nil
   return opts
+end
+
+local function updateMarkersFromMeta(meta)
+  if not globalOptions then
+    return
+  end
+
+  local langs = meta['api-reference'] and meta['api-reference']['langs'] or {}
+
+  for lang, _ in pairs(knownLanguages) do
+    if langs[lang] and langs[lang]['marker'] then
+      knownLanguages[lang]["marker"] = langs[lang]["marker"]
+    end
+  end
+
+  local types = meta['api-reference'] and meta['api-reference']['types'] or {}
+
+  for type, _ in pairs(knownEntryTypes) do
+    if types[type] and types[type]['marker'] then
+      knownEntryTypes[type]["marker"] = types[type]["marker"]
+    end
+  end
 end
 
 local function readYamlFile(filename)
@@ -70,7 +136,6 @@ local function readYamlFile(filename)
   content = content .. "\n---\n"
   file:close()
   local metadata = pandoc.read(content, "markdown-raw_html").meta
-  -- quarto.log.output(metadata)
   return metadata
 end
 
@@ -91,9 +156,9 @@ local function intializeReference(item, parent)
   entry.id = item.id
   entry.used = false
   entry.type = item.type and stringify(item.type)
-    or parent and ENTITY_TYPES.method.name or ENTITY_TYPES.class.name
-  entry.isFunc = ENTITY_TYPES[entry.type].isFunc
-  entry.isClass = ENTITY_TYPES[entry.type].isClass
+    or (parent and METHOD_TYPE_NAME or CLASS_TYPE_NAME)
+  entry.isFunc = knownEntryTypes.func
+  entry.isClass = knownEntryTypes.class
   entry.label = item.label and stringify(item.label) or item.id
   entry.refname = table.concat({
     parent and parent.refname or CROSSREF_PREFIX,
@@ -171,15 +236,16 @@ local function initialize(meta)
 
   ensureHtmlDeps()
 
-  globalOptions = getOptions(meta)
-  if not (globalOptions and globalOptions['path']) then
+  local opts = getOptions(meta)
+  if not (opts and opts['path']) then
     return false
   end
 
-  local path = stringify(globalOptions['path'])
+  local path = stringify(opts['path'])
   local metadata = readYamlFile(path)
   globalReferences = initializeReferences(metadata)
 
+  globalOptions = opts
   return true
 end
 
@@ -209,11 +275,18 @@ return {
   isInitialized = function()
     return globalOptions ~= nil
   end,
+  updateMarkersFromMeta = updateMarkersFromMeta,
   findEntry = findEntry,
   referencesIterator = function()
     return pairs(globalReferences)
   end,
   getOptions = function()
-    return globalOptions
+    return globalOptions or {}
+  end,
+  getLanguage = function(lang)
+    return knownLanguages[lang] or createLanguage(lang)
+  end,
+  getType = function(type)
+    return knownEntryTypes[type] or createEntryType(type)
   end
 }

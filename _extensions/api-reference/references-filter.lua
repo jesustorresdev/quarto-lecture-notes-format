@@ -11,32 +11,17 @@ local Link = pandoc.Link
 local RawInline = pandoc.RawInline
 local Space = pandoc.Space
 local Span = pandoc.Span
+local stringify = pandoc.utils.stringify
 
-local TYPE_MAPPING = {
-  ["class"] = "clase",
-  ["struct"] = "estructura",
-  ["function"] = "función",
-  ["method"] = "método",
-  ["event"] = "evento",
-  ["static"] = "static",
-}
-
-local LANG_MAPPING = {
-  ["cpp"] = "C++",
-  ["bp"] = "Blueprint",
-}
-
-local function processEntry(opts, entry, parent)
+local function processEntry(entry)
   local header = pandoc.List()
   local headerEnd = pandoc.List()
   local results = pandoc.Nil
   
   -- type marker
-  local marker = opts['markers'][entry.type]
-  if marker then
-    header:insert(Span(marker, Attr("", {"apirefs-entry-marker"})))
-    header:insert(RawInline("html", "&nbsp;"))
-  end
+  local marker = apiref.getType(entry.type).marker
+  header:insert(Span(marker, Attr("", {"apirefs-entry-marker"})))
+  header:insert(RawInline("html", "&nbsp;"))
 
   -- name
   local labelSuffix = entry.isFunc and "()" or ""
@@ -45,7 +30,7 @@ local function processEntry(opts, entry, parent)
   -- type
   -- header::insert(Span("«" .. TYPE_MAPPING[entry.type] .. "»"))
   header:insert(Space())
-  header:insert(Span(TYPE_MAPPING[entry.type], Attr("", {"apirefs-entry-type"})))
+  header:insert(Span(apiref.getType(entry.type).title, Attr("", {"apirefs-entry-type"})))
 
   -- internal name
   if entry['internal-name'] then
@@ -68,7 +53,7 @@ local function processEntry(opts, entry, parent)
       if #headerEnd > 0 or not firstRef then
         refList:insert(Space())
       end
-      refList:insert(Link(opts['markers'][lang] or lang, url, LANG_MAPPING[lang],
+      refList:insert(Link(apiref.getLanguage(lang).marker, url, stringify(apiref.getLanguage(lang).title),
       Attr("", {"apirefs-entry-ref " .. "apirefs-entry-ref-" .. lang})))
       firstRef = false
     end
@@ -103,7 +88,7 @@ local function processEntry(opts, entry, parent)
   return results
 end
 
-local function create_section_references(opts)
+local function create_section_references()
   -- filter references
   local references = pandoc.List()
   for _, entry in apiref.referencesIterator() do
@@ -136,10 +121,10 @@ local function create_section_references(opts)
     end)
   
   return Div({BulletList(references:map(function(ref)
-      local refBlock = processEntry(opts, ref[1])
+      local refBlock = processEntry(ref[1])
       if #ref[2] > 0 then
         local membersList = Div({BulletList(ref[2]:map(function(memberRef)
-            return processEntry(opts, memberRef, ref[1])
+            return processEntry(memberRef, ref[1])
           -- return 
           end))}, Attr("", {"apirefs-list, apirefs-entry-members-list"}))
         refBlock.content:insert(membersList)
@@ -152,10 +137,15 @@ return {
   Pandoc = function(doc)
     -- insert references section at the end of the document
     if apiref.isInitialized() then
-      local opts = apiref.getOptions() 
+      if doc.meta then
+        -- update the markers from the metadata
+        -- this is needed if the markers are defined using shortcodes
+        apiref.updateMarkersFromMeta(doc.meta)
+      end
+      local opts = apiref.getOptions()
       local section = {
         Header(1, opts['reference-section-title'], Attr("toc-apirefs")),
-        create_section_references(opts)
+        create_section_references()
       }
       local newSection = pandoc.structure.make_sections(section, {number_sections=false})
       -- usar extend para agregar los bloques al documento

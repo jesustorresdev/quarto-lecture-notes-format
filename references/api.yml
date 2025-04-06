@@ -606,6 +606,7 @@ PawnMovementComponent:
   refs:
     cpp: https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/UPawnMovementComponent/index.html
 PhysicalSurface:
+  type: enum
   internal-name: EPhysicalSurface
   refs:
     bp: https://docs.unrealengine.com/en-US/BlueprintAPI/Utilities/Enum/LiteralenumEPhysicalSurface/

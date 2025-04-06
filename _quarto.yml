@@ -64,15 +64,37 @@ reference-section-title: Referencias
 api-reference:
   path: references/api.yml
   reference-section-title: Referencias a la API
-  markers:
-    class: "{{< iconify ph cube-bold >}}"
-    struct: "{{< iconify ph brackets-curly-bold >}}"
-    event: "{{< iconify ph lightning-bold >}}"
-    function: "{{< iconify ph function-bold >}}"
-    method: "{{< iconify ph function-bold >}}"
-    static: "{{< iconify ph function-square-bold >}}"
-    cpp: "{{< iconify devicon-plain cplusplus title='C++' >}}"
-    bp: "{{< iconify simple-icons blueprint title='Blueprint' >}}"
+  types:
+    class:
+      title: clase
+      marker: "{{< iconify ph cube-bold >}}"
+    struct:
+      title: estructura
+      marker: "{{< iconify ph brackets-curly-bold >}}"
+    enum:
+      title: enumeración
+      marker: "{{< iconify ph list-light >}}"
+    event:
+      title: evento
+      func: true
+      marker: "{{< iconify ph lightning-bold >}}"
+    function:
+      title: función
+      marker: "{{< iconify ph function-bold >}}"
+    method:
+      title: método
+      marker: "{{< iconify ph function-bold >}}"
+    static:
+      title: estática
+      func: true
+      marker: "{{< iconify ph function-square-bold >}}"
+  langs:
+    cpp:
+      title: C++
+      marker: "{{< iconify devicon-plain cplusplus title='C++' >}}"
+    bp:
+      title: Blueprint
+      marker: "{{< iconify simple-icons blueprint title='Blueprint' >}}"
 
 filters:
   - reading-time
