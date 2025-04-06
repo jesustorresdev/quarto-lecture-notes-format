@@ -1,4 +1,5 @@
-title: MUDV-D3D HTML Format
+title: Formato de notas de clase
+description: Extensión de fomato para los documentos de notas de clase de Jesús Torres
 author: Jesús Torres
 version: 1.0.0
 quarto-required: ">=1.6.0"

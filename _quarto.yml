@@ -105,6 +105,6 @@ filters:
   - pwa
 
 format:
-  mudv-d3d-html:
+  lecture-notes-html:
     include-in-header: 
       - text: '<meta name="robots" content="noindex, nofollow">'
