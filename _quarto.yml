@@ -1,5 +1,7 @@
 project:
   type: book
+  output-dir: _book
+  post-render: bash _extensions/pwa/update-sw.sh _book
   resources: 
     - /assets
 
@@ -13,6 +15,7 @@ book:
     - name: Jesús Torres
       email: jmtorres@ull.es
   publisher: Universidad de La Laguna
+  favicon: assets/icons/icon-192x192.png
   page-footer: |
     Este trabajo está bajo licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es)
     <img style="height:16px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="">

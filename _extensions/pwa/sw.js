@@ -1,20 +1,19 @@
-// START CONFIGURATION
-CONFIG = {
-  cacheName: 'ull-mudv-d3d',
-  urlsToCache: [
-    '/',
-    '/index.html',
-    '/manifest.json',
-  ]
-}
-// END CONFIGURATION
+const VERSION = '1'
+const URLS_TO_CACHE = []
+
+//-----SERVICE WORKER-----
+
+const CACHE_NAME = `site-cache-v${VERSION}`
 
 self.addEventListener('install', event => {
+  self.skipWaiting()  // Force immediate activation
   event.waitUntil(
-    caches.open(CONFIG.cacheName)
-      .then(cache => {
-        return cache.addAll(CONFIG.urlsToCache);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(URLS_TO_CACHE))
+      .catch(error => {
+        console.error('Cache installation failed:', error)
+        throw error
+      })
   )
 })
 
@@ -23,45 +22,45 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {
-
         if (cachedResponse) {
-          return cachedResponse;
+          return cachedResponse
         }
         
         // If the request is not in the cache, we try to fetch it
-        return fetch(event.request)
-          .then(networkResponse => {
+        return fetch(event.request.clone())
+          .then(response => {
             // If the network is available and the response is valid,
             // we save a copy in the cache for future use
-            if (networkResponse && networkResponse.status === 200 && 
-                networkResponse.type === 'basic') {
-              const responseToCache = networkResponse.clone();
-              caches.open(CONFIG.cacheName)
-                .then(cache => {
-                  cache.put(event.request, responseToCache);
-                });
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response
             }
-            
-            return networkResponse;
-          });
+
+            const responseToCache = response.clone()
+            return caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache)
+                return response
+              })
+          })
+          .catch(() => {
+            // Return a fallback response if the network is unavailable
+            return caches.match('/index.html')
+          })
       })
-  );
-});
+  )
+})
 
 // Update service worker
 self.addEventListener('activate', event => {
-  // Add current cache to the whitelist
-  const cacheWhitelist = [CONFIG.cacheName];
   event.waitUntil(
+    // Remove old caches
     caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            // Delete the cache if it is not in the whitelist
-            return caches.delete(cacheName);
-          }
-        })
-      );
+      return Promise.all([
+        self.clients.claim(), // Take control of all open clients
+        cacheNames
+          .filter(cacheName => cacheName !== CACHE_NAME)
+          .map(cacheName => caches.delete(cacheName))
+      ])
     })
-  );
-});
+  )
+})

@@ -2,12 +2,13 @@ local SW_REGISTER_SCRIPT = [[
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-      navigator.serviceWorker.register('%s/sw.js').then(function(registration) {
-        console.log('Service Worker registered with scope:', registration.scope);
-      }, function(err) {
-        console.log('Service Worker registration failed:', err);
-      });
-    });
+      navigator.serviceWorker.register('%s/sw.js')
+        .then(function(registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+        }, function(err) {
+          console.log('Service Worker registration failed:', err);
+        })
+      })
   }
 </script>
 ]]
@@ -65,9 +66,9 @@ function saveManifest(manifest)
 end
 
 function Meta(meta)
-  if quarto.doc.is_format('html:js') and meta['pwa-manifest'] then
+  local pwa = os.getenv('ENABLE_PWA') and meta['pwa-manifest']
+  if quarto.doc.is_format('html:js') and pwa then
     local manifest = generateManifest(meta)
-    local offset_path = quarto.project.offset
     local links = {
       { rel = 'manifest', href = '/manifest.json' },
     }
