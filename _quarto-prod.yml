@@ -1,0 +1,17 @@
+pwa-manifest:
+  short_name: Desarrollo 3D
+  # description: Apuntes de Desarrollo de Videojuegos 3D del Master Universitario en Desarrollo de Videojuegos de la Universidad de La Laguna
+  icons:
+    - src: assets/icons/icon-192x192.png
+      sizes: 192x192
+      type: image/png
+    - src: assets/icons/icon-512x512.png
+      sizes: 512x512
+      type: image/png
+
+filters:
+  - reading-time
+  - quarto
+  - api-reference
+  - section-bibliographies
+  - pwa

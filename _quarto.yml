@@ -1,7 +1,6 @@
 project:
   type: book
-  output-dir: _book
-  post-render: bash _extensions/pwa/update-sw.sh _book
+  post-render: _extensions/pwa/update-sw.ts
   resources: 
     - /assets
 
@@ -50,6 +49,10 @@ book:
   appendices:
     - chapters/perforce.qmd
 
+profile:
+  group: 
+    - [devel, prod]
+
 lang: es
 bibliography: references/references.bib
 csl: references/elsevier-with-titles.csl
@@ -88,24 +91,6 @@ api-reference:
     bp:
       title: Blueprint
       marker: "{{< iconify simple-icons blueprint title='Blueprint' >}}"
-
-pwa-manifest:
-  short_name: Desarrollo 3D
-  # description: Apuntes de Desarrollo de Videojuegos 3D del Master Universitario en Desarrollo de Videojuegos de la Universidad de La Laguna
-  icons:
-    - src: assets/icons/icon-192x192.png
-      sizes: 192x192
-      type: image/png
-    - src: assets/icons/icon-512x512.png
-      sizes: 512x512
-      type: image/png
-
-filters:
-  - reading-time
-  - quarto
-  - api-reference
-  - section-bibliographies
-  - pwa
 
 format:
   lecture-notes-html:

@@ -19,15 +19,22 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": ".devcontainer/postCreateCommand.sh",
 
+	"remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/opt/quarto/bin/tools/x86_64",
+	},
+
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"settings": {
-				"editor.tabSize": 2
+				"editor.tabSize": 2,
+				// "deno.path": "/opt/quarto/bin/tools/x86_64/deno",
+				"deno.enable": true
 			},
 			"extensions": [
-				"github.vscode-github-actions",
+				"denoland.vscode-deno",
 				"GitHub.vscode-pull-request-github",
+				"github.vscode-github-actions",
 				"pascalreitermann93.vscode-yaml-sort",
 				"sumneko.lua",
 				"zfscgy.bibtex-helper"

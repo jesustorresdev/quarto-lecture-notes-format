@@ -1,7 +1,7 @@
+//--- START CONFIG ---
 const VERSION = '1'
 const URLS_TO_CACHE = []
-
-//-----SERVICE WORKER-----
+//--- END CONFIG ---
 
 const CACHE_NAME = `site-cache-v${VERSION}`
 
