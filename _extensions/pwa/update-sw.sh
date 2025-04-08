@@ -67,9 +67,9 @@ fi
 # Generate list of files and directories (excluding sw.js)
 echo "Generating list of files and directories..."
 
-DIRS="'/',
+DIRS="'./',
 "
-FILES=$(find "$output_dir" -type f -not -path "*/\.*"  -printf "'/%P',\n" | grep -v "'/$SERVICE_WORKER_FILE'")
+FILES=$(find "$output_dir" -type f -not -path "*/\.*"  -printf "'./%P',\n" | grep -v "'./$SERVICE_WORKER_FILE'")
 FILES_LIST=$(echo "$DIRS$FILES" | sort)
 
 # Update service worker file
