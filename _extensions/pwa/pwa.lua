@@ -66,7 +66,7 @@ function saveManifest(manifest)
 end
 
 function Meta(meta)
-  local pwa = os.getenv('ENABLE_PWA') and meta['pwa-manifest']
+  local pwa = meta['pwa-manifest'] and os.getenv('ENABLE_PWA'):lower() == 'true'
   if quarto.doc.is_format('html:js') and pwa then
     local manifest = generateManifest(meta)
     local links = {
