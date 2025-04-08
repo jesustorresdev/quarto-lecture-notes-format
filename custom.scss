@@ -23,6 +23,14 @@
   content: ".";
 }
 
+.breadcrumb .chapter-number::after {
+  content: ".";
+}
+
+.nav-page .chapter-number::after {
+  content: ".";
+}
+
 /* Estilo de las partes en el sidebar */
 
 #quarto-sidebar .sidebar-item-section > div:first-child .sidebar-item-text {
