@@ -18,6 +18,37 @@ contributes:
           - kind: float
             reference-prefix: Vídeo
             key: vid
+      filters:
+        - reading-time
+        - quarto
+        - api-reference
+        - pwa
+      shortcodes:
+        - api-reference
+        - coatless-quarto/embedio
+        - mcanouil/iconify
+      api-reference:
+        reference-section-title: Referencias a la API
+        types:
+          class:
+            title: clase
+            marker: "{{< iconify ph cube-bold >}}"
+          struct:
+            title: estructura
+            marker: "{{< iconify ph brackets-curly-bold >}}"
+          enum:
+            title: enumeración
+            marker: "{{< iconify ph list-light >}}"
+          function:
+            title: función
+            marker: "{{< iconify ph function-bold >}}"
+          method:
+            title: método
+            marker: "{{< iconify ph function-bold >}}"
+        langs:
+          cpp:
+            title: C++
+            marker: "{{< iconify devicon-plain cplusplus title='C++' >}}"
     html:
       theme: [default, custom.scss]
       mermaid:
