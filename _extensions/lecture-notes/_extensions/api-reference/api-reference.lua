@@ -157,8 +157,8 @@ local function intializeReference(item, parent)
   entry.used = false
   entry.type = item.type and stringify(item.type)
     or (parent and METHOD_TYPE_NAME or CLASS_TYPE_NAME)
-  entry.isFunc = knownEntryTypes.func
-  entry.isClass = knownEntryTypes.class
+  entry.isFunc = knownEntryTypes[entry.type].func
+  entry.isClass = knownEntryTypes[entry.type].class
   entry.label = item.label and stringify(item.label) or item.id
   entry.refname = table.concat({
     parent and parent.refname or CROSSREF_PREFIX,

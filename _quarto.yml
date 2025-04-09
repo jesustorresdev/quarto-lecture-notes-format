@@ -1,6 +1,6 @@
 project:
   type: book
-  post-render: _extensions/pwa/update-sw.ts
+  post-render: _extensions/lecture-notes/_extensions/pwa/update-sw.ts
   resources: 
     - /assets
 
@@ -49,9 +49,8 @@ book:
   appendices:
     - chapters/perforce.qmd
 
-profile:
-  group: 
-    - [devel, prod]
+filters:
+  - section-bibliographies
 
 lang: es
 bibliography: references/references.bib
@@ -59,35 +58,16 @@ csl: references/elsevier-with-titles.csl
 
 api-reference:
   path: references/api.yml
-  reference-section-title: Referencias a la API
   types:
-    class:
-      title: clase
-      marker: "{{< iconify ph cube-bold >}}"
-    struct:
-      title: estructura
-      marker: "{{< iconify ph brackets-curly-bold >}}"
-    enum:
-      title: enumeración
-      marker: "{{< iconify ph list-light >}}"
     event:
       title: evento
       func: true
       marker: "{{< iconify ph lightning-bold >}}"
-    function:
-      title: función
-      marker: "{{< iconify ph function-bold >}}"
-    method:
-      title: método
-      marker: "{{< iconify ph function-bold >}}"
     static:
       title: estática
       func: true
       marker: "{{< iconify ph function-square-bold >}}"
   langs:
-    cpp:
-      title: C++
-      marker: "{{< iconify devicon-plain cplusplus title='C++' >}}"
     bp:
       title: Blueprint
       marker: "{{< iconify simple-icons blueprint title='Blueprint' >}}"

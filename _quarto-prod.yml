@@ -8,10 +8,3 @@ pwa-manifest:
     - src: assets/icons/icon-512x512.png
       sizes: 512x512
       type: image/png
-
-filters:
-  - reading-time
-  - quarto
-  - api-reference
-  - section-bibliographies
-  - pwa

@@ -9,7 +9,7 @@ const SERVICE_WORKER_FILE = 'sw.js';
 const START_CONFIG_MARKER = '//--- START CONFIG ---';
 const END_CONFIG_MARKER = '//--- END CONFIG ---';
 
-if (!Deno.env.get("QUARTO_PROJECT_RENDER_ALL")) {
+if (!Deno.env.get("QUARTO_PROJECT_RENDER_ALL") || Deno.env.get("QUARTO_PROFILE") !== 'prod') {
   Deno.exit(0);
 }
 

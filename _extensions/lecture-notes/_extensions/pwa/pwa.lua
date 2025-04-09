@@ -66,7 +66,7 @@ function saveManifest(manifest)
 end
 
 function Meta(meta)
-  if quarto.doc.is_format('html:js') then
+  if quarto.doc.is_format('html:js') and meta['pwa-manifest'] then
     local manifest = generateManifest(meta)
     local links = {
       { rel = 'manifest', href = '/manifest.json' },
