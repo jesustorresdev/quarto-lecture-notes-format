@@ -3,7 +3,7 @@
 {
 	"name": "mudv-desarrollo3d-apuntes",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
+	"image": "mcr.microsoft.com/devcontainers/javascript-node:20-bookworm",
 	"features": {
 		"ghcr.io/rocker-org/devcontainer-features/quarto-cli:latest": {
 			"version": "latest"
@@ -19,17 +19,13 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": ".devcontainer/postCreateCommand.sh",
 
-	"remoteEnv": {
-    "PATH": "${containerEnv:PATH}:/opt/quarto/bin/tools/x86_64",
-	},
-
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"settings": {
 				"editor.tabSize": 2,
-				// "deno.path": "/opt/quarto/bin/tools/x86_64/deno",
 				"deno.enable": true
+				"deno.path": "/opt/quarto/bin/tools/x86_64/deno",
 			},
 			"extensions": [
 				"denoland.vscode-deno",

@@ -1,0 +1,10 @@
+{
+  "name": "pwa-sw",
+  "version": "1.0.0",
+  "scripts": {
+    "generate-sw": "npx workbox generateSW workbox-config.js"
+  },
+  "dependencies": {
+    "workbox-cli": "^7.3.0"
+  }
+}
