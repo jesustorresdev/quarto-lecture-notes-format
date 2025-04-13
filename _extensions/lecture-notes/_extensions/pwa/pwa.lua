@@ -89,7 +89,7 @@ function Meta(meta)
     })
 
     -- Save manifest to output directory
-    if os.getenv('QUARTO_PROJECT_RENDER_ALL') and quarto.project.output_directory then
+    if quarto.project.output_directory and pandoc.path.filename(quarto.doc.input_file) == "index.qmd" then
       saveManifest(manifest)
     end
   end
