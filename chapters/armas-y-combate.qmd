@@ -1,9 +1,16 @@
 ---
-title: "Programación de *gameplay* (III): Armas y combate"
-title-meta: "Programación de *gameplay* (III): Armas y combate"
+abstract: |
+  En este capítulo se describen los sistemas de combate, los diferentes tipos de armas, su funcionamiento y
+  cómo se pueden implementar en un videojuego.
 ---
 
-# *Hitboxes*
+# Armas y combate
+
+## *Hitboxes*
+
+## Armas cuerpo a cuerpo
+
+![](/assets/work-in-progress.webp)
 
 <!---
 
@@ -20,14 +27,13 @@ https://www.google.com/search?q=hitbox+block+or+overlap+unreal+engine&sxsrf=AJOq
 
 --->
 
-# Armas cuerpo a cuerpo
 
-# Armas a distancia: proyectiles
+
+## Armas a distancia: *ray castings*
 
 Para implementar armas a distancia en juegos de acción, como pistolas, rifles, cañones o lanzacohetes, es necesario implementar la lógica de los proyectiles que disparan.
-Esto se puede hacer usando *raycasts*, proyectiles o una combinación de ambas opciones, lanzados desde el personaje.
-
-## Ray castings
+Esto se puede hacer usando *raycasts* o proyectiles, lanzados desde el personaje.
+En juegos con gran cantidad de armas con diferentes características, es común implementar ambos sistemas, de forma que cada arma use el sistema que mejor se adapte a sus características.
 
 El uso de *raycasts* es, con diferencia, la opción más sencilla.
 Al disparar, se lanza un *raycast* para descubrir si algún objeto es alcanzado en la trayectoria.
@@ -35,7 +41,7 @@ Si es así, se le aplica daño.
 
 En el caso del arma del jugador, en juegos en primera o tercera persona, con cámaras orbitales o sobre el hombro, lo más común es lanzar el *raycast* desde el centro de la cámara, porque así al jugador le resulta más sencillo apuntar.
 Los efectos visuales del disparo, como el destello del arma, el humo o el sonido, se emiten desde el arma hacia el centro de la perspectiva de la cámara.
-Si se ha detectado un objeto, se pueden corregir la dirección para que coincida con el punto de impacto del objeto alcanzado por el *raycast*.
+Si se ha detectado un objeto, se puede corregir la dirección para que coincida con el punto de impacto del objeto alcanzado por el *raycast*.
 
 <!-- TODO: imagen de raycast desde la cámara y de laser desde el arma -->
 
@@ -50,10 +56,10 @@ Como contrapartida, el impacto es instantáneo, por lo que no hay manera de esqu
 Tampoco resulta realista en disparos a muy larga distancia, donde la gravedad, el viento y otros factores ambientales deberían tener efecto en la trayectoria del proyectil.
 Por tanto, el uso de *raycasts* no es la mejor opción si interesa crear una experiencia realista.
 
-## Proyectiles
+## Armas a distancia: proyectiles
 
 La forma de conseguir una experiencia más realista e inmersiva es lanzar proyectiles al disparar.
-Es decir, crear objetos, impulsarlos en la dirección del disparo y simular su movimiento según su masa, velocidad, gravedad, dirección del viento, **comportamientos de dirección**[Ver «Comportamientos de dirección» en @TorresD3DGameplay02] o cualquier otro aspecto que pueda alterar la dirección del proyectil.
+Es decir, crear objetos, impulsarlos en la dirección del disparo y simular su movimiento según su masa, velocidad, gravedad, dirección del viento, **comportamientos de dirección** (véase la @sec-steering-behaviours) o cualquier otro aspecto que pueda alterar la dirección del proyectil.
 Esto se puede implementar tanto usando controladores cinemáticos como dinámicos.
 
 Los proyectiles permiten añadir tipos de armas que difícilmente se pueden implementar mediante *raycasts*, como granadas o cohetes guiados.
@@ -70,7 +76,7 @@ El problema es que lanzar el proyectil desde esa posición puede resultar en una
 Por ese motivo:
 
 * Es común hacer primero un *raycast* desde el centro de la cámara, para ver si se alcanza algún objeto.
-  Luego se lanza el proyectil desde el arma hacia el punto de impacto del *raycast*.
+  Si es así, después se lanza el proyectil desde el arma hacia el punto de impacto del *raycast*.
 
 * Si no se detecta otro objeto, simplemente se lanza el proyectil desde el arma hacia el centro de la perspectiva de la cámara.
 
@@ -84,7 +90,7 @@ Esto es debido a que, por lo general, cada cliente ejecuta su propia simulación
 Por tanto, en juegos en red, esto implica tener decenas de objetos cuyo movimiento debe sincronizarse entre todos los clientes, para evitar crear inconsistencias en la experiencia de los distintos jugadores.
 
 Para que esto funcione correctamente, es necesario que el movimiento de los proyectiles sea determinista, es decir, que el movimiento de los proyectiles sea el mismo en todos los clientes y el servidor, cuando las condiciones son las mismas.
-Esto es sencillo de conseguir con controladores cinemáticos, pero puede ser más complicado con controladores dinámicos, porque estos últimos dependen de motor de fisicas y algunos motores de físicas no garantizan que la simulación sea determinista[Ver *«Motor de física determinista»* en @TorresD3DFisicas].
+Esto es sencillo de conseguir con controladores cinemáticos, pero puede ser más complicado con controladores dinámicos, porque estos últimos dependen de motor de fisicas y algunos motores de físicas no garantizan que la simulación sea determinista (véase el @sec-físicas).
 
 ### Tipos de control
 
@@ -94,14 +100,14 @@ En el primer caso, los proyectiles se mueven usando las capacidades del motor de
 Este tipo de control se puede usar para proyectiles sencillos, como granadas, balas, pelotas o piedras, en juegos donde el comportamiento físico es un factor determinante.
 
 En el segundo caso se puede implementar cualquier tipo de comportamiento que se quiera programar, porque el controlador cinemático ofrece más control, ya que no depende de las limitaciones de la simulación realista del motor de físicas.
-Esto permite implementar tanto proyectiles sencillos --gobernados bajo las ecuaciones de la mecánica cinemática-- como proyectiles con un comportamiento más complejo, como cohetes guiados, capaces de perseguir a un objetivo[Ver «persecución y evasión» en @TorresD3DGameplay02].
+Esto permite implementar tanto proyectiles sencillos --gobernados bajo las ecuaciones de la mecánica cinemática-- como proyectiles con un comportamiento más complejo, como cohetes guiados, capaces de perseguir a un objetivo (véase «persecución y evasión» en la @sec-steering-behaviours).
 
 ### Consideraciones adicionales
 
 Además de lo comentado hasta el momento, los cálculos del movimiento de los proyectiles pueden presentar varios retos:
 
 * Como ocurre con el movimiento de los personajes, en cada actualización la trayectoria suele aproximarse mediante segmentos rectilíneos.
-  Para calcular una trayectoria más precisa, en cada *tick* se pueden usar múltiples subpasos rectilíneos[Ver «Actualización en subpasos» en @TorresD3DGameplay02].
+  Para calcular una trayectoria más precisa, en cada *tick* se pueden usar múltiples subpasos rectilíneos (véase la @sec-substeps).
 
 * Puede ser importante considerar la frecuencia con la que se actualiza el movimiento de los proyectiles, porque si mueven muy rápido --cubriendo grandes distancia entre actualizaciones-- se puede dar el caso de que no se detecten algunas colisiones.
   Por eso es común que los cálculos se hagan con mayor frecuencia y de forma independiente a la tasa de refresco del *render*.
@@ -109,14 +115,14 @@ Además de lo comentado hasta el momento, los cálculos del movimiento de los pr
 Con el objeto de evitar fallar en la detección de posibles obstáculos, puede ser necesario considerar algunas técnicas de detección continua de colisiones:
 
 * Si el motor lo soporta y el control es cinemático, se debe mover el proyectil usando un *barrido* para detectar colisiones en la trayectoria.
-  Si el control es dinámico, se pueden activar las opciones de detección continua de colisiones[Ver *«Detección continua de colisiones»* en @TorresD3DFisicas] a cambio de un mayor coste.
+  Si el control es dinámico, se pueden activar las opciones de detección continua de colisiones (véase la @sec-ccd) a cambio de un mayor coste.
 
 * Otra opción es hacer que el objeto, en cada paso de simulación, lance un *raycast* en la dirección del movimiento para detectar objetos que podría atravesar en el intervalo del tiempo hasta el siguiente paso.
   En caso de detectar alguno, se lanzan las acciones que simula la colisión.
 
 * Finalmente, se puede añadir geometría de colisión que dote al proyectil una cola invisible, aumentado el tamaño del objeto de forma imperceptible, para que se puede dectectar la colisión incluso aunque el proyectil se mueva muy rápido.
 
-### *ProjectileMovementComponent* en Unreal Engine
+### Proyectiles en Unreal Engine
 
 El {{< api ProjectileMovementComponent >}} es un componente de Unreal Engine diseñado para facilitar la implementación de proyectiles, proporcionando una simulación realista de la física, que incluye gravedad, fricción, flotabilidad y rebotes.
 
@@ -127,23 +133,6 @@ A partir de ese momento, el **ProjectileMovementComponent** se encarga de actual
 
 Utilizando la interfaz del componente se puede modificar la trayectoria del proyectil en tiempo real, lo que es útil para la creación de proyectiles guiados o afectados por cambios ambientales.
 
+<!-- TODO: imagen de las opciones y repaso -->
+
 Además, incluye varias opciones para optimizar el rendimiento, como la desactivación de los cálculos cuando el proyectil se mueve muy despacio o limitar el número de subpasos en la simulación.
-
-## Sistemas híbridos
-
-En muchos videojuegos se utilizan ambos tipos de soluciones.
-Esto da la opción de tener una gran cantidad de armas con diferentes características, de forma que en cada una se use la solución que ofrezca los mejores resultados.
-
----
-
-\appendix
-
-# Referencias de API {.unnumbered}
-
-::: {#api-refs}
-:::
-
-# Referencias {.unnumbered}
-
-::: {#refs}
-:::
