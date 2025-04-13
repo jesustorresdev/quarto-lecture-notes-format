@@ -13,7 +13,7 @@ const extensionDir = path.resolve(path.dirname(path.fromFileUrl(import.meta.url)
 
 console.log("Generating service worker...")
 const command = new Deno.Command('npx', {
-  args: ['workbox', 'generateSW', 'workbox-config.js'],
+  args: ['--yes', 'workbox-cli', 'generateSW', 'workbox-config.js'],
   cwd: extensionDir,
   stdout: "inherit",
   stderr: "inherit"
