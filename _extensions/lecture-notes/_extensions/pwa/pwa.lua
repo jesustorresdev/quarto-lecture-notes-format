@@ -89,7 +89,7 @@ function Meta(meta)
     })
 
     -- Save manifest to output directory
-    if quarto.project.output_directory and meta['pwa-render-manifest'] then
+    if os.getenv('QUARTO_PROJECT_RENDER_ALL') and quarto.project.output_directory then
       saveManifest(manifest)
     end
   end

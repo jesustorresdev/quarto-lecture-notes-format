@@ -1,5 +1,6 @@
 pwa-manifest:
-  short_name: Desarrollo 3D
+  short_name: MUDV D3D
+  display: standalone
   # description: Apuntes de Desarrollo de Videojuegos 3D del Master Universitario en Desarrollo de Videojuegos de la Universidad de La Laguna
   icons:
     - src: assets/icons/icon-192x192.png

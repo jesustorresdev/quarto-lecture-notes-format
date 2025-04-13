@@ -24,8 +24,8 @@
 		"vscode": {
 			"settings": {
 				"editor.tabSize": 2,
-				"deno.enable": true
-				"deno.path": "/opt/quarto/bin/tools/x86_64/deno",
+				"deno.enable": true,
+				"deno.path": "/opt/quarto/bin/tools/x86_64/deno"
 			},
 			"extensions": [
 				"denoland.vscode-deno",

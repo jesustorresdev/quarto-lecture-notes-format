@@ -16,14 +16,14 @@ module.exports = {
 	runtimeCaching: [
 		{
 			urlPattern: ({request}) => !['video', 'audio'].includes(request.destination),
-			handler: 'CacheOnly',
+			handler: 'CacheFirst',
 			options: {
 				cacheName: 'app-cache',
 			},
 		},
 		{
 			urlPattern: ({request}) => ['video', 'audio'].includes(request.destination),
-			handler: 'CacheOnly',
+			handler: 'CacheFirst',
 			options: {
 				cacheName: 'media-cache',
 				rangeRequests: true,
