@@ -1,6 +1,6 @@
 project:
   type: book
-  post-render: _extensions/lecture-notes/_extensions/pwa/generate-sw.ts
+  post-render: _extensions/lecture-notes/_extensions/pwa/build-sw.ts
   resources: 
     - /assets
 

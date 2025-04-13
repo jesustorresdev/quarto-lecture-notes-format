@@ -1,6 +1,5 @@
 /.quarto/
 /_book/
 .vscode/
-node_modules/
 *~
 /.luarc.json
