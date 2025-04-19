@@ -51,6 +51,7 @@ contributes:
             marker: "{{< iconify devicon-plain cplusplus title='C++' >}}"
     html:
       theme: [default, custom.scss]
+      filters: [title-enddot.lua]
       mermaid:
         theme: default
       anchor-sections: true
