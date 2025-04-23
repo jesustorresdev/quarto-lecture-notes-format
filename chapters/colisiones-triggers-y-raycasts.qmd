@@ -46,7 +46,7 @@ La vista de la @fig-lyra-player-collisions se llama **Player Collision** y es ú
 Puede verse activando **View Mode / Player Collision** en el editor de Unreal Engine.
 :::
 
-## Mallas de colisión
+## Mallas de colisión {#sec-collision-meshes}
 
 Las **mallas de colisión** o **colisiones** son formas geométricas que rodean a los elementos del juego y se utilizan para determinar cuándo estos se tocan o superponen.
 Desde el punto de vista de la lógica del *gameplay*, no importa qué ocurre con las mallas renderizadas, sino las interacciones entre las **mallas de colisión**.
@@ -508,7 +508,7 @@ La premisa básica es que si hacemos una **consulta asíncrona** en un frame, el
 El resultado lo podemos obtener consultado directamente el **FTraceHandle** que devuelven estas funciones, o dejando que Unreal Engine llame de vuelta a una función especifica de nuestro código de *gameplay*.
 Para esto último, tendremos que indicar dicha función a través de un parámetro de las funciones de ***raycast*** que espera un *delegado*.
 
-## Colisiones simples y complejas
+## Colisiones simples y complejas {#sec-complex-collision}
 
 Hemos comentado que generalmente los objetos tiene una **colisión** contra las que se comprueba el movimiento de los objetos en la escena.
 Vamos a llamar a esta colisión **colisión simple**, porque generalmente es lo más sencilla posible por motivos de rendimiento.

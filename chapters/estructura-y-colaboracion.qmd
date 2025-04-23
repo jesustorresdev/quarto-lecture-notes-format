@@ -495,7 +495,7 @@ La estructura de directorios dentro de cada directorio de *plugins* en `Plugins`
 
 En ambos motores se puede incluir el directorio donde se compila el proyecto, si queremos que los binarios estén disponibles para todo el equipo en el control de versiones --por ejemplo, para que el departamento de control de calidad pueda acceder a ellos rápidamente, sin tener que compilar--.
 
-Además, en Unreal Engine se debe valorar si incluir o excluir el directorio `Content/Developers`, si por la forma en la que se colabora resulta útil que los contenidos privados que algunos desarrolladores copian en ella puedan ser vistos por todos (véase la @sec-carpeta-developers).
+Además, en Unreal Engine se debe valorar si incluir o excluir el directorio `Content/Developers`, si por la forma en la que se colabora resulta útil que los contenidos privados que algunos desarrolladores copian en ella puedan ser vistos por todos (ver la @sec-carpeta-developers).
 
 El resto de archivos son temporales y se generan al abrir el proyecto o compilarlo, por lo que no se deben incluir en el VCS.
 

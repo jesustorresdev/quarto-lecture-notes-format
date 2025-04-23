@@ -27,7 +27,7 @@ Generalmente, estos compomnentes deben ser extendidos para implementar los modos
 ## Control de movimiento {#sec-control-de-movimiento}
 
 La entrada del control de movimiento son las acciones de movimiento indicadas por el jugador o por la IA --por ejemplo, «accelera hacia la derecha», «salta» o «camina agachado»-- y la salida es la nueva posición del personaje, ajustada a las restricciones físicas del mundo.
-Es responsabilidad del controlador implementar la física del personaje --aunque, como veremos más adelante, eso no significa necesariamente que usen motor de simulación física (ver la @sec-colisión-y-simulación)-- haciendo que se mueva sin atravesar muros o suelos, que salte y caiga, que pueda subir y bajar pendientes y escaleras o escalar muros.
+Es responsabilidad del controlador implementar la física del personaje --aunque, como veremos más adelante, eso no significa necesariamente que usen motor de simulación física (ver la @sec-colisiones-y-simulacion)-- haciendo que se mueva sin atravesar muros o suelos, que salte y caiga, que pueda subir y bajar pendientes y escaleras o escalar muros.
 
 ### Cápsula del personaje
 
@@ -334,7 +334,7 @@ Un escalón o una rampa se detectan con una colisión al mover el personaje haci
 
 1. Finalmente, si no es ni una rampa ni un escalón, es que el personaje está ante una pared, por lo que lo desplaza de forma paralela a la superficie, como se ilustra en el @vid-collide-and-slide.
 
-### Controladores dinámicos
+### Controladores dinámicos {#sec-controladores-dinamicos}
 
 Los **controladores de personaje dinámicos** aprovechan las funcionalidades del motor de físicas, por lo que en teoría son muy sencillos de implementar.
 

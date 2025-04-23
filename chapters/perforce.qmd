@@ -12,7 +12,7 @@ El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
 
 ## Introducción
 
-{{< var perforce.site >}} es la compañía que desarrolla {{< var perforce.helixcore >}}, un sistema de control de versiones --en inglés, *Version Control System* o VCS-- que escala muy bien para manejar proyectos y equipos realmente grandes (véase la @fig-helix-code-scalability).
+{{< var perforce.site >}} es la compañía que desarrolla {{< var perforce.helixcore >}}, un sistema de control de versiones --en inglés, *Version Control System* o VCS-- que escala muy bien para manejar proyectos y equipos realmente grandes (ver la @fig-helix-code-scalability).
 
 ![[Going Remote: Build Up Your Game Dev Team](https://www.perforce.com/webinars/vcs/going-remote-build-your-game-dev-team) --- Robert Cowham.](/assets/perforce/helix_core_scalability.jpg){#fig-helix-code-scalability}
 

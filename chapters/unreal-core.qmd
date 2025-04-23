@@ -53,7 +53,7 @@ Para personalizarlo se hereda de la clase **GameInstance**, se le añaden las pr
 En proyectos grandes, para respetar el *principio de responsabilidad única* [@WikipediaSRP] y evitar que la clase **GameInstance** se convierta en un *objeto todopoderoso* [@WikipediaGodObject], se suele dividir la funcionalidad en diferentes clases heredadas de **UObject**, que se instancian y referencian en propiedades del **GameInstance**.
 De esta forma, son fácilmente localizables para el resto de componentes del juego a través del objeto **GameInstance**, que se puede obtener mediante la función {{< api short UGameplayStatics::GetGameInstance >}}.
 
-Sin embargo, desde Unreal Engine 4.22, se recomienda usar *subsistemas* para implementar funcionalidades globales del juego, que antes se implementaban en **GameInstance** (ver el @sec-subsystems).
+Sin embargo, desde Unreal Engine 4.22, se recomienda usar *subsistemas* para implementar funcionalidades globales del juego, que antes se implementaban en **GameInstance** (ver el @sec-unreal-subsystems).
 
 ## *UEngine*
 

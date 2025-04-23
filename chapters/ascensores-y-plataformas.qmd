@@ -113,7 +113,7 @@ Otra solución es que el personaje detecte el movimiento de la plataforma desde 
 Esto es lo que hace el {{< api CharacterMovementComponent >}} de Unreal Engine.
 
 Lo primero que hace este componente es realizar un *raycast* hacia abajo para detectar la superficie sobre la que está el personaje y --si es la misma que en el *tick* anterior-- compara su posición actual con la del *tick* anterior.
-Si la superficie se ha movido, ajusta la posición del personaje en la misma cantidad, antes de continuar con el cálculo de movimiento, como se puede ver en la @fig-platform-side-movement-solved.
+Si la superficie se ha movido, ajusta la posición del personaje en la misma cantidad, antes de continuar con el cálculo de movimiento, como se puede ver en la @vid-platform-side-movement-solved.
 Mientras que si la superficie ha cambiado, el componente guarda una referencia a la nueva superficie para usarla en la comparación en el siguiente *tick*.
 
 ::: {#vid-platform-side-movement-solved}

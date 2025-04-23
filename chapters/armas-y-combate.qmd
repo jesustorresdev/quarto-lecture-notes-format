@@ -59,7 +59,7 @@ Por tanto, el uso de *raycasts* no es la mejor opción si interesa crear una exp
 ## Armas a distancia: proyectiles
 
 La forma de conseguir una experiencia más realista e inmersiva es lanzar proyectiles al disparar.
-Es decir, crear objetos, impulsarlos en la dirección del disparo y simular su movimiento según su masa, velocidad, gravedad, dirección del viento, **comportamientos de dirección** (véase la @sec-steering-behaviours) o cualquier otro aspecto que pueda alterar la dirección del proyectil.
+Es decir, crear objetos, impulsarlos en la dirección del disparo y simular su movimiento según su masa, velocidad, gravedad, dirección del viento, **comportamientos de dirección** (ver la @sec-steering-behaviours) o cualquier otro aspecto que pueda alterar la dirección del proyectil.
 Esto se puede implementar tanto usando controladores cinemáticos como dinámicos.
 
 Los proyectiles permiten añadir tipos de armas que difícilmente se pueden implementar mediante *raycasts*, como granadas o cohetes guiados.
@@ -90,7 +90,7 @@ Esto es debido a que, por lo general, cada cliente ejecuta su propia simulación
 Por tanto, en juegos en red, esto implica tener decenas de objetos cuyo movimiento debe sincronizarse entre todos los clientes, para evitar crear inconsistencias en la experiencia de los distintos jugadores.
 
 Para que esto funcione correctamente, es necesario que el movimiento de los proyectiles sea determinista, es decir, que el movimiento de los proyectiles sea el mismo en todos los clientes y el servidor, cuando las condiciones son las mismas.
-Esto es sencillo de conseguir con controladores cinemáticos, pero puede ser más complicado con controladores dinámicos, porque estos últimos dependen de motor de fisicas y algunos motores de físicas no garantizan que la simulación sea determinista (véase el @sec-físicas).
+Esto es sencillo de conseguir con controladores cinemáticos, pero puede ser más complicado con controladores dinámicos, porque estos últimos dependen de motor de fisicas y algunos motores de físicas no garantizan que la simulación sea determinista (ver el @sec-simulacion-fisica).
 
 ### Tipos de control
 
@@ -100,14 +100,14 @@ En el primer caso, los proyectiles se mueven usando las capacidades del motor de
 Este tipo de control se puede usar para proyectiles sencillos, como granadas, balas, pelotas o piedras, en juegos donde el comportamiento físico es un factor determinante.
 
 En el segundo caso se puede implementar cualquier tipo de comportamiento que se quiera programar, porque el controlador cinemático ofrece más control, ya que no depende de las limitaciones de la simulación realista del motor de físicas.
-Esto permite implementar tanto proyectiles sencillos --gobernados bajo las ecuaciones de la mecánica cinemática-- como proyectiles con un comportamiento más complejo, como cohetes guiados, capaces de perseguir a un objetivo (véase «persecución y evasión» en la @sec-steering-behaviours).
+Esto permite implementar tanto proyectiles sencillos --gobernados bajo las ecuaciones de la mecánica cinemática-- como proyectiles con un comportamiento más complejo, como cohetes guiados, capaces de perseguir a un objetivo (ver «persecución y evasión» en la @sec-steering-behaviours).
 
 ### Consideraciones adicionales
 
 Además de lo comentado hasta el momento, los cálculos del movimiento de los proyectiles pueden presentar varios retos:
 
 * Como ocurre con el movimiento de los personajes, en cada actualización la trayectoria suele aproximarse mediante segmentos rectilíneos.
-  Para calcular una trayectoria más precisa, en cada *tick* se pueden usar múltiples subpasos rectilíneos (véase la @sec-substeps).
+  Para calcular una trayectoria más precisa, en cada *tick* se pueden usar múltiples subpasos rectilíneos (ver la @sec-substeps).
 
 * Puede ser importante considerar la frecuencia con la que se actualiza el movimiento de los proyectiles, porque si mueven muy rápido --cubriendo grandes distancia entre actualizaciones-- se puede dar el caso de que no se detecten algunas colisiones.
   Por eso es común que los cálculos se hagan con mayor frecuencia y de forma independiente a la tasa de refresco del *render*.
@@ -115,7 +115,7 @@ Además de lo comentado hasta el momento, los cálculos del movimiento de los pr
 Con el objeto de evitar fallar en la detección de posibles obstáculos, puede ser necesario considerar algunas técnicas de detección continua de colisiones:
 
 * Si el motor lo soporta y el control es cinemático, se debe mover el proyectil usando un *barrido* para detectar colisiones en la trayectoria.
-  Si el control es dinámico, se pueden activar las opciones de detección continua de colisiones (véase la @sec-ccd) a cambio de un mayor coste.
+  Si el control es dinámico, se pueden activar las opciones de detección continua de colisiones (ver la @sec-ccd) a cambio de un mayor coste.
 
 * Otra opción es hacer que el objeto, en cada paso de simulación, lance un *raycast* en la dirección del movimiento para detectar objetos que podría atravesar en el intervalo del tiempo hasta el siguiente paso.
   En caso de detectar alguno, se lanzan las acciones que simula la colisión.

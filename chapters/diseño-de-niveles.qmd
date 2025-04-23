@@ -55,7 +55,7 @@ Aunque el ***blockout*** se puede realizar en cualquier herramienta de modelado 
   
   Obviamente, el *pacing* está influido porque el género del juego, ya que se suele esperar que los juegos de acción tengan un ritmo más rápido que los juegos de aventura o de estrategia.
 
-<!-- TODO: Momento `Wow' -->
+<!-- TODO: Momento `Wow' @sec-momento-wow -->
 
 [^set-pieces]: Estos instantes impactantes se denominan *set pieces*.
 Son escenas o momentos clave diseñados para causar una fuerte impresión en el jugador, ya sea por tener una dificultad especialmente elevada, los acontecimientos narrados o el aspecto del nivel.
