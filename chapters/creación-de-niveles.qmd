@@ -1,0 +1,237 @@
+---
+abstract: |
+  En este capítulo se presentan los pasos involucrados en la creación de niveles de un videojuego, enmarcados en las etapas generales del desarrollo de un videojuego.
+  Se describen los pasos involucrados en el diseño y la producción de niveles, así como las herramientas y técnicas utilizadas.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
+# Creación de niveles {#sec-creacion-niveles}
+
+## Ciclo de vida
+
+<!-- TODO: Arrancar del historia, las mecánicas o las emociones -->
+<!-- TODO: Meter el problema de las puertas? -->
+<!-- TODO: Añadir contenidos -->
+
+Como ya hemos visto en otras asignaturas, el ciclo de vida del desarrollo de un videojuego se puede dividir en distintas etapas.
+Aunque obviamente estas etapas pueden variar entre proyectos y estudios, en general el proceso siempre es muy similar al de la @fig-gamedev-cycle.
+
+```{mermaid}
+%%| label: fig-gamedev-cycle
+%%| fig-cap: "Ciclo de vida del desarrollo de un videojuego."
+%%| file: ../diagrams/creación-de-niveles/gamedev-cycle.mmd
+```
+
+En los siguientes apartados vamos a ver los pasos involucrados en la creación de los niveles de un juego, enmarcados en las etapas generales del desarrollo de un videojuego.
+
+## Diseño del juego
+
+El **diseño del juego** se define en las primeras etapas del desarrollo del videojuego, que son: **conceptualización** y **preproducción**.
+
+Durante la etapa de **conceptualización** se establecen aspectos como el género, las mecánicas principales, el argumento o el estilo artístico; mientras que durante la **preproducción** se elaboran todos los detalles de cómo se implementará cada aspecto del juego, se determinan los recursos necesarios y se planifica el cronograma del desarrollo del juego.
+Todo eso se recoge en documentos como el *Game Design Document* (GDD) o el *Art Design Document* (ADD), que luego guiarán el desarrollo del proyecto durante la etapa de **producción**.
+Cuando se concluye la planificación del desarrollo durante la **preproducción**, se pasa a la etapa de **producción**, en la que se crean los niveles y se desarrolla el juego.
+
+El desarrollo de un videojuego es costoso y cualquier cambio en el diseño puede suponer un gran esfuerzo y un retraso considerable en el desarrollo, con unos costes mayores cuanto más avanzado está el proyecto.
+Por eso es importante que el diseño esté bien definido --habiendo resuelto todas las incertidumbres-- y que el desarrollo se haya planificado con detalle, antes de entrar en la etapa de **producción**.
+
+El diseño del juego es un proceso iterativo, en el que se van probando alternativas y se van realizando cambios y mejoras en el diseño del juego, a medida que se avanza.
+Es por esto que la creación de bocetos y prototipos es tan importante en el desarrollo de un videojuego, ya que son baratos y rápidos de realizar, al tiempo que son útiles para probar alternativas y para detectar errores y problemas en el diseño del juego.
+
+### Arte conceptual
+
+En este sentido, durante la **conceptualización** se hace parte del **arte conceptual**, aunque la mayor parte se elabora durante la **preproducción**, según se van definiendo aspectos concretos del juego.
+El **arte conceptual** servirá como fuente de información y de inspiración para el modelado de personajes, objetos y edificaciones, y como referencia para la posterior composición de los niveles, durante la **producción**.
+Otras fuentes de inspiración son imágenes de referencia, que los artistas suelen buscar antes de ponerse a trabajar en una parte del juego.
+
+Para la creación del **arte conceptual** los artistas desarrollan múltiples alternativas, hasta que se seleccionan aquellas que encajan con el estilo artístico, la historia, etc.
+Si, por ejemplo, miramos el arte conceptual de *«Sonic the Hedgehog» (1991)*[@SonicRetroConceptArt], podemos observar cómo en algunos bocetos el personaje es completamente irreconocible --probablemente porque se hicieron en las primeras etapas de **conceptualización**-- mientras que en otros es bastante similar al Sonic que conocemos.
+
+### Prototipado de mecánicas y niveles {#sec-prototyping}
+
+Igualmente, durante la **preproducción** se crean prototipos de las mecánicas del juego para probarlas, estimar cuáles funcionan y detectar problemas en el diseño.
+El tipo de prototipo depende de la mecánica o el aspecto del juego que se quiera probar.
+Por ejemplo, en juegos de estrategia, de cartas o de rol, se pueden simular partidas de forma analógica: con lápiz y papel o aprovechando los recursos de otros juegos de tablero o de cartas.
+También se pueden usar hojas de cálculo para simular de forma automatizada partidas o combates, considerando diferentes armas, armaduras y habilidades; o para simular la evolución de ciertos recursos en algunos juegos de gestión.
+
+Sin embargo, existen mecánicas que solo se pueden probar de forma digital, interactuando con el juego, como pueden ser: el parkour, la conducción, la interacción con objetos, el combate, etc.
+Para esos casos, durante la **preproducción**, se crean prototipos de niveles que solo sirven para probar estas mecánicas del juego, por lo que no suelen acabar formando parte del juego final.
+Se crean solo para servir como banco de pruebas de las mecánicas que podrían ser incluidas en el juego que se está diseñado.
+
+Algunos de estos **prototipos de mecánicas** puede incluso llegar a hacerse durante la **conceptualización**, al menos para algunas de las mecánicas principales del juego.
+El motivo es que a veces la idea del juego parte de un tema o una historia que se quiere contar.
+En ese caso, el **prototipado de mecánicas** en **preproducción** sirve para determinar cuáles son las mecánicas adecuadas para dotar de jugabilidad a la historia.
+Pero en otras ocasiones, la idea del juego parte del género y de ciertas ideas sobre las mecánicas que se quieren utilizar.
+En ese caso, parte del **prototipado de mecánicas** puede adelantarse a la etapa de **conceptualización** para experimentar con ellas y explorar el espacio de opciones lo antes posible, antes de decidir continuar con el proyecto.
+Posteriormente, se desarrolla una historia y un estilo que encajen con las mecánicas seleccionadas.
+
+Durante la **preproducción** también se crean prototipos de algunos niveles completos, con vista a que sean incluidos en el juego, aunque muchos podrían ser descartados al ir avanzando el proyecto.
+Igualmente, no es necesario que todos los niveles previstos sean prototipados durante la **preproducción**, ya que algunos pueden ser diseñados directamente en la etapa de **producción**.
+El objetivo es que los niveles prototipados sirvan para resolver las incertidumbres existentes sobre el diseño del juego y establecer los criterios para la creación de los niveles definitivos.
+Con lo anterior resuelto, se puede cerrar la planificación y empezar la **producción** con mayor seguridad.
+
+El prototipado de niveles también se puede hacer de múltiples maneras.
+Igual que comentamos antes, puede ser usando herramientas analógicas, como lápiz y papel o juegos de bloques de construcción; o empleando herramientas digitales, como Photoshop, Sketchup, Maya o utilidades del propio motor de videojuegos.
+Incluso es posible utilizar una combinación de varias herramientas en distintas iteraciones sobre el prototipo.
+Por ejemplo, comenzado por un mapa del nivel en papel o en Photoshop y terminando con un prototipo 3D básico --es decir, un ***blockout***-- en el propio motor de videojuegos.
+
+En cualquier caso, en algún momento del proceso el nivel acaba siendo prototipado usando un conjunto mínimo de recursos, como cajas y modelos de *stock* o modelos de proyectos previos, con pocas o ninguna textura.
+Por eso a estos prototipos se los denomina: ***blocking***, ***greyboxing***, ***whiteboxing*** o ***blockout***.
+
+::: {#fig-valorant-greyboxing layout="[48,-4, 48]"}
+
+![Blockout del nivel](/assets/creación-de-niveles/valorant-pearl-greyboxing.jpg){#fig-valorant-pearl-greyboxing}
+
+![Vista aérea del nivel definitivo](/assets/creación-de-niveles/valorant-pearl-final.jpg){#fig-valorant-pearl-final}
+
+![Blockout de la Plaza Media](/assets/creación-de-niveles/valorant-pearl-detail-greyboxing.jpg){#fig-valorant-detail-greyboxing}
+
+![Escultura en la Plaza Media](/assets/creación-de-niveles/valorant-pearl-detail-final.jpg){#fig-valorant-detail-final}
+
+![Blockout de la Zona B](/assets/creación-de-niveles/valorant-pearl-zoneb-greyboxing.jpg){#fig-valorant-zoneb-greyboxing}
+
+![Zona B](/assets/creación-de-niveles/valorant-pearl-zoneb-final.jpg){#fig-valorant-zoneb-final}
+
+Prototipado del nivel *«Pearl»* de *«Valorant» (2020)*.
+:::
+
+Por ejemplo, en la @fig-valorant-greyboxing se muestran imágenes del ***blockout*** del nivel *«Pearl»* de *«Valorant»* --extraídas de un hilo del diseñador de niveles Pearl Hogbash en Twitter[@Hogbash2022Greyboxing]---.
+Como se puede observar, el prototipo carece de detalles gráficos, usándose sencillos bloques rectangulares para definir la estructura del nivel, el espacio jugable[^espacio-jugable] y la distribución de los elementos.
+
+[^espacio-jugable]: En [@Schell2019ArtGameDesign] se define el *espacio jugable* o *espacio funcional* como aquel donde tienen lugar el juego, una vez se han eliminado todos los elementos superficiales.
+
+En la @fig-valorant-detail-greyboxing se observa que reutilizan un modelo de un pez espada --que nada tiene que ver con la temática del nivel-- para marcar un punto de interés.
+Probablemente, la incorporación de un detalle tan significativo no sea casual.
+Para probar el diseño del nivel en un prototipo, este debe contener todos los elementos que afectan a la jugabilidad.
+Esa escultura se encuentra en el cruce de los caminos que recorrerán los equipos y puede observarse desde varios puntos del mapa, por lo que se trata de un punto de referencia que ayuda a los jugadores a orientarse en el nivel.
+Por eso es importante que destaque en el prototipo, de forma similar a como destacará en el nivel definitivo.
+
+Finalmente, en la @fig-valorant-greyboxing se puede observar que, aunque el prototipo no se ilumina en detalle, sí se han incluido algunos elementos de iluminación.
+Se usa la luz ambiental para generar una sensación o estado de ánimo, similar al que se pretende en el nivel definitivo, y se ilumina con luz puntual los puntos de interés que pueden afectar a la jugabilidad, como la ubicación de objetos, rutas de navegación o entradas y salidas.
+
+Por su valor para el diseño de niveles, en algunos estudios el ***blockout*** de algunos niveles se hace pronto, desde instantes muy tempranos de la **preproducción**. 
+Así se pueden usar como banco de pruebas para establecer las mecánicas y las características del diseño que guiarán el desarrollo del resto del proyecto.
+
+### *Vertical slice*
+
+Es posible que durante la **conceptualización** se desarrolle algún pequeño prototipo del juego, como forma de demostrar la viabilidad de la idea.
+Y, durante la segunda mitad de la **preproducción**, a veces es necesario hacer un ***vertical slice***, que consiste en tomar una pequeña parte del juego y desarrollarla de forma acelerada hasta tener un acabado similar al del producto final.
+
+La motivación para realizar este prototipo puede ser doble.
+Por un lado, ofrecer al editor e inversores una idea de cómo será el juego final, dado que seguramente tengan que aprobar el presupuesto y la planificación.
+En este sentido, el **vertical slice** puede servir tanto para buscar editor e inversores como puede ser uno de los hitos que estos soliciten durante la **preproducción** para aprobar la continuidad del proyecto.
+Por otro, permite identificar futuros problemas y ayuda en la estimación de las tareas y su tiempo, ya que permite obtener una idea muy precisa de todo lo que debemos considerar durante el desarrollo en la etapa de **producción**.
+
+## Producción
+
+Durante la etapa de **producción** se crean los niveles y los elementos del juego, siguiendo la guía de los documentos de diseño elaborados durante la **preproducción**.
+
+### Prototipado de niveles
+
+El trabajo de los artistas conceptuales no termina en la **preproducción**, dado que no es necesario bocetar y prototipar todo el juego antes de cambiar de etapa.
+Su trabajo continúa durante la **producción**, bocetando elementos del juego y niveles en desarrollo antes de su modelado y composición, cambios y elementos nuevos añadidos durante esta etapa y cinemáticas.
+
+Igualmente, los niveles son prototipados y probados antes de su composición definitiva, para asegurar que el diseño es el adecuado y que no hay problemas de *gameplay*.
+Durante la etapa de **producción**, el ***blockout*** de los niveles es extremadamente útil, puesto que permite a los diseñadores explorar y probar el nivel con un *gameplay* más próximo a como serán en el producto final.
+
+::: {.callout-tip}
+Cada primero de octubre arranca el *Blocktober*, un evento en el que durante un mes diseñadores y artistas comparten *blockouts* para mostrar la fase inicial de sus creaciones.
+Algunos incluso comparten algunas de las iteraciones, para mostrar la evolución desde el *blockouts* hasta el resultado final.
+Es, por tanto, una buena manera de ver como trabajan los diseñadores de niveles.
+Para ver los trabajos, basta con buscar el *hashtag* {{< var twitter.blocktober >}} en Twitter.
+:::
+
+### Composición de niveles
+
+```{mermaid}
+%%| label: fig-level-production-pipeline-part1
+%%| fig-cap: "Proceso de creación de niveles (I)."
+%%| file: ../diagrams/creación-de-niveles/level-production-pipeline-part1.mmd
+```
+
+Una vez el ***blockout*** de un nivel se da por terminado y el *gameplay* funciona, se compone el nivel con las mallas estáticas definitivas, modeladas a partir del arte conceptual.
+En ocasiones, se exportan previamente las mallas del ***blockout*** al programa de modelado para que los artistas tengan una referencia del tamaño mientras modelan los elemento del nivel.
+Algunos modeladores trabajan sobre el nivel completo exportado, mientras en otros lo hacen sobre una colección de pequeños componentes individuales con los que luego se compondrá el nivel definitivo.
+
+En la @fig-level-production-pipeline-part1 se puede ver un esquema simplificado de parte del proceso de creación de un nivel.
+Cuando se ha terminado de componer el nivel con las mallas, se procede a incorporar otros elementos del juego para crear el nivel final, como se puede observar en la @fig-level-production-pipeline-part2.
+
+```{mermaid}
+%%| label: fig-level-production-pipeline-part2
+%%| fig-cap: "Proceso de creación de niveles (II)."
+%%| file: ../diagrams/creación-de-niveles/level-production-pipeline-part2.mmd
+```
+
+Generalmente, se suele continuar con la incorporación del terreno y después la iluminación.
+En niveles donde el espacio de juego se define sobre un terreno natural, este se suelen prototipar en el ***blockout***, incluyendo los elementos que afectan al *gameplay*, ya que tiene un papel fundamental en el diseño del nivel.
+Luego se procede a modelar el terreno definitivo, incluyendo detalles adicionales como texturas, rocas y vegetación.
+En la @fig-apex-greyboxing se puede ver un ejemplo de este proceso en el juego "Apex Legends".
+
+::: {#fig-apex-greyboxing layout="[48,-4, 48]"}
+
+![Diseño 2D inicial](/assets/creación-de-niveles/apex-storm-point-map.jpg){#fig-apex-storm-point-map}
+
+![Blockout inicial](/assets/creación-de-niveles/apex-storm-point-greyboxing.jpg){#fig-apex-storm-point-greyboxing}
+
+![Blockout para *playtest*](/assets/creación-de-niveles/apex-storm-point-greyboxing-playtest.jpg){#fig-apex-storm-point-greyboxing-playtest}
+
+![Nivel definitivo](/assets/creación-de-niveles/apex-storm-point-final.jpg){#fig-apex-storm-point-final}
+
+Prototipado del nivel *«Storm Point»* de *«Apex Legends» (2019)*[@Reece2022Greyboxing].
+:::
+
+<!-- Desarrollar una sección dedicada a la iluminación -->
+
+Respecto a la iluminación, los pasos a seguir pueden variar dependiendo del motor de juego y del equipo de desarrollo, pero en general se incluyen los siguientes:
+
+1. **Analizar la escena**.
+   Estudiar el diseño del nivel e identificar qué tipo de iluminación se necesita para crear la atmósfera deseada y qué elementos se quieren destacar y cuáles no.
+   Durante el proceso, los artistas pueden usar como guía imágenes de referencia de la atmósfera deseada.
+
+1. **Emplazamiento de la iluminación**.
+   Colocar las luces en el nivel usando las herramientas de iluminación del motor de videojuegos.
+   El orden recomendado para el emplazamiento suele ser de luces más generales a luces más específicas:
+
+   1. **Luz ambiental**.
+      Es la luz que ilumina todo el nivel de manera general, como la luz del sol o de la luna.
+      Se suele utilizar para dar una sensación de día o de noche y para establecer el tono general de la iluminación.
+      Para fuentes de luz principales como el sol o la luna se suelen usar fuentes direccionales, que pueden complementarse con fuentes que reproducen efectos ambientales --como el *Sky Light* en Unreal Engine--.
+
+   1. **Luces primarias**.
+      Son las luces que iluminan las áreas principales del nivel, como las luces de una habitación, una calle o una plaza.
+      Se suelen utilizar focos, luces puntuales y rectangulares.
+
+   1. **Luces secundarias**.
+      Son las luces que iluminan detalles específicos del nivel o simulan ciertos efectos, como luces de señalización, luces de seguridad, farolas, pantallas, focos, fuegos, etc.
+      Estas luces deben ser colocadas de manera que complementen las luces principales y ayuden a establecer una sensación de profundidad y de realismo.
+   
+   1. **Iluminación funcional**.
+      Es la iluminación dirigida a modular el *gameplay*, como la iluminación de puzzles, áreas a explorar, puntos de entrada de los enemigos o la señalización de posibles estrategias.
+      También se pueden iluminar salidas o incluso dar alguna indicación sobre la ruta de navegación, especialmente en niveles complejos.
+ 
+      Esta iluminación se puede incorporar ajustando las luces primarias y secundarias o añadiendo luces nuevas.
+      En cualquier caso, es interesante definir una jerarquía.
+      Los elementos más importantes deberían destacar más.
+
+1. **Probar y ajustar**.
+   Como casi todas las tareas en el desarrollo de videojuegos, la iluminación del nivel es un proceso iterativo.
+   Es necesario ajustar los parámetros de las luces, como intensidad, color, alcance, dirección, etc., probando hasta lograr el efecto deseado.
+
+1. **Iluminación dinámica y efectos de iluminación**.
+   Las luces dinámicas son aquellas que cambian de posición, color o intensidad, como las luces de un vehículo en movimiento o un fuego.
+   También se incorporan sombras y reflejos y los efectos de posproceso, dado que afectan y se ven afectados por la iluminación.
+   El objetivo es complementar a las luces principales y secundarias para crear una sensación de mayor realismo en el nivel.
+
+1. **Optimizar**.
+   La iluminación es uno de los aspectos que más afecta al rendimiento de un videojuego.
+   De hecho, el número máximo de luces puede estar limitado por el propio motor de videojuegos, en función de la técnica de render que utilice.
+   Por eso es necesario dedicar tiempo a optimizar la iluminación, asegurando un rendimiento aceptable en las diferentes plataformas en las que se vaya a publicar el juego.
+
+   <!-- TODO: Aquí se puede hablar de los tipos de renderizado y de las técnicas de optimización de la iluminación. -->
+
+La creación del nivel definitivo continua con iteraciones donde se añaden sonidos, código adicional, sistemas de partículas y otros efectos, se pulen los detalles y, finalmente, se optimiza de forma general su funcionamiento en las distintas plataformas.
+
+<!-- TODO: ¿Meter algo sobre optimización? Streaming de niveles? LOD? Activación de objetos? -->

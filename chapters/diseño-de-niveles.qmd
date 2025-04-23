@@ -1,0 +1,461 @@
+---
+abstract: |
+  En este capítulo se presentan los principios fundamentales del diseño de niveles, el *blockout* y las metodologías de diseño.
+---
+
+::: {.callout-note}
+El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
+# Diseño de niveles
+
+## Introducción
+
+El diseño de niveles es una disciplina fundamental en el desarrollo de videojuegos que abarca la creación y organización de espacios jugables para proporcionar una experiencia específica al jugador.
+Un buen diseño de nivel comunica visualmente al jugador cómo navegar por el espacio, presenta desafíos adecuados y mantiene un ritmo que captura su atención durante toda la experiencia.
+
+Como hemos visto en el @sec-creacion-niveles, durante el proceso de desarrollo, el diseño de niveles evoluciona desde conceptos iniciales hasta espacios completamente detallados, pasando por diferentes fases de prototipado, pruebas e iteración.
+Una de las etapas más críticas en este proceso es el *blockout* o *greyboxing*.
+
+## *Blockout* (*Greyboxing*) {#sec-blockout}
+
+La idea del ***blockout*** es obtener un bosquejo aproximado --sin detalles ni texturas, usando figuras geométricas básicas-- de la distribución del nivel, para centrar la atención sobre sus características principales, como:
+
+* **Tamaño del nivel**.
+  Es decir, sus dimensiones en el espacio y el tiempo para recorrerlo.
+
+* **Escala**.
+  Se refiere a la relación entre el tamaño de los elementos en el juego y su tamaño real.
+  Por ejemplo, una puerta en un juego podría ser más grande en relación con su tamaño real porque en función del punto de vista, esta puede ser la forma en la que da se obtiene una sensación más realista o porque realmente se quiere que se perciba como más grande que en la realidad.
+
+* **Estructura y distribución**.
+  Se refiere a la forma en la que se distribuyen los elementos del nivel, como las habitaciones, las calles, las áreas de juego, puntos de interés, puntos de control, etc.
+
+* **Jugabilidad**.
+  Se refiere a cómo se presentan los desafíos al jugador, cómo se desarrolla la acción y cómo se resuelven los problemas.
+  La estructura del nivel influye notablemente en la jugabilidad, ya que determina la ubicación de los puntos de interés, puntos de control, objetos y enemigos.
+
+::: {.callout-note}
+Los puntos de control son lugares en los que el jugador puede guardar su progreso y continuar jugando más tarde, mientras que los puntos de interés son elementos que proporcionan contexto, desafíos o misiones al juego y añaden profundidad y variedad al mundo del juego.
+:::
+
+Aunque el ***blockout*** se puede realizar en cualquier herramienta de modelado 3D, hacerlo en el propio motor de videojuegos abre la puerta a ir desarrollando y probando el código de *gameplay* y, al mismo tiempo, iterar probando la jugabilidad del diseño, refinando así aspectos como:
+
+* **Navegabilidad**.
+   Es la facilidad que tiene el jugador para moverse por el nivel, evitando obstáculos y siguiendo la ruta de navegación.
+ 
+* **Durabilidad**.
+   Durabilidad es la cantidad de tiempo que un jugador puede pasar jugando el nivel antes de completarlo o dejar de jugar, por ejemplo, porque el nivel no es capaz de mantener la atención del jugador durante tiempo suficiente como para completarlo.
+
+* **Ritmo**.
+  El ritmo o *pacing* de un nivel es el orden general y la cadencia de las actividades y eventos del nivel.
+  Por ejemplo, en los juegos de acción los niveles suelen combinar momentos de acción rápida y emocionante seguidos por momentos tranquilos para recoger objetos y contemplar el escenario e instantes impactantes por su belleza o dificultad[^set-pieces].
+   
+  Lo que buscan los diseñadores es contraste, haciendo que el jugador suba y baje a nivel emocional entre unas zonas del nivel y otras.
+  
+  Obviamente, el *pacing* está influido porque el género del juego, ya que se suele esperar que los juegos de acción tengan un ritmo más rápido que los juegos de aventura o de estrategia.
+
+<!-- TODO: Momento `Wow' -->
+
+[^set-pieces]: Estos instantes impactantes se denominan *set pieces*.
+Son escenas o momentos clave diseñados para causar una fuerte impresión en el jugador, ya sea por tener una dificultad especialmente elevada, los acontecimientos narrados o el aspecto del nivel.
+
+* **Flujo**.
+  En diseño de niveles el *flow* es cómo se siente el jugador al moverse por el nivel.
+  Es decir, ¿el recorrido se siente complejo o sencillo?, ¿parece peligroso o seguro?, ¿qué tipos de movimientos se le piden al jugador?, ¿hay muchos obstáculos, curvas o es en línea recta?, ¿el desplazamiento se siente rápido o lento?, etc.
+
+::: {.callout-note}
+En diseño de videojuegos, también se usa el término *flow* para referirse a cómo el juego hace que el jugador se sienta inmerso y concentrado en el juego.
+Es un estado mental en el que el jugador se siente completamente absorto en el juego y olvida el mundo exterior.
+El *flow* se logra cuando el desafío está equilibrado con las habilidades del jugador y el nivel dirige al jugador hacia el objetivo, evitando parones y momentos de confusión no intencionados en el juego.
+:::
+
+Es importante recordar que el ***blockout*** es un prototipo del diseño, por lo que cambiará según se prueba y avanza el desarrollo del nivel.
+Así que debe ser modular, sencillo de modificar y sin detalles; porque durante las iteraciones del diseño muchos aspectos serán desechados o cambiados.
+
+## Principios fundamentales del diseño de niveles
+
+### Escalas y tamaños {#sec-metrics}
+
+Las escalas y tamaños escogidos son fundamentales para la experiencia de juego.
+Al menos se deben tomar en consideración dos tipos de tamaños y medidas:
+
+* **Medidas del jugador**, que hacen referencia a medidas reales realizas en el motor que describen características del personaje y de la física del juego, como tamaño del personaje, velocidad de movimiento, altura del salto, velocidad de caída, etc.
+
+* **Medidas del entorno**, que son las dimensiones y pautas para el diseño del nivel, como la dimensiones de suelos y paredes, la altura de los obstáculos, etc.
+
+Obviamente, ambas están relacionadas, pero se suele comenzar por el tamaño del personaje y la altura de cámara, dado que sirven como referencia para ayudar a diseñar con una escala realista.
+
+En la @tbl-common-player-sizes se puede ver el tamaño típico de la cápsula de colisión de un personaje para varios motores de videojuegos.
+Esta cápsula suele ser más grande que la malla del personaje porque así es más fácil evitar que el personaje se atasque o atraviese otros objetos al moverse y para tener margen para que las animaciones no saquen la malla fuera de la cápsula.
+
+| **Motor**           | **Cápsula de colisión**     | **Altura de la cámara** |
+|---------------------|-----------------------------|-------------------------|
+| **Unity**           | $1.0⨯1.8$ m. o $1.0⨯2.0$ m. | 1.5 m. -- 1.7 m.        |
+| **Unreal Engine**   | $60⨯176$ cm.                | 152 cm.                 | 
+| **Humano promedio** | $50⨯175$ cm.                | 170 cm.                 |
+
+: Medidas de personaje más comunes en distintos motores de videojuegos. {#tbl-common-player-sizes}
+
+::: {.callout-note}
+Mientras que en Unity se configura la altura total de la cápsula de colisión, en Unreal Engine el tamaño se ajusta indicando la altura media de la cápsula, que por defecto es de 88 cm.
+Por defecto, la altura de la cámara es de 64 cm. respecto al centro de dicha cápsula de colisión.
+:::
+
+El resto de las medidas se van estableciendo a partir de las anteriores, según el tipo de arquitectura que se pretende imitar.
+Por ejemplo, estas son algunas dimensiones y recomendaciones típicas cuando se crean entornos con arquitectura moderna[@LDBBasicMetrics]:
+
++-------------------------+-------------------------+-------------------+---------------------+-------------------------+
+| **Motor**               | **Paredes interiores**\ | **Ancho mínimo**\ | **Puertas**         | **Escalones**\          |
+|                         | (gr. $⨯$ al.)           | **de pasillos**   |                     | (h. $⨯$ ch.)            |
++=========================+=========================+===================+=====================+=========================+
+| **Unity**               | $0.1⨯3.0$ m.            | 2.0 m.            | $1.25⨯2.5$ m.       | $15⨯10$ cm. (34°)       |
++-------------------------+-------------------------+-------------------+---------------------+-------------------------+
+| **Unreal Engine**       | $20⨯300$ cm.            | 150 cm.           | $110⨯220$ cm.       | $25⨯15$ cm. (31°)       |
++-------------------------+-------------------------+-------------------+---------------------+-------------------------+
+| **Estándar real**       | $10⨯250$ cm.            | 120 cm.           | $90⨯215$ cm.        | $28⨯18$ cm. (33°)       |
++-------------------------+-------------------------+-------------------+---------------------+-------------------------+
+
+: Medidas de arquitectura moderna más comunes en distintos motores de videojuegos. {#tbl-common-architecture-sizes}
+
+* El tamaño mínimo de un pasillo siempre debería ser del doble del ancho del personaje, para facilitar su movimiento.
+
+* Las puertas deben ser algo más estrechas que el ancho del pasillo para dejar espacio para el marco.
+
+* En las escaleras modernas se suele poner un descansillo entre cada 12 y 16 escalones.
+
+* Las escaleras de uso general modernas suelen tener una pendiente de entre 30° y 40°.
+
+Todas estas medidas deben establecerse según el tipo de experiencia que se persiga, en etapas tempranas del desarrollo para poder tomarlas en consideración al establecer otras reglas de diseño y asegurar la coherencia.
+
+Como hemos comentado, estas medidas y tamaños ayudan a establecer la escala.
+Es decir, cómo de grande o pequeño se quiere que se sienta el mundo del juego.
+
+En el diseño de niveles, por lo general, se persigue simular una arquitectura realista, por lo que para escalar adecuadamente, se añaden a los niveles, desde los primeros prototipos de *blockout*, modelos de «dimensiones humanas» como referencia --o cualquier otro objeto que tenga sentido según el caso--.
+Estas referencias se usan para establecer las medidas del resto de tipos de elementos del nivel, según la sensación perseguida, de forma que luego se usen de forma consistente en todos los niveles del juego.
+
+Al observar las referencias en el nivel para seleccionar la escala del resto de objetos, debemos considerar cuál será el punto de vista del jugador, ya que según el punto de vista cambia el campo de visión y las distorsiones derivadas de este.
+
+Por ejemplo, en juegos en primera persona, huecos como los de puertas y ventana parecen un poco más pequeños de lo que son en realidad, dando la impresión de que no cabemos por ellos.
+Para compensarlo, estos huecos suelen modelarse una escala algo mayor.
+Por otro lado, situar la cámara demasiado alta --más de 2 m.-- o demasiado bajo --menos de 1.5 m.-- tiende a distorsionar la perspectiva, dado que el cerebro del jugador asume que la altura de la cámara debe estar próxima a la altura real de los ojos del jugador.
+En muchos juegos en primera persona la cámara se coloca a la altura del cuello o el pecho, porque es donde los jugadores lo sienten mejor.
+
+Igualmente, en juegos en tercera persona en interiores con escala real, el jugador tiene la impresión de que el espacio es demasiado pequeño.
+Por eso se tiende a crear habitaciones más amplias, con mobiliario de tamaño real --o solo un poco más grande-- repartido por la habitación para llenarla[@Schell2019ArtGameDesign].
+
+Además, tenemos que tener en cuenta que no siempre se busca el realismo.
+Muchas veces se juegan con las escalas para conseguir un efecto que sea coherente con el género, la temática y estilo artístico del juego.
+Por eso, más que seguir una reglas preestablecidas sobre la selección de escalas, lo recomendable es hacer prototipos de niveles con modelos de referencia y probarlos usando el punto de vista previsto para el jugador, de forma que se pueda iterar en la selección de escalas y tamaños hasta quedar conforme con el efecto conseguido.
+Luego esta selección usará en el resto de niveles del juego.
+
+::: {.callout-note}
+Por lo general los personajes se mueven muy rápido, pero se sienten normales dentro del juego.
+Si se usaran velocidades realistas, los jugadores tendrían la percepción de que su personaje se mueve demasiado lento, de forma poco realista.
+:::
+
+### Patrones de distribución espacial
+
+Al comenzar el diseño de un nivel, es fundamental determinar cómo se organizará el espacio jugable.
+La distribución es una de las primeras características que se definen, estableciendo cómo se moverá el jugador por el nivel y qué experiencias encontrará.
+
+Si ya se tiene bastante claro cómo debe jugarse el nivel, entonces ya se tiene una idea clara de cómo organizar el espacio jugable, lo que servirá como punto de partida para construir el nivel.
+Si por el contrario se está en una etapa muy temprana del desarrollo y aún no se tiene claro cómo es el espacio del juego, se puede comenzar explorando alguno de los patrones más comunes, que se ilustran en la @fig-level-layout-patterns:
+
+::: {#fig-level-layout-patterns layout-nrow=3}
+![Lineal](/assets/diseño-de-niveles/level-layout-linear.png){#fig-level-layout-linear}
+
+![Rejilla](/assets/diseño-de-niveles/level-layout-grid.png){#fig-level-layout-grid}
+
+![Web](/assets/diseño-de-niveles/level-layout-web.png){#fig-level-layout-web}
+
+![Puntos en el espacio](/assets/diseño-de-niveles/level-layout-points.png){#fig-level-layout-points}
+
+![Espacio dividido](/assets/diseño-de-niveles/level-layout-divided.png){#fig-level-layout-divided}
+
+Patrones de distribución del espacio de juego[@Schell2019ArtGameDesign].
+:::
+
+* **Lineal**.
+  El nivel se desarrolla en una dirección, como ocurre en muchos juegos de plataformas o en juegos de acción-aventura con una fuerte componente narrativa.
+
+  En algunos juegos el jugador puede retroceder, puede que todo el nivel o solo hasta cierto punto.
+  
+  El nivel puede tener un principio y un final diferente o puede definirse en un bucle cerrado, como ocurre en muchos juegos de tablero, como el *«Parchís»* o el *«Monopoly»*.
+
+* **Rejilla**.
+  El nivel se desarrolla en una cuadrícula --como ocurre en el ajedrez-- lo que facilita mucho el desarrollo del juego.
+  Esa una distribución típica de los juegos de estrategia y en algunos RPG y juegos de acción-aventura en 2D.
+
+* **Web**.
+  El nivel se desarrolla colocando puntos de interés en un mapa y conectándolos con caminos, de forma que el jugador tiene varios puntos que visitar, pero puede elegir diferentes caminos para hacerlo.
+  
+  En ocasiones hay una ruta principal recomendada, hacia la que se guía al jugador, pero este puede elegir otros caminos que le ofrezcan otras recompensas.
+  
+  En algunos juegos cada nivel se juega la primera vez de forma lineal, pero al completarlo se puede volver a jugar con mayor libertad, pudiendo elegir diferentes caminos que la primera vez estaban bloqueados.
+
+* **Puntos en el espacio**.
+  En algunos casos el juego ofrece la posibilidad de que el jugador se traslade libremente a una zona de juego de su elección.
+  Por ejemplo, RPG como Final Fantasy VII tienen un mapa del mundo que permite al jugador desplazarse a una zona --como una ciudad, un bosque o una montaña-- para jugar diferentes misiones.
+
+* **Espacio dividido**.
+  Es el tipo de distribución que más se parece a un mapa real.
+  Es muy común en juegos de estrategia y hoy en día es muy popular gracias a los juegos de mundo abierto.
+
+En un juego estos 5 patrones se pueden combina de muchas formas, ya sea en el mismo nivel o a diferentes escalas.
+Por ejemplo, en *«Star Wars Jedi: Fallen Order» (2019)* el jugador dispone de un mapa con el que puede desplazarse libremente al planeta de su elección, pero en cada uno le espera una misión que se desarrolla en un nivel lineal.
+Al superar la misión se desbloquea la posibilidad de volver a jugarla de forma algo más libre, pudiendo elegir diferentes caminos para acceder de forma más directa a las distintas zonas del nivel.
+
+### Flujo y circulación
+
+El diseño del *flow* del nivel consiste en definir cómo se siente el jugador al moverse por él.
+Obviamente, existen múltiples factores que pueden afectar al flujo:
+
+* **Tamaños y escalas**.
+  Las distancias de las mecánicas que usa el jugador para desplazarse, el tamaño del personaje y de los elementos del entorno, sobre los que ya discutimos en la @sec-metrics.
+
+* **Velocidad**.
+  ¿El jugador siente que moverse por el nivel es rápido o lento?
+
+* **Dirección**.
+  La ruta por el nivel ¿tiene cambios bruscos de dirección? ¿Hay interrupciones en la ruta? ¿Es continua y suave?.
+
+* ***Wayfinding***.
+  ¿El jugador sabe ubicarse y encontrar una ruta por el nivel? ¿Es la ruta difícil de identificar o resulta obvia? ¿Qué información se le proporciona al jugador para que encuentre una ruta?
+
+Para diseñar el *flow* considerando los factores anteriores, existen múltiples técnicas:
+
+* **Sendas deseadas**.
+  Son los caminos que el jugador considera más naturales para recorrer el nivel, generalmente porque son más cortos.
+
+  Esta técnica consiste en imaginar --o detectar mediante *playtesting*-- las **sendas deseadas** dentro de un área y compararlas con el camino que el jugador realmente puede tomar --por ejemplo, por limitación de las mecánicas--.
+
+  A veces interesa modificar aspectos del diseño para optimizar el camino que el jugador puede hacer, acercándolo a la **senda deseada**, mientras que en otros casos es preferible que no sea así --por ejemplo, para animar a la exploración--.
+
+* **Camino crítico**.
+  Es la ruta más corta para completar un nivel.
+  Es importante analizarla para asegurar que en ella está incluido el contenido más importante que se quiere que el jugador experimente obligatoriamente.
+
+  El **camino crítico** se utiliza para evaluar la longitud y el desafío que representa el nivel para el jugador, y para identificar y solucionar problemas que puedan dificultar u obstaculizar el progreso del jugador a lo largo de ese camino.
+
+* **Circulación**.
+  En arquitectura, la **circulación** es la forma en la que las personas se mueven por los espacios, usando las vías que conectar las distintas áreas.
+
+  El análisis de la **circulación** es útil en juegos mutijugador, dónde el espacio del nivel se organiza en áreas conectadas por un sistema de espacios de circulación.
+  Los espacios de circulación principales pueden llevar rápidamente al combate, mientras que las vías secundarias pueden ofrecer otras recompensas u oportunidades.
+
+### *Wayfinding* y orientación del jugador
+
+El ***wayfinding*** es cuando el jugador determina donde está en el nivel (orientación) o encuentra una ruta hacia su destino (navegación).
+
+Generalmente, el objetivo al diseñar un nivel es que el jugador sea capaz de orientarse y encontrar un camino de forma natural e inmersiva, que coincida con el **camino crítico** diseñado.
+Obviamente, después el jugador puede decidir si lo sigue o si explora otros caminos o vías alternativas en busca de alguna recompensa.
+
+Las formas de ayudar al ***wayfinding*** pueden ser muy diversas, según el tipo de juego y de experiencia que se esté diseñando:
+
+* **Puntos de referencia**.
+  Se pueden colocar construcciones u otros elementos visibles desde múltiples puntos del nivel a modo de puntos de referencia.
+
+* **Materiales**.
+  En diferentes áreas se pueden usar distintos materiales, lo que facilita al jugador conocer su ubicación en el nivel.
+  
+  Por otro lado, en muchos juegos de acción-aventura es común marcar las zonas que el personaje puede escalar, por las que puede correr o los bordes a los que puede agarrarse.
+  Así el jugador puede reconocer rápidamente la ruta que debe seguir para seguir progresando.
+
+* **Recursos y coleccionables**.
+  Se puede llamar la atención de jugador en una determinada dirección colocando objetos coleccionables, recursos o mejoras que sean visibles en la distancia.
+
+* **Iluminación y color**.
+  La iluminación y el uso del contraste de colores es una forma de señalar un camino o las vías de entrada y de salida de un área.
+
+* **Sonido**.
+  Es frecuente utilizar los sonidos o la música para advertir de que nos acercamos a una zona peligrosa.
+
+* **HUD**.
+  En algunos juegos el personaje puede activar, durante un breve periodo de tiempo, un modo de visión especial que le ofrece pistas para saber a dónde puede ir o sobre qué objetos puede interactuar.
+
+* **NPC**.
+  Cuando los NPC enemigos atacan al jugador, están indicando que seguramente por allí siga el camino.
+  De forma menos sutil, un NPC amigo pude conducir al jugador a dónde es necesario que vaya para continuar.
+
+## Metodologías de diseño
+
+Como comentamos en la @sec-prototyping, durante la preproducción se hacen prototipos de niveles muy básicos, solo para servir de *sandbox* donde probar mecánicas, sistemas y **reglas de diseño**.
+El prototipado de los niveles del juego se hace sobre la base de las reglas de diseño que se han establecido en la fase de preproducción.
+
+### Reglas de diseño
+
+Estas reglas debe incluir aspectos como el tamaño de las puertas o la anchura de los pasillos y de los espacios por los que pueda navegar el personaje --de forma que si hay menos espacio, generalmente se bloquea completamente el paso--.
+Algunas otras reglas posibles son:
+
+* La altura de los huecos para que pueda pasar agachados, si el personaje puede *agacharse*.
+
+* La distancia de los huecos, la distancia entre plataformas y la altura de los obstáculos para que pueda pasar por encima de ellos, si el personaje puede *saltar*.
+
+* La altura de los bloques para que pueda escalarlos, si el personaje puede *escalar bloques*.
+
+* La distancia de los huecos si el personaje hace *salto de sprint* o *doble salto*.
+
+* Si puede *correr en la pared*, la distancia a la que debe estar la superficie segura a la que debe poder llegar, y si puede hacer *salto en la pared*, la distancia y la altura a la que debe estar el borde de otra superficie para poder agarrarse y escalarla.
+
+* Si puede *disparar*, la distancia máxima de disparo, de forma que el diseñador pueda poner los enemigos los donde el jugador no les pueda alcanzar a distancia.
+
+Estas reglas ayudan a evitar problemas técnicos y de diseño que podrían que afectar negativamente a la experiencia de juego.
+Por ejemplo, que un jugador pueda quedar atrapado en una zona del nivel, que haya zonas que no puedan alcanzar o que, aunque sean capaces de usar el salto de forma consistente, acaben cayendo frecuentemente por huecos que se supone que deberían poder superar.
+En este sentido, las reglas de diseño evitan los problemas de accesibilidad, ya ayudan a que el juego sea jugable para una gran variedad de jugadores, con un rango de habilidades muy amplio.
+
+Las reglas de diseño también facilitan ofrecer una experiencia de juego consistente.
+Gracias a eso los jugadores son capaces identificar las reglas y aprenden cómo funciona el juego y cómo deben superar los distintos retos.
+
+### Diseño en cuadrícula
+
+En algunos casos las reglas de diseño establecen una cuadrícula fija --por ejemplo, de $100⨯100$-- para organizar los elementos del juego.
+Esta técnica se conoce como **diseño en cuadrícula** y se utiliza para ayudar a los desarrolladores a organizar y posicionar los objetos en el juego de manera eficiente y consistente.
+La rejilla se divide en celdas que se utilizan para posicionar los objetos de juego, y los objetos se colocan dentro de estas celdas para asegurar que se alineen correctamente y sean fácilmente accesibles para los jugadores.
+Para trabajar de esta manera es útil aprovechar el sistema de *snapping* del editor que se esté utilizando.
+
+Obviamente, la elección de la cuadrícula tiene un gran impacto en el resto de las reglas de diseño y los parámetros de las mecánicas.
+Por ejemplo, si los elementos se ajustan respecto al suelo en una rejilla de $100⨯100⨯100$, por lo que se escogen huecos son de 2 m. y paredes de 3 m. de alto, eso determina la distancia y altura que debe poder saltar el personaje para superar obstáculos o alcanzar superficies elevadas.
+También condiciona el largo de los tramos de escalera, el ancho y alto de ventanas y puertas, entre otras cosas.
+
+Esta técnica es común en juegos de estrategia, RPG y juegos de plataformas.
+
+### Diseño modular
+
+El **diseño modular** estás relacionado con el diseño de arte, aunque acaba afectando a las reglas de diseño del juego de forma similar a como ocurre con el **diseño en cuadrícula**.
+
+El **diseño modular**[@Perry2002ModularLevelDesign;@Burgess2013ModularLevelDesign] es una técnica muy común que consiste en la creación de diferentes entornos a partir de la reutilización y combinación de distintas maneras de un conjunto de elementos de nivel individuales, como se muestra en la @fig-modular-design-burgess.
+Esta técnica surge de la necesidad de crear ambientes con gran nivel de detalle visual sin tener que modelar y texturizar cada esquina del entorno, puesto que eso tendría un coste importante en tiempo y dinero.
+
+::: {#fig-modular-design-burgess layout-nrow=2}
+
+![Kit modular de las *«Ruinas Dwemer»*.](/assets/diseño-de-niveles/modular-kit-zoo-joel-burgess-skyrim.jpg){#fig-modular-kit-joel-burgess}
+
+![Ejemplo creado con el kit modular.](/assets/diseño-de-niveles/dwemer-ruin-joel-burgess-skyrim.jpg){#fig-dungeon-joel-burgess}
+
+Ejemplo de diseño modular en *«Skyrim» (2011)*[@Burgess2013ModularLevelDesign].
+:::
+
+El **diseño modular** requiere que en *preprodución* se establezca una escala a la que implementar la modularidad y una rejilla. 
+En un juego de carreras urbanas es bastante razonable que cada edificación se modele mediante una malla, que se pueden reutilizar en diferentes puntos de la ciudad, variando levemente el color y otros detalles.
+Pero también se puede modelar módulos de 2 o 3 plantas de edificio y apilando estos módulos unos sobre otros, de diferentes maneras, para construir las edificaciones.
+En este caso, al bajar la escala de modularidad, podemos obtener más variedad con menos trabajo.
+
+De forma similar, en un *survival horror* que transcurre en los estrechos pasillos de una nave espacial, se pueden modelar las paredes, techo y suelo de cada estancia en una sola malla, que se puede reutilizar en varios puntos del juego.
+La ventaja de utilizar un único modelo para las estancias es que así cada estancia utiliza un único *ligthmap*, lo que evita algunos problemas con la iluminación precalculada.
+Sin embargo, tampoco es raro optar por una solución aún más modular, donde los paneles se construyen uniendo mallas individuales de tamaño fijo.
+La combinación de estas mallas individuales permite obtener estancias diferentes con múltiples variaciones de paredes, techos y pisos, con un menor coste.
+
+Para colocar los módulos y que encajen de forma sencilla es necesario establecer una rejilla, coherente con tamaño de los módulos, y adherirse a ella fielmente.
+Por ejemplo, seleccionar una rejilla de $400⨯400$ para colorar modelos de muros de 400 de ancho, porciones de techo y de suelo de $400⨯400$.
+Esto no significa que no pueda haber objetos en posiciones intermedias de la rejilla, para dotar de mayor detalle y variedad a la escena, pero se recomienda usar siempre divisiones pares de la cuadrícula estándar escogida
+Por ejemplo, piezas de mobiliario de 200 o 100 colocadas según una rejilla de $200⨯200$ o $100⨯100$, etc.
+
+Como se puede intuir, las reglas establecidas por el **diseño modular** no solo afectan al arte, sino que también afectan y se ven afectadas por las reglas de diseño del juego.
+Para asegurar la coherencia, se establecen de forma conjunta y tienen que ser consideradas al desarrollar los prototipos de los niveles.
+El uso del **diseño modular** probablemente implique que las reglas de diseño establezcan una cuadrícula a la que hay que ajustarse durante el diseño del nivel.
+
+Durante el *blockout* tenemos que respetar aspectos como la cuadrícula, pero no es necesario usar el mismo nivel de modularidad que en las mallas definitivas del nivel.
+En el *blockout* lo importante es escoger un nivel de modularidad que nos dé suficiente flexibilidad como para iterar rápidamente en el diseño del nivel.
+
+Si, por ejemplo, durante el *blockout* creamos las estancias usando porciones de muros, techos y suelo de tamaño fijo --a imitación de como serán los módulos de las mallas definitivas-- al final podremos sustituir cada bloque directamente por un modelo, para componer el nivel definitivo.
+Sin embargo, al hacerlo así puede resultar más complejo modificar la geometría de las estancias al iterar el diseño en el *blockout*, algo que previsiblemente tendremos que hacer muchas veces.
+Por eso es probable que en el *blockout* interese trabajar con modularidad diferente --o ninguna, según el caso y las preferencias de los diseñadores--.
+
+En la @fig-modular-kit-joel-burgess se muestra un kit modular usado para hacer el *blockout* de los niveles de *«Skyrim»*, como los creados con el kit de la @fig-modular-kit-joel-burgess.
+
+![Kit modular para *blockout* en *«Skyrim»*[@Burgess2013ModularLevelDesign].](/assets/diseño-de-niveles/modular-kit-blockout-joel-burgess-skyrim.png){#fig-modular-greyboxing-burgess}
+
+La ventaja de usar este tipo de kits es que solo hace falta preocuparse de comprobar que se están usando las medidas correctas --según las reglas de diseño establecidas-- mientras se construye el kit modular.
+Después, componiendo los prototipos de los niveles mediante estos módulos, se asegura que esos prototipos cumplen dichas reglas.
+
+## Del concepto a la implementación
+
+### Proceso de trabajo
+
+Para comenzar el diseño de un nivel, algunos diseñadores con experiencia prefieren comenzar a trabajar directamente por el *blockout*.
+Otros optan por comenzar creando planos 2D del nivel, como se puede ver en la [@fig-apex-storm-point-map].
+Posteriormente, estos planos se trasladan al *blockout* en 3D --por ejemplo, véase la @fig-maya-blockout--.
+
+![Blocking en Maya a partir de un diseño en papel[@Galuzin2009BlokingMaya].](/assets/diseño-de-niveles/blocking-in-maya.jpg){#fig-maya-blockout}
+
+Respecto a la elección de la herramienta para el *blockout*, hacerlo en el propio motor de videojuegos tiene varias ventajas importantes, ya que permite comprobar la jugabilidad del nivel en tiempo real e iterar rápidamente.
+Sin embargo, para que esto sea posible, uno de los factores determinantes es la disponibilidad de herramientas adecuadas para los diseñadores de niveles.
+Los motores comerciales --como Unreal Engine o Unity-- ofrecen editores muy completos, que facilitan esta tarea, pero los estudios que trabajan con motores propios, pueden carecer de un editor de niveles adecuado, por lo que los diseñadores pueden verse obligados a recurrir a herramientas genéricas de modelado 3D, como Maya o Blender.
+
+Antes de comenzar el *blockout* es recomendable organizar una colección de imágenes de referencia relacionadas con el tipo de espacios que vamos a crear.
+Estas imágenes pueden provenir del arte conceptual creado por los artistas y de búsquedas en galerías de imágenes de Internet.
+Obviamente, no se hace con el objetivo de poner atención a detalles relacionados con la creación de los modelos definitivos, sino para obtener referencias del diseño estructura o arquitectónico de los espacios.
+
+Al comenzar el *blockout* es recomendable empezar a nivel macro, haciendo uso de bloques de gran tamaño para definir las grandes áreas jugables y conectarlas.
+Luego se va iterando para ir añadiendo algo más de detalle, empezando por los elementos más destacables del nivel.
+
+Si bien el *blockout* es una tarea en la que participan principalmente los diseñadores y --al comenzar a añadir el *gameplay*-- los programadores, es importante que haya comunicación con el equipo de arte para coordinar el *look-and-feel*.
+Los artistas pueden ir creando arte conceptual mientras trabajan con los diseñadores de nivel.
+Este arte conceptual posteriormente servirá para el modelado de los elementos que compondrán los niveles.
+Los bloques blancos o grises del *blockout* pueden representar cualquier cosa, así que es importante documentar las intenciones para facilitar la comunicación, incluso dentro del equipo de diseñadores
+Por eso, en ocasiones, los bloques se colorean para dar una idea del tipo de material que se espera o como para señalar dónde van ciertos elementos de *gameplay*.
+Incluso puede ser buena idea hacer algunas capturas del nivel desde distintos ángulos y pintar encima, con el objeto de comunicar expectativas, tanto al equipo de arte como a otros diseñadores.
+
+::: {#fig-lost-legacy-greyboxing layout="[48,-4, 48]"}
+
+![Blockout](/assets/diseño-de-niveles/lost-legacy-a-greyboxing.jpg){#fig-lost-legacy-a-greyboxing}
+
+![Definitivo](/assets/diseño-de-niveles/lost-legacy-a-final.jpg){#fig-lost-legacy-a-final}
+
+![Blockout](/assets/diseño-de-niveles/lost-legacy-b-greyboxing.jpg){#fig-lost-legacy-b-greyboxing}
+
+![Definitivo](/assets/diseño-de-niveles/lost-legacy-b-final.jpg){#fig-lost-legacy-b-final}
+
+Blockout de *«Uncharted: The Lost Legacy» (2017)*[@Barclay2021BlockoutsUnchartedLostLegacy].
+:::
+
+### Playtesting e iteración
+
+En las primeras iteraciones del *blockout* se establece la distribución y se comienza a diseñar el flujo y el ritmo del nivel.
+Cuando avanza el prototipo, se van añadiendo algunos personajes y otros elementos, se programan eventos y se hace el *playtesting* para probar el diseño de niveles --por ejemplo, ver si obtenemos el ritmo y flujo deseado-- y el funcionamiento del *gameplay*.
+
+Se denomina *playtesting* a jugar un nivel para probarlo y detectar errores y problemas.
+Como hemos comentado varias veces, esto ocurre muchas veces en cualquier momento del desarrollo: durante la conceptualización y la preproducción, para probar las mecánicas, establecer las reglas de diseño y reducir incertidumbres sobre el desarrollo del proyecto; durante la producción, para probar el *gameplay*, el diseño de los niveles y, cuando el desarrollo está avanzado, para el control de calidad.
+
+Por tanto, hay mucho *playtesting* durante el diseño de un nivel.
+Muchas veces realizado diariamente por el propio diseñador, pero también por otros miembros del equipo, para obtener *feedback* según avanza el desarrollo.
+Basándose en los resultados de las pruebas, se corrige el código, se modifican las mecánicas y la estructura del nivel y se vuelve a iterar.
+Si aún estamos en **preproducción**, reuniendo requisitos del *gameplay* y características del diseño de niveles, estos ajusten se recogerán para incluirlos en el GDD.
+
+## Casos de estudio
+
+### Análisis: FPS multijugador
+
+En la @fig-valorant-perl-map se puede observar el mapa del nivel *«Pearl»* de *«Valorant»*, del que pudimos ver el *blockout* en la @fig-valorant-greyboxing.
+
+![Mapa del nivel *«Pearl»* de *«Valorant»*](/assets/diseño-de-niveles/valorant-pearl-map.png){#fig-valorant-perl-map width=10cm}
+
+Defensores y atacantes aparecen al norte y al sur del mapa, respecitivamente.
+Por la distribución del mapa, los jugadores se ven obligados a viajar uno hacia el otro a través de las zonas A, B y Mid.
+
+En mapas abiertos, con grandes líneas de visión, los jugadores equipados con armas de largo alcance --como los francotiradores-- tienen mucha ventaja.
+Si se quiere un juego más equilibrado, dando a los jugadores libertad para escoger distintas armas según su estilo de juego, el diseño del nivel debe limitar las líneas de visión.
+
+En la arquitectura de las zonas A y B se utilizan colores diferentes, de forma que los jugadores reconocen fácilmente en que zona del mapa se encuentran en cada momento.
+La estatua en la Plaza Mid es visible desde varios puntos del nivel, lo que sirve como punto de referencia para facilitar la navegación y la orientación.
+
+La circulación por las zonas A y B es la principal, ya que son las vías más amplias y las más fáciles de localizar desde los puntos de inicio de los equipos.
+Sin embargo, el camino a lo largo de estas zonas se estrecha en varios puntos, por la existencia de corredores y portales.
+A estos cuellos de botella de la circulación se los denomina *choke points*, porque son zonas peligrosas, de conflicto, en donde varios jugadores de los diferentes equipos se encontrarán allí al mismo tiempo, con toda probabilidad.
+
+Los *choke points* son fundamentales para modular la jugabilidad, dado que es en ellos donde va a transcurrir buena parte de la acción.
+Por eso es típico medir durante el prototipado el tiempo que se tarda en llegar desde los puntos de reaparación hasta los *choke points*, para asegurar que son adecuados para la experiencia que se persigue.
+
+Valores típicos están situados entre 8 y 10 segundos.
+Valores algo más cortos pueden ser más interesantes, sí se quiere un juego con una acción más trepidante, pero generalmente no interesa que se pueda llegar muy rápido a los *choke points* porque morir debe tener algún coste.
+Por otro lado, el ritmo del juego puede verse afectado si se tarda mucho en llegar.
+Esto no es necesariamente negativo, si lo que interesa es un estilo de juego más lento y táctico.
+La ubicación de los *choke points* es fundamental para ajustar el ritmo el equilibrio del juego.
+
+El Mid podría haber sido otra zona de circulación principal --como ocurre en otros juegos-- pero en este caso los diseñadores optaron por que sea una especie de laberinto de pasillos y corredores.
+Esto favorece un luego más lento y cuidadoso en este zona.
+Las vías secundarias del Mid ofrecen una forma de flanquear al enemigo en las zonas A y B con el objeto de sorprenderlo, por lo que el control del Mid durante la partida es fundamental.
+
+Las edificaciones a lo largo del mapa tiene algunas ventanas y agujeros que pueden ser aprovechados con ciertas habilidades para coger a los enemigos por sorpresa.
+Y, obviamente, todas las áreas estan salpicadas de elementos que estan dispuestos con el propósito de ser usados como coverturas.

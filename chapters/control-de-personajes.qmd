@@ -5,7 +5,8 @@ abstract: |
 ---
 
 ::: {.callout-note}
-El **tiempo estimado de lectura** es de {{< meta reading-time.formatted >}}.
+El **tiempo estim
+o de lectura** es de {{< meta reading-time.formatted >}}.
 :::
 
 # Control de personajes
