@@ -277,7 +277,11 @@ Es decir, que en cada paso en el tiempo de simulación se calcula la posición d
 Sin embargo, esto abre la puerta a que objetos pequeños que se muevan muy rápido puedan pasar a través de otros, en lo que dura un paso en el tiempo de simulación, sin ser detectados.
 A este fenómeno se lo denomina *tunneling*.
 
-![Problema de la detección de colisión discreta con objetos pequeños que se desplazan rápidamente.](/assets/simulación-física/discrete_collision_detection.png)
+::: {#vid-discrete-collision-detection}
+{{< video /assets/simulación-física/discrete-collision-detection.mp4 >}} 
+
+Problema de la detección de colisión discreta con objetos pequeños que se desplazan rápidamente.
+:::
 
 Algunas posibles soluciones a este problema son:
 
@@ -369,7 +373,7 @@ El primero opera interpolando entre los cuaterniones de la orientación actual y
 Como se puede ver en la @fig-twist-and-swing, el segundo separa el movimiento de rotación en dos partes que se pueden controlar de forma independiente, una de giro sobre sí mismo --el eje X de la *unión*-- y otra de balanceo en un cono --los ejes Z e Y--.
 Según el caso, puede dar mejor resultado usar un modo u otro.
 
-![Movimiento de rotación en el modo **Twist and Swing**.](/assets/simulación-física/twist_and_swing.png){#fig-twist-and-swing}
+![Movimiento de rotación en el modo **Twist and Swing**.](/assets/simulación-física/twist-and-swing.png){#fig-twist-and-swing}
 
 ### Unreal Engine
 
