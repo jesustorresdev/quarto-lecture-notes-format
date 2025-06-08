@@ -1,4 +1,4 @@
-name: Publicar
+name: Publish Website
 
 on:
   workflow_dispatch:
@@ -7,25 +7,25 @@ on:
       - '*'
 
 jobs:
-  build-deploy:
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-    - name: Obtener el proyecto
+    - name: Checkout repository
       uses: actions/checkout@v4
 
     - id: dotenv
-      name: Leer variables de entorno
+      name: Read environment variables
       uses: falti/dotenv-action@v1.1.4
       with:
         path: ./_environment-prod
         log-variables: true
 
-    - name: Configurar Quarto
+    - name: Setup Quarto
       uses: quarto-dev/quarto-actions/setup@v2
 
-    - name: Publicar en GitHub Pages
+    - name: Publish to GitHub Pages
       uses: quarto-dev/quarto-actions/publish@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -33,10 +33,10 @@ jobs:
       with:
         target: gh-pages
 
-    - name: Empaquetar la documentación
+    - name: Package documentation
       run: cd _book && zip -r ../desarrollo3d.zip *
 
-    - name: Publicar en 'Releases'
+    - name: Publish the documentation to 'Releases'
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
