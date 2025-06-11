@@ -71,7 +71,7 @@ api-reference:
     static:
       title: estática
       func: true
-      marker: "{{< iconify ph function-square-bold >}}"
+      marker: "{{< iconify ph function-bold >}}"
   langs:
     bp:
       title: Blueprint

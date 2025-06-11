@@ -1,6 +1,6 @@
-// Generate the service worker before publishing the website.
+// Service Worker builder script
 //
-// Usage: quarto run generate-sw.ts
+// Usage: quarto run build-sw.ts
 
 import * as path from "stdlib/path";
 

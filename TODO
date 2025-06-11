@@ -1,20 +1,5 @@
 Añadir espacios al citar
 
-El problema con offline es con las imágenes de iconify que hacen perticiones a una api
-https://ull-master-videojuegos.github.io/desarrollo3d-apuntes/chapters/control-de-personajes.html
-Posible solución
-
-¡Gracias por el contexto! Sí, al usar la extensión [`quarto-iconify`](https://github.com/mcanouil/quarto-iconify), por defecto **sí hace llamadas a la CDN de Iconify** para cargar los iconos.
-
-Pero hay formas de **evitar esas llamadas** empaquetando los iconos que necesitas **de forma local**, aunque la extensión no lo haga automáticamente. Aquí van las opciones más claras:
-
-1. Parece que hace falta usar los custom-loaders para ofrecer como source un IconifyJSON que solo contiene los iconos usados en el documento.
-2. Se puede usar getIcon() para cargar los icono de forma local. La línea de comandos de iconify/utils debe permitir generar el IconifyJSON a partir de un icono o de una lista de iconos.
-3. Quizás se puede hacer fork de la extensión y eso pueda ayudar:
-    - Detectar cuando se llama al shortcode.
-    - Comprobar si el icono está en el IconifyJSON local (en el output directory).
-    - Si no está, cargarlo de la CDN y añadirlo al IconifyJSON local usando os.execute npx iconify/utils para generar el IconifyJSON.
-4. La extensión puede estar en otro repo para facilitar la instalación y actualización.
 
 Hacer resúmenes de los capítulos
 Blueprint en mayusculas sin cursiva
