@@ -2,86 +2,83 @@ const QUARTO_PROJECT_OUTPUT_DIR = process.env.QUARTO_PROJECT_OUTPUT_DIR || '_sit
 
 const serviceWorkerPath = `${QUARTO_PROJECT_OUTPUT_DIR}/sw.js`
 
-const getIconifyAPIRequestIcons = (url) => {
-	const parsedUrl = new URL(url)
-	const result = {
-		prefix: '',
-		iconNames: []
-	}
-	
-	result.prefix = parsedUrl.pathname.replace('.json', '').substring(1)
+const iconifyAPIHandler = async ({request}) => {
+	const ICONS_ASSETS_PATH = `assets/icons`
 
-	const icons = parsedUrl.searchParams.get('icons')
-	if (!icons) {
+	function getIconifyAPIRequestIcons(url) {
+		const result = {
+			prefix: '',
+			icons: []
+		}
+		
+		const pathSegments = url.pathname.split('/')
+		const lastSegment = pathSegments[pathSegments.length - 1]
+		result.prefix = lastSegment.replace('.json', '')
+		const icons = url.searchParams.get('icons')
+		if (!icons) {
+			return result
+		}
+
+		result.icons = icons.split(',').map(icon => icon.trim())
 		return result
 	}
 
-	result.iconNames = icons.split(',').map(icon => icon.trim())
-	return result
-}
+	async function fetchLocalIcons(prefix) {
+		const baseUrl = location.href.substring(0, location.href.lastIndexOf('/'));
+		const iconUrl = `${baseUrl}/${ICONS_ASSETS_PATH}/${prefix}.json`
+		return await fetch(iconUrl)
+	}
+	
+	async function iconifyAPIHandlerImpl(request) {
+		const parsedUrl = new URL(request.url)
 
-const fetchIconifyIcons = async ({prefix, iconNames}) => {
-	const iconUrl = `https://api.iconify.design/${prefix}.json?icons=${iconNames.join(',')}`
-	return await fetch(iconUrl)
-}
+		if (!parsedUrl.pathname.endsWith('.json') || !parsedUrl.searchParams.has('icons')) {
+			return new Response('404', { status: 404 })
+		}
 
-const cacheIconifyIcons = async (cache, {prefix, icons}) => {
-	const promises = Object.entries(icons).map(async ([iconName, iconData]) => {
-		const cacheUrl = `/${prefix}/${iconName}`
-		await cache.put(cacheUrl, new Response(JSON.stringify({
-			prefix: prefix,
-			icons: {
-				[iconName]: iconData
+		const {prefix, icons} = getIconifyAPIRequestIcons(parsedUrl)
+		const response = await fetchLocalIcons(prefix)
+		if (!response || !response.ok) {
+			return new Response('404', { status: 404 })
+		}
+
+		const iconData = await response.json()
+		if (!iconData || !iconData.icons || Object.keys(iconData.icons).length === 0) {
+			return new Response('500', { status: 500 })
+		}
+
+		if (icons.length === 0) {
+			iconData.icons = {}
+			iconData.not_found = [""]
+			return new Response(JSON.stringify(iconData), {
+				headers: {
+					'Content-Type': 'application/json',
+				}
+			});
+		}
+
+		const filteredIcons = {}
+		const notFound = []
+
+		for (const requestedIcon of icons) {
+			if (iconData.icons[requestedIcon]) {
+				filteredIcons[requestedIcon] = iconData.icons[requestedIcon]
+			} else {
+				notFound.push(requestedIcon)
 			}
-		}), {
+		}
+
+		iconData.icons = filteredIcons
+		iconData.not_found = notFound
+		
+		return new Response(JSON.stringify(iconData), {
 			headers: {
 				'Content-Type': 'application/json',
 			}
-		}))
-	})
-	await Promise.all(promises)
-}
-
-const iconifyHandler = async ({request}) => {
-	const {prefix, iconNames} = getIconifyAPIRequestIcons(request.url)
-
-	const cache = await caches.open('iconify-cache')
-	const finalResponse = {
-		prefix: prefix,
-		icons: {},
-	};
-
-	const cacheMisses = []
-	const promises = iconNames.flatMap(async (iconName) => {
-		const cacheResponse = await cache.match(`/${prefix}/${iconName}`)
-		if (!cacheResponse) {
-			cacheMisses.push(iconName)
-			return []
-		}
-		const iconData = await cacheResponse.json()
-		if (iconData.icons) {
-			Object.assign(finalResponse.icons, iconData.icons);
-		}
-	});
-
-	await Promise.all(promises)
-
-	if (cacheMisses.length > 0) {
-		const fetchResponse = await fetchIconifyIcons({prefix: prefix, iconNames: cacheMisses})
-		if (fetchResponse && fetchResponse.ok) {
-			const iconData = await fetchResponse.json()
-			if (iconData.icons) {
-				await cacheIconifyIcons(cache, {prefix: prefix, icons: iconData.icons})
-				Object.assign(finalResponse.icons, iconData.icons)
-			}
-		}
+		});
 	}
 
-	return new Response(JSON.stringify(finalResponse), {
-		headers: {
-			'Content-Type': 'application/json',
-		}
-	});
+	return iconifyAPIHandlerImpl(request)
 }
 
 module.exports = {
@@ -95,14 +92,15 @@ module.exports = {
   clientsClaim: true,
 	sourcemap: true,
 
-	additionalManifestEntries: [
-		'https://api.iconify.design/devicon-plain.json?icons=cplusplus',
-		'https://api.iconify.design/fa6-brands.json?icons=github',
-		'https://api.iconify.design/ph.json?icons=cube-bold,brackets-curly-bold,list-light,function-bold,lightning-bold',
-		'https://api.iconify.design/simple-icons.json?icons=blueprint',
-	],
-
 	runtimeCaching: [
+		{
+			urlPattern: ({request}) => {
+				const baseUrl = location.href.substring(0, location.href.lastIndexOf('/'));
+				const urlPattern = new RegExp(`^${RegExp.escape(baseUrl)}/iconify/\\w+\\.json`)
+				return urlPattern.test(request.url)
+	 		},
+			handler: iconifyAPIHandler,
+		},
 		{
 			urlPattern: ({request}) => !['video', 'audio'].includes(request.destination),
 			handler: 'CacheFirst',
@@ -117,10 +115,6 @@ module.exports = {
 				cacheName: 'media-cache',
 				rangeRequests: true,
 			},
-		},
-		{
-			urlPattern: /^https:\/\/api\.iconify\.design\/\w+\.json\?icons=\w/,
-			handler: iconifyHandler,
-		},
+		}
 	]
 }
