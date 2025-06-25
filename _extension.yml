@@ -19,10 +19,10 @@ contributes:
             reference-prefix: Vídeo
             key: vid
       filters:
+        - pwa
         - reading-time
         - quarto
         - api-reference
-        - pwa
       shortcodes:
         - api-reference
         - coatless-quarto/embedio
