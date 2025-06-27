@@ -2,7 +2,7 @@ const QUARTO_PROJECT_OUTPUT_DIR = process.env.QUARTO_PROJECT_OUTPUT_DIR || '_sit
 
 const serviceWorkerPath = `${QUARTO_PROJECT_OUTPUT_DIR}/sw.js`
 
-const iconifyAPIHandler = async ({request}) => {
+const iconifyAPIHandler = ({request}) => {
 	const ICONS_ASSETS_PATH = `assets/icons`
 
 	function getIconifyAPIRequestIcons(url) {
@@ -96,7 +96,7 @@ module.exports = {
 		{
 			urlPattern: ({request}) => {
 				const baseUrl = location.href.substring(0, location.href.lastIndexOf('/'));
-				const urlPattern = new RegExp(`^${RegExp.escape(baseUrl)}/iconify/\\w+\\.json`)
+				const urlPattern = new RegExp(`^${RegExp.escape(baseUrl)}/iconify/[\\w-]+\\.json`)
 				return urlPattern.test(request.url)
 	 		},
 			handler: iconifyAPIHandler,
