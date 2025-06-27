@@ -4,6 +4,10 @@ abstract: |
   cómo se pueden implementar en un videojuego.
 ---
 
+::: {.callout-note}
+El **tiempo estimo de lectura** es de {{< meta reading-time.formatted >}}.
+:::
+
 # Armas y combate
 
 ## *Hitboxes*
