@@ -1,7 +1,0 @@
-
-
-Keyframe vs mocap
-  https://medium.com/my-games-company/animating-virtual-heroes-the-workflow-of-a-3d-animator-88bd8ae85da7
-
-Mencionar mixamo retargetting 
-Plugin

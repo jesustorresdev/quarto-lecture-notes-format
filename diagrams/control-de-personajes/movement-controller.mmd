@@ -1,9 +1,0 @@
-stateDiagram-v2
-    direction LR
-    [*] --> Walk
-    Walk --> Jump: Jump Start
-    Jump --> Walk: Land
-    Jump --> DoubleJump: Jump Start<br>[JumpElapsedTime < 1.5]
-    DoubleJump --> Walk: Land
-    Walk --> Crouch: Crouch Start
-    Crouch --> Walk: Crouch End
