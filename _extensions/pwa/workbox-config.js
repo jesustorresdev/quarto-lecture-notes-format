@@ -1,6 +1,5 @@
-const QUARTO_PROJECT_OUTPUT_DIR = process.env.QUARTO_PROJECT_OUTPUT_DIR || '_site'
-
-const serviceWorkerPath = `${QUARTO_PROJECT_OUTPUT_DIR}/sw.js`
+const quartoProjectOutputDir = process.env.QUARTO_PROJECT_OUTPUT_DIR || '_site'
+const serviceWorkerPath = `${quartoProjectOutputDir}/sw.js`
 
 const iconifyAPIHandler = ({request}) => {
 	const ICONS_ASSETS_PATH = `assets/icons`
@@ -82,7 +81,7 @@ const iconifyAPIHandler = ({request}) => {
 }
 
 module.exports = {
-	globDirectory: QUARTO_PROJECT_OUTPUT_DIR,
+	globDirectory: quartoProjectOutputDir,
 	globPatterns: [
 		'**/*.{mp4,jpg,png,mp3,webp,html,json,css,woff,js}'
 	],
