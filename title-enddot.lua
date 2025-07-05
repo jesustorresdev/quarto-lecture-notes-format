@@ -1,14 +1,16 @@
 function Meta(meta)
   if pandoc.utils.type(meta.title) == "Inlines" then
-    local first = meta.title[1]
-    if pandoc.utils.type(first) == "Inline"
-        and first.classes
-        and first.classes:includes("chapter-number") then
-      local chapterNumnber = first.content[1].text
-      if not chapterNumnber:match("%.$") then
-        first.content[1].text = chapterNumnber .. "."
-      end
-    end
+    meta.title = meta.title:walk({
+      Inline = function(el)
+        if el.classes and el.classes:includes("chapter-number") then
+          local chapterNumber = el.content[1].text
+          if not chapterNumber:match("%.$") then
+            el.content[1].text = chapterNumber .. "."
+          end
+        end
+        return el
+      end,
+    })
   end
   return meta
 end
