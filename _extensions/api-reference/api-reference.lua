@@ -13,9 +13,6 @@ local CLASS_TYPE_NAME = "class"
 local METHOD_TYPE_NAME = "method"
 local knownEntryTypes = {
   class = { title = "class", func = false, class = true, marker = "C{}" },
-  struct = { title = "struct", func = false, class = true, marker = "{}" },
-  enum = { title = "enum", func = false, class = true, marker = "E{}" },
-  func = { title = "function", func = true, class = false, marker = "ƒ()" },
   method = { title = "method", func = true, class = false, marker = "ƒ()" },
 }
 
@@ -33,7 +30,7 @@ local function ensureHtmlDeps()
 end
 
 local function createLanguage(lang, defaults)
-  if not defaults then
+  if defaults == nil then
     defaults = {}
   end
 
@@ -44,7 +41,8 @@ local function createLanguage(lang, defaults)
 end
 
 local function createEntryType(type, defaults)
-  if not defaults then
+
+  if defaults == nil then
     defaults = {}
   end
   
@@ -70,7 +68,7 @@ local function getOptions(meta)
   -- merge the languages options with the default ones
   local langs = opts['langs'] or {}
   for lang, desc in pairs(langs) do
-    if not knownLanguages[lang] ~= nil then
+    if knownLanguages[lang] == nil then
       knownLanguages[lang] = createLanguage(lang, desc)
     else
       for key, value in pairs(desc) do
@@ -84,7 +82,7 @@ local function getOptions(meta)
   -- merge the entry types options with the default ones
   local types = opts['types'] or {}
   for type, desc in pairs(types) do
-    if not knownEntryTypes[type] ~= nil then
+    if knownEntryTypes[type] == nil then
       knownEntryTypes[type] = createEntryType(type, desc)
     else
       for key, value in pairs(desc) do

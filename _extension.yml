@@ -35,17 +35,23 @@ contributes:
             marker: "{{< iconify ph cube-bold >}}"
           struct:
             title: estructura
+            isClass: true
             marker: "{{< iconify ph brackets-curly-bold >}}"
           enum:
             title: enumeración
+            isClass: true
             marker: "{{< iconify ph list-light >}}"
           function:
             title: función
+            isFunc: true
             marker: "{{< iconify ph function-bold >}}"
           method:
             title: método
             marker: "{{< iconify ph function-bold >}}"
         langs:
+          c:
+            title: C
+            marker: "{{< iconify devicon-plain c title='C' >}}"
           cpp:
             title: C++
             marker: "{{< iconify devicon-plain cplusplus title='C++' >}}"
